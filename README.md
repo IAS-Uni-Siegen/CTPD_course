@@ -1,2 +1,15 @@
-# CTPD_course
-Control of three-phase drives course
+# Control of three-phase drive course
+[![Build LaTeX PDFs](https://github.com/IAS-Uni-Siegen/CTPD_course/actions/workflows/buildPDFs.yml/badge.svg?event=workflow_dispatch)](https://github.com/IAS-Uni-Siegen/CTPD_course/actions/workflows/buildPDFs.yml)
+[![CC BY 4.0][cc-by-shield]][cc-by]
+[![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg)](https://www.latex-project.org/)
+
+This work is licensed under a
+[Creative Commons Attribution-ShareAlike 4.0 International License][cc-by].
+
+[![CC BY 4.0][cc-by-image]][cc-by]
+
+[cc-by]: http://creativecommons.org/licenses/by/4.0/
+[cc-by-image]: https://licensebuttons.net/l/by/4.0/88x31.png
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
+
+Currently work in progress!
