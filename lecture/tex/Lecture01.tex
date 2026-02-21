@@ -115,20 +115,14 @@
     \frametitle{Overview of controlled drive systems}
     \begin{figure}
         \begin{circuitikz}[node distance = 2mm and 2mm]
-            % DC/AC converter (three-phase)
             \draw (0,0) node[tdcacshape] (conv) {};
-
-            % Three-phase motor (anchored so its ac anchors align with converter)
             \node[threephasemotorshaftshape] (motor) at (4,0) {};
-            % Bended arrow right of the motor shaft pointing downwards
             \draw[->] (motor.shaft) ++(0.25,{0.7*sin(30)})
             arc[start angle=30, end angle=-30, radius=0.7]
             node[midway, right, name=shaftlabels] {$T,\omega, \varepsilon$};
-            % Three-phase connections: straight horizontal lines
             \draw (conv.ac mid out) to [currtap, name=ct1]  (motor.west mid);
             \node[tmultiwireshape] at ($(conv.ac mid out)!.25!(motor.west mid)$) {};
             \node[tmultiwireshape] at ($(conv.ac mid out)!.75!(motor.west mid)$) {};
-
             \draw (0,-2) node[ctrlblock, align = center] (ctrl) {Controller};
             \draw[->] (ctrl.north) -- (conv.south);
             \draw[->] (motor.shaft) |- ($(ctrl.east |- ctrl.north)!.75!(ctrl.east |- ctrl.south)$);
@@ -151,6 +145,7 @@
         A drive system comprises the converter, machine, controller, and sensors. The drive train extends this by adding the power supply (e.g., battery, grid rectifier) and all mechanical torque-transmission components (e.g., gears, shafts, clutches).
     \end{varblock}
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Examples of controlled drive applications: mechanical to electrical energy conversion %%
@@ -222,4 +217,146 @@
         \caption{Examples of bidirectional controlled drive systems: (a) electric drive (incl. transmission) of an electric vehicle and (b) industrial robot for manufacturing. Both applications cover motoring acceleration of the mechanical load and regenerative braking (deceleration) of the mechanical load, converting kinetic energy back into electrical energy.}
         \label{fig:examples_machine_drives_03}
     \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Differentiation of key control concepts %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Differentiation of key control concepts}
+    \vspace{0.25cm}
+    \begin{figure}
+        \begin{subfigure}{\textwidth}
+            \centering
+            \begin{circuitikz}
+                \draw (0,0) node[tdcacshape] (conv) {};
+                \draw (conv.ac mid out) to [tmultiwire] ++(0.75,0)  to [currtap, name=ct1] ++(0.75,0) to ++(0.25,0) node[threephasemotorshaftshape, anchor = west mid] (motor) {};
+                \draw[shadecolor] node[ctrlblock, align = center, left = of conv] (mod) {Modulator};
+                \draw[->] (mod.east) --  node[midway, above] {$s$} (conv.west);
+                \draw node[ctrlblock, align = center, left = of mod] (tctrl) {Torque \\controller};
+                \draw[->] (tctrl.east) --  node[midway, above] {$u$} (mod.west);
+                \draw[-] (ct1.tap) -- ++(0,-1) node[name = A] {};
+                \draw[shadecolor] ($(A)!.5!(tctrl.south |- A)$) node[ctrlblock, align = center] (obs) {Observer};
+                \draw[->] (ct1.tap) |- (obs.east);
+                \draw[->] (obs.west) -| (tctrl.south);
+                \draw ($(obs.west)!.5!(obs.west -| tctrl.south)$) node[above] {$x$};
+                \draw node[left = of tctrl] (B){};
+                \draw[->] (B) -- node[midway, above] {$T^*$} (tctrl.west);
+            \end{circuitikz}
+            \label{fig:direct_torque_ctrl}
+            \caption{Direct torque control}
+        \end{subfigure}
+        \begin{subfigure}{\textwidth}
+            \centering
+            \begin{circuitikz}
+                \draw (0,0) node[tdcacshape] (conv) {};
+                \draw (conv.ac mid out) to [tmultiwire] ++(0.75,0)  to [currtap, name=ct1] ++(0.75,0) to ++(0.25,0) node[threephasemotorshaftshape, anchor = west mid] (motor) {};
+                \draw[shadecolor] node[ctrlblock, align = center, left = of conv] (mod) {Modulator};
+                \draw[->] (mod.east) --  node[midway, above] {$s$} (conv.west);
+                \draw node[ctrlblock, align = center, left = of mod] (cftrl) {Current / flux \\controller};
+                \draw[->] (cftrl.east) --  node[midway, above] {$u$} (mod.west);
+                \draw[-] (ct1.tap) -- ++(0,-1) node[name = A] {};
+                \draw[shadecolor] ($(A)!.5!(cftrl.south |- A)$) node[ctrlblock, align = center] (obs) {Observer};
+                \draw[->] (ct1.tap) |- (obs.east);
+                \draw[->] (obs.west) -| (cftrl.south);
+                \draw ($(obs.west)!.5!(obs.west -| cftrl.south)$) node[above] {$x$};
+                \draw node[ctrlblock, align = center, left = of cftrl] (torque) {Feedforward\\ torque control};
+                \draw[->] (torque.east) -- node[midway, above] {$x^*$} (cftrl.west);
+                \draw node[left = of torque] (B){};
+                \draw[->] (B) -- node[midway, above] {$T^*$} (torque.west);
+            \end{circuitikz}
+            \vspace{-0.5cm}
+            \label{fig:indirect_torque_ctrl}
+            \caption{Indirect torque control}
+        \end{subfigure}
+        \caption{Drive control concepts differ in direct vs. indirect torque control as well as whether a modulator is used or not to actuate the power converter. An observer (e.g., for the flux linkage) might be necessary if relevant control variables are not directly measurable.}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pros and cons: modulator-based vs. modulator-free %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Modulator-based vs.\ modulator-free inverter actuation}
+    \renewcommand{\pro}{\textcolor{signalbeta}{\ding{51}}}%
+    \renewcommand{\con}{\textcolor{signaldelta}{\ding{55}}}%
+    \begin{table}
+        \centering
+        \small
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}p{3.75cm} c c@{}}
+            \toprule
+                                  & \textbf{Modulator-based}      & \textbf{Modulator-free}           \\
+            \midrule
+            Switching frequency   & \pro~Fixed and predictable    & \con~Variable                     \\
+            Harmonic spectrum     & \pro~Well-defined             & \con~Spread spectrum              \\
+            Dynamic performance   & \con~Slower (modulator delay) & \pro~Faster                       \\
+            Implementation effort & \pro~Standard hardware        & \con~Fast DSP/{\textmu}C required \\
+            \bottomrule
+        \end{tabular}
+        \caption{Qualitative comparison of modulator-based and modulator-free inverter actuation}
+        \label{tab:modulator_vs_modulatorfree}
+    \end{table}
+    \vspace{-0.5cm}
+    \begin{varblock}{}
+        The modulator allows to map continuous control decisions to discrete switching actions. This enables standard linear feedback controllers (i.e., well-understood simple control design) and ensures a predefined switching frequency and harmonic spectrum. However, the modulator delay limits achievable transient control performance.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pros and cons: direct vs. indirect torque control %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Direct vs.\ indirect torque control}
+    \begin{table}
+        \centering
+        \small
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}p{3.75cm} c c@{}}
+            \toprule
+                              & \textbf{Direct torque ctrl.} & \textbf{Indirect torque ctrl.} \\
+            \midrule
+            Torque dynamics   & \pro~Faster                  & \con~Slower                    \\
+            Overcurrents      & \con~More likely             & \pro~Less likely               \\
+            Control structure & Centralized                  & More modular                   \\
+            \bottomrule
+        \end{tabular}
+        \caption{Qualitative comparison of direct and indirect torque control}
+        \label{tab:direct_vs_indirect_torque}
+    \end{table}
+    \vspace{-0.5cm}
+    \begin{varblock}{}
+        The indirect approach is slower since minimizing the current/flux control error is not garantuntying to minimize the torque control error at each time instant  (the torque to current / flux mapping comes with degrees of freedom for three-phase drives). However, in practice the transient control performance difference is typically minor.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% On measuring the drive's torque %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{On measuring the drive's torque}
+    \begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[height=0.4\textheight]{fig/lec01/Torque_shaft.jpg}
+            \caption{Torque shaft example (source: \href{https://commons.wikimedia.org/wiki/File:Torque_w_Coupling2.gif}{Wikimedia Commons}, M.~Laible, \href{https://creativecommons.org/licenses/by-sa/2.5/deed.en}{CC BY-SA 2.5})}
+        \end{subfigure}
+        \pause
+        \hfill
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[height=0.4\textheight]{fig/lec01/Torque_shaft_cross_section.pdf}
+            \caption{Torque flange cross section (source: \href{https://commons.wikimedia.org/wiki/File:Torque_Flange.gif}{Wikimedia Commons}, M.~Laible, \href{https://creativecommons.org/licenses/by-sa/2.5/deed.en}{CC BY-SA 2.5})}
+        \end{subfigure}
+        \caption{Torque measurement (via torque-induced strain sensors)}
+        \label{fig:torque_sensor}
+    \end{figure}
+    \vspace{-0.5cm}
+    \begin{varblock}{}
+        Due to costs, weight and volume of torque sensors, drive systems typically rely on indirect model-based torque estimation. In practice, only test benches and special application needs warrant direct torque measurement.
+    \end{varblock}
 \end{frame}
