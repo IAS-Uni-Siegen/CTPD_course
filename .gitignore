@@ -333,3 +333,4 @@ TSWLatexianTemp*
 *.ruff_cache
 *.nom
 *.nomc
+build_log.txt

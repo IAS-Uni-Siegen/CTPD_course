@@ -1,0 +1,75 @@
+\subsection{Nomenclature}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Mathematical nomenclature (via glossaries-extra package) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newglossaryentry{torque}{
+	type=nomen,
+	name={$T$},
+	description={Torque},
+	sort={torque}
+}
+
+\newglossaryentry{angularspeed}{
+	type=nomen,
+	name={$\omega$},
+	description={Angular speed (electrical)},
+	sort={angularspeed}
+}
+
+\newglossaryentry{angularspeedmechanical}{
+	type=nomen,
+	name={$\omega_{\mathrm{me}}$},
+	description={Angular speed (mechanical)},
+	sort={angularspeedmechanical}
+}
+
+\newglossaryentry{angle}{
+	type=nomen,
+	name={$\varepsilon$},
+	description={Angle (electrical)},
+	sort={angle}
+}
+
+\newglossaryentry{anglemechanical}{
+	type=nomen,
+	name={$\varepsilon_{\mathrm{me}}$},
+	description={Angle (mechanical)},
+	sort={anglemechanical}
+}
+
+\newglossaryentry{speedmechanical}{
+	type=nomen,
+	name={$n$},
+	description={Speed (mechanical)},
+	sort={speedmechanical}
+}
+
+\newglossaryentry{current}{
+	type=nomen,
+	name={$i$},
+	description={Current},
+	sort={current}
+}
+
+\newglossaryentry{voltage}{
+	type=nomen,
+	name={$u$},
+	description={Voltage},
+	sort={voltage}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Build nomenclature %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[allowframebreaks]{Nomenclature}
+	\glsaddallunused
+	\small
+	\setlength{\glslistdottedwidth}{.25\linewidth} % Set the width of the dotted lines in the glossary
+	\printglossary[style = listdotted, nogroupskip, title = , type = nomen]
+\end{frame}
+
