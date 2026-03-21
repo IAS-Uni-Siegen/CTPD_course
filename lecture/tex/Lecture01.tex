@@ -107,6 +107,45 @@
     \end{itemize}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Learning objectives %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Learning objectives}
+    \begin{itemize}
+        \item Understand the general structure and components of controlled drive systems.
+        \item Differentiate key drive control concepts.
+        \item Understand the trade-offs of different drive control concepts and their suitability for different applications (incl. different machines and converter types).
+        \item Being able to simulate and implement drive control algorithms on virtual and real test benches.
+        \item Configure and optimize controller parameters.
+        \item Evaluate the achievable performance of drive control systems based on their physical constraints.
+        \item Have fun learning about drive control systems and their applications!
+    \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Necessary prior knowledge for this course %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Necessary prior knowledge for this course}
+    You should have a solid understanding of the following topics:
+    \begin{itemize}
+        \item Fundamentals of electric machines (cf. our  \href{https://github.com/IAS-Uni-Siegen/EMD_course/}{bachelor course})
+        \item Fundamentals of power electronics (cf. our  \href{https://github.com/IAS-Uni-Siegen/PE_course/}{bachelor course})
+        \item Fundamentals of system and control theory \\(e.g., book from K. J. Åström and R. M. Murray, \href{https://fbswiki.org/wiki/index.php/Feedback_Systems:_An_Introduction_for_Scientists_and_Engineers}{Feedback Systems})
+        \item Fundamentals of signal processing \\(e.g., TU Delft open book \href{https://books.open.tudelft.nl/home/catalog/book/247}{Engineering Signal Analysis} by C. Tiberius and M. Mulder)
+    \end{itemize}
+    \vspace{0.5cm}
+    What we will \underline{not} cover in this course:
+    \begin{itemize}
+        \item Mechanical load behavior,
+        \item Power supply behahavior,
+    \end{itemize}
+    i.e., we will focus only on the drive system and not the drive train.
+\end{frame}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Overview of controlled drive systems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,7 +181,7 @@
     \end{figure}
     \vspace{-0.75cm}
     \begin{varblock}{Drive system vs. drive train}
-        A drive system comprises the converter, machine, controller, and sensors. The drive train extends this by adding the power supply (e.g., battery, grid rectifier) and all mechanical torque-transmission components (e.g., gears, shafts, clutches).
+        A \hl{drive system} comprises the converter, machine, controller, and sensors. The \hl{drive~train} extends this by adding the power supply (e.g., battery, grid rectifier) and all mechanical torque-transmission components (e.g., gears, shafts, clutches).
     \end{varblock}
 \end{frame}
 
@@ -357,6 +396,766 @@
     \end{figure}
     \vspace{-0.5cm}
     \begin{varblock}{}
-        Due to costs, weight and volume of torque sensors, drive systems typically rely on indirect model-based torque estimation. In practice, only test benches and special application needs warrant direct torque measurement.
+        Due to costs, weight and volume of torque sensors, drive systems typically rely on  model-based torque estimation. In practice, only test benches and special application needs warrant direct torque measurement.
     \end{varblock}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Control of mechanical loads %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Control of mechanical loads}
+    If not only the motor's torque is controlled, but also the mechanical load's speed, an application-specific load model
+    $$
+        \frac{\mathrm{d}}{\mathrm{d}t}\omega_\mathrm{me} = f_\mathrm{load}(\omega_\mathrm{me}, T_\mathrm{me})
+    $$
+    is required. As these models are heterogenous and can differ drastically between applications, we will not cover them in this course. Instead, we refer to general purpose control literature.\\
+    \begin{figure}
+        \begin{circuitikz}
+            \draw (0,0) node[tdcacshape] (conv) {};
+            \draw (conv.ac mid out) to [tmultiwire] ++(0.75,0) to [currtap, name=ct1] ++(0.75,0) to ++(0.25,0) node[threephasemotorshaftshape, anchor = west mid] (motor) {};
+            \draw node[ctrlblock, align = center, left = of conv] (tctrl) {Torque \\controller};
+            \draw[->] (tctrl.east) -- node[midway, above] {$s$} (conv.west);
+            \draw[->] (ct1.tap) -- ++(0,-1) node[name = A] {} -| (tctrl.south);
+            \draw node[ctrlblock, align = center, left = of tctrl] (sctrl) {Speed \\controller};
+            \draw[->] (sctrl.east) -- node[midway, above] {$T^*$} (tctrl.west);
+            \draw node[ctrlblock, align=center, anchor=west] at (motor.shaft tip) (mblock) {Mechanical \\Load};
+            \draw node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}, left = of sctrl] (sum) {};
+            \draw[->] (sum.east) -- node[midway, above] {$\Delta \omega_\mathrm{me}$} (sctrl.west);
+            \draw[->] (mblock.south) -- ++(0.,-1.0) -| node[very near end, right] {$\omega_\mathrm{me}$} (sum.south);
+            \draw node[left = of sum] (B){};
+            \draw[->] (B) -- node[midway, above] {$\omega_\mathrm{me}^*$} (sum.west);
+        \end{circuitikz}
+        \label{fig:speed_ctrl_loop}
+        \caption{Cascaded speed control loop superimposed to the torque control structure.}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Subsection: Single and three-phase alternating current systems %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Single and three-phase alternating current systems}
+\label{subsec:single_three_phase_AC_systems}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase alternating current (AC) system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase alternating current (AC) system}
+    Consider a general \hl{phase signal} (e.g., voltage, current, flux linkage)
+    \begin{equation}
+        x(t) = \hat{x}(t)\cos(\varphi_x(t))
+    \end{equation}
+    with time-varying \hl{amplitude} $\hat{x}(t)\in\mathbb{R}_{\geq 0}$ and \hl{phase} $\varphi_x(t)\in\mathbb{R}$. The \hl{instantaneous angular frequency} of this signal is defined as
+    \begin{equation}
+        \omega_x(t) = \frac{\mathrm{d}}{\mathrm{d}t}\varphi_x(t).
+    \end{equation}
+    Assuming that $\varphi_x(t)$ has a \hl{period} $T\in\mathbb{R}_{>0}$, typical (time-varying) signal properties are:
+    \begin{itemize}
+        \item Average: $\overline{x}(t)=\frac{1}{T}\int_{t-T}^{t} x(\tau) \, \mathrm{d}\tau$,
+        \item Rectified average: $\overline{|x|}(t)=\frac{1}{T}\int_{t-T}^{t} |x(\tau)| \, \mathrm{d}\tau$,
+        \item Root mean square (RMS): $X(t)=\sqrt{\frac{1}{T}\int_{t-T}^{t} x^2(\tau) \, \mathrm{d}\tau}$.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Three-phase AC system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Three-phase AC system}
+    Extending the single-phase system to three phases, we have \hl{three-phase signal}
+    \begin{equation}
+        \bm{x}_\mathrm{abc} = \begin{bmatrix}
+            x_\mathrm{a}(t) \\
+            x_\mathrm{b}(t) \\
+            x_\mathrm{c}(t)
+        \end{bmatrix} = \begin{bmatrix}
+            \hat{x}_\mathrm{a}(t)\cos(\varphi_{x_\mathrm{a}}(t)) \\
+            \hat{x}_\mathrm{b}(t)\cos(\varphi_{x_\mathrm{b}}(t)) \\
+            \hat{x}_\mathrm{c}(t)\cos(\varphi_{x_\mathrm{c}}(t))
+        \end{bmatrix}.
+    \end{equation}
+    Here, again $\hat{x}_\mathrm{a}(t), \hat{x}_\mathrm{b}(t), \hat{x}_\mathrm{c}(t)\in\mathbb{R}_{\geq 0}$ are the time-varying amplitudes and $\varphi_{x_\mathrm{a}}(t), \varphi_{x_\mathrm{b}}(t), \varphi_{x_\mathrm{c}}(t)\in\mathbb{R}$ are the time-varying phase angles. Instead of phase signals, we can also define \hl{line-to-line signals} as
+    \begin{equation}
+        \bm{x}_\mathrm{a\text{-}b\text{-}c} = \begin{bmatrix}
+            x_\mathrm{a\text{-}b}(t) \\
+            x_\mathrm{b\text{-}c}(t) \\
+            x_\mathrm{c\text{-}a}(t)
+        \end{bmatrix} = \begin{bmatrix}
+            x_\mathrm{a}(t) - x_\mathrm{b}(t) \\
+            x_\mathrm{b}(t) - x_\mathrm{c}(t) \\
+            x_\mathrm{c}(t) - x_\mathrm{a}(t)
+        \end{bmatrix} = \underbrace{\begin{bmatrix}
+                1  & -1 & 0  \\
+                0  & 1  & -1 \\
+                -1 & 0  & 1
+            \end{bmatrix}}_{\bm{T}_\Delta} \
+        \bm{x}_\mathrm{abc}.
+    \end{equation}
+    Since $\det(\bm{T}_\Delta) = 0$, we cannot directly transform line-to-line signals back to phase signals (at least not without additional information such as a reference potential against neutral).
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Interconnection of three-phase systems (star / delta) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Interconnection of three-phase systems (star / delta)}
+    \begin{columns}
+        \column{0.5\textwidth}
+
+        \begin{figure}
+            \centering
+            \begin{circuitikz}[scale=0.9, transform shape]
+                \coordinate (N) at (0,0); % Define the center (neutral) point
+                \def\phaselen{2.5} % Define the radius for the phase endpoints
+                \def\angleoff{10} % Define an angle offset for the L-L voltage arrows
+
+                % Define the three phase endpoints, 120° apart, a-phase at 0° (3 o'clock)
+                \coordinate (A) at (\phaselen,0);           % a-phase (3 o'clock)
+                \coordinate (B) at ({\phaselen*cos(120)},{\phaselen*sin(120)}); % b-phase (120° from a)
+                \coordinate (C) at ({\phaselen*cos(240)},{\phaselen*sin(240)}); % c-phase (240° from a)
+
+                % Draw the three phase windings
+                \draw (A) to [short, i_=$i_\mathrm{a}$, o-] ($(A)!.25!(N)$)  to [generic, l=$Z_\mathrm{a}$, v=$u_\mathrm{a}$, voltage = straight] ($(A)!.75!(N)$) to [short, -*] (N);
+                \draw (B) to [short, i_=$i_\mathrm{b}$, o-] ($(B)!.25!(N)$)  to [generic, l=$Z_\mathrm{b}$, v=$u_\mathrm{b}$, voltage = straight] ($(B)!.75!(N)$) to [short, -*] (N);
+                \draw (C) to [short, i=$i_\mathrm{c}$, o-] ($(C)!.25!(N)$)  to [generic, l=$Z_\mathrm{c}$, v=$u_\mathrm{c}$, voltage = straight] ($(C)!.75!(N)$) to [short, -*] (N);
+
+                % Draw the line-to-line voltage arrows
+                \draw[->]
+                ({(\phaselen)*cos(\angleoff)},{(\phaselen)*sin(\angleoff)})
+                arc[start angle=\angleoff, end angle=120-\angleoff, radius=\phaselen]
+                node[midway, below left] {$u_\mathrm{ab}$};
+                \draw[->]
+                ({(\phaselen)*cos(120+\angleoff)},{(\phaselen)*sin(120+\angleoff)})
+                arc[start angle=120+\angleoff, end angle=240-\angleoff, radius=\phaselen]
+                node[midway, right] {$u_\mathrm{bc}$};
+                \draw[->]
+                ({(\phaselen)*cos(240+\angleoff)},{(\phaselen)*sin(240+\angleoff)})
+                arc[start angle=240+\angleoff, end angle=360-\angleoff, radius=\phaselen]
+                node[midway, above left] {$u_\mathrm{ca}$};
+
+                % Draw and label the neutral point and the phase points
+                \node[right] at (A) {$a$};
+                \node[above left] at (B) {$b$};
+                \node[below left] at (C) {$c$};
+                \node[above right] at (N) {$N$};
+            \end{circuitikz}
+            \caption{Star connection}
+            \label{fig:star_connection}
+        \end{figure}
+        \begin{equation}
+            \begin{gathered}
+                i_\mathrm{a}+i_\mathrm{b}+i_\mathrm{c}= 0 \\
+                u_\mathrm{a}+u_\mathrm{b}+u_\mathrm{c}\neq0
+            \end{gathered}
+        \end{equation}
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \begin{circuitikz}[scale=0.9, transform shape]
+                \def\phaselen{1.9} % Define the radius for the phase endpoints
+                \def\terminaloffset{0.6} % Define the terminal extension beyond each corner
+                \def\angleoff{10} % Define an angle offset for the outer voltage arrows
+
+                % Define the delta corner points, 120° apart, a-phase at 0° (3 o'clock)
+                \coordinate (A) at (\phaselen,0);           % a-phase corner
+                \coordinate (B) at ({\phaselen*cos(120)},{\phaselen*sin(120)}); % b-phase corner
+                \coordinate (C) at ({\phaselen*cos(240)},{\phaselen*sin(240)}); % c-phase corner
+
+                % Define the outer terminals on the same radial directions
+                \coordinate (Aa) at ({(\phaselen+\terminaloffset)*cos(0)},{(\phaselen+\terminaloffset)*sin(0)});
+                \coordinate (Bb) at ({(\phaselen+\terminaloffset)*cos(120)},{(\phaselen+\terminaloffset)*sin(120)});
+                \coordinate (Cc) at ({(\phaselen+\terminaloffset)*cos(240)},{(\phaselen+\terminaloffset)*sin(240)});
+
+                % Draw the external terminals and line currents
+                \draw (Aa) to [short, i_=$i_\mathrm{a}$, o-*] (A);
+                \draw (Bb) to [short, i_=$i_\mathrm{b}$, o-*] (B);
+                \draw (Cc) to [short, i_=$i_\mathrm{c}$, o-*] (C);
+
+                % Draw the three delta-connected phase windings
+                \draw (A) to [short] ($(A)!0.25!(B)$) to [generic, l=$Z_\mathrm{ab}$, v>=$u_\mathrm{ab}$, voltage = straight] ($(A)!0.75!(B)$) to [short, i>_=$i_\mathrm{ab}$] (B);
+                \draw (B) to [short] ($(B)!0.25!(C)$) to [generic, l=$Z_\mathrm{bc}$, v>=$u_\mathrm{bc}$, voltage = straight] ($(B)!0.75!(C)$) to [short, i>_=$i_\mathrm{bc}$] (C);
+                \draw (C) to [short] ($(C)!0.25!(A)$) to [generic, l=$Z_\mathrm{ca}$, v>=$u_\mathrm{ca}$, voltage = straight] ($(C)!0.75!(A)$) to [short, i>_=$i_\mathrm{ca}$] (A);
+
+
+                % Draw and label the phase points
+                \node[right] at (Aa) {$a$};
+                \node[above left] at (Bb) {$b$};
+                \node[below left] at (Cc) {$c$};
+            \end{circuitikz}
+            \caption{Delta connection}
+            \label{fig:delta_connection}
+        \end{figure}
+        \begin{equation}
+            \begin{gathered}
+                i_\mathrm{ab}+i_\mathrm{bc}+i_\mathrm{ca}\neq 0 \\
+                u_\mathrm{ab}+u_\mathrm{bc}+u_\mathrm{ca}=0
+            \end{gathered}
+        \end{equation}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Star interconnection and terminal box %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Star interconnection and terminal box}
+    \begin{columns}
+        \column{0.5\textwidth}
+
+        \begin{figure}
+            \centering
+            \begin{circuitikz}[scale=0.9, transform shape]
+                \def\topY{2.1} % Upper winding terminal height
+                \def\botY{-0.8} % Lower winding terminal height
+                \def\lineY{3.0} % External line terminal height
+                \def\xoff{2.2} % Horizontal phase spacing
+
+                % Define terminal-box connection points and external line terminals
+                \coordinate (A1) at (-\xoff,\topY);
+                \coordinate (B1) at (0,\topY);
+                \coordinate (C1) at (\xoff,\topY);
+                \coordinate (A2) at (-\xoff,\botY);
+                \coordinate (B2) at (0,\botY);
+                \coordinate (C2) at (\xoff,\botY);
+                \coordinate (a) at (-\xoff,\lineY);
+                \coordinate (b) at (0,\lineY);
+                \coordinate (c) at (\xoff,\lineY);
+                \coordinate (N) at (0,\botY);
+
+                % Draw the incoming line connections and currents
+                \draw (a) to [short, i_=$i_\mathrm{a}$, o-*] (A1);
+                \draw (b) to [short, i_=$i_\mathrm{b}$, o-*] (B1);
+                \draw (c) to [short, i_=$i_\mathrm{c}$, o-*] (C1);
+
+                % Draw the three vertical, parallel phase windings
+                \draw (A1) to [short] ($(A1)!0.25!(A2)$) to [generic, l=$Z_\mathrm{a}$, v=$u_\mathrm{a}$, voltage = straight] ($(A1)!0.75!(A2)$) to [short, -*] (A2);
+                \draw (B1) to [short] ($(B1)!0.25!(B2)$) to [generic, l=$Z_\mathrm{b}$, v=$u_\mathrm{b}$, voltage = straight] ($(B1)!0.75!(B2)$) to [short, -*] (B2);
+                \draw (C1) to [short] ($(C1)!0.25!(C2)$) to [generic, l=$Z_\mathrm{c}$, v=$u_\mathrm{c}$, voltage = straight] ($(C1)!0.75!(C2)$) to [short, -*] (C2);
+
+                % Draw the star-point bus bar at the lower winding ends
+                \draw (A2) -- (C2);
+
+
+
+                % Draw and label the terminal-box connection points and external phase terminals
+                \node[above] at (a) {$a$};
+                \node[above] at (b) {$b$};
+                \node[above] at (c) {$c$};
+                \node[above right] at (A1) {A1};
+                \node[above right] at (B1) {B1};
+                \node[above right] at (C1) {C1};
+                \node[below left] at (A2) {A2};
+                \node[below] at (B2) {B2};
+                \node[below right] at (C2) {C2};
+                \node[above right] at (N) {$N$};
+            \end{circuitikz}
+            \caption{Star connection with terminal box designations}
+            \label{fig:star_terminal_box}
+        \end{figure}
+
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[height=0.5\textheight]{fig/lec01/Terminal_box_star.jpg}
+            \caption{Terminal box star connection example (source: \href{https://ndla.no/r/energi--og-styresystemer-el-ele-vg1/startmetoder-for-trefasede-asynkronmotorer/392692a8b1}{https://ndla.no}, \href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0})}
+            \label{fig:Terminal_box_star}
+        \end{figure}
+
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Delta interconnection and terminal box %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Delta interconnection and terminal box}
+    \begin{columns}
+        \column{0.5\textwidth}
+
+        \begin{figure}
+            \centering
+            \begin{circuitikz}[scale=0.9, transform shape]
+                \def\topY{2.1} % Upper winding terminal height
+                \def\botY{-0.8} % Lower winding terminal height
+                \def\lineY{3.0} % External line terminal height
+                \def\xoff{2.2} % Horizontal phase spacing
+
+                % Define terminal-box connection points and external line terminals
+                \coordinate (A1) at (-\xoff,\topY);
+                \coordinate (B1) at (0,\topY);
+                \coordinate (C1) at (\xoff,\topY);
+                \coordinate (A2) at (-\xoff,\botY);
+                \coordinate (B2) at (0,\botY);
+                \coordinate (C2) at (\xoff,\botY);
+                \coordinate (a) at (-\xoff,\lineY);
+                \coordinate (b) at (0,\lineY);
+                \coordinate (c) at (\xoff,\lineY);
+                \coordinate (N) at (0,\botY);
+
+                % Draw the incoming line connections and currents
+                \draw (a) to [short, i_=$i_\mathrm{a}$, o-*] (A1);
+                \draw (b) to [short, i_=$i_\mathrm{b}$, o-*] (B1);
+                \draw (c) to [short, i_=$i_\mathrm{c}$, o-*] (C1);
+
+                % Draw the three vertical, parallel phase windings
+                \draw (A1) to [short] ($(A1)!0.25!(A2)$) to [generic, l=$Z_\mathrm{ca}$, v<=$u_\mathrm{ca}$, voltage = straight] ($(A1)!0.75!(A2)$) to [short, -*]  (A2);
+                \draw (B1) to [short] ($(B1)!0.25!(B2)$) to [generic, l=$Z_\mathrm{ab}$, v<=$u_\mathrm{ab}$, voltage = straight] ($(B1)!0.75!(B2)$) to [short, -*] (B2);
+                \draw (C1) to [short] ($(C1)!0.25!(C2)$) to [generic, l=$Z_\mathrm{bc}$, v<=$u_\mathrm{bc}$, voltage = straight] ($(C1)!0.75!(C2)$) to [short, -*] (C2);
+
+                % Draw the delta connections
+                \draw (A1) -- ($(A1)!0.5!(B1)$) -- ($(A2)!0.5!(B2)$) -- (B2);
+                \draw (B1) -- ($(B1)!0.5!(C1)$) -- ($(B2)!0.5!(C2)$) -- (C2);
+                \draw (C1) to ++(1,0) to (\tikztostart |- C2) to ++(0,-1) -| (A2);
+
+                % Draw and label the terminal-box connection points and external phase terminals
+                \node[above] at (a) {$a$};
+                \node[above] at (b) {$b$};
+                \node[above] at (c) {$c$};
+                \node[above right] at (A1) {A1};
+                \node[above right] at (B1) {B1};
+                \node[above right] at (C1) {C1};
+                \node[below left] at (A2) {A2};
+                \node[below] at (B2) {B2};
+                \node[below right] at (C2) {C2};
+            \end{circuitikz}
+            \caption{Delta connection with terminal box designations}
+            \label{fig:delta_terminal_box}
+        \end{figure}
+
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[height=0.5\textheight]{fig/lec01/Terminal_box_delta.jpg}
+            \caption{Terminal box delta connection example (source: \href{https://ndla.no/r/energi--og-styresystemer-el-ele-vg1/startmetoder-for-trefasede-asynkronmotorer/392692a8b1}{https://ndla.no}, \href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0})}
+            \label{fig:Terminal_box_delta}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Balanced three-phase systems %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Balanced three-phase systems}
+    A three-phase system is called \hl{balanced} if the three-phase signals have equal amplitude and are phase-shifted by $120^\circ$ (i.e., $\nicefrac{2\pi}{3}$ radians) with respect to each other. In this case, the three-phase signals can be expressed as
+    \begin{equation}
+        \begin{split}
+            \bm{x}_{\mathrm{abc}}(t) = \begin{bmatrix}
+                                           x_\mathrm{a}(t) \\
+                                           x_\mathrm{b}(t) \\
+                                           x_\mathrm{c}(t)
+                                       \end{bmatrix} = \hat{x}(t) \begin{bmatrix}
+                                                                      \cos(\varphi_x(t))                             \\
+                                                                      \cos\left(\varphi_x(t) - \frac{2\pi}{3}\right) \\
+                                                                      \cos\left(\varphi_x(t) - \frac{4\pi}{3}\right)
+                                                                  \end{bmatrix}
+        \end{split}
+    \end{equation}
+    with common amplitude and shifted phases
+    \begin{equation}
+        \begin{gathered}
+            \hat{x}(t)    =\hat{x}_\mathrm{a}(t)=\hat{x}_\mathrm{b}(t)=\hat{x}_\mathrm{c}(t),            \\
+            \varphi_x(t)  =\varphi_a(t)=\varphi_b(t)+\nicefrac{2\pi}{3}=\varphi_c(t)+\nicefrac{4\pi}{3}.
+        \end{gathered}
+    \end{equation}
+    If these conditions apply, the \hl{zero-sequence component} of the three-phase systems is zero:
+    \begin{equation}
+        x_0(t) = \frac{1}{3}\left(x_\mathrm{a}(t)+x_\mathrm{b}(t)+x_\mathrm{c}(t)\right) = 0.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Space vector theory / coordinate systems %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Space vector theory / coordinate systems}
+\label{subsec:space_vector_fundamentals}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Representation of three-phase signals in an orthogonal coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Representation of three-phase signals in an orthogonal coordinate system}
+    \begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[height=0.55\textheight]{fig/lec01/abc_stator.pdf}
+            \caption{abc coordinates}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[height=0.55\textheight]{fig/lec01/alpha_beta_stator.pdf}
+            \caption{$\upalpha\upbeta$ coordinates}
+        \end{subfigure}
+        \caption{Representation of an abstracted three-phase stator in different coordinate systems. Motivation: in a balanced three-phase system, the three-phase signals are linearly dependent and can be represented in a two-dimensional orthogonal coordinate system.}
+        \label{fig:abc_alpha_beta_stator}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Clarke transformation}
+    Consider any $\bm{x}_\mathrm{abc}(t)\in\mathbb{R}^3$, then the \hl{Clarke transformation} is given by
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_{\upalpha \upbeta \upgamma}(t) = \begin{bmatrix} x_\upalpha(t) \\ x_\upbeta(t) \\ x_\upgamma(t)\end{bmatrix} = \begin{bmatrix}
+            \nicefrac{2}{3}        & -\nicefrac{1}{3}       & -\nicefrac{1}{3}        \\
+            0                      & \nicefrac{1}{\sqrt{3}} & -\nicefrac{1}{\sqrt{3}} \\
+            \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3}
+        \end{bmatrix} \begin{bmatrix} x_\mathrm{a}(t) \\ x_\mathrm{b}(t) \\ x_\mathrm{c}(t)\end{bmatrix} = \bm{T}_\mathrm{c} \bm{x}_\mathrm{abc}.
+        \label{eq:Clarke_transformation}
+    \end{equation}
+    \pause
+    Above, $\bm{T}_\mathrm{c}\in\mathbb{R}^{3\times 3}$ is the \hl{Clarke transformation matrix} and $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}\in\mathbb{R}^3$ the transformed vector. The values inside $\bm{T}_\mathrm{c}$ are originating from the angle displacement between the two coordinate system axes (cf. \figref{fig:abc_alphabeta_vectors}):
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{T}_\mathrm{c} = \frac{2}{3}\begin{bmatrix}
+            \cos(0)                 & \cos(\nicefrac{2\pi}{3}) & \cos(\nicefrac{4\pi}{3}) \\
+            \cos(\nicefrac{\pi}{2}) & \cos(\nicefrac{\pi}{6})  & \cos(\nicefrac{5\pi}{6})
+            \\ \nicefrac{1}{\sqrt{2}} & \nicefrac{1}{\sqrt{2}} & \nicefrac{1}{\sqrt{2}}\end{bmatrix} = \begin{bmatrix}
+            \nicefrac{2}{3}        & -\nicefrac{1}{3}       & -\nicefrac{1}{3}        \\
+            0                      & \nicefrac{1}{\sqrt{3}} & -\nicefrac{1}{\sqrt{3}} \\
+            \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3}
+        \end{bmatrix}.
+    \end{equation}
+    The factor $\nicefrac{2}{3}$ is a normalization factor to preserve the amplitude of the transformed vector, i.e., the amplitude of $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}(t)$ is identical to the amplitude of $\bm{x}_\mathrm{abc}(t)$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Clarke transformation (cont.)}
+    The \hl{inverse transformation} is defined
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_\mathrm{abc}(t)  = \begin{bmatrix}
+            1                & 0                       & \nicefrac{1}{\sqrt{2}} \\
+            -\nicefrac{1}{2} & \nicefrac{\sqrt{3}}{2}  & \nicefrac{1}{\sqrt{2}} \\
+            -\nicefrac{1}{2} & -\nicefrac{\sqrt{3}}{2} & \nicefrac{1}{\sqrt{2}}
+        \end{bmatrix} \begin{bmatrix} x_\upalpha(t) \\ x_\upbeta(t) \\ x_\upgamma(t)\end{bmatrix} = \bm{T}_\mathrm{c}^{-1} \bm{x}_{\upalpha \upbeta \upgamma}(t).
+    \end{equation}
+
+    \begin{varblock}{$\upgamma$ vs. zero-sequence component}
+        The $\upgamma$ component is a scaled version of the zero-sequence component, i.e., $$x_\upgamma(t) = \sqrt{2} x_0(t).$$
+        This choice is not unique, i.e., there are Clarke transformation variants which map directly to $x_0(t)$ instead of $x_\upgamma(t)$, but in this case the power-preserving variant from \eqref{eq:Clarke_transformation_power_preserving} is not a simple scalar mapping from \eqref{eq:Clarke_transformation}.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation: amplitude and power scaling %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Clarke transformation: amplitude and power scaling}
+    The transformation \eqref{eq:Clarke_transformation} is \hl{amplitude-preserving}, i.e., the amplitude of the $\upalpha\upbeta$ vector is identical to the amplitude of the original abc vector. \pause On the other hand, the power is not preserved, as can be seen from the inner product of the transformed vectors (which commonly occurs in power calculations):
+    \begin{equation*}
+        \bm{x}_{\mathrm{abc}}\T \bm{y}_{\mathrm{abc}} = \bm{x}_\mathrm{\upalpha \upbeta \upgamma}\T\left(\bm{T}_\mathrm{c}^{-1}\right)\T \bm{T}_\mathrm{c}^{-1}\bm{y}_\mathrm{\upalpha \upbeta \upgamma} \quad \Leftrightarrow \quad x_\mathrm{a}y_\mathrm{a} + x_\mathrm{b}y_\mathrm{b} + x_\mathrm{c}y_\mathrm{c} = \frac{3}{2}\left(x_\upalpha y_\upalpha + x_\upbeta y_\upbeta + x_\upgamma y_\upgamma \right).
+    \end{equation*}
+    \pause
+    The alternative \hl{power-preserving} Clarke transformation variant is given by
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{T}'_\mathrm{c} = \frac{\sqrt{3}}{2} \bm{T}_\mathrm{c} \qquad \left(\bm{T}'_\mathrm{c}\right)^{-1} = \left(\bm{T}'_\mathrm{c}\right)\T,
+        \label{eq:Clarke_transformation_power_preserving}
+    \end{equation}
+    which utilizes an \hl{orthogonal transformation matrix}. \pause However, when using $\bm{T}'_\mathrm{c}$ the amplitude of the transformed vector is not preserved. While being an arbitrary choice, we will stick to \eqref{eq:Clarke_transformation} as a convention for the following.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation: simplification for zero-component-free vectors %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Clarke transformation: simplification for zero-component-free vectors}
+    If the abc vector $\bm{x}_\mathrm{abc}(t)$ is zero-component-free, i.e.,  $$x_\mathrm{a}(t) + x_\mathrm{b}(t) +x_\mathrm{c}(t) = 0,$$
+    e.g., the phase currents of a star connected system, \pause the Clarke transformation simplifies to
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_{\upalpha \upbeta}(t) = \begin{bmatrix} x_\upalpha(t) \\ x_\upbeta(t) \end{bmatrix} =\begin{bmatrix}
+            \nicefrac{2}{3} & -\nicefrac{1}{3}       & -\nicefrac{1}{3}        \\
+            0               & \nicefrac{1}{\sqrt{3}} & -\nicefrac{1}{\sqrt{3}}
+        \end{bmatrix} \begin{bmatrix} x_\mathrm{a}(t) \\ x_\mathrm{b}(t) \\ x_\mathrm{c}(t)\end{bmatrix} = \bm{T}_{23} \bm{x}_\mathrm{abc}(t)
+        \label{eq:Clarke_transformation_zero_component_free}
+    \end{equation}
+    \pause
+    and
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_\mathrm{abc}(t)  = \begin{bmatrix}
+            1                & 0                       \\
+            -\nicefrac{1}{2} & \nicefrac{\sqrt{3}}{2}  \\
+            -\nicefrac{1}{2} & -\nicefrac{\sqrt{3}}{2}
+        \end{bmatrix} \begin{bmatrix} x_\upalpha(t) \\ x_\upbeta(t) \end{bmatrix} = \bm{T}_{32} \bm{x}_{\upalpha \upbeta}(t).
+    \end{equation}
+    Here, $\bm{T}_{23}\in\mathbb{R}^{2\times 3}$ and $\bm{T}_{32}\in\mathbb{R}^{3\times 2}$ are the \hl{simplified Clarke transformation matrices} for zero-component-free vectors.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation: simplification for zero-component-free vectors %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Clarke transformation: simplification for zero-component-free vectors}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \pgfmathsetmacro{\xrho}{.92} % normalized vector length
+            \pgfmathsetmacro{\xang}{36} % vector angle in degrees 
+
+            \pgfmathsetmacro{\gridlen}{2.5} % figure scaling
+            \pgfmathsetmacro{\sqrtthreeovertwo}{0.8660254} % pre-computed constant for coordinate transformations
+
+            % Vector in normalized \alpha\beta coordinates.
+            \pgfmathsetmacro{\xalphaN}{\xrho*cos(\xang)}
+            \pgfmathsetmacro{\xbetaN}{\xrho*sin(\xang)}
+
+            % For zero-component-free vectors, the abc components follow from T_32.
+            \pgfmathsetmacro{\xaN}{\xalphaN}
+            \pgfmathsetmacro{\xbN}{-0.5*\xalphaN + \sqrtthreeovertwo*\xbetaN}
+            \pgfmathsetmacro{\xcN}{-0.5*\xalphaN - \sqrtthreeovertwo*\xbetaN}
+
+            \coordinate (O) at (0,0);
+            \coordinate (X) at ({\gridlen*\xalphaN},{\gridlen*\xbetaN});
+
+            % Equal-length coordinate arrows on the normalized domain.
+            \coordinate (Aarr) at (\gridlen,0);
+            \coordinate (Betarr) at (0,\gridlen);
+            \coordinate (Barr) at ({-0.5*\gridlen},{\sqrtthreeovertwo*\gridlen});
+            \coordinate (Carr) at ({-0.5*\gridlen},{-\sqrtthreeovertwo*\gridlen});
+
+            % Signed projection points onto the coordinate axes.
+            \coordinate (Xa) at ({\gridlen*\xaN},0);
+            \coordinate (Xbeta) at (0,{\gridlen*\xbetaN});
+            \coordinate (Xb) at ({\gridlen*(-0.5*\xbN)},{\gridlen*(\sqrtthreeovertwo*\xbN)});
+            \coordinate (Xc) at ({\gridlen*(-0.5*\xcN)},{\gridlen*(-\sqrtthreeovertwo*\xcN)});
+
+            % Normalized rectangular grid.
+            \draw[step=0.25*\gridlen, gray!30, very thin] (-\gridlen,-\gridlen) grid (\gridlen,\gridlen);
+            \draw[gray!55, line width=0.4pt] (-\gridlen,-\gridlen) rectangle (\gridlen,\gridlen);
+
+            % Equal-length arrows for the coordinate directions.
+            \draw[->] ($-1*(Aarr)$) -- (Aarr) node[right] {$\mathrm{a},\upalpha$};
+            \draw[->] ($-1*(Betarr)$) -- (Betarr) node[above] {$\upbeta$};
+            \draw[->] ($-1*(Barr)$) -- (Barr) node[above left] {$\mathrm{b}$};
+            \draw[->] ($-1*(Carr)$) -- (Carr) node[below left] {$\mathrm{c}$};
+
+            % Complete mapping lines from x to all coordinates.
+            \draw[densely dotted] (X) -- (Xa);
+            \draw[densely dotted] (X) -- (Xbeta);
+            \draw[densely dotted] (X) -- (Xb);
+            \draw[densely dotted] (X) -- (Xc);
+
+            \draw[->,signaldelta,very thick] (O) -- (X) node[above right, pos=0.95] {$\bm{x}$}; % exemplary vector 
+
+            \node[fill=white, inner sep=1pt, below, yshift=-3pt] at (Xa) {$x_\mathrm{a}=x_\upalpha$}; % a/alpha component
+            \node[fill=white, inner sep=1pt, left, xshift=-2pt] at (Xbeta) {$x_\upbeta$}; % beta component
+            \node[fill=white, inner sep=1pt, left, xshift=-2pt, yshift=-1pt] at (Xb) {$x_\mathrm{b}$}; % b component
+            \node[fill=white, inner sep=1pt, left, xshift=-2pt, yshift=1pt] at (Xc) {$x_\mathrm{c}$}; % c component
+        \end{tikzpicture}
+        \caption{Geometrical interpretation of the Clarke
+            transformation without zero components: mapping $\bm{x}_\mathrm{abc}\in\mathbb{R}^3$ to $\bm{x}_{\upalpha\upbeta}\in\mathbb{R}^2$ without information loss}
+        \label{fig:abc_alphabeta_vectors}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Rotating reference frame}
+    \begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \pgfmathsetmacro{\xrho}{.85} % normalized x vector length
+                \pgfmathsetmacro{\xang}{62} % vector x angle in degrees 
+                \pgfmathsetmacro{\dqang}{25} % dq angle in degrees 
+
+                %calculte d&q components
+                \pgfmathsetmacro{\xdN}{\xrho*cos(\xang-\dqang)}
+                \pgfmathsetmacro{\xqN}{\xrho*sin(\xang-\dqang)}
+
+
+                \pgfmathsetmacro{\gridlen}{2.5} % figure scaling
+                \pgfmathsetmacro{\sqrtthreeovertwo}{0.8660254} % pre-computed constant for coordinate transformations
+
+                % Vector in normalized \alpha\beta coordinates.
+                \pgfmathsetmacro{\xalphaN}{\xrho*cos(\xang)}
+                \pgfmathsetmacro{\xbetaN}{\xrho*sin(\xang)}
+
+                % For zero-component-free vectors, the abc components follow from T_32.
+                \pgfmathsetmacro{\xaN}{\xalphaN}
+                \pgfmathsetmacro{\xbN}{-0.5*\xalphaN + \sqrtthreeovertwo*\xbetaN}
+                \pgfmathsetmacro{\xcN}{-0.5*\xalphaN - \sqrtthreeovertwo*\xbetaN}
+
+                \coordinate (O) at (0,0);
+                \coordinate (X) at ({\gridlen*\xalphaN},{\gridlen*\xbetaN});
+
+                % Equal-length coordinate arrows on the normalized domain.
+                \coordinate (Aarr) at (\gridlen,0);
+                \coordinate (Betarr) at (0,\gridlen);
+                \coordinate (darr) at ({\gridlen*cos(\dqang)},{\gridlen*sin(\dqang)});
+                \coordinate (qarr) at ({\gridlen*cos(\dqang+90)},{\gridlen*sin(\dqang+90)});
+
+                % Signed projection points onto the coordinate axes.
+                \coordinate (Xa) at ({\gridlen*\xaN},0);
+                \coordinate (Xbeta) at (0,{\gridlen*\xbetaN});
+                \coordinate (Xd) at ({\gridlen*\xdN*cos(\dqang)},{\gridlen*\xdN*sin(\dqang)});
+                \coordinate (Xq) at ({\gridlen*\xqN*cos(\dqang+90)},{\gridlen*\xqN*sin(\dqang+90)});
+
+                % Normalized rectangular grid.
+                \draw[step=0.25*\gridlen, gray!30, very thin] (-\gridlen,-\gridlen) grid (\gridlen,\gridlen);
+                \draw[gray!55, line width=0.4pt] (-\gridlen,-\gridlen) rectangle (\gridlen,\gridlen);
+
+                % Equal-length arrows for the coordinate directions.
+                \draw[->] ($-1*(Aarr)$) -- (Aarr) node[right] {$\upalpha$};
+                \draw[->] ($-1*(Betarr)$) -- (Betarr) node[above] {$\upbeta$};
+                \draw[->] ($-1*(darr)$) -- (darr) node[above right] {$\mathrm{d}$};
+                \draw[->] ($-1*(qarr)$) -- (qarr) node[above left] {$\mathrm{q}$};
+
+                % Complete mapping lines from x to all coordinates.
+                \draw[densely dotted] (X) -- (Xa);
+                \draw[densely dotted] (X) -- (Xbeta);
+                \draw[densely dotted] (X) -- (Xd);
+                \draw[densely dotted] (X) -- (Xq);
+
+                \draw[->,signaldelta,very thick] (O) -- (X) node[above right, pos=0.95] {$\bm{x}$}; % exemplary vector 
+
+                \node[fill=white, inner sep=1pt, below, yshift=-3pt] at (Xa) {$x_\upalpha$}; % alpha component
+                \node[fill=white, inner sep=1pt, left, xshift=-2pt] at (Xbeta) {$x_\upbeta$}; % beta component
+                \node[fill=white, inner sep=1pt, below, yshift=-3pt] at (Xd) {$x_\mathrm{d}$}; % d component
+                \node[fill=white, inner sep=1pt, left, xshift=-2pt] at (Xq) {$x_\mathrm{q}$}; % q component
+
+                %indicate angle between alpha and d axis with rounded arc
+                \draw[->,dashed] (2,0) arc (0:\dqang:2) node[midway, right] {$\varepsilon$};
+                %indicate rotating d axis with speed \omega 
+                \draw[->,dashed] ({1.05*\gridlen*cos(\dqang-10)},{1.05*\gridlen*sin(\dqang-10)}) arc[start angle={\dqang-10}, end angle={\dqang+10}, x radius=1.05*\gridlen, y radius=1.05*\gridlen] node[above] {$\omega$};
+            \end{tikzpicture}
+            \caption{Exemplary phasor representation}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\textwidth}
+            \centering
+            \includegraphics[height=0.6\textheight]{fig/lec01/dq_stator.pdf}
+            \caption{Permanent magnet synchronous machine}
+        \end{subfigure}
+        \caption{Aligning a rotating $\mathrm{dq}$ coordinate system with a relevant flux vector, e.g., permanent magnet of a synchronous machine, allows representing key variables as constants during steady state.}
+        \label{fig:dq_stator}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Visualization of different coordinate systems %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Visualization of different coordinate systems}
+    \begin{figure}
+        \centering
+        \movie{\includegraphics[height=0.8\textheight]{fig/lec01/Clarke_Park_preview.png}}{fig/lec01/Clarke_Park.gif}
+        \vspace{-0.25cm}
+        \caption{Representation of a rotating phasor (without zero component) in different coordinate systems}
+        \label{fig:Clarke_Park_animation}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Park transformation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Park transformation}
+    The \hl{Park transform rotates} a vector $\bm{x}_{\upalpha\upbeta}\in\mathbb{R}^2$ by a certain angle $\varepsilon$ to obtain $\bm{x}_\mathrm{dq}\in\mathbb{R}^2$, that is,
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_{\mathrm{dq}} = \begin{bmatrix} x_\mathrm{d} \\ x_\mathrm{q} \end{bmatrix} = \begin{bmatrix}
+            \cos(\varepsilon)  & \sin(\varepsilon) \\
+            -\sin(\varepsilon) & \cos(\varepsilon)
+        \end{bmatrix} \begin{bmatrix} x_\upalpha \\ x_\upbeta \end{bmatrix} = \bm{T}_\mathrm{p}^{-1}(\varepsilon) \bm{x}_\mathrm{\upalpha \upbeta}
+        \label{eq:Park_transformation}
+    \end{equation}
+    \pause
+    with the counter rotation
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.2}
+        \bm{x}_{\upalpha\upbeta} = \begin{bmatrix}
+            \cos(\varepsilon) & -\sin(\varepsilon) \\
+            \sin(\varepsilon) & \cos(\varepsilon)
+        \end{bmatrix} \begin{bmatrix} x_\mathrm{d} \\ x_\mathrm{q} \end{bmatrix} = \bm{T}_\mathrm{p}(\varepsilon) \bm{x}_{\mathrm{dq}}.
+    \end{equation}
+    \pause
+    Above, $\bm{T}_\mathrm{p}\in\mathbb{R}^{2\times 2}$ is the \hl{Park transformation matrix}. It might be noted that is a (historical) convention to define that $\bm{T}_\mathrm{p}$ rotates into the mathematically positive direction. Depending on the application background and choice of $\varepsilon$ (e.g., alignment with stator / air gap / rotor flux of a certain three-phase machine type), the interpretation of $\bm{x}_\mathrm{dq}$ can vary.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Park transformation: some properties %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Park transformation: some properties}
+    \onslide<+->
+    Performing the Park and inverse Park transformation sequentially, does not change the vector:
+    \begin{equation}
+        \bm{x}_{\upalpha \upbeta} = \bm{T}_\mathrm{p} \bm{T}_\mathrm{p}^{-1} \bm{x}_{\upalpha \upbeta} = \bm{T}_\mathrm{p}^{-1} \bm{T}_\mathrm{p} \bm{x}_{\upalpha \upbeta}.
+    \end{equation}
+    \onslide<+->
+    A frequent rotation within the electric machines and drives context is
+    \begin{equation}
+        \renewcommand{\arraystretch}{1.1}
+        \bm{T}_\mathrm{p}(\varepsilon = \nicefrac{\pi}{2}) = \begin{bmatrix}
+            \cos(\nicefrac{\pi}{2}) & -\sin(\nicefrac{\pi}{2}) \\
+            \sin(\nicefrac{\pi}{2}) & \cos(\nicefrac{\pi}{2})
+        \end{bmatrix} = \begin{bmatrix}
+            0 & -1 \\
+            1 & 0
+        \end{bmatrix} = \bm{J}
+    \end{equation}
+    leading to the definition of $\bm{J}\in\mathbb{R}^{2 \times 2}$ which will be used for brevity in the following.  \onslide<+-> Moreover, if $\varepsilon$ results from some rotation, i.e., $\nicefrac{\mathrm{d}}{\mathrm{d}t}\,\varepsilon(t)=\omega(t)$, we have:
+    \begin{align}
+        \renewcommand{\arraystretch}{1.1}
+        \uncover<+->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{T}_\mathrm{p}(\varepsilon(t))      & = \begin{bmatrix}
+                                                                                                      -\sin(\varepsilon(t)) & -\cos(\varepsilon(t)) \\
+                                                                                                      \cos(\varepsilon(t))  & -\sin(\varepsilon(t))
+                                                                                                  \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)}  \uncover<+->{= \bm{T}_\mathrm{p}(\varepsilon(t)) \bm{J}\omega(t),} \\
+        \uncover<+->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{T}_\mathrm{p}^{-1}(\varepsilon(t)) & = \begin{bmatrix}
+                                                                                                      -\sin(\varepsilon(t)) & \cos(\varepsilon(t))  \\
+                                                                                                      -\cos(\varepsilon(t)) & -\sin(\varepsilon(t))
+                                                                                                  \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)  = -\bm{T}_\mathrm{p}^{-1}(\varepsilon(t)) \bm{J}\omega(t).}
+        \label{eq:Park_transformation_derivative}
+    \end{align}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Park transformation with zero component %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Park transformation with zero component}
+    If a given signal $\bm{x}_{\upalpha\upbeta\upgamma}\in\mathbb{R}^3$ contains a zero component, the Park transformation can be applied to the $\upalpha\upbeta$ components while leaving the $\upgamma$ component unchanged, i.e.,
+    \begin{equation}
+        \bm{x}_{\mathrm{dq}\upgamma} = \begin{bmatrix} x_\mathrm{d} \\ x_\mathrm{q} \\ x_\upgamma \end{bmatrix} = \begin{bmatrix}
+            \cos(\varepsilon)  & \sin(\varepsilon) & 0 \\
+            -\sin(\varepsilon) & \cos(\varepsilon) & 0 \\
+            0                  & 0                 & 1
+        \end{bmatrix} \begin{bmatrix} x_\upalpha \\ x_\upbeta \\ x_\upgamma \end{bmatrix}.
+    \end{equation}
+    \pause
+
+    \begin{varblock}{Note on the $\upgamma$ component in $\mathrm{dq}$ coordinates}
+        While the $\mathrm{dq}$ components of transformed currents / voltages / fluxes become constant in steady state, the $\upgamma$ / zero component typically exhibits harmonics (e.g., due to non-idealities in the machine, unbalanced loads, etc.) and thus does not become constant. Therefore, the $\upgamma$ component is often neglected in the control of three-phase machines, but it can be relevant for certain applications (e.g., fault detection).
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Power definitions %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Power definitions}
+\label{subsec:power_def}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Instantaneous power theory %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Instantaneous power theory}
+\end{frame}
+
+
+
