@@ -864,7 +864,7 @@
         \bm{T}'_\mathrm{c} = \frac{\sqrt{3}}{2} \bm{T}_\mathrm{c} \qquad \left(\bm{T}'_\mathrm{c}\right)^{-1} = \left(\bm{T}'_\mathrm{c}\right)\T,
         \label{eq:Clarke_transformation_power_preserving}
     \end{equation}
-    which utilizes an \hl{orthogonal transformation matrix}. \pause However, when using $\bm{T}'_\mathrm{c}$ the amplitude of the transformed vector is not preserved. While being an arbitrary choice, we will stick to \eqref{eq:Clarke_transformation} as a convention for the following.
+    which utilizes an \hl{orthogonal transformation matrix}. \pause However, when using $\bm{T}'_\mathrm{c}$ the amplitude of the transformed vector is not preserved.0\hl{ While being an arbitrary choice, we will stick to \eqref{eq:Clarke_transformation} as a convention for the following.}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1136,6 +1136,7 @@
             -\sin(\varepsilon) & \cos(\varepsilon) & 0 \\
             0                  & 0                 & 1
         \end{bmatrix} \begin{bmatrix} x_\upalpha \\ x_\upbeta \\ x_\upgamma \end{bmatrix}.
+        \label{eq:Park_transform_dqgamma}
     \end{equation}
     \pause
 
@@ -1150,12 +1151,211 @@
 \subsection{Power definitions}
 \label{subsec:power_def}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Instantaneous power theory %%
+%% General setting %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Instantaneous power theory}
+    \frametitle{General setting: three-phase system with possible zero component}
+    Consider arbitrary instantaneous three-phase voltage and current vectors
+    \begin{equation}
+        \bm{u}_{\mathrm{abc}}(t)=\begin{bmatrix} u_{\mathrm{a}}(t) & u_{\mathrm{b}}(t) & u_{\mathrm{c}}(t) \end{bmatrix}^\top,
+        \qquad
+        \bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix} i_{\mathrm{a}}(t) & i_{\mathrm{b}}(t) & i_{\mathrm{c}}(t) \end{bmatrix}^\top,
+    \end{equation}
+    without assuming balanced sinusoidal operation or vanishing zero-sequence components. We define the \hl{instantaneous active power $p(t)$} as the inner product of the voltage and current vectors:
+    \begin{equation}
+        p(t)=\bm{u}_{\mathrm{abc}}^{\top}(t)\bm{i}_{\mathrm{abc}}(t) = u_{\mathrm{a}}(t)i_{\mathrm{a}}(t) + u_{\mathrm{b}}(t)i_{\mathrm{b}}(t) + u_{\mathrm{c}}(t)i_{\mathrm{c}}(t).
+    \end{equation}
+    Moreoever, we define the \hl{instantaneous reactive power vector $\bm{q}(t)$} as the cross product of the voltage and current vectors
+    \begin{equation}
+        \bm{q}_{\mathrm{abc}}(t)=\bm{u}_{\mathrm{abc}}(t)\times\bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix}
+            u_{\mathrm{b}}(t)i_{\mathrm{c}}(t)-u_{\mathrm{c}}(t)i_{\mathrm{b}}(t) \\
+            u_{\mathrm{c}}(t)i_{\mathrm{a}}(t)-u_{\mathrm{a}}(t)i_{\mathrm{c}}(t) \\
+            u_{\mathrm{a}}(t)i_{\mathrm{b}}(t)-u_{\mathrm{b}}(t)i_{\mathrm{a}}(t)
+        \end{bmatrix}
+    \end{equation}
+    leading to \hl{(scalar) instantaneous reactive power $q(t)$} as the norm of $\bm{q}_{\mathrm{abc}}(t)$, i.e.,
+    \begin{equation}
+        q(t)=\lVert\bm{q}_{\mathrm{abc}}(t)\rVert.
+    \end{equation}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Interpretation of the instantaneous reactive power in the a-b-c coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Interpretation of the instantaneous reactive power}
+    \begin{columns}
+        \begin{column}{0.45\textwidth}
+            \begin{varblock}{Interpretation}
+                The instantaneous reactive power vector $\bm{q}_{\mathrm{abc}}(t)$ can be interpreted as the vector in the perpendicular plane of the voltage and current vectors in the $a$-$b$-$c$ coordinate system, i.e., $\bm{q}_{\mathrm{abc}}(t)\perp\bm{u}_{\mathrm{abc}}(t)$ and $\bm{q}_{\mathrm{abc}}(t)\perp\bm{i}_{\mathrm{abc}}(t)$. It represents power which is exchanged between the source and the load but not converted to other energy forms.
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.55\textwidth}
+            \tdplotsetmaincoords{68}{118}
+            \begin{figure}
+                \centering
+                \begin{tikzpicture}[
+                        tdplot_main_coords,
+                        scale=2.5,
+                        font=\normalsize,
+                        line cap=round,
+                        line join=round,
+                        >=Latex
+                    ]
+                    \pgfmathsetmacro{\phaseoff}{150} % phase offset for voltage vector
+                    \pgfmathsetmacro{\phasedelay}{75} % phase delay for current vector
+                    % Parameterizable vector coordinates in the a-b-c frame.
+                    \pgfmathsetmacro{\ua}{1*cos(\phaseoff)}
+                    \pgfmathsetmacro{\ub}{1*cos(\phaseoff - 120)}
+                    \pgfmathsetmacro{\uc}{1*cos(\phaseoff - 240)}
+                    \pgfmathsetmacro{\ia}{cos(\phasedelay + \phaseoff)}
+                    \pgfmathsetmacro{\ib}{cos(\phasedelay + \phaseoff - 120)}
+                    \pgfmathsetmacro{\ic}{cos(\phasedelay + \phaseoff - 240)}
+                    \pgfmathsetmacro{\qa}{\ib*\uc-\ic*\ub}
+                    \pgfmathsetmacro{\qb}{\ic*\ua-\ia*\uc}
+                    \pgfmathsetmacro{\qc}{\ia*\ub-\ib*\ua}
+                    \pgfmathsetmacro{\coordmax}{max(abs(\ua),max(abs(\ub),max(abs(\uc),max(abs(\ia),max(abs(\ib),abs(\ic))))))}
+                    \pgfmathsetmacro{\qcoordmax}{max(abs(\qa),max(abs(\qb),abs(\qc)))}
+                    \pgfmathsetmacro{\axismax}{1.15*max(1.15,max(\coordmax,\qcoordmax))}
+                    \pgfmathsetmacro{\axismin}{-\axismax}
+                    \pgfmathsetmacro{\caxismin}{-0.2*\axismax}
+
+                    \coordinate (O) at (0,0,0);
+                    \coordinate (U) at (\ua,\ub,\uc);
+                    \coordinate (I) at (\ia,\ib,\ic);
+                    \coordinate (Q) at (\qa,\qb,\qc);
+
+
+                    \draw[gray!60, thin] (\axismin,0,0) -- (\axismax,0,0);
+                    \draw[gray!60, thin] (0,\axismin,0) -- (0,\axismax,0);
+                    \draw[gray!60, thin] (0,0,\caxismin) -- (0,0,\axismax);
+                    \draw[->, thick] (O) -- (\axismax,0,0) node[anchor=north east] {$a$};
+                    \draw[->, thick] (O) -- (0,\axismax,0) node[anchor=south] {$b$};
+                    \draw[->, thick] (O) -- (0,0,\axismax) node[anchor=south west] {$c$};
+                    \fill[black] (O) circle (0.45pt);
+                    \node[anchor=south east] at (O) {$\bm{0}$};
+
+                    \draw[->, very thick, signalblue] (O) -- (U)
+                    node[pos=1.0, anchor=west] {$\bm{u}_{\mathrm{abc}}$};
+                    \draw[->, very thick, signaldelta] (O) -- (I)
+                    node[pos=1.0, right] {$\bm{i}_{\mathrm{abc}}$};
+                    \draw[->, very thick, signalbeta] (O) -- (Q)
+                    node[pos=1.0, right, anchor=north west] {$\bm{q}_{\mathrm{abc}}$};
+
+                \end{tikzpicture}
+                \caption{Visualization of the instantaenous reactive power component as the cross product of the voltage and current vectors in the $a$-$b$-$c$ coordinate system.}
+                \label{fig:abc_reactive_instantaneous_power}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Clarke transformation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Representation in $\upalpha\upbeta\upgamma$ coordinates}
+    Using the amplitude-invariant Clarke transformation \eqref{eq:Clarke_transformation} produces
+    \begin{equation}
+        \bm{u}_{\mathrm{\upalpha\upbeta\upgamma}}(t)=\begin{bmatrix} u_{\mathrm{\upalpha}}(t) & u_{\mathrm{\upbeta}}(t) & u_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
+        \qquad
+        \bm{i}_{\mathrm{\upalpha\upbeta\upgamma}}(t)=\begin{bmatrix} i_{\mathrm{\upalpha}}(t) & i_{\mathrm{\upbeta}}(t) & i_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
+    \end{equation}
+    and the instantaneous active becomes
+    \begin{equation}
+        p(t)=\frac{3}{2}\bm{u}_{\upalpha\upbeta\upgamma}^{\top}(t)\bm{i}_{\upalpha\upbeta\upgamma}(t) = \frac{3}{2}\left(u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upalpha}}(t) + u_{\mathrm{\upbeta}}(t)i_{\mathrm{\upbeta}}(t) + u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upgamma}}(t)\right),
+    \end{equation}
+    while the instantaneous reactive power vector becomes
+    \begin{equation}
+        \bm{q}_{\upalpha\upbeta\upgamma}(t)=\frac{3}{2}\left(\bm{u}_{\mathrm{\upalpha\upbeta\upgamma}}(t)\times\bm{i}_{\mathrm{\upalpha\upbeta\upgamma}}(t)\right)=\frac{3}{2}
+        \begin{bmatrix}
+            u_{\mathrm{\upbeta}}(t)i_{\mathrm{\upgamma}}(t)-u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upbeta}}(t)   \\
+            u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upalpha}}(t)-u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upgamma}}(t) \\
+            u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upbeta}}(t)-u_{\mathrm{\upbeta}}(t)i_{\mathrm{\upalpha}}(t)
+        \end{bmatrix}.
+    \end{equation}
+    Moreover, we define the \hl{instantaneous apparent power} as the norm of the instantaneous active and reactive powers (which applies in any coordinate system):
+    \begin{equation}
+        s(t)=\sqrt{p^2(t)+q^2(t)}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% dqgamma coordinates %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Representation in $\mathrm{dq}\upgamma$ coordinates}
+    The Park transformation \eqref{eq:Park_transform_dqgamma} delivers
+    \begin{equation}
+        \bm{u}_{\mathrm{dq}\upgamma}(t)=\begin{bmatrix} u_{\mathrm{d}}(t) & u_{\mathrm{q}}(t) & u_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
+        \qquad
+        \bm{i}_{\mathrm{dq}\upgamma}(t)=\begin{bmatrix} i_{\mathrm{d}}(t) & i_{\mathrm{q}}(t) & i_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top.
+    \end{equation}
+    Hence, the instantaneous active power becomes
+    \begin{equation}
+        p(t)=\frac{3}{2}\bm{u}_{\mathrm{dq}\upgamma}^{\top}(t)\bm{i}_{\mathrm{dq}\upgamma}(t) = \frac{3}{2}\left(u_{\mathrm{d}}(t)i_{\mathrm{d}}(t) + u_{\mathrm{q}}(t)i_{\mathrm{q}}(t) + u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upgamma}}(t)\right),
+    \end{equation}
+    while the instantaneous reactive power vector becomes
+    \begin{equation}
+        \bm{q}_{\mathrm{dq}\upgamma}(t)=\frac{3}{2}\left(\bm{u}_{\mathrm{dq}\upgamma}(t)\times\bm{i}_{\mathrm{dq}\upgamma}(t)\right)=\frac{3}{2}
+        \begin{bmatrix}
+            u_{\mathrm{q}}(t)i_{\mathrm{\upgamma}}(t)-u_{\mathrm{\upgamma}}(t)i_{\mathrm{q}}(t) \\
+            u_{\mathrm{\upgamma}}(t)i_{\mathrm{d}}(t)-u_{\mathrm{d}}(t)i_{\mathrm{\upgamma}}(t) \\
+            u_{\mathrm{d}}(t)i_{\mathrm{q}}(t)-u_{\mathrm{q}}(t)i_{\mathrm{d}}(t)
+        \end{bmatrix}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% From instantaneous to average powers %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{From instantaneous quantities to average active and reactive powers}
+    Let $T=\nicefrac{2\pi}{\omega}$ denote the \hl{fundamental period} of the system. Then, the classical \hl{average active power} follows directly from the instantaneous active power:
+    \begin{equation}
+        P(t)=\overline{p}(t)=\frac{1}{T}\int_{t-T}^{t} p(\tau)\,\mathrm{d}\tau.
+    \end{equation}
+    This relation is valid for all coordinate systems. Applying the same averaging to the instantaneous reactive power $q(t)$, however, does not in general recover the classical average reactive power $Q$:
+    \begin{equation}
+        \overline{q}(t)=\frac{1}{T}\int_{t-T}^{t} q(\tau)\,\mathrm{d}\tau \neq Q(t).
+    \end{equation}
+
+    \begin{varblock}{Difference between $Q$ and $\overline{q}$}
+        The classical average reactive power $Q$ and the average of the instantaneous reactive power $\overline{q}$ are different concepts: $Q$ is a signed reactive power which differentiates between inductive and capacitive behavior, whereas $\overline{q}$ is a non-negative norm describing the average magnitude of the reactive power vector.
+    \end{varblock}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Balanced simplification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Balanced three-phase system without zero component}
+    If the three-phase currents and/or voltages are zero-sequence free, i.e.,
+    \begin{equation}
+        x_{\upgamma}(t)=0 \quad \Leftrightarrow \quad x_{\mathrm{a}}(t)+x_{\mathrm{b}}(t)+x_{\mathrm{c}}(t)=0,
+    \end{equation}
+    the instantaneous active and reactive powers simplify to
+    \begin{equation}
+        \begin{split}
+            p(t) & =\frac{3}{2}\Big(v_{\upalpha}(t)i_{\upalpha}(t)+v_{\upbeta}(t)i_{\upbeta}(t)\Big)
+            =\frac{3}{2}\Big(v_{\mathrm{d}}(t)i_{\mathrm{d}}(t)+v_{\mathrm{q}}(t)i_{\mathrm{q}}(t)\Big), \\
+            q(t) & =\frac{3}{2}\left|v_{\upalpha}(t)i_{\upbeta}(t)-v_{\upbeta}(t)i_{\upalpha}(t)\right|
+            =\frac{3}{2}\left|v_{\mathrm{d}}(t)i_{\mathrm{q}}(t)-v_{\mathrm{q}}(t)i_{\mathrm{d}}(t)\right|.
+        \end{split}
+    \end{equation}
+    Further assuming a steady-state balanced system, the instantaneous active and reactive powers become constant and equal to their average values, i.e.,
+    \begin{equation}
+        p(t)=P, \qquad q(t)=|Q|.
+    \end{equation}
+    Hence, only in this special case, the instantaneous reactive power $q(t)$ can be used to determine the magnitude of the average reactive power $Q$.
+\end{frame}
+
 
 
 
