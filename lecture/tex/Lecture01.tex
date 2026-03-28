@@ -526,15 +526,15 @@
                 \draw[->]
                 ({(\phaselen)*cos(\angleoff)},{(\phaselen)*sin(\angleoff)})
                 arc[start angle=\angleoff, end angle=120-\angleoff, radius=\phaselen]
-                node[midway, below left] {$u_\mathrm{ab}$};
+                node[midway, below left] {$u_\mathrm{a\text{-}b}$};
                 \draw[->]
                 ({(\phaselen)*cos(120+\angleoff)},{(\phaselen)*sin(120+\angleoff)})
                 arc[start angle=120+\angleoff, end angle=240-\angleoff, radius=\phaselen]
-                node[midway, right] {$u_\mathrm{bc}$};
+                node[midway, right] {$u_\mathrm{b\text{-}c}$};
                 \draw[->]
                 ({(\phaselen)*cos(240+\angleoff)},{(\phaselen)*sin(240+\angleoff)})
                 arc[start angle=240+\angleoff, end angle=360-\angleoff, radius=\phaselen]
-                node[midway, above left] {$u_\mathrm{ca}$};
+                node[midway, above left] {$u_\mathrm{c\text{-}a}$};
 
                 % Draw and label the neutral point and the phase points
                 \node[right] at (A) {$a$};
@@ -575,9 +575,9 @@
                 \draw (Cc) to [short, i_=$i_\mathrm{c}$, o-*] (C);
 
                 % Draw the three delta-connected phase windings
-                \draw (A) to [short] ($(A)!0.25!(B)$) to [generic, l=$Z_\mathrm{ab}$, v>=$u_\mathrm{ab}$, voltage = straight] ($(A)!0.75!(B)$) to [short, i>_=$i_\mathrm{ab}$] (B);
-                \draw (B) to [short] ($(B)!0.25!(C)$) to [generic, l=$Z_\mathrm{bc}$, v>=$u_\mathrm{bc}$, voltage = straight] ($(B)!0.75!(C)$) to [short, i>_=$i_\mathrm{bc}$] (C);
-                \draw (C) to [short] ($(C)!0.25!(A)$) to [generic, l=$Z_\mathrm{ca}$, v>=$u_\mathrm{ca}$, voltage = straight] ($(C)!0.75!(A)$) to [short, i>_=$i_\mathrm{ca}$] (A);
+                \draw (A) to [short] ($(A)!0.25!(B)$) to [generic, l=$Z_\mathrm{a\text{-}b}$, v>=$u_\mathrm{a\text{-}b}$, voltage = straight] ($(A)!0.75!(B)$) to [short, i>_=$i_\mathrm{ab}$] (B);
+                \draw (B) to [short] ($(B)!0.25!(C)$) to [generic, l=$Z_\mathrm{b\text{-}c}$, v>=$u_\mathrm{b\text{-}c}$, voltage = straight] ($(B)!0.75!(C)$) to [short, i>_=$i_\mathrm{bc}$] (C);
+                \draw (C) to [short] ($(C)!0.25!(A)$) to [generic, l=$Z_\mathrm{c\text{-}a}$, v>=$u_\mathrm{c\text{-}a}$, voltage = straight] ($(C)!0.75!(A)$) to [short, i>_=$i_\mathrm{ca}$] (A);
 
 
                 % Draw and label the phase points
@@ -590,8 +590,8 @@
         \end{figure}
         \begin{equation}
             \begin{gathered}
-                i_\mathrm{ab}+i_\mathrm{bc}+i_\mathrm{ca}\neq 0 \\
-                u_\mathrm{ab}+u_\mathrm{bc}+u_\mathrm{ca}=0
+                i_\mathrm{a\text{-}b}+i_\mathrm{b\text{-}c}+i_\mathrm{c\text{-}a}\neq 0 \\
+                u_\mathrm{a\text{-}b}+u_\mathrm{b\text{-}c}+u_\mathrm{c\text{-}a}=0
             \end{gathered}
         \end{equation}
     \end{columns}
