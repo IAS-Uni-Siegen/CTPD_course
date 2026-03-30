@@ -1021,7 +1021,7 @@
         s^*_\mathrm{a} = s^*_\upalpha, \quad s^*_\mathrm{b} = -\frac{1}{2}s^*_\upalpha + \frac{\sqrt{3}}{2}s^*_\upbeta, \quad s^*_\mathrm{c} = -\frac{1}{2}s^*_\upalpha - \frac{\sqrt{3}}{2}s^*_\upbeta.
         \label{eq:average_switching_values_abc_alpha_beta}
     \end{equation}
-    Combining \eqref{eq:linear_mod_per_phase_max} and \eqref{eq:average_switching_values_abc_alpha_beta} yields the maximum achievable $\upalpha\upbeta$-reference voltage magnitude for the naive three-phase PWM:
+    Combining \eqref{eq:linear_mod_per_phase_max} and \eqref{eq:average_switching_values_abc_alpha_beta} yields the maximum achievable $\upalpha\upbeta$-reference voltage magnitude for the naive three-phase PWM (cf. \figref{fig:naive_three_phase_pwm_alpha_beta_voltage_limit}):
     \begin{equation}
         \left|s^*_\upalpha\vphantom{-\frac{1}{2}s^*_\upalpha + \frac{\sqrt{3}}{2}s^*_\upbeta}\right|\leq 1, \quad \left|-\frac{1}{2}s^*_\upalpha + \frac{\sqrt{3}}{2}s^*_\upbeta\right| \leq 1, \quad \left|-\frac{1}{2}s^*_\upalpha - \frac{\sqrt{3}}{2}s^*_\upbeta\right| \leq 1.
         \label{eq:maximum_achievable_alpha_beta_voltage}
@@ -1033,9 +1033,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[b]
     \frametitle{Inverter voltage utilization for naive three-phase PWM (cont.)}
-    \begin{columns}[T,onlytextwidth]
+    \begin{columns}[onlytextwidth]
         \begin{column}{0.47\textwidth}
-
+            \begin{itemize}
+                \item The three independent single-phase PWMs underutilize the available voltage range of the three-phase inverter.
+                \item The maximum achievable fundamental normalized voltage reference is $$|\bm{s}_{\upalpha\upbeta}| \leq 1,$$ that is, $$|\bm{u}^*_{\upalpha\upbeta}| \leq \nicefrac{u_\mathrm{dc}}{2}.$$
+                \item Naively extending the voltage range by overmodulating each phase is theoretically possible but leads to significant harmonic distortion. Hence, we explore an alternative approach next.
+            \end{itemize}
         \end{column}
         \begin{column}{0.47\textwidth}
             \centering
@@ -1084,7 +1088,7 @@
                     \draw[gray!70,thick] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
                     \draw[signalalpha!65,thick] (m1) -- (m2) -- (m3) -- (m4) -- (m5) -- (m6) -- cycle;
                     \draw[signalalpha,thick] (origin) circle[radius=\linearRadius];
-                    \draw[signalalpha,->,thick] (origin) -- (circleRadius) node[midway, below] {$1$};
+                    \draw[signalalpha,->,thick] (origin) -- (circleRadius) node[near end, below] {$1$};
 
                     \draw[thin] (u1) ++(0,\tickHalf) -- ++(0,-2*\tickHalf);
                     \draw[thin] ($(u1) + (\alphaLeaderShiftX,\alphaLeaderShiftY)$) -- ++(\alphaLeaderDx,\alphaLeaderDy) node[below right] {$\frac{4}{3}$};
@@ -1092,8 +1096,146 @@
                     \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
                     \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
                 \end{tikzpicture}
+
+
                 \caption{Maximum achievable $\upalpha\upbeta$-reference voltage for the naive three-phase PWM}
                 \label{fig:naive_three_phase_pwm_alpha_beta_voltage_limit}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Three-phase PWM with zero-sequence injection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Three-phase PWM with zero-sequence injection}
+    Adding a zero-sequence component to all phase references
+    \begin{equation}
+        u_\mathrm{a}^{**}(t) = u_\mathrm{a}^*(t) + u_0(t), \quad u_\mathrm{b}^{**}(t) = u_\mathrm{b}^*(t) + u_0(t), \quad u_\mathrm{c}^{**}(t) = u_\mathrm{c}^*(t) + u_0(t)
+    \end{equation}
+    does not change the line-to-line voltages
+    \begin{equation}
+        u_\mathrm{a\text{-}b}^{**}(t) = u_\mathrm{a}^{**}(t) - u_\mathrm{b}^{**}(t) = u_\mathrm{a}^*(t) - u_\mathrm{b}^*(t) = u_\mathrm{a\text{-}b}^*(t), \quad \text{etc.}
+    \end{equation}
+    and hence does not change the $\upalpha\upbeta$-reference voltage, compare \eqref{eq:Clarke_transformation_zero_component_free}. Consequently, the \hl{zero-sequence injection is not a disturbance from a control perspective}. To find $u_0$, we formulate the following optimization problem (dropping the time argument for better readability):
+    \begin{equation}
+        \min_{u_0} \max \left\{|u^*_\mathrm{a}-u_0|, |u^*_\mathrm{b}-u_0|, |u^*_\mathrm{c}-u_0|\right\},
+        \label{eq:opt_problem_zero_sequence_PWM}
+    \end{equation}
+    i.e., we want to \hl{find the smallest possible zero-sequence component that is required to meet the highest phase voltage demand}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Three-phase PWM with zero-sequence injection (cont.)%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Three-phase PWM with zero-sequence injection (cont.)}
+    The problem \eqref{eq:opt_problem_zero_sequence_PWM} is equivalent to
+    \begin{equation}
+        \min_{u_0, r} r \quad \text{subject to} \quad |u^*_\mathrm{a}-u_0| \leq r, \; |u^*_\mathrm{b}-u_0| \leq r, \; |u^*_\mathrm{c}-u_0| \leq r
+    \end{equation}
+    with $r\in\mathbb{R}\geq 0$ representing the maximum deviation of the zero-sequence injected phase voltages from the original reference voltages. Rewriting the constraints yields
+    \begin{equation}
+        u_\mathrm{a}^* - r \leq u_0 \leq u_\mathrm{a}^* + r, \quad u_\mathrm{b}^* - r \leq u_0 \leq u_\mathrm{b}^* + r, \quad u_\mathrm{c}^* - r \leq u_0 \leq u_\mathrm{c}^* + r.
+    \end{equation}
+    Hence, a feasible $u_0$ exists if and if only the three intervals overlap, i.e.,
+    \begin{equation}
+        \max\left\{u^*_\mathrm{a}-r, u^*_\mathrm{b}-r, u^*_\mathrm{c}-r\right\} \leq \min\left\{u^*_\mathrm{a}+r, u^*_\mathrm{b}+r, u^*_\mathrm{c}+r\right\}.
+        \label{eq:feasible_intervals_r_zero_volt_inject}
+    \end{equation}
+    Define the auxiliary variables
+    \begin{equation}
+        M = \max\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}, \quad m = \min\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}.
+        \label{eq:aux_variables_zero_volt_inject}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Three-phase PWM with zero-sequence injection (cont.)%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Three-phase PWM with zero-sequence injection (cont.)}
+    Combining \eqref{eq:feasible_intervals_r_zero_volt_inject} and \eqref{eq:aux_variables_zero_volt_inject} yields
+    \begin{equation}
+        M - r \leq m + r \quad \Leftrightarrow \quad r \geq \frac{M - m}{2}.
+        \label{eq:zero_volt_inject_r_M_m_range}
+    \end{equation}
+    Since we search for the smallest possible $r$, we have
+    \begin{equation}
+        r = \frac{M - m}{2}.
+    \end{equation}
+    This observation is identical that the optimal solution is given with equality in \eqref{eq:zero_volt_inject_r_M_m_range}, i.e.,
+    \begin{equation}
+        M - r = m + r \quad \Leftrightarrow \quad u_0 = \frac{M + m}{2}.
+    \end{equation}
+    Hence, the \hl{optimal zero-sequence component} is:
+    \begin{equation}
+        u_0(t) = \frac{1}{2}\left(\max\left\{u^*_\mathrm{a}(t), u^*_\mathrm{b}(t), u^*_\mathrm{c}(t)\right\} + \min\left\{u^*_\mathrm{a}(t), u^*_\mathrm{b}(t), u^*_\mathrm{c}(t)\right\}\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Inverter voltage utilization with zero-sequence injection three-phase PWM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[b]
+    \frametitle{Inverter voltage utilization with zero-sequence injection three-phase PWM}
+    \begin{columns}[onlytextwidth]
+        \begin{column}{0.47\textwidth}
+            \begin{itemize}
+                \item test
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \centering
+            \vspace{-0.25cm}
+            \begin{figure}
+                \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=Latex]
+                    \pgfmathsetmacro{\outerRadius}{2}
+                    \pgfmathsetmacro{\innerRadius}{sqrt(3)}
+                    \pgfmathsetmacro{\linearRadius}{\innerRadius}
+                    \pgfmathsetmacro{\axisExtension}{1.1*\outerRadius}
+                    \pgfmathsetmacro{\tickHalf}{0.08}
+                    \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
+                    \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
+                    \pgfmathsetmacro{\alphaLeaderDx}{0.10}
+                    \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
+                    \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
+                    \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
+                    \pgfmathsetmacro{\betaLeaderDx}{0.35}
+                    \pgfmathsetmacro{\betaLeaderDy}{0.20}
+
+                    \coordinate (origin) at (0,0);
+                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                            \coordinate (\name) at (\angle:\outerRadius);
+                        }
+                    \foreach \name/\angle in {m1/30,m2/90,m3/150,m4/210,m5/270,m6/330} {
+                            \coordinate (\name) at (\angle:\innerRadius);
+                        }
+                    \coordinate (circleRadius) at (45:\linearRadius);
+                    \coordinate (betaMax) at (90:\innerRadius);
+                    \coordinate (alphaAxisStart) at (180:\axisExtension);
+                    \coordinate (alphaAxisEnd) at (0:\axisExtension);
+                    \coordinate (betaAxisStart) at (270:\axisExtension);
+                    \coordinate (betaAxisEnd) at (90:\axisExtension);
+                    \begin{scope}[on background layer]
+                        \fill[signalalpha!15] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+                    \end{scope}
+                    \draw[->,thin] (alphaAxisStart) -- (alphaAxisEnd) node[right] {$s^*_{\upalpha}$};
+                    \draw[->,thin] (betaAxisStart) -- (betaAxisEnd) node[left] {$s^*_{\upbeta}$};
+                    \draw[gray!70,thick] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+                    \draw[signalalpha!65,thick] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+                    \draw[signalalpha,thick] (origin) circle[radius=\linearRadius];
+                    \draw[signalalpha,->,thick] (origin) -- (circleRadius) node[near end, below] {$\frac{2}{\sqrt{3}}$};
+
+                    \draw[thin] (u1) ++(0,\tickHalf) -- ++(0,-2*\tickHalf);
+                    \draw[thin] ($(u1) + (\alphaLeaderShiftX,\alphaLeaderShiftY)$) -- ++(\alphaLeaderDx,\alphaLeaderDy) node[below right] {$\frac{4}{3}$};
+
+                    \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
+                    \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
+                \end{tikzpicture}
+                \caption{Maximum achievable $\upalpha\upbeta$-reference with zero-sequence injection}
+                \label{fig:zero_injection_three_phase_pwm_alpha_beta_voltage_limit}
             \end{figure}
         \end{column}
     \end{columns}
