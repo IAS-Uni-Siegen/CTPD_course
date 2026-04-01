@@ -12,4 +12,7 @@ This work is licensed under a
 [cc-by-image]: https://licensebuttons.net/l/by/4.0/88x31.png
 [cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
 
-Currently work in progress!
+Currently heavy work in progress!
+
+## Lecture slides (click on preview picture)
+<a href="https://ias-uni-siegen.github.io/CTPD_course/lecture.pdf" target="_blank" class="image fit"><img src="misc/Lecture_preview.png" alt=""></a>
