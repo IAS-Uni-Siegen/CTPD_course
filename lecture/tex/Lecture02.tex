@@ -594,13 +594,13 @@
             \end{equation}
             Comparing $s^*(t)$ to a high frequency \hl{carrier signal} $c(t)$, e.g., a triangular signal, generates the switching function $s(t)$. Assuming that $s^*(t)$ only changes slowly compared to \hl{switching frequency $T_\mathrm{s}$} introduced by the carrier, we can approximate:
             \begin{equation}
-                \overline{s}(t) = \frac{1}{T_\mathrm{s}} \int_{t-T_\mathrm{s}}^{t} s(\tau) \mathrm{d}\tau \approx s^*(t).
+                \overline{s}(t) = \frac{1}{T_\mathrm{s}} \int_{t-T_\mathrm{s}}^{t} s(\tau) \, \mathrm{d}\tau \approx s^*(t).
             \end{equation}
         \end{column}
         \begin{column}{0.49\textwidth}
             \begin{figure}
                 \begin{circuitikz}[]
-                    \ctikzset{amplifiers/scale=0.25} % Scale of amplifier
+                    \ctikzset{amplifiers/scale=0.25} % Scale of amplifier       
                     \draw (0,0) to [Tnpn, n=npn1, invert, bodydiode] ++(0,-1.6) coordinate (A)
                     to [Tnpn, n=npn2, invert, bodydiode] ++(0,-1.6) coordinate (B)
                     ($(npn1.E)!0.5!(npn2.C)$) to [short, i=$i(t)$, *-o] ++(1.5,0) coordinate (C);
@@ -651,7 +651,7 @@
                     \draw[->] (carrier.east) -- (carrier.east -| add1.south) -- node[above left]{$c(t)$} (add1.south) node[anchor = north west] {$-$};
                     \draw[->] (add1.east) -- ++(0.5,0) node[ctrlblock, anchor = west, minimum width = \cwidth cm, minimum height = \cheight cm](comp){};
 
-                    % Comperator block 
+                    % Comperator block
                     \begin{axis}[at={(comp)}, scale only axis, width = 0.8*\cwidth cm, height = 0.8*\cheight cm, anchor = center, xtick=\empty, ytick={0,1}, axis lines=middle, ymax=1.25, ymin = -1.25, font = \footnotesize, extra y ticks={-1}, extra y tick style = {yticklabel shift = -0.75cm}]
                         \addplot[thick, signalalpha] coordinates {(-1,-1) (0,-1) (0,1) (1,1)};
                     \end{axis}
@@ -673,7 +673,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 3, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.37\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.35\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: duty cycle reference and carrier signal
                 \nextgroupplot[ylabel = {$s^*(t), c(t)$}, legend pos=north east, legend columns=2]
@@ -780,7 +780,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 3, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.37\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.35\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: duty cycle reference and carrier signal
                 \nextgroupplot[ylabel = {$s^*(t), c(t)$}, ymin = -1.25, ymax =1.25, legend pos=north east, legend columns=2 ]
@@ -810,11 +810,11 @@
     \begin{columns}
         \begin{column}{0.45\textwidth}
             Considering a normalized sinusoidal input reference
-            $$ s^*(t) = m\sin(\omega t)=\frac{\hat{u}^*}{\nicefrac{u_\mathrm{dc}}{2}}\sin(\omega t)$$
-            with the \hl{modulation ratio $m$} one can distinguish two PWM operation areas:
+            $$ s^*(t) = m^*\sin(\omega t)=\frac{\hat{u}^*}{\nicefrac{u_\mathrm{dc}}{2}}\sin(\omega t)$$
+            with the \hl{modulation ratio $m^*$} one can distinguish two PWM operation areas:
             \begin{itemize}
-                \item $m \leq 1$: linear modulation,
-                \item $m > 1$: overmodulation.
+                \item $m* \leq 1$: linear modulation,
+                \item $m* > 1$: overmodulation.
             \end{itemize}
             \vspace{-0.25cm}
             \onslide<2->{%
@@ -826,7 +826,7 @@
             \begin{figure}
                 \begin{tikzpicture}
                     \begin{axis}[
-                            xlabel={$m$},
+                            xlabel={$m^*$},
                             ylabel={$\hat{u}^{(1)}/\nicefrac{u_\mathrm{dc}}{2}$},
                             ymin=0, ymax=4/pi*1.2,
                             xmin=0, xmax=3,
@@ -927,7 +927,7 @@
 %% Three-phase PWM example (with ref. modulation index $m=0.5$) %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Three-phase PWM example (with ref. modulation index $m=0.5$)}
+    \frametitle{Three-phase PWM example (with ref. modulation index $m^*=0.5$)}
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
@@ -968,7 +968,7 @@
 %% Three-phase PWM example (with ref. modulation index $m=1$) %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Three-phase PWM example (with ref. modulation index $m=1$)}
+    \frametitle{Three-phase PWM example (with ref. modulation index $m^*=1$)}
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
@@ -1011,7 +1011,7 @@
 \begin{frame}
     \frametitle{Inverter voltage utilization for naive three-phase PWM}
     Assume linear modulation for all three phases, i.e.,
-    $$s_\mathrm{a}^*(t) = m \sin\left(\omega t\right), \quad s_\mathrm{b}^*(t) = m \sin\left(\omega t - \frac{2\pi}{3}\right), \quad s_\mathrm{c}^*(t) = m \sin\left(\omega t - \frac{4\pi}{3}\right), \quad \text{with} \quad m\leq1 .$$ Hence, we have
+    $$s_\mathrm{a}^*(t) = m^* \sin\left(\omega t\right), \quad s_\mathrm{b}^*(t) = m^* \sin\left(\omega t - \frac{2\pi}{3}\right), \quad s_\mathrm{c}^*(t) = m^* \sin\left(\omega t - \frac{4\pi}{3}\right), \quad \text{with} \quad m^*\leq1 .$$ Hence, we have
     \begin{equation}
         \left\{|s^*_\mathrm{a}|, |s^*_\mathrm{b}|, |s^*_\mathrm{c}|\right\} \leq 1.
         \label{eq:linear_mod_per_phase_max}
@@ -1146,7 +1146,7 @@
     \end{equation}
     Define the auxiliary variables
     \begin{equation}
-        M = \max\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}, \quad m = \min\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}.
+        u_\mathrm{max} = \max\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}, \quad u_\mathrm{min} = \min\left\{u^*_\mathrm{a}, u^*_\mathrm{b}, u^*_\mathrm{c}\right\}.
         \label{eq:aux_variables_zero_volt_inject}
     \end{equation}
 \end{frame}
@@ -1158,16 +1158,16 @@
     \frametitle{Three-phase PWM with zero-sequence injection (cont.)}
     Combining \eqref{eq:feasible_intervals_r_zero_volt_inject} and \eqref{eq:aux_variables_zero_volt_inject} yields
     \begin{equation}
-        M - r \leq m + r \quad \Leftrightarrow \quad r \geq \frac{M - m}{2}.
-        \label{eq:zero_volt_inject_r_M_m_range}
+        u_\mathrm{max} - r \leq u_\mathrm{min} + r \quad \Leftrightarrow \quad r \geq \frac{u_\mathrm{max} - u_\mathrm{min}}{2}.
+        \label{eq:zero_volt_inject_r_max_min_range}
     \end{equation}
     Since we search for the smallest possible $r$, we have
     \begin{equation}
-        r = \frac{M - m}{2}.
+        r = \frac{u_\mathrm{max} - u_\mathrm{min}}{2}.
     \end{equation}
-    This observation is identical that the optimal solution is given with equality in \eqref{eq:zero_volt_inject_r_M_m_range}, i.e.,
+    This observation is identical that the optimal solution is given with equality in \eqref{eq:zero_volt_inject_r_max_min_range}, i.e.,
     \begin{equation}
-        M - r = m + r \quad \Leftrightarrow \quad u_0 = \frac{M + m}{2}.
+        u_\mathrm{max} - r = u_\mathrm{min} + r \quad \Leftrightarrow \quad u_0 = \frac{u_\mathrm{max} + u_\mathrm{min}}{2}.
     \end{equation}
     Hence, the \hl{optimal zero-sequence component} is:
     \begin{equation}
@@ -1183,7 +1183,9 @@
     \begin{columns}[onlytextwidth]
         \begin{column}{0.47\textwidth}
             \begin{itemize}
-                \item test
+                \item Extends the fundamental voltage range to $$|\bm{s}_{\upalpha\upbeta}| \leq \frac{2}{\sqrt{3}} \approx 1.15.$$
+                \item Also allows reaching the entire voltage hexagon incl. the corners (cf. figure to the right and proof in the next slide).
+                \item Alternatively a \hl{third harmonic voltage injection} is often used in practice, i.e., $$u_0(t) = m^* \sin\left(3\omega t\right).$$ This approach also increases the modulation range to $\nicefrac{2}{\sqrt{3}}$ but does not allow reaching the hexagon's corners.
             \end{itemize}
         \end{column}
         \begin{column}{0.47\textwidth}
@@ -1234,9 +1236,288 @@
                     \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
                     \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
                 \end{tikzpicture}
-                \caption{Maximum achievable $\upalpha\upbeta$-reference with zero-sequence injection}
+                \caption{Maximum achievable $\upalpha\upbeta$-reference with min-max zero-sequence injection}
                 \label{fig:zero_injection_three_phase_pwm_alpha_beta_voltage_limit}
             \end{figure}
         \end{column}
     \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Proof min-max zero-sequence injection voltage capacity %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Proof min-max zero-sequence injection voltage capacity}
+    Using symmetry we will focus on the \hl{first sector} of the hexagon (cf. \figref{fig:elementary_voltages_alpha_beta}). Any reference voltage in the first sector can be expressed as a convex combination of the two adjacent switching vectors, i.e.,
+    \begin{equation}
+        \bm{s}_{\upalpha\upbeta} = \frac{\bm{u}_{\upalpha\upbeta}^*}{\nicefrac{u_\mathrm{dc}}{2}} = \tau_1 \bm{s}_{\mathrm{i}1} + \tau_2 \bm{s}_{\mathrm{i}2}, \quad \text{with} \quad \tau_1, \tau_2 \geq 0, \quad \tau_1 + \tau_2 \leq 1.
+    \end{equation}
+    Here, $\bm{s}_{\mathrm{i}1}$ and $\bm{s}_{\mathrm{i}2}$ are the normalized elementary switching vectors of the first sector, i.e.
+    \begin{equation}
+        \bm{s}_{\mathrm{i}1} = \begin{bmatrix}
+            \frac{4}{3} & 0
+        \end{bmatrix}^\top, \quad \bm{s}_{\mathrm{i}2} = \begin{bmatrix}
+            \frac{2}{3} & \frac{2}{\sqrt{3}}
+        \end{bmatrix}^\top.
+    \end{equation}
+    Hence, the normalized phase voltage references can be found be the inverse Clarke transformation as
+    \begin{equation}
+        \bm{s}^*_\mathrm{abc} = \begin{bmatrix}
+            1                & 0                       \\
+            -\nicefrac{1}{2} & \nicefrac{\sqrt{3}}{2}  \\
+            -\nicefrac{1}{2} & -\nicefrac{\sqrt{3}}{2}
+        \end{bmatrix} \left(\tau_1 \bm{s}_{\mathrm{i}1} + \tau_2 \bm{s}_{\mathrm{i}2}\right) = \begin{bmatrix}
+            \nicefrac{4}{3}\tau_1 + \nicefrac{2}{3}\tau_2  \\
+            -\nicefrac{2}{3}\tau_1 + \nicefrac{2}{3}\tau_2 \\
+            -\nicefrac{2}{3}\tau_1 - \nicefrac{4}{3}\tau_2
+        \end{bmatrix}.
+        \label{eq:first_sector_hexagon_lin_comb_abc}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Proof min-max zero-sequence injection voltage capacity (cont.)%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Proof min-max zero-sequence injection voltage capacity (cont.)}
+    With $\tau_1, \tau_2 \geq 0$ it follows directly from \eqref{eq:first_sector_hexagon_lin_comb_abc} that
+    \begin{equation}
+        s_\mathrm{a}^* \geq s_\mathrm{b}^* \geq s_\mathrm{c}^* \quad \Rightarrow \quad  \max\left\{s_\mathrm{a}^*, s_\mathrm{b}^*, s_\mathrm{c}^*\right\} = s_\mathrm{a}^*, \quad \min\left\{s_\mathrm{a}^*, s_\mathrm{b}^*, s_\mathrm{c}^*\right\} = s_\mathrm{c}^*.
+    \end{equation}
+    Hence, the zero-sequence injected phase voltage is $s_0 = \nicefrac{1}{2}(s_\mathrm{a}^* + s_\mathrm{c}^*)=\nicefrac{1}{3}(\tau_1 - \tau_2)$ leading to the shifted phase voltage references
+    \begin{equation}
+        s_\mathrm{a}^{**} = s_\mathrm{a}^* - s_0 = \tau_1 + \tau_2, \quad s_\mathrm{b}^{**} = s_\mathrm{b}^* - s_0 = -\tau_1 + \tau_2, \quad s_\mathrm{c}^{**} = s_\mathrm{c}^* - s_0 = -\tau_1 -\tau_2.
+    \end{equation}
+    Because of $\tau_1 + \tau_2 \leq 1$ we have
+    \begin{equation}
+        |s_\mathrm{a}^{**}| \leq 1, \quad |s_\mathrm{b}^{**}| \leq 1, \quad |s_\mathrm{c}^{**}| \leq 1,
+    \end{equation}
+    i.e., \hl{each phase voltage reference stays within the linear modulation range and is realizable}. The transfer to other sectors of the hexagon is straightforward by symmetry.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Three-phase PWM with zero-sequence injection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Three-phase PWM with zero-sequence injection}
+    \begin{figure}
+        \begin{circuitikz}[x=1cm,y=1cm]
+            \def\cwidth{1.15}
+            \def\cheight{0.9}
+            \def\rowsep{1.75}
+
+            \node[adder] (shift1) at (3.05,0) {};
+            \node[adder] (shift2) at (4.05,-\rowsep) {};
+            \node[adder] (shift3) at (5.05,-2*\rowsep) {};
+
+            \node[adder] (add1) at (6.05,0) {};
+            \node[adder] (add2) at (7.05,-\rowsep) {};
+            \node[adder] (add3) at (8.05,-2*\rowsep) {};
+
+            \node[ctrlblock, minimum width = \cwidth cm, minimum height = \cheight cm] (comp1) at (9.55,0) {};
+            \node[ctrlblock, minimum width = \cwidth cm, minimum height = \cheight cm] (comp2) at (9.55,-\rowsep) {};
+            \node[ctrlblock, minimum width = \cwidth cm, minimum height = \cheight cm] (comp3) at (9.55,-2*\rowsep) {};
+
+            \coordinate (zeroCenter) at ($(shift2) + (0,-3.2)$);
+            \coordinate (carrierCenter) at ($(add2) + (0,-3.2)$);
+            \node[ctrlblock, minimum width = 1.35 cm, minimum height = \cheight cm] (zero) at (zeroCenter) {$s_0(t)$};
+            \node[ctrlblock, minimum width = \cwidth cm, minimum height = \cheight cm] (carrier) at (carrierCenter) {};
+
+            \coordinate (zeroInA) at ($(zero.north west)!0.22!(zero.south west)$);
+            \coordinate (zeroInB) at ($(zero.north west)!0.50!(zero.south west)$);
+            \coordinate (zeroInC) at ($(zero.north west)!0.78!(zero.south west)$);
+            \path (carrier.south west) coordinate (blockBottomLeft);
+
+            \draw[->] (0,0) -- coordinate[pos=0.42] (tap1) node[above]{$s_\mathrm{a}^*(t)$} (shift1.west);
+            \draw[->] (0,-\rowsep) -- coordinate[pos=0.42] (tap2) node[above]{$s_\mathrm{b}^*(t)$} (shift2.west);
+            \draw[->] (0,-2*\rowsep) -- coordinate[pos=0.42] (tap3) node[above]{$s_\mathrm{c}^*(t)$} (shift3.west);
+            \node[crossingshape, name=jumpAB, rotate=-90] at (tap1 |- shift2.west) {};
+            \node[crossingshape, name=jumpAC, rotate=-90] at (tap1 |- shift3.west) {};
+            \node[crossingshape, name=jumpBC, rotate=-90] at (tap2 |- shift3.west) {};
+
+            \fill (tap1) circle (1.1pt);
+            \fill (tap2) circle (1.1pt);
+            \fill (tap3) circle (1.1pt);
+
+            \draw (tap1) -- (jumpAB.west);
+            \draw (jumpAB.east) -- (jumpAC.west);
+            \draw (jumpAC.east) |- (zeroInA);
+            \draw (tap2) -- (jumpBC.west);
+            \draw (jumpBC.east) |- (zeroInB);
+            \draw (tap3) |- (zeroInC);
+
+            \node[crossingshape, name=jumpZab, rotate=-90] at (shift1.south |- shift2.west) {};
+            \node[crossingshape, name=jumpZac, rotate=-90] at (shift1.south |- shift3.west) {};
+            \node[crossingshape, name=jumpZbc, rotate=-90] at (shift2.south |- shift3.west) {};
+
+            \coordinate (zeroOut) at ($(zero.north) + (0,0.25)$);
+            \coordinate (zeroStemA) at (shift1.south |- zeroOut);
+            \draw (zero.north) -- (zeroOut);
+            \fill (zeroOut) circle (1.1pt);
+            \draw (zeroOut) -- (zeroStemA);
+            \draw (zeroStemA) -- (jumpZac.east);
+            \draw (jumpZac.west) -- (jumpZab.east);
+            \draw[->] (jumpZab.west) -- (shift1.south);
+            \draw (zeroOut) -- (jumpZbc.east);
+            \draw[->] (jumpZbc.west) -- (shift2.south);
+            \draw[->] (zeroOut) -| (shift3.south);
+            \node[anchor = north west] at (shift1.south) {$-$};
+            \node[anchor = north west] at (shift2.south) {$-$};
+            \node[anchor = north west] at (shift3.south) {$-$};
+
+            \draw[->] (shift1.east) -- node[above, fill=white, inner sep=1pt, yshift=1mm]{$s_\mathrm{a}^{**}(t)$} (add1.west);
+            \draw[->] (shift2.east) -- node[above, fill=white, inner sep=1pt, yshift=1mm]{$s_\mathrm{b}^{**}(t)$} (add2.west);
+            \draw[->] (shift3.east) -- node[above, fill=white, inner sep=1pt, yshift=1mm]{$s_\mathrm{c}^{**}(t)$} (add3.west);
+
+            \node[crossingshape, name=jumpBab, rotate=-90] at (add1.south |- shift2.east) {};
+            \node[crossingshape, name=jumpCab, rotate=-90] at (add1.south |- shift3.east) {};
+            \node[crossingshape, name=jumpCbc, rotate=-90] at (add2.south |- shift3.east) {};
+
+            \coordinate (carrierOut) at ($(carrier.north) + (0,0.25)$);
+            \draw (carrier.north) -- (carrierOut);
+            \fill (carrierOut) circle (1.1pt);
+            \coordinate (carrierStemA) at (add1.south |- carrierOut);
+            \draw (carrierOut) -- (carrierStemA);
+            \draw (carrierStemA) -- (jumpCab.east);
+            \draw (jumpCab.west) -- (jumpBab.east);
+            \draw[->] (jumpBab.west) -- (add1.south);
+            \draw (carrierOut) -- (jumpCbc.east);
+            \draw[->] (jumpCbc.west) -- node[pos=0.50, right] {$c(t)$} (add2.south);
+            \draw[->] (carrierOut) -| (add3.south);
+            \node[anchor = north west] at (add1.south) {$-$};
+            \node[anchor = north west] at (add2.south) {$-$};
+            \node[anchor = north west] at (add3.south) {$-$};
+
+            \draw[->] (add1.east) -- (comp1.west);
+            \draw[->] (add2.east) -- (comp2.west);
+            \draw[->] (add3.east) -- (comp3.west);
+
+            % Triangular signal pattern within carrier block
+            \begin{scope}
+                \def\signalsteps{6}
+                \pgfmathsetmacro{\stepwidth}{\cwidth/\signalsteps}
+                \pgfmathsetmacro{\signalheight}{\cheight/1.3}
+
+                \draw[black, thick]
+                ($(blockBottomLeft) + (0.025, 0.1*\cheight)$)
+                \foreach \x in {1,...,\signalsteps} {
+                        -- ($
+                            (blockBottomLeft) +
+                            (\x*\stepwidth, {0.1*\cheight + mod(\x, 2)*\signalheight})
+                        $)
+                    };
+            \end{scope}
+
+            % Comparator block #1
+            \begin{axis}[at={(comp1)}, scale only axis, width = 0.8*\cwidth cm, height = 0.8*\cheight cm, anchor = center, xtick=\empty, ytick={0,1}, axis lines=middle, ymax=1.25, ymin = -1.25, font = \footnotesize, extra y ticks={-1}, extra y tick style = {yticklabel shift = -0.75cm}]
+                \addplot[thick, signalalpha] coordinates {(-1,-1) (0,-1) (0,1) (1,1)};
+            \end{axis}
+            % Comparator block #2
+            \begin{axis}[at={(comp2)}, scale only axis, width = 0.8*\cwidth cm, height = 0.8*\cheight cm, anchor = center, xtick=\empty, ytick={0,1}, axis lines=middle, ymax=1.25, ymin = -1.25, font = \footnotesize, extra y ticks={-1}, extra y tick style = {yticklabel shift = -0.75cm}]
+                \addplot[thick, signalalpha] coordinates {(-1,-1) (0,-1) (0,1) (1,1)};
+            \end{axis}
+            % Comparator block #3
+            \begin{axis}[at={(comp3)}, scale only axis, width = 0.8*\cwidth cm, height = 0.8*\cheight cm, anchor = center, xtick=\empty, ytick={0,1}, axis lines=middle, ymax=1.25, ymin = -1.25, font = \footnotesize, extra y ticks={-1}, extra y tick style = {yticklabel shift = -0.75cm}]
+                \addplot[thick, signalalpha] coordinates {(-1,-1) (0,-1) (0,1) (1,1)};
+            \end{axis}
+
+            \draw[->] (comp1.east) -- ++(0.95,0) node[anchor = west]{$s_\mathrm{a}(t)$};
+            \draw[->] (comp2.east) -- ++(0.95,0) node[anchor = west]{$s_\mathrm{b}(t)$};
+            \draw[->] (comp3.east) -- ++(0.95,0) node[anchor = west]{$s_\mathrm{c}(t)$};
+        \end{circuitikz}
+        \caption{Three-phase PWM with zero-sequence injection}
+        \label{fig:three-phase_pwm_with_zero_sequence_injection}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PWM example with min-max zero-sequence injection ($m=1$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PWM example with min-max zero-sequence injection ($m^*=1$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PWM example with min-max zero-sequence injection ($m=1.15$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PWM example with min-max zero-sequence injection ($m^*=\nicefrac{2}{\sqrt{3}}$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.2, ymax =1.2]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
 \end{frame}
