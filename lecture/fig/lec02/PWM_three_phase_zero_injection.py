@@ -47,6 +47,10 @@ def min_max_zero_injection(d_a, d_b, d_c):
     return d_a - d_zero, d_b - d_zero, d_c - d_zero, d_zero
 
 
+def clip_to_unit_interval(d):
+    return np.clip(d, -1, 1)
+
+
 # calculate complementary PWM-based switching signals
 def s_comp(d, c):
     return np.where(d > c, 1, -1)
@@ -62,15 +66,18 @@ def e(d, s, xn):
 ###################################################
 
 c_example = c_tri(x, N)
-d_a_example = 2 / np.sqrt(3) * d_sin(x)
-d_b_example = 2 / np.sqrt(3) * d_sin(x, np.pi / 3 * 2)
-d_c_example = 2 / np.sqrt(3) * d_sin(x, np.pi / 3 * 4)
+d_a_example = 1.4 * d_sin(x)
+d_b_example = 1.4 * d_sin(x, np.pi / 3 * 2)
+d_c_example = 1.4 * d_sin(x, np.pi / 3 * 4)
 d_a_mod_example, d_b_mod_example, d_c_mod_example, d_zero_example = min_max_zero_injection(
     d_a_example, d_b_example, d_c_example
 )
-s_a_example = s_comp(d_a_mod_example, c_example)
-s_b_example = s_comp(d_b_mod_example, c_example)
-s_c_example = s_comp(d_c_mod_example, c_example)
+d_a_mod_clip_example = clip_to_unit_interval(d_a_mod_example)
+d_b_mod_clip_example = clip_to_unit_interval(d_b_mod_example)
+d_c_mod_clip_example = clip_to_unit_interval(d_c_mod_example)
+s_a_example = s_comp(d_a_mod_clip_example, c_example)
+s_b_example = s_comp(d_b_mod_clip_example, c_example)
+s_c_example = s_comp(d_c_mod_clip_example, c_example)
 
 # e_comp_example = e(d_comp_example, (s_comp_example[0] - s_comp_example[1])/2, xn)
 
@@ -110,7 +117,7 @@ idx_sum = np.unique(
 
 # save the reduced data to a csv file
 current_directory = os.path.dirname(os.path.abspath(__file__))
-save_path = os.path.join(current_directory, "PWM_three-phase_zero_injection_mod115_example.csv")
+save_path = os.path.join(current_directory, "PWM_three-phase_zero_injection_mod140_example.csv")
 np.savetxt(
     save_path,
     np.column_stack(
@@ -125,12 +132,15 @@ np.savetxt(
             d_a_mod_example[idx_sum],
             d_b_mod_example[idx_sum],
             d_c_mod_example[idx_sum],
+            d_a_mod_clip_example[idx_sum],
+            d_b_mod_clip_example[idx_sum],
+            d_c_mod_clip_example[idx_sum],
             d_zero_example[idx_sum],
             c_example[idx_sum],
         )
     ),
     delimiter=",",
-    header="wt, sa, sb, sc, d_a, d_b, d_c, d_a_mod, d_b_mod, d_c_mod, d_zero, c",
+    header="wt, sa, sb, sc, d_a, d_b, d_c, d_a_mod, d_b_mod, d_c_mod, d_a_mod_clip, d_b_mod_clip, d_c_mod_clip, d_zero, c",
     comments="",
 )
 
@@ -149,9 +159,12 @@ axes[0].grid()
 axes[0].legend(loc="upper right")
 
 axes[1].plot(x, c_example, color="black", label=r"$c(t)$")
-axes[1].plot(x, d_a_mod_example, label=r"$d_{\mathrm{a},\mathrm{mod}}(t)$")
-axes[1].plot(x, d_b_mod_example, label=r"$d_{\mathrm{b},\mathrm{mod}}(t)$")
-axes[1].plot(x, d_c_mod_example, label=r"$d_{\mathrm{c},\mathrm{mod}}(t)$")
+axes[1].plot(x, d_a_mod_example, linestyle="--", label=r"$d_{\mathrm{a},\mathrm{mod}}(t)$")
+axes[1].plot(x, d_b_mod_example, linestyle="--", label=r"$d_{\mathrm{b},\mathrm{mod}}(t)$")
+axes[1].plot(x, d_c_mod_example, linestyle="--", label=r"$d_{\mathrm{c},\mathrm{mod}}(t)$")
+axes[1].plot(x, d_a_mod_clip_example, label=r"$d_{\mathrm{a},\mathrm{mod,clip}}(t)$")
+axes[1].plot(x, d_b_mod_clip_example, label=r"$d_{\mathrm{b},\mathrm{mod,clip}}(t)$")
+axes[1].plot(x, d_c_mod_clip_example, label=r"$d_{\mathrm{c},\mathrm{mod,clip}}(t)$")
 axes[1].plot(x, d_zero_example, linestyle="--", color="gray", label=r"$d_0(t)$")
 axes[1].set_ylabel("modified")
 axes[1].grid()

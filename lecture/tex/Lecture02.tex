@@ -4,7 +4,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Two-level voltage source inverter}
+\subsection{Two-level three-phase voltage source inverter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -245,7 +245,7 @@
         u_\mathrm{ci}(t) = \frac{u_\mathrm{dc}(t)}{2} s_\mathrm{c}(t)
         \label{eq:VSI_phase_voltages}
     \end{equation}
-    and the \hl{DC-link current} is $i_\mathrm{dc}(t) = \sum_{k=\mathrm{a, b, c}}s_k(t)i_k(t)$.
+    and the \hl{DC-link current} is $i_\mathrm{dc}(t) = \nicefrac{1}{2}\sum_{k=\mathrm{a, b, c}}s_k(t)i_k(t)$.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -847,7 +847,7 @@
                         \draw node[fill=white, inner sep = 1pt, above] at (axis cs:1.5,4/pi) {\small Fundamental freq. mod. ($f_\mathrm{s}=\nicefrac{\omega}{2 \pi}$)};
                     \end{axis}
                 \end{tikzpicture}
-                \caption{Reference amplitude to output voltage fundamental amplitude $\hat{u}^{(1)}$}
+                \caption{Reference amplitude to output voltage fundamental amplitude $\hat{u}^{(1)}$ for a single-phase half-bridge}
                 \label{fig:Overmodulation_single_phase_gain}
             \end{figure}
         \end{column}
@@ -931,7 +931,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: duty cycle reference and carrier signal
                 \nextgroupplot[ylabel = {$s_{i}^*(t), c(t)$}]
@@ -945,19 +945,19 @@
                 \node[black, anchor=south, fill = white, inner sep = 1pt] at (axis cs: pi/10, -0.6) {\small $c$};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalalpha, thick] table[x=wt, y=s1, col sep=comma] {PWM_three-phase_mod05_example.csv};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalbeta, thick] table[x=wt, y=s2, col sep=comma] {PWM_three-phase_mod05_example.csv};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalgamma, thick] table[x=wt, y=s3, col sep=comma] {PWM_three-phase_mod05_example.csv};
 
                 % bottom plot: line-to-line voltage
-                \nextgroupplot[ylabel = {$\frac{u_{\mathrm{a\text{-}b}}(t)}{u_\mathrm{dc}(t)}$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \nextgroupplot[ylabel = {$\frac{u_{\mathrm{a\text{-}b}}(t)}{u_\mathrm{dc}(t)}$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.3\textheight]
                 \addplot[signalalpha, thick] table[x=wt, y expr=(\thisrow{s1}-\thisrow{s2})/2, col sep=comma] {PWM_three-phase_mod05_example.csv};
             \end{groupplot}
         \end{tikzpicture}
@@ -972,7 +972,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: duty cycle reference and carrier signal
                 \nextgroupplot[ylabel = {$s_{i}^*(t), c(t)$}]
@@ -986,19 +986,19 @@
                 \node[black, anchor=south, fill = white, inner sep = 1pt] at (axis cs: pi/10, -0.6) {\small $c$};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalalpha, thick] table[x=wt, y=s1, col sep=comma] {PWM_three-phase_mod1_example.csv};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalbeta, thick] table[x=wt, y=s2, col sep=comma] {PWM_three-phase_mod1_example.csv};
 
                 % top middle plot: individual switching signals
-                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalgamma, thick] table[x=wt, y=s3, col sep=comma] {PWM_three-phase_mod1_example.csv};
 
                 % bottom plot: line-to-line voltage
-                \nextgroupplot[ylabel = {$\frac{u_{\mathrm{a\text{-}b}}(t)}{u_\mathrm{dc}(t)}$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \nextgroupplot[ylabel = {$\frac{u_{\mathrm{a\text{-}b}}(t)}{u_\mathrm{dc}(t)}$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, ymin = -1.25, ymax =1.25, height=0.3\textheight]
                 \addplot[signalalpha, thick] table[x=wt, y expr=(\thisrow{s1}-\thisrow{s2})/2, col sep=comma] {PWM_three-phase_mod1_example.csv};
             \end{groupplot}
         \end{tikzpicture}
@@ -1105,14 +1105,18 @@
     \end{columns}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Zero-sequence injection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Three-phase PWM with zero-sequence injection %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Three-phase PWM with zero-sequence injection}
-    Adding a zero-sequence component to all phase references
+    Subtract a zero-sequence component from all phase references
     \begin{equation}
-        u_\mathrm{a}^{**}(t) = u_\mathrm{a}^*(t) + u_0(t), \quad u_\mathrm{b}^{**}(t) = u_\mathrm{b}^*(t) + u_0(t), \quad u_\mathrm{c}^{**}(t) = u_\mathrm{c}^*(t) + u_0(t)
+        u_\mathrm{a}^{**}(t) = u_\mathrm{a}^*(t) - u_0(t), \quad u_\mathrm{b}^{**}(t) = u_\mathrm{b}^*(t) - u_0(t), \quad u_\mathrm{c}^{**}(t) = u_\mathrm{c}^*(t) - u_0(t)
     \end{equation}
     does not change the line-to-line voltages
     \begin{equation}
@@ -1184,8 +1188,8 @@
         \begin{column}{0.47\textwidth}
             \begin{itemize}
                 \item Extends the fundamental voltage range to $$|\bm{s}_{\upalpha\upbeta}| \leq \frac{2}{\sqrt{3}} \approx 1.15.$$
-                \item Also allows reaching the entire voltage hexagon incl. the corners (cf. figure to the right and proof in the next slide).
-                \item Alternatively a \hl{third harmonic voltage injection} is often used in practice, i.e., $$u_0(t) = m^* \sin\left(3\omega t\right).$$ This approach also increases the modulation range to $\nicefrac{2}{\sqrt{3}}$ but does not allow reaching the hexagon's corners.
+                \item Also allows reaching the entire voltage hexagon incl. the corners (cf. figure to the right and proof in the next slides).
+                \item Alternatively a \hl{third harmonic voltage injection} is often used in practice, i.e., $$u_0(t) = \hat{u}_0 \sin\left(3\omega t\right).$$ This approach also increases the modulation range to $\nicefrac{2}{\sqrt{3}}$ but does not allow reaching the hexagon's corners.
             \end{itemize}
         \end{column}
         \begin{column}{0.47\textwidth}
@@ -1248,7 +1252,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Proof min-max zero-sequence injection voltage capacity}
-    Using symmetry we will focus on the \hl{first sector} of the hexagon (cf. \figref{fig:elementary_voltages_alpha_beta}). Any reference voltage in the first sector can be expressed as a convex combination of the two adjacent switching vectors, i.e.,
+    Using symmetry we will focus on the \hl{first sector} of the hexagon, i.e., $\angle  \bm{s}_{\upalpha\upbeta}\in[\SI{0}{\degree}, \SI{60}{\degree}]$   (cf. \figref{fig:elementary_voltages_alpha_beta}). Any reference voltage in the first sector can be expressed as a linear combination of the two adjacent switching vectors, i.e.,
     \begin{equation}
         \bm{s}_{\upalpha\upbeta} = \frac{\bm{u}_{\upalpha\upbeta}^*}{\nicefrac{u_\mathrm{dc}}{2}} = \tau_1 \bm{s}_{\mathrm{i}1} + \tau_2 \bm{s}_{\mathrm{i}2}, \quad \text{with} \quad \tau_1, \tau_2 \geq 0, \quad \tau_1 + \tau_2 \leq 1.
     \end{equation}
@@ -1438,7 +1442,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: original normalized voltage references
                 \nextgroupplot[ylabel = {$s_i^*(t)$}]
@@ -1461,15 +1465,15 @@
                 \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
 
                 % switching sequence phase a
-                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
 
                 % switching sequence phase b
-                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
 
                 % switching sequence phase c
-                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod1_example.csv};
             \end{groupplot}
         \end{tikzpicture}
@@ -1484,7 +1488,7 @@
     \begin{figure}
         \begin{tikzpicture}
             \pgfplotsset{table/search path={fig/lec02}}
-            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.31\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
 
                 % Top plot: original normalized voltage references
                 \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.2, ymax =1.2]
@@ -1507,17 +1511,1247 @@
                 \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
 
                 % switching sequence phase a
-                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
 
                 % switching sequence phase b
-                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}]
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
 
                 % switching sequence phase c
-                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}]
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
                 \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod115_example.csv};
             \end{groupplot}
         \end{tikzpicture}
     \end{figure}
 \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Overmodulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Overmodulation for three-phase PWM with min-max injection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Overmodulation for three-phase PWM with min-max injection}
+    \begin{columns}[onlytextwidth]
+        \begin{column}{0.53\textwidth}
+            Beyond $m^* > \nicefrac{2}{\sqrt{3}}$ the phase voltage references leave the linear modulation range and are no longer realizable. The resulting overmodulation strategy is a simple \hl{clipping}, i.e.,
+            \begin{equation}
+                \begin{split}
+                    s_{i}^{**}(t)          & = \operatorname{clip}\!\left(s_{i}^{*}(t)-s_0(t)\right), \\
+                    \operatorname{clip}(x) & = \min\!\left\{1,\max\!\left\{-1,x\right\}\right\}.
+                \end{split}
+            \end{equation}
+            \begin{varblock}{Control disturbance}
+                The clipping renders itself a control disturbance and reduces the degrees of freedom: in the linear range, amplitude and phase of the voltage reference can be controlled independently, while in the overmodulation range those two are coupled.
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \vspace{-0.2cm}
+            \begin{figure}
+                \begin{tikzpicture}[x=1.2cm,y=1.2cm,>=Latex]
+                    \pgfmathsetmacro{\outerRadius}{2}
+                    \pgfmathsetmacro{\mStar}{1.24}
+                    \pgfmathsetmacro{\commandedRadius}{1.5*\mStar}
+                    \pgfmathsetmacro{\clipGamma}{acos(2/(sqrt(3)*\mStar))}
+                    \pgfmathsetmacro{\innerRadius}{sqrt(3)}
+                    \pgfmathsetmacro{\tickHalf}{0.08}
+                    \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
+                    \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
+                    \pgfmathsetmacro{\alphaLeaderDx}{0.10}
+                    \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
+                    \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
+                    \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
+                    \pgfmathsetmacro{\betaLeaderDx}{0.35}
+                    \pgfmathsetmacro{\betaLeaderDy}{0.20}
+                    \coordinate (O) at (0,0);
+                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                            \coordinate (\name) at (\angle:\outerRadius);
+                        }
+                    \coordinate (betaMax) at (90:\innerRadius);
+                    \draw[gray!70,thick] (u1)--(u2)--(u3)--(u4)--(u5)--(u6)--cycle;
+                    \draw[signalalpha,dotted,thick] (O) circle [radius=\commandedRadius];
+                    \draw[->,thin] (-2.25,0) -- (2.25,0) node[right] {$s_\upalpha^*$};
+                    \draw[->,thin] (0,-2.15) -- (0,2.15) node[above] {$s_\upbeta^*$};
+
+                    \draw[thin] (u1) ++(0,\tickHalf) -- ++(0,-2*\tickHalf);
+                    \draw[thin] ($(u1) + (\alphaLeaderShiftX,\alphaLeaderShiftY)$) -- ++(\alphaLeaderDx,\alphaLeaderDy) node[below right] {$\frac{4}{3}$};
+
+                    \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
+                    \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
+
+                    \foreach \sector in {0,...,5} {
+                            \pgfmathsetmacro{\sectorCenter}{30 + 60*\sector}
+                            \pgfmathsetmacro{\clipStart}{\sectorCenter - \clipGamma}
+                            \pgfmathsetmacro{\clipEnd}{\sectorCenter + \clipGamma}
+                            \pgfmathsetmacro{\nextArcEnd}{\sectorCenter + 60 - \clipGamma}
+
+                            \draw[signalbeta,dashed,thick] (\clipStart:\commandedRadius) -- (\clipEnd:\commandedRadius);
+                            \draw[signalbeta,dashed,thick] (\clipEnd:\commandedRadius) arc[start angle=\clipEnd,end angle=\nextArcEnd,radius=\commandedRadius];
+                        }
+
+                    \node[signalalpha, fill=white, inner sep=1pt, right, align=left] at (1.86,1.22) {\scriptsize reference\\[-2pt]\scriptsize $m^*=1.24$};
+                    \node[signalbeta, fill=white, inner sep=1pt, left] at (1.54,0.64) {\scriptsize clipping};
+                \end{tikzpicture}
+                \caption{Beyond $m^*=\nicefrac{2}{\sqrt{3}}$, the desired sinusoidal trajectory leaves the linear range and is clipped at the inverter hexagon.}
+                \label{fig:min_max_injection_overmodulation_hexagon_clipping}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PWM example with min-max zero-sequence injection ($m^*=1.24$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PWM example with min-max zero-sequence injection ($m^*=1.24$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod124_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PWM example with min-max zero-sequence injection ($m^*=1.24$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PWM example with min-max zero-sequence injection ($m^*=1.4$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.45, ymax =1.45]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_zero_injection_mod140_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector}
+    Assume the balanced sinusoidal reference vector
+    \begin{equation}
+        s_\mathrm{a}^*(\theta)=m^*\cos\theta, \qquad
+        s_\mathrm{b}^*(\theta)=m^*\cos\!\left(\theta-\frac{2\pi}{3}\right), \qquad
+        s_\mathrm{c}^*(\theta)=m^*\cos\!\left(\theta+\frac{2\pi}{3}\right).
+        \label{eq:balanced_sinusoidal_reference_PWM}
+    \end{equation}
+    In the first sector ($0 \le \theta \le \nicefrac{\pi}{3}$), the min-max injected zero-sequence is
+    \begin{equation}
+        \begin{split}
+            s_0(\theta) & = \frac{1}{2}\left(\max\{s_\mathrm{a}^*(\theta), s_\mathrm{b}^*(\theta), s_\mathrm{c}^*(\theta)\} + \min\{s_\mathrm{a}^*(\theta), s_\mathrm{b}^*(\theta), s_\mathrm{c}^*(\theta)\}\right) \\
+                        & = \frac{1}{2}\left(s_\mathrm{a}^*(\theta) + s_\mathrm{c}^*(\theta)\right)= \frac{m^*}{2}\cos\!\left(\theta+\frac{\pi}{3}\right), \quad \text{for} \quad 0 \le \theta \le \frac{\pi}{3}.
+        \end{split}
+    \end{equation}
+    Hence, the unclipped injected voltage references for the first sector are
+    \begin{equation}
+        \begin{split}
+            s_\mathrm{a}^*(\theta) - s_0(\theta) & = m^*\cos\theta - \frac{m^*}{2}\cos\!\left(\theta+\frac{\pi}{3}\right) = \frac{\sqrt{3}m^*}{2}\cos\!\left(\theta-\frac{\pi}{6}\right),                                \\
+            s_\mathrm{b}^*(\theta) - s_0(\theta) & = m^*\cos\!\left(\theta-\frac{2\pi}{3}\right) - \frac{m^*}{2}\cos\!\left(\theta+\frac{\pi}{3}\right) = \frac{3m^*}{2}\cos\!\left(\theta-\frac{2\pi}{3}\right),        \\
+            s_\mathrm{c}^*(\theta) - s_0(\theta) & = m^*\cos\!\left(\theta+\frac{2\pi}{3}\right) - \frac{m^*}{2}\cos\!\left(\theta+\frac{\pi}{3}\right) = \frac{\sqrt{3}m^*}{2}\cos\!\left(\theta+\frac{5\pi}{6}\right).
+        \end{split}
+        \label{eq:unclipped_ref_overmod_min_max}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (cont.)}
+    The cosine terms in \eqref{eq:unclipped_ref_overmod_min_max} have the following maximum absolute values in the first sector:
+    \begin{equation}
+        \left|\cos\left(\theta - \frac{\pi}{6}\right)\right|  \leq 1,                                                                                     \quad
+        \left|\cos\left(\theta - \frac{2\pi}{3}\right)\right|  \leq \frac{1}{2},       \quad
+        \left|\cos\left(\theta + \frac{5\pi}{6}\right)\right|  \leq 1, \quad \text{for} \quad 0 \le \theta \le \frac{\pi}{3}.
+    \end{equation}
+    Since phases $\mathrm{a}$ and $\mathrm{c}$ are symmetric, we can distinguish two cases:
+    \begin{equation}
+        \max_\theta \left\{|s_\mathrm{a}^*- s_0|, |s_\mathrm{c}^*- s_0|\right\} = \frac{\sqrt{3}}{2}m^* \quad \text{and} \quad \max_\theta |s_\mathrm{b}^*- s_0| = \frac{3}{2}\cdot\frac{1}{2}m^* = \frac{3}{4}m^*.
+    \end{equation}
+    Hence, in terms of overmodulation clipping we have two regions:
+    \begin{itemize}
+        \item \textbf{Region I: \(\nicefrac{2}{\sqrt{3}} < m^* \le \nicefrac{4}{3}\)}\\
+              Only phases $\mathrm{a}$ and $\mathrm{c}$ are clipped, while phase $\mathrm{b}$ is still realizable without clipping.
+        \item \textbf{Region II: \(m^* \ge \nicefrac{4}{3}\)}\\
+              All three phases are clipped.
+    \end{itemize}
+    In order to derive the fundamental voltage amplitude, we need to determine the clipping intervals for those two regions.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region I)}
+    In region I, clipping starts and ends at the two first-sector roots of
+    \begin{equation}
+        \cos\left(\theta - \frac{\pi}{6}\right) = \frac{2}{\sqrt{3}m^*}, \qquad \text{for} \qquad \frac{2}{\sqrt{3}} < m^* \le \frac{4}{3}, \quad 0 \le \theta \le \frac{\pi}{3}.
+    \end{equation}
+    Since the cosine is symmetric around $\theta = \nicefrac{\pi}{6}$, the clipping interval boundaries are
+    \begin{equation}
+        \gamma_1 = \frac{\pi}{6} - \arccos\!\left(\frac{2}{\sqrt{3}m^*}\right),
+        \qquad
+        \gamma_2 = \frac{\pi}{6} + \arccos\!\left(\frac{2}{\sqrt{3}m^*}\right).
+    \end{equation}
+    Hence, phases $\mathrm{a}$ and $\mathrm{c}$ are clipped for $\theta \in [\gamma_1,\gamma_2]$ with clipping width
+    \begin{equation}
+        \Delta\gamma = \gamma_2 - \gamma_1 = 2\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region I, cont.)}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[x=1.75cm,y=1.75cm,>=Latex]
+            \pgfmathsetmacro{\outerRadius}{2}
+            \pgfmathsetmacro{\mStar}{1.22}
+            \pgfmathsetmacro{\referenceStartAngle}{-20}
+            \pgfmathsetmacro{\referenceEndAngle}{95}
+            \pgfmathsetmacro{\gammaDelta}{acos(2/(sqrt(3)*\mStar))}
+            \pgfmathsetmacro{\gammaOneAngle}{30 - \gammaDelta}
+            \pgfmathsetmacro{\gammaTwoAngle}{30 + \gammaDelta}
+            \pgfmathsetmacro{\lowerAdjReleaseAngle}{-30 + \gammaDelta}
+            \pgfmathsetmacro{\upperAdjEngageAngle}{90 - \gammaDelta}
+            \pgfmathsetmacro{\commandedRadius}{2/(cos(\gammaTwoAngle) + sin(\gammaTwoAngle)/sqrt(3))}
+            \pgfmathsetmacro{\deltaGammaArcRadius}{0.70}
+            \pgfmathsetmacro{\referenceLabelRadiusFactor}{0.98}
+            \pgfmathsetmacro{\referenceLabelOffset}{0.22}
+            \pgfmathsetmacro{\clippedLabelOffset}{0.28}
+
+            \coordinate (O) at (0,0);
+            \coordinate (u1) at (0:\outerRadius);
+            \coordinate (u2) at (60:\outerRadius);
+            \coordinate (u2prev) at ($(u2)+(-1.35,0)$);
+            \coordinate (u1next) at ($(u1)+(240:0.78)$);
+            \coordinate (refStart) at (\referenceStartAngle:\commandedRadius);
+            \coordinate (refEnd) at (\referenceEndAngle:\commandedRadius);
+            \coordinate (clipStart) at (\gammaOneAngle:\commandedRadius);
+            \coordinate (clipEnd) at (\gammaTwoAngle:\commandedRadius);
+            \coordinate (referenceLabelBase) at (30:{\referenceLabelRadiusFactor*\commandedRadius});
+            \coordinate (referenceLabelPos) at ($(referenceLabelBase)+(-60:\referenceLabelOffset)$);
+            \coordinate (clipLabelBase) at ($(clipStart)!0.5!(clipEnd)$);
+            \coordinate (clipLabelPos) at ($(clipLabelBase)+(210:\clippedLabelOffset)$);
+            \coordinate (lowerAdjClipStart) at ({2*sqrt(3)*cos(\referenceStartAngle)/(sqrt(3)*cos(\referenceStartAngle)-sin(\referenceStartAngle))},{2*sqrt(3)*sin(\referenceStartAngle)/(sqrt(3)*cos(\referenceStartAngle)-sin(\referenceStartAngle))});
+            \coordinate (lowerAdjClipEnd) at ({2*sqrt(3)*cos(\lowerAdjReleaseAngle)/(sqrt(3)*cos(\lowerAdjReleaseAngle)-sin(\lowerAdjReleaseAngle))},{2*sqrt(3)*sin(\lowerAdjReleaseAngle)/(sqrt(3)*cos(\lowerAdjReleaseAngle)-sin(\lowerAdjReleaseAngle))});
+            \coordinate (upperAdjClipStart) at ({sqrt(3)*cos(\upperAdjEngageAngle)/sin(\upperAdjEngageAngle)},{sqrt(3)});
+            \coordinate (upperAdjClipEnd) at ({sqrt(3)*cos(\referenceEndAngle)/sin(\referenceEndAngle)},{sqrt(3)});
+
+            \draw[->,thin] (O) -- (2.35,0) node[right] {$s_\upalpha^*$};
+            \draw[->,thin] (O) -- (0,2.3) node[above] {$s_\upbeta^*$};
+            \draw[gray!60,->,thin] (O) -- (u1) node[below right, gray!60, fill=white, inner sep=0.1pt, yshift=-3pt] {\scriptsize $\bm{s}_{\mathrm{i}1}$};
+            \draw[gray!60,->,thin] (O) -- (u2) node[above right, gray!60, fill=white, inner sep=0.1pt] {\scriptsize $\bm{s}_{\mathrm{i}2}$};
+            \draw[gray!70,thick] (u1) -- (u2);
+            \draw[gray!70,dashed,thick] (u2prev) -- (u2);
+            \draw[gray!70,dashed,thick] (u1) -- (u1next);
+
+            \draw[signalalpha,dotted,thick] (refStart) arc[start angle=\referenceStartAngle,end angle=\referenceEndAngle,radius=\commandedRadius];
+            \draw[signalbeta,dashed,very thick] (lowerAdjClipStart) -- (lowerAdjClipEnd);
+            \draw[signalbeta,dashed,very thick] (lowerAdjClipEnd) arc[start angle=\lowerAdjReleaseAngle,end angle=\gammaOneAngle,radius=\commandedRadius];
+            \draw[signalbeta,dashed,very thick] (clipStart) -- (clipEnd);
+            \draw[signalbeta,dashed,very thick] (clipEnd) arc[start angle=\gammaTwoAngle,end angle=\upperAdjEngageAngle,radius=\commandedRadius];
+            \draw[signalbeta,dashed,very thick] (upperAdjClipStart) -- (upperAdjClipEnd);
+
+            \draw[thin,dashed] (O) -- (clipStart);
+            \draw[thin,dashed] (O) -- (clipEnd);
+            \draw[thin] (\gammaOneAngle:\deltaGammaArcRadius) arc[start angle=\gammaOneAngle,end angle=\gammaTwoAngle,radius=\deltaGammaArcRadius];
+
+            \fill[signalbeta] (clipStart) circle (1.4pt);
+            \fill[signalbeta] (clipEnd) circle (1.4pt);
+
+            \node[fill=white, inner sep=0.1pt, yshift=3pt, xshift=3pt] at (0.76,0.38) {\scriptsize $\Delta\gamma$};
+            \node[signalalpha, fill=white, inner sep=0.1pt, align=left, above right, xshift=2pt, yshift=1pt] at (referenceLabelPos) {\scriptsize reference\\[-2pt]\scriptsize $m^*=1.22$};
+            \node[signalbeta, fill=white, inner sep=0.1pt, xshift=-2pt, yshift=-1pt] at (clipLabelPos) {\scriptsize clipping};
+        \end{tikzpicture}
+        \caption{Zoom into the upper-right quadrant of the $\upalpha\upbeta$ plane visualizing the clipping interval -- calculations for the other sectors are symmetric and can be obtained by appropriate angle shifts.}
+        \label{fig:min_max_injection_region1_gamma_definition}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region I, cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region I, cont.)}
+    Let
+    \begin{equation}
+        \underline{s}^{**}(\theta) = s_{\upalpha}^{**}(\theta) + \mathrm{j}s_{\upbeta}^{**}(\theta)
+    \end{equation}
+    denote the clipped realized normalized voltage vector. Then the positive-sequence fundamental amplitude follows from the first Fourier coefficient as
+    \begin{equation}
+        m^{(1)} = \left|\frac{1}{2\pi}\int_{0}^{2\pi} \underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\,\mathrm{d}\theta\right|.
+    \end{equation}
+    With six-sector symmetry, it is sufficient to integrate over sector 1 only:
+    \begin{equation}
+        m^{(1)} = \frac{3}{\pi}\int_{0}^{\pi/3} \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}\,\mathrm{d}\theta.
+    \end{equation}
+    Here, $\Re\{\cdot\}$ denotes the real part. In region I, sector 1 splits into $[0,\gamma_1] \cup [\gamma_1,\gamma_2] \cup [\gamma_2,\pi/3]$.
+    On the two outer intervals, the realizable vector equals the commanded one,
+    \begin{equation}
+        \underline{s}^{**}(\theta) = m^*e^{\mathrm{j}\theta}
+        \quad \Rightarrow \quad
+        \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\} = m^*.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region I, cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region I, cont.)}
+    Hence, only the clipped interval contributes a nontrivial correction:
+    \begin{equation}
+        m^{(1)} = \frac{3}{\pi}\left[m^*\left(\frac{\pi}{3}-\Delta\gamma\right) + \int_{\gamma_1}^{\gamma_2} \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}\,\mathrm{d}\theta\right].
+    \end{equation}
+    On the clipped interval we have $s_\mathrm{a}^{**}=1$, $s_\mathrm{c}^{**}=-1$, and with $\psi=\theta-\nicefrac{\pi}{6}$,
+    \begin{equation}
+        s_\mathrm{b}^{**} = \frac{3m^*}{2}\sin\psi.
+    \end{equation}
+    Applying the Clarke transformation yields
+    \begin{equation}
+        s_{\upalpha}^{**}(\theta) = 1 - \frac{m^*}{2}\sin\psi,
+        \qquad
+        s_{\upbeta}^{**}(\theta) = \frac{1}{\sqrt{3}} + \frac{\sqrt{3}m^*}{2}\sin\psi.
+    \end{equation}
+    Therefore,
+    \begin{equation}
+        \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}
+        = s_{\upalpha}^{**}(\theta)\cos\theta + s_{\upbeta}^{**}(\theta)\sin\theta
+        = \frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region I, cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region I, cont.)}
+    Since the clipping interval is symmetric around $\nicefrac{\pi}{6}$ and has width $\Delta\gamma = \gamma_2-\gamma_1$, the shifted variable satisfies $\psi \in [-\nicefrac{\Delta\gamma}{2},\nicefrac{\Delta\gamma}{2}]$, giving
+    \begin{equation}
+        m^{(1)} = \frac{3}{\pi}\left[m^*\left(\frac{\pi}{3}-\Delta\gamma\right) + \int_{-\nicefrac{\Delta\gamma}{2}}^{\nicefrac{\Delta\gamma}{2}}\left(\frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi\right)\mathrm{d}\psi\right].
+    \end{equation}
+    After integration, this becomes
+    \begin{equation}
+        \begin{split}
+            m^{(1)} & = \frac{3}{\pi}\left[m^*\frac{\pi}{3} - \frac{m^*}{2}\Delta\gamma - \frac{m^*}{2}\sin\!\left(\Delta\gamma\right) + \frac{4}{\sqrt{3}}\sin\!\left(\frac{\Delta\gamma}{2}\right)\right] \\
+                    & = m^* - \frac{3m^*}{2\pi}\Delta\gamma - \frac{3m^*}{2\pi}\sin\!\left(\Delta\gamma\right) + \frac{4\sqrt{3}}{\pi}\sin\!\left(\frac{\Delta\gamma}{2}\right).
+        \end{split}
+    \end{equation}
+    With $\Delta\gamma = 2\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right)$, we receive the final expression for the fundamental modulation amplitude in region I:
+    \begin{equation}
+        m^{(1)} = m^* - \frac{3m^*}{\pi}\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right) + \frac{2\sqrt{3}}{\pi}\sqrt{1-\frac{4}{3(m^*)^2}}, \quad \text{for} \quad \frac{2}{\sqrt{3}} < m^* \le \frac{4}{3}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region II) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region II)}
+    In region II, i.e. for $m^* \geq \nicefrac{4}{3}$, phases $\mathrm{a}$ and $\mathrm{c}$ are clipped over the entire first sector.
+    Phase $\mathrm{b}$ is unclipped only between the two roots of
+    \begin{equation}
+        \left|\frac{3m^*}{2}\sin\!\left(\theta-\frac{\pi}{6}\right)\right| = 1,
+        \qquad 0 \leq \theta \leq \frac{\pi}{3}.
+    \end{equation}
+    By symmetry around $\nicefrac{\pi}{6}$, the interval boundaries are
+    \begin{equation}
+        \delta_1 = \frac{\pi}{6} - \arcsin\!\left(\frac{2}{3m^*}\right),
+        \qquad
+        \delta_2 = \frac{\pi}{6} + \arcsin\!\left(\frac{2}{3m^*}\right),
+    \end{equation}
+    with unclipped width
+    \begin{equation}
+        \Delta\delta = \delta_2 - \delta_1 = 2\arcsin\!\left(\frac{2}{3m^*}\right).
+    \end{equation}
+    Hence, $s_\mathrm{b}^{**}=-1$ on $[0,\delta_1]$, $s_\mathrm{b}^{**}=+1$ on $[\delta_2,\nicefrac{\pi}{3}]$, and only on $[\delta_1,\delta_2]$ phase $\mathrm{b}$ remains unclipped.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region II, cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region II, cont.)}
+    Therefore, the realized space vector is piecewise given by
+    \begin{equation}
+        \underline{s}^{**}(\theta) =
+        \begin{cases}
+            \nicefrac{4}{3},                                                & 0 \leq \theta \leq \delta_1,                 \\
+            s_{\upalpha}^{**}(\theta) + \mathrm{j}s_{\upbeta}^{**}(\theta), & \delta_1 \leq \theta \leq \delta_2,          \\
+            \nicefrac{2}{3} + \mathrm{j}\nicefrac{2}{\sqrt{3}},             & \delta_2 \leq \theta \leq \nicefrac{\pi}{3},
+        \end{cases}
+    \end{equation}
+    where on the middle interval the same edge relation as in region I applies:
+    \begin{equation}
+        \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}
+        = \frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi,
+        \qquad \psi = \theta - \frac{\pi}{6}.
+    \end{equation}
+    Hence,
+    \begin{equation}
+        \begin{split}
+            m^{(1)} = \frac{3}{\pi}\Bigg[ & \int_{0}^{\delta_1} \frac{4}{3}\cos\theta\,\mathrm{d}\theta
+            + \int_{-\nicefrac{\Delta\delta}{2}}^{\nicefrac{\Delta\delta}{2}}\left(\frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi\right)\mathrm{d}\psi                        \\
+                                          & + \int_{\delta_2}^{\nicefrac{\pi}{3}}\left(\frac{2}{3}\cos\theta + \frac{2}{\sqrt{3}}\sin\theta\right)\mathrm{d}\theta\Bigg].
+        \end{split}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Min-max injection clipping law in the first hexagon sector (region II, cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Min-max injection clipping law in the first hexagon sector (region II, cont.)}
+    Evaluating the integrals and using $\delta_1 = \nicefrac{\pi}{6} - \nicefrac{\Delta\delta}{2}$ gives
+    \begin{equation}
+        m^{(1)} = \frac{3}{\pi}\left[\frac{4}{3}\cos\!\left(\frac{\Delta\delta}{2}\right) + \frac{m^*}{2}\Delta\delta - \frac{m^*}{2}\sin\!\left(\Delta\delta\right)\right].
+    \end{equation}
+    Hence, the achievable fundamental modulation amplitude in region II is
+    \begin{equation}
+        m^{(1)} = \frac{4}{\pi}\cos\!\left(\frac{\Delta\delta}{2}\right) + \frac{3m^*}{2\pi}\Delta\delta - \frac{3m^*}{2\pi}\sin\!\left(\Delta\delta\right).
+    \end{equation}
+    With $\Delta\delta = 2\arcsin\!\left(\frac{2}{3m^*}\right)$, this becomes
+    \begin{equation}
+        m^{(1)} = \frac{3m^*}{\pi}\arcsin\!\left(\frac{2}{3m^*}\right) + \frac{2}{\pi}\sqrt{1-\frac{4}{9(m^*)^2}}, \quad \text{for} \quad m^* \geq \frac{4}{3}.
+    \end{equation}
+    Hence, for the \hl{six-step limit} one obtains
+    \begin{equation}
+        \lim_{m^*\to\infty} m^{(1)} = \frac{3}{\pi}\lim_{m^*\to\infty}\left(m^*\arcsin\!\left(\frac{2}{3m^*}\right)\right) + \frac{2}{\pi} = \frac{2}{\pi} + \frac{2}{\pi} = \frac{4}{\pi}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fundamental modulation characteristic %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Achievable fundamental modulation for the min-max injection}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=0.88\textwidth,
+                    height=0.65\textheight,
+                    xmin=0,
+                    xmax=2.2,
+                    ymin=0,
+                    ymax=1.6,
+                    grid=major,
+                    xlabel={$m^*$},
+                    ylabel={$m^{(1)}$},
+                    xtick={0, 0.5, 1, 2/sqrt(3), 4/3, 2.0},
+                    xticklabels={$0$,$\frac{1}{2}$, $1$, $\frac{2}{\sqrt{3}}$, $\frac{4}{3}$, $2$},
+                    ytick={0, 0.5, 1, 2/sqrt(3), 4/pi},
+                    yticklabels={$0$, $\frac{1}{2}$, $1$,$\nicefrac{2}{\sqrt{3}}$, $\nicefrac{4}{\pi}$},
+                    domain=0:2.2,
+                    samples=200,
+                    clip=false,
+                    every axis plot/.append style={thick},
+                ]
+                \addplot[signalalpha, domain=0:2/sqrt(3)] {x};
+                \addplot[signalalpha, domain=2/sqrt(3):4/3] {x - (3*x/pi)*((pi/180)*acos(2/(sqrt(3)*x))) + (2*sqrt(3)/pi)*sqrt(1 - 4/(3*x^2))};
+                \addplot[signalalpha, domain=4/3:2.2] {(3*x/pi)*((pi/180)*asin(2/(3*x))) + (2/pi)*sqrt(1 - 4/(9*x^2))};
+
+                \addplot[black, dashed] coordinates {(0,4/pi) (2.2,4/pi)};
+                \addplot[black, dashed] coordinates {(2/sqrt(3),0) (2/sqrt(3),4/pi)};
+                \addplot[black, dashed] coordinates {(4/3,0) (4/3,4/pi)};
+
+                \node[fill=white, inner sep=4pt, anchor=south] at (axis cs:0.75,0.2) {\scriptsize Linear modulation};
+                \node[fill=white, inner sep=4pt, anchor=south] at (axis cs:1.4,0.2) {\scriptsize Overmodulation};
+                \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (axis cs:1.1547,0.5) -- (axis cs:1.3333,0.5);
+                \node[fill=white, inner sep=1pt, rotate=90, anchor=west] at (axis cs:1.25,0.55) {\scriptsize Region I};
+                \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (axis cs:1.3333,0.5) -- (axis cs:2.2,0.5);
+                \node[fill=white, inner sep=1pt, anchor=south] at (axis cs:1.6667,0.55) {\scriptsize Region II};
+
+                \node[fill=white, inner sep=1pt, anchor=south] at (axis cs:1.75,1.3) {\scriptsize Six-step limit};
+
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Achievable normalized fundamental modulation amplitude as a function of the reference modulation index for the min-max injection clipping law.}
+        \label{fig:min_max_injection_fundamental_modulation_characteristic}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Compensating the overmodulation nonlinearity %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Compensating the overmodulation nonlinearity}
+    \begin{itemize}
+        \item The controller output can be considered a combination of a fundamental voltage amplitude and a voltage angle $\theta$, i.e., $\bm{u} = \bm{u}_{\upalpha\upbeta} = \begin{bmatrix}
+                      m^{(1)} \cos(\theta) & m^{(1)} \sin(\theta)
+                  \end{bmatrix}^\top$ (neglecting harmonics).
+        \item Within the six-step limit, the overmodulation nonlinearity can be (partially) compensated by an inverse modulation gain control.
+        \item However, this does not compensate for the voltage angle issue, i.e., the lack of setting the voltage amplitude and angle independently during overmodulation.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \begin{circuitikz}
+            \draw (0,0) node[tdcacshape] (conv) {};
+            \draw (conv.ac mid out) to [tmultiwire] ++(0.75,0)  to [currtap, name=ct1] ++(0.75,0) to ++(0.25,0) node[threephasemotorshaftshape, anchor = west mid] (motor) {};
+            \draw node[ctrlblock, align = center, left = of conv] (mod) {Modulator};
+            \draw[->] (mod.east) --  node[midway, above] {$s$} (conv.west);
+            \draw node[ctrlblock, align = center, left = of mod] (comp) {$m^*=f^{-1}(m^{(1)})$};
+            \draw[->] (comp.east) --  node[midway, above] {$\bm{u}'$} (mod.west);
+            \draw node[ctrlblock, align = center, left = of comp] (tctrl) {Torque \\controller};
+            \draw[->] (tctrl.east) --  node[midway, above] {$\bm{u}$} (comp.west);
+            \draw[-] (ct1.tap) -- ++(0,-1) node[name = A] {};
+            \draw[shadecolor] ($(A)!.5!(tctrl.south |- A)$) node[ctrlblock, align = center] (obs) {Observer};
+            \draw[->] (ct1.tap) |- (obs.east);
+            \draw[->] (obs.west) -| (tctrl.south);
+            \draw ($(obs.west)!.5!(obs.west -| tctrl.south)$) node[above] {$x$};
+            \draw node[left = of tctrl] (B){};
+            \draw[->] (B) -- node[midway, above] {$T^*$} (tctrl.west);
+        \end{circuitikz}
+        \caption{Compensating the overmodulation nonlinearity by an inverse modulation gain control, i.e., inverting the modulation characteristic $m^{(1)}=f(m^*)$ from \figref{fig:min_max_injection_fundamental_modulation_characteristic}.}
+        \label{fig:inverse_modulation_gain_ctrl}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Discontinous flat-top pulse width modulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Continuous vs. discontinuous PWM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Continuous vs.\ discontinuous PWM schemes}
+    \begin{columns}[onlytextwidth, t]
+        \begin{column}{0.49\textwidth}
+            \textbf{Continuous PWM}
+            \begin{itemize}
+                \item All three-phase references are modulated continuously.
+                \item Zero-voltage injection is a continuous function of the reference vector, e.g., the min-max injection.
+                \item Lower low-order distortion, but higher switching activity.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{Discontinuous PWM}
+            \begin{itemize}
+                \item The zero-sequence is chosen such that (at least) one phase satisfies
+                      \begin{equation}
+                          s_p^{**}(t)=\pm 1, \quad p\in\{\mathrm{a,b,c}\},
+                      \end{equation}
+                      over a finite interval (\hl{clamped leg}).
+                \item This reduces switching losses, but changes the harmonic spectrum.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \begin{block}{Remark}
+        Discontinuous PWM (DPWM) schemes offer similar fundamental modulation capability as continuous schemes, but with reduced switching losses at the cost of increased low-order harmonics. There are several DPWM variants which differ in the choice of the clamping angle and the clamped leg with the flat-top modulation, as considered next, being a common scheme.
+    \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Discontinuous flat-top modulation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Discontinuous flat-top modulation}
+    Consider a balanced sinusoidal reference as from \eqref{eq:balanced_sinusoidal_reference_PWM}. Define the phase with the largest absolute instantaneous reference as
+    \begin{equation}
+        p(\theta)\in \operatorname*{arg\,max}_{i\in\{\mathrm{a,b,c}\}}\left|s_i^*(\theta)\right|.
+    \end{equation}
+    The \hl{flat-top zero-sequence injection} is then chosen as
+    \begin{equation}
+        s_0(\theta)=s_{p(\theta)}^*(\theta)-\operatorname{sgn}\!\left(s_{p(\theta)}^*(\theta)\right).
+        \label{eq:flat_top_zero_sequence_general}
+    \end{equation}
+    With
+    \begin{equation}
+        s^*_{\max}=\max\{s_\mathrm{a}^*,s_\mathrm{b}^*,s_\mathrm{c}^*\}, \qquad
+        s^*_{\min}=\min\{s_\mathrm{a}^*,s_\mathrm{b}^*,s_\mathrm{c}^*\},
+    \end{equation}
+    one may write
+    \begin{equation}
+        s_0=
+        \begin{cases}
+            s^*_{\max}-1, & s^*_{\max}\geq -s^*_{\min}, \\
+            s^*_{\min}+1, & s^*_{\max}< -s^*_{\min}.
+        \end{cases}
+        \label{eq:flat_top_zero_sequence_piecewise}
+    \end{equation}
+    Thus, one phase is clamped to \(+1\) or \(-1\) in each \(60^\circ\) interval, yielding the characteristic \hl{flat-top PWM sequence}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPWM flat-top example ($m^*=0.5$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPWM flat-top example ($m^*=0.5$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.1, ymax =1.1]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_flat-top_mod05_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPWM flat-top example ($m^*=1$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPWM flat-top example ($m^*=1$)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.1, ymax =1.1]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_flat-top_mod1_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top voltage capacity %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Voltage capacity of the flat-top injection}
+    Using the first-sector parametrization from \eqref{eq:first_sector_hexagon_lin_comb_abc},
+    \begin{equation*}
+        \bm{s}^*_\mathrm{abc} =
+        \begin{bmatrix}
+            \nicefrac{4}{3}\tau_1 + \nicefrac{2}{3}\tau_2  &
+            -\nicefrac{2}{3}\tau_1 + \nicefrac{2}{3}\tau_2 &
+            -\nicefrac{2}{3}\tau_1 - \nicefrac{4}{3}\tau_2
+        \end{bmatrix}^\top,
+        \qquad
+        \tau_1,\tau_2\geq 0, \quad \tau_1+\tau_2\leq 1,
+    \end{equation*}
+    the \hl{flat-top PWM definition} clamps the leading positive phase to the upper rail for $\theta\in[-\nicefrac{\pi}{6}, \nicefrac{\pi}{6}]$. Hence, within the upper first sector part, phase \(\mathrm{a}\) is clamped, yielding
+    \begin{equation}
+        s_0=s_\mathrm{a}^*-1
+        \qquad \Rightarrow \qquad
+        s_\mathrm{a}^{**}=s_\mathrm{a}^*-s_0=1.
+        \label{eq:flat_top_clamping_phase_a}
+    \end{equation}
+    Consequently, only the modulated phases \(\mathrm{b}\) and \(\mathrm{c}\) must be checked. Inserting \eqref{eq:flat_top_clamping_phase_a} into \eqref{eq:first_sector_hexagon_lin_comb_abc} gives
+    \begin{equation}
+        s_\mathrm{b}^{**}=1-2\tau_1, \qquad
+        s_\mathrm{c}^{**}=1-2(\tau_1+\tau_2).
+    \end{equation}
+    Because \(0\leq \tau_1\leq 1\) and \(0\leq \tau_1+\tau_2\leq 1\), it follows directly that
+    \begin{equation}
+        -1\leq s_\mathrm{b}^{**}\leq 1, \qquad -1\leq s_\mathrm{c}^{**}\leq 1.
+    \end{equation}
+    Thus, every reference in the \hl{first upper sector part of the hexagon} is realizable with flat-top PWM: phase \(\mathrm{a}\) is fixed at \(+1\), while phases \(\mathrm{b}\) and \(\mathrm{c}\) remain within the admissible interval. By symmetry, the \hl{entire voltage hexagon}, including its corners, can be reached.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top linear modulation range %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top linear modulation range}
+    In the positive \(\mathrm{a}\)-clamp sector $-\nicefrac{\pi}{6}\leq \theta \leq \nicefrac{\pi}{6}$,  one has \(s_0(\theta)=s_\mathrm{a}^*(\theta)-1\), yielding
+    \begin{equation}
+        s_\mathrm{a}^{**}(\theta)=1,
+        \qquad
+        s_\mathrm{b}^{**}(\theta)=1-\sqrt{3}m^*\cos\!\left(\theta+\frac{\pi}{6}\right),
+        \qquad
+        s_\mathrm{c}^{**}(\theta)=1-\sqrt{3}m^*\cos\!\left(\theta-\frac{\pi}{6}\right).
+        \label{eq:flat_top_positive_a_sector}
+    \end{equation}
+    Since
+    \begin{equation}
+        \cos\!\left(\theta\pm\frac{\pi}{6}\right)\in\left[\frac{1}{2},1\right]
+        \qquad \forall\, \theta\in\left[-\frac{\pi}{6},\frac{\pi}{6}\right],
+    \end{equation}
+    the following must hold to prevent clipping of a further phase:
+    \begin{equation}
+        1-\sqrt{3}m^*
+        \leq
+        s_\mathrm{b}^{**}(\theta),\, s_\mathrm{c}^{**}(\theta)
+        \leq
+        1-\frac{\sqrt{3}}{2}m^*.
+    \end{equation}
+    Therefore, requiring the non-clamped phases to stay within the \hl{linear modulation} range yields
+    \begin{equation}
+        1-\sqrt{3}m^* \geq -1
+        \qquad \Leftrightarrow \qquad
+        m^*\leq \frac{2}{\sqrt{3}}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top overmodulation regions %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top overmodulation regions}
+    For the flat-top overmodulation range define
+    \begin{equation}
+        \gamma=\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right),
+        \qquad
+        \frac{2}{\sqrt{3}}<m^*\leq \frac{4}{\sqrt{3}}.
+        \label{eq:flat_top_gamma_definition}
+    \end{equation}
+    With \eqref{eq:flat_top_gamma_definition} and \eqref{eq:flat_top_positive_a_sector}, on the positive half-sector \(0\leq \theta\leq \nicefrac{\pi}{6}\), phase \(\mathrm{c}\) is clipped for
+    \begin{equation}
+        \theta\in\left[\frac{\pi}{6}-\gamma,\frac{\pi}{6}\right].
+        \label{eq:region_I_flat_top_theta}
+    \end{equation}
+    If \(\gamma>\nicefrac{\pi}{6}\), then additionally phase \(\mathrm{b}\) is clipped for
+    \begin{equation}
+        \theta\in\left[0,\gamma-\frac{\pi}{6}\right].
+        \label{eq:region_II_flat_top_theta}
+    \end{equation}
+    Hence, from inserting \eqref{eq:flat_top_gamma_definition} in \eqref{eq:region_I_flat_top_theta} and \eqref{eq:region_II_flat_top_theta}, the flat-top overmodulation splits into
+    \begin{itemize}
+        \item \textbf{Region I:} \(\nicefrac{2}{\sqrt{3}}<m^*\leq \nicefrac{4}{3}\),
+        \item \textbf{Region II:} \(m^*>  \nicefrac{4}{3}\).
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPWM flat-top example ($m^*=1.24$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPWM flat-top example  ($m^*=1.24$, region I)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.45, ymax =1.45]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_flat-top_mod124_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPWM flat-top example ($m^*=1.4$) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPWM flat-top example  ($m^*=1.4$, region II)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -1.45, ymax =1.45]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_flat-top_mod140_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top region I proof %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top overmodulation: region I fundamental component}
+    Let
+    \begin{equation}
+        \underline{s}^{**}(\theta)=s_{\upalpha}^{**}(\theta)+\mathrm{j}s_{\upbeta}^{**}(\theta)
+    \end{equation}
+    denote the realized normalized voltage vector. Using the six clamping sectors and mirror symmetry around each sector center, the positive-sequence fundamental amplitude is
+    \begin{equation}
+        m^{(1)}=
+        \left|
+        \frac{1}{2\pi}\int_{0}^{2\pi}\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\,\mathrm{d}\theta
+        \right|
+        =
+        \frac{6}{\pi}\int_{0}^{\pi/6}\Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}\,\mathrm{d}\theta.
+        \label{eq:flat_top_fundamental_half_sector}
+    \end{equation}
+    In \textbf{region I}, define the clipping onset
+    \begin{equation}
+        \theta_\mathrm{c}=\frac{\pi}{6}-\gamma,
+        \qquad
+        \frac{2}{\sqrt{3}}<m^*\leq \frac{4}{3}.
+    \end{equation}
+    Then, on \(0\leq \theta\leq \theta_\mathrm{c}\) the reference is still realizable:
+    \begin{equation}
+        \underline{s}^{**}(\theta)=m^*e^{\mathrm{j}\theta}
+        \qquad \Rightarrow \qquad
+        \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}=m^*.
+    \end{equation}
+    On the clipped interval \(\theta_\mathrm{c}\leq \theta\leq \nicefrac{\pi}{6}\), one has
+    \begin{equation}
+        s_\mathrm{a}^{**}=1, \qquad
+        s_\mathrm{c}^{**}=-1, \qquad
+        s_\mathrm{b}^{**}=1-\sqrt{3}m^*\cos\!\left(\theta+\frac{\pi}{6}\right).
+    \end{equation}
+    Applying the Clarke transformation gives
+    \begin{equation}
+        s_{\upalpha}^{**}(\theta)=\frac{2}{3}+\frac{m^*}{\sqrt{3}}\cos\!\left(\theta+\frac{\pi}{6}\right), \qquad
+        s_{\upbeta}^{**}(\theta)=\frac{2}{\sqrt{3}}-m^*\cos\!\left(\theta+\frac{\pi}{6}\right).
+    \end{equation}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top region I proof cont. %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top overmodulation: region I fundamental component (cont.)}
+    Hence, on the clipped interval
+    \begin{equation}
+        \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}
+        =
+        s_{\upalpha}^{**}(\theta)\cos\theta+s_{\upbeta}^{**}(\theta)\sin\theta
+        =
+        \frac{2}{3}\cos\theta+\frac{2}{\sqrt{3}}\sin\theta+\frac{m^*}{2}-\frac{\sqrt{3}m^*}{3}\sin(2\theta).
+        \label{eq:flat_top_region1_integrand}
+    \end{equation}
+    Therefore, the region-I fundamental amplitude follows from
+    \begin{equation}
+        m^{(1)}=
+        \frac{6}{\pi}
+        \left[
+            \int_{0}^{\theta_\mathrm{c}} m^*\,\mathrm{d}\theta
+            +
+            \int_{\theta_\mathrm{c}}^{\nicefrac{\pi}{6}}
+            \left(
+            \frac{2}{3}\cos\theta+\frac{2}{\sqrt{3}}\sin\theta+\frac{m^*}{2}-\frac{\sqrt{3}m^*}{3}\sin(2\theta)
+            \right)\mathrm{d}\theta
+            \right].
+        \label{eq:flat_top_region1_integral}
+    \end{equation}
+    Evaluating the integrals and using \(\cos\gamma=\nicefrac{2}{\sqrt{3}m^*}\) yields
+    \begin{equation}
+        \begin{split}
+            m^{(1)}
+             & =
+            m^*
+            -\frac{3m^*}{\pi}\gamma
+            +\frac{\sqrt{3}m^*}{\pi}
+            -\frac{4}{\pi}
+            +\frac{4}{\sqrt{3}\pi m^*}
+            +\frac{2\sqrt{3}}{\pi}\sin\gamma,
+            \qquad
+            \frac{2}{\sqrt{3}}<m^*\leq \frac{4}{3} \\
+             & =
+            m^*
+            -\frac{3m^*}{\pi}\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right)
+            +\frac{\sqrt{3}m^*}{\pi}
+            -\frac{4}{\pi}
+            +\frac{4}{\sqrt{3}\pi m^*}
+            +\frac{2\sqrt{3}}{\pi}\sqrt{1-\frac{4}{3(m^*)^2}}.
+        \end{split}
+        \label{eq:flat_top_region1_closed_form}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top overmodulation: transition to full six-step %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top overmodulation: transition to full six-step}
+    In \textbf{region II}, i.e. $m^*>\nicefrac{4}{3}$, phase \(\mathrm{c}\) is clipped over the entire half-sector \(0\leq \theta\leq \nicefrac{\pi}{6}\), while phase \(\mathrm{b}\) is clipped additionally for
+    \begin{equation}
+        0\leq \theta\leq \theta_\mathrm{b},
+        \qquad
+        \theta_\mathrm{b}=\gamma-\frac{\pi}{6}.
+    \end{equation}
+    The \hl{full six-step waveform} is reached when phase \(\mathrm{b}\) is also clipped over the complete half-sector, i.e.
+    \begin{equation}
+        \theta_\mathrm{b}=\frac{\pi}{6}
+        \qquad \Leftrightarrow \qquad
+        \gamma=\frac{\pi}{3}.
+    \end{equation}
+    Inserting this in \eqref{eq:flat_top_gamma_definition} gives the command value at which flat-top PWM reaches six-step operation:
+    \begin{equation}
+        \arccos\!\left(\frac{2}{\sqrt{3}m^*}\right)=\frac{\pi}{3}
+        \qquad \Leftrightarrow \qquad
+        m^*=\frac{4}{\sqrt{3}}.
+    \end{equation}
+    Thus, the following derivation applies to the strict region-II interval
+    \begin{equation}
+        \frac{4}{3}<m^*<\frac{4}{\sqrt{3}}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flat-top overmodulation: region II fundamental component %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flat-top overmodulation: region II fundamental component}
+    For \(\nicefrac{4}{3}<m^*<\nicefrac{4}{\sqrt{3}}\), the realized vector is piecewise given by
+    \begin{equation}
+        \underline{s}^{**}(\theta)=
+        \begin{cases}
+            \nicefrac{4}{3},                                              & 0\leq \theta\leq \theta_\mathrm{b},                 \\[1mm]
+            s_{\upalpha}^{**}(\theta)+\mathrm{j}s_{\upbeta}^{**}(\theta), & \theta_\mathrm{b}\leq \theta\leq \nicefrac{\pi}{6},
+        \end{cases}
+        \label{eq:flat_top_region2_piecewise_vector}
+    \end{equation}
+    where on the second interval the same expressions as in region I apply, i.e. \eqref{eq:flat_top_region1_integrand}.
+    Hence,
+    \begin{equation}
+        m^{(1)}=
+        \frac{6}{\pi}
+        \left[
+            \int_{0}^{\theta_\mathrm{b}}\frac{4}{3}\cos\theta\,\mathrm{d}\theta
+            +
+            \int_{\theta_\mathrm{b}}^{\nicefrac{\pi}{6}}
+            \left(
+            \frac{2}{3}\cos\theta+\frac{2}{\sqrt{3}}\sin\theta+\frac{m^*}{2}-\frac{\sqrt{3}m^*}{3}\sin(2\theta)
+            \right)\mathrm{d}\theta
+            \right].
+        \label{eq:flat_top_region2_integral}
+    \end{equation}
+    Evaluating \eqref{eq:flat_top_region2_integral} and again using \(\cos\gamma=\nicefrac{2}{\sqrt{3}m^*}\) yields
+    \begin{equation}
+        \begin{split}
+            m^{(1)}
+             & =
+            m^*
+            -\frac{3m^*}{\pi}\gamma
+            +\frac{\sqrt{3}m^*}{\pi}
+            -\frac{4}{\pi}
+            +\frac{4}{\sqrt{3}\pi m^*}
+            +\frac{2\sqrt{3}}{\pi}\sin\gamma,
+            \qquad
+            \frac{4}{3}<m^*<\frac{4}{\sqrt{3}} \\
+             & =
+            m^*
+            -\frac{3m^*}{\pi}\arccos\!\left(\frac{2}{\sqrt{3}m^*}\right)
+            +\frac{\sqrt{3}m^*}{\pi}
+            -\frac{4}{\pi}
+            +\frac{4}{\sqrt{3}\pi m^*}
+            +\frac{2\sqrt{3}}{\pi}\sqrt{1-\frac{4}{3(m^*)^2}}.
+        \end{split}
+        \label{eq:flat_top_region2_closed_form}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPWM flat-top example ($m^*=2.35$, six step) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPWM flat-top example  ($m^*=2.35$, six step)}
+    \begin{figure}
+        \begin{tikzpicture}
+            \pgfplotsset{table/search path={fig/lec02}}
+            \begin{groupplot}[group style={group size=1 by 5, xticklabels at = edge bottom, vertical sep=0.25cm}, height=0.39\textheight, width=0.875\textwidth, xmin=0, xmax=2*pi, grid,clip = false, ymin = -1.1, ymax =1.1, xtick = {0, pi/2, pi, 3/2*pi, 2*pi}, xticklabels = {$0$,$\nicefrac{1}{2}\pi$,$\pi$, $\nicefrac{3}{2}\pi$, $2\pi$}, ytick = {-1, 0, 1}, yticklabels = {$-1$, $0$, $1$}]
+
+                % Top plot: original normalized voltage references
+                \nextgroupplot[ylabel = {$s_i^*(t)$}, ymin = -2.5, ymax =2.5,  ytick = {-2, -1, 0, 1, 2}, yticklabels = {$-2$, $-1$, $0$, $1$, $2$}]
+                \addplot[signalalpha, thick] table[x=wt, y=d_a, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 1pt] at (axis cs: pi/2, 0.95) {\small $s_\mathrm{a}^*$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 7*pi/6, 0.95) {\small $s_\mathrm{b}^*$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 1pt] at (axis cs: 11*pi/6, 0.95) {\small $s_\mathrm{c}^*$};
+
+                % middle plot: injected duty cycles and carrier
+                \nextgroupplot[ylabel = {$s_i^{**}(t), c(t)$}, ymin = -3, ymax =3,  ytick = {-3, -2, -1, 0, 1, 2, 3}, yticklabels = {$-3$, $-2$, $-1$, $0$, $1$, $2$, $3$}]
+                \addplot[signalalpha, dashed, thick] table[x=wt, y=d_a_mod, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalbeta, dashed, thick] table[x=wt, y=d_b_mod, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalgamma, dashed, thick] table[x=wt, y=d_c_mod, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalalpha, thick] table[x=wt, y=d_a_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalbeta, thick] table[x=wt, y=d_b_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[signalgamma, thick] table[x=wt, y=d_c_mod_clip, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \addplot[black, thick] table[x=wt, y=c, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+                \node[signalalpha, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: pi/2, 0.70) {\small $s_\mathrm{a}^{**}$};
+                \node[signalbeta, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 6.6*pi/6, 0.7) {\small $s_\mathrm{b}^{**}$};
+                \node[signalgamma, anchor=north, fill = white, inner sep = 0.1pt] at (axis cs: 11.4*pi/6, 0.7) {\small $s_\mathrm{c}^{**}$};
+                \node[black, anchor=center] at (axis cs: 0.3, -0.4) {\small $c$};
+
+                % switching sequence phase a
+                \nextgroupplot[ylabel = {$s_\mathrm{a}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalalpha, thick] table[x=wt, y=sa, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+
+                % switching sequence phase b
+                \nextgroupplot[ylabel = {$s_\mathrm{b}(t)$}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalbeta, thick] table[x=wt, y=sb, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+
+                % switching sequence phase c
+                \nextgroupplot[ylabel = {$s_\mathrm{c}(t)$}, xlabel={$\omega t$}, xlabel style={yshift=1ex}, height=0.26\textheight, ytick={-1,1}, yticklabels={$-1$,$+1$}, ymin = -1.25, ymax =1.25]
+                \addplot[signalgamma, thick] table[x=wt, y=sc, col sep=comma] {PWM_three-phase_flat-top_mod235_example.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Achievable fundamental modulation for the flat-top DPWM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Achievable fundamental modulation for the flat-top DPWM}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=0.88\textwidth,
+                    height=0.64\textheight,
+                    xmin=0,
+                    xmax=2.6,
+                    ymin=0,
+                    ymax=1.4,
+                    grid=major,
+                    xlabel={$m^*$},
+                    ylabel={$m^{(1)}$},
+                    xtick={0,0.5,1,2/sqrt(3),4/3,4/sqrt(3),2.5},
+                    xticklabels={$0$,$\frac{1}{2}$,$1$,$\frac{2}{\sqrt{3}}$,$\frac{4}{3}$,$\frac{4}{\sqrt{3}}$,$2.5$},
+                    ytick={0,0.5,1,2/sqrt(3),4/pi},
+                    yticklabels={$0$,$\nicefrac{1}{2}$,$1$,$\nicefrac{2}{\sqrt{3}}$,$\nicefrac{4}{\pi}$},
+                    domain=0:2.6,
+                    samples=250,
+                    clip=false,
+                    every axis plot/.append style={thick},
+                ]
+                \addplot[signalalpha, domain=0:2/sqrt(3)] {x};
+                \addplot[signalalpha, domain=2/sqrt(3):4/sqrt(3)] {
+                    x
+                    - (3*x/pi)*((pi/180)*acos(2/(sqrt(3)*x)))
+                    + (sqrt(3)*x/pi)
+                    - 4/pi
+                    + 4/(sqrt(3)*pi*x)
+                    + (2*sqrt(3)/pi)*sqrt(1 - 4/(3*x^2))
+                };
+                \addplot[signalalpha, domain=4/sqrt(3):2.6] {4/pi};
+
+                \addplot[black, dashed] coordinates {(0,4/pi) (2.6,4/pi)};
+                \addplot[black, dashed] coordinates {(2/sqrt(3),0) (2/sqrt(3),4/pi)};
+                \addplot[black, dashed] coordinates {(4/3,0) (4/3,4/pi)};
+                \addplot[black, dashed] coordinates {(4/sqrt(3),0) (4/sqrt(3),4/pi)};
+
+
+                \node[fill=white, inner sep=4pt, anchor=south] at (axis cs:0.75,0.15) {\scriptsize Linear modulation};
+                \node[fill=white, inner sep=4pt, anchor=south] at (axis cs:1.5,0.15) {\scriptsize Overmodulation};
+                \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (axis cs:1.1547,0.5) -- (axis cs:1.3333,0.5);
+                \node[fill=white, inner sep=1pt, rotate=90, anchor=west] at (axis cs:1.245,0.55) {\scriptsize Region I};
+                \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (axis cs:1.3333,0.5) -- (axis cs:2.3094,0.5);
+                \node[fill=white, inner sep=1pt, anchor=south] at (axis cs:1.82,0.55) {\scriptsize Region II};
+                \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (axis cs:2.3094,0.5) -- (axis cs:2.6,0.5);
+                \node[fill=white, inner sep=1pt, anchor=south] at (axis cs:2.475,0.55) {\scriptsize Six-step};
+
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Achievable normalized fundamental modulation amplitude as a function of the reference modulation index for the discontinuous flat-top injection.}
+        \label{fig:flat_top_fundamental_modulation_characteristic}
+    \end{figure}
+\end{frame}
+
+
+
+
+
+
+
+
+
