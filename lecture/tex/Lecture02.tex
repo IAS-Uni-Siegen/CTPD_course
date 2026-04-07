@@ -461,6 +461,10 @@
                             \draw[signalalpha,->,thick] (u0) -- (\vertex);
                         }
 
+                    \foreach \sector/\angle in {1/30,2/90,3/150,4/210,5/270,6/330} {
+                            \node[font=\footnotesize, fill=white, inner sep=0.5pt] at (\angle:1.02) {Sector \sector};
+                        }
+
                     \node[above right] at (u1) {$\bm{u}_{\mathrm{i}1}$};
                     \node[above right] at (u2) {$\bm{u}_{\mathrm{i}2}$};
                     \node[above left] at (u3) {$\bm{u}_{\mathrm{i}3}$};
@@ -1291,6 +1295,7 @@
     Hence, the zero-sequence injected phase voltage is $s_0 = \nicefrac{1}{2}(s_\mathrm{a}^* + s_\mathrm{c}^*)=\nicefrac{1}{3}(\tau_1 - \tau_2)$ leading to the shifted phase voltage references
     \begin{equation}
         s_\mathrm{a}^{**} = s_\mathrm{a}^* - s_0 = \tau_1 + \tau_2, \quad s_\mathrm{b}^{**} = s_\mathrm{b}^* - s_0 = -\tau_1 + \tau_2, \quad s_\mathrm{c}^{**} = s_\mathrm{c}^* - s_0 = -\tau_1 -\tau_2.
+        \label{eq:shifted_three_phase_PWM_modulation_indices_min_max}
     \end{equation}
     Because of $\tau_1 + \tau_2 \leq 1$ we have
     \begin{equation}
@@ -2747,6 +2752,401 @@
     \end{figure}
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Space vector modulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Space vector modulation principle %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Space vector modulation principle}
+    \small
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.45\textwidth}
+            Using the elementary vectors from \figref{fig:elementary_voltages_alpha_beta}, define the normalized \hl{dwell factors}
+            \begin{equation}
+                \tau_j = \frac{t_j}{T_\mathrm{s}}, \qquad j\in\{0,1,\ldots,7\}.
+            \end{equation}
+            In \hl{space vector modulation (SVM)}, the reference vector is synthesized as a linear combination of elementary vectors weighted by the dwell factors, i.e.,
+            \begin{equation}
+                \begin{gathered}
+                    \bm{s}_{\upalpha\upbeta}^* = \sum_{j=0}^7 \tau_j \bm{s}_{\mathrm{i}j},\\
+                    \sum_{j=0}^7 \tau_j = 1, \qquad
+                    \tau_j\geq 0.
+                \end{gathered}
+                \label{eq:SVM_assignment_problem}
+            \end{equation}
+        \end{column}
+        \begin{column}{0.53\textwidth}
+            \centering
+            \vspace{-0.15cm}
+            \begin{figure}
+                \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=Latex]
+                    \pgfmathsetmacro{\R}{2.0}
+                    \pgfmathsetmacro{\tauOne}{0.55}
+                    \pgfmathsetmacro{\tauTwo}{0.35}
+                    \pgfmathsetmacro{\axisFactor}{1.18}
+                    \coordinate (O) at (0,0);
+                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                            \coordinate (\name) at (\angle:\R);
+                        }
+                    \coordinate (alphaAxisStart) at (180:{\axisFactor*\R});
+                    \coordinate (alphaAxisEnd) at (0:{\axisFactor*\R});
+                    \coordinate (betaAxisStart) at (270:{\axisFactor*\R});
+                    \coordinate (betaAxisEnd) at (90:{\axisFactor*\R});
+                    \coordinate (v1) at ($(O)!\tauOne!(u1)$);
+                    \coordinate (v2) at ($(O)!\tauTwo!(u2)$);
+                    \coordinate (sref) at ($(v1)+(v2)$);
+
+                    \draw[->,thin] (alphaAxisStart) -- (alphaAxisEnd) node[right] {$s_{\upalpha}$};
+                    \draw[->,thin] (betaAxisStart) -- (betaAxisEnd) node[left] {$s_{\upbeta}$};
+                    \draw[gray!70,thick] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+                    \foreach \vertex in {u1,u2,u3,u4,u5,u6} {
+                            \draw[gray!60,->,thin] (O) -- (\vertex);
+                        }
+                    \draw[signalalpha,->,very thick] (O) -- (v1);
+                    \draw[signalbeta,->,very thick] (O) -- (v2);
+                    \draw[signalbeta,dashed,thick] (v1) -- (sref);
+                    \draw[signalalpha,dashed,thick] (v2) -- (sref);
+                    \draw[black,->,very thick] (O) -- (sref);
+
+                    \pgfmathanglebetweenpoints{\pgfpointanchor{O}{center}}{\pgfpointanchor{sref}{center}}
+                    \let\sectorAngle\pgfmathresult
+                    \node[fill=white, inner sep=1pt, below, xshift=-0.1cm, yshift=-0.1cm] at ($(O)!0.60!(v1)$) {\scriptsize $\tau_1\bm{s}_{\mathrm{i}1}$};
+                    \node[fill=white, inner sep=1pt, above left, xshift=-0.01cm, yshift=0.15cm] at ($(O)!0.74!(v2)$) {\scriptsize $\tau_2\bm{s}_{\mathrm{i}2}$};
+                    \node[fill=white, inner sep=0.1pt, above left, xshift=-0.1cm] at ($(sref)+(0.03,0.05)$) {$\bm{s}_{\upalpha\upbeta}^*$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, below right] at ($(u1)+(0.02,-0.03)$) {$\bm{s}_{\mathrm{i}1}$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, above right] at ($(u2)+(0.02,0.03)$) {$\bm{s}_{\mathrm{i}2}$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, above left] at ($(u3)+(-0.03,0.03)$) {$\bm{s}_{\mathrm{i}3}$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, left] at ($(u4)+(-0.05,0)$) {$\bm{s}_{\mathrm{i}4}$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, below left] at ($(u5)+(-0.03,-0.03)$) {$\bm{s}_{\mathrm{i}5}$};
+                    \node[fill=white, text=gray!85!black, inner sep=0.1pt, below right] at ($(u6)+(0.03,-0.03)$) {$\bm{s}_{\mathrm{i}6}$};
+                \end{tikzpicture}
+                \caption{Reference vector decomposition with exemplary reference vector $\bm{s}_{\upalpha\upbeta}^*$ in the first sector}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Dual coordinates %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Dual coordinates}
+    \footnotesize
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.52\textwidth}
+            \centering
+            \begin{figure}
+                \begin{tikzpicture}[x=1.2cm,y=1.2cm,>=Latex]
+                    \pgfmathsetmacro{\R}{2}
+                    \pgfmathsetmacro{\h}{sqrt(3)}
+                    \pgfmathsetmacro{\tauOne}{0.55}
+                    \pgfmathsetmacro{\tauTwo}{0.35}
+                    \coordinate (O) at (0,0);
+                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                            \coordinate (\name) at (\angle:\R);
+                        }
+                    \coordinate (tauOneDir) at (1.5,-0.5*\h);
+                    \coordinate (tauOneOne) at (1.5,-0.5*\h);
+                    \coordinate (tauOneAxisStart) at (-1.80,1.0392);
+                    \coordinate (tauOneAxisEnd) at (2.55,-1.4722);
+                    \coordinate (tauTwoAxisStart) at (0,-2.45);
+                    \coordinate (tauTwoAxisEnd) at (0,2.45);
+
+                    \coordinate (S1) at ($(O)!\tauOne!(u1)$);
+                    \coordinate (S2) at ($(O)!\tauTwo!(u2)$);
+                    \coordinate (S) at ($(S1)+(S2)$);
+
+                    \coordinate (QtauTwo) at (0,{\tauTwo*\h});
+                    \coordinate (QtauOne) at ($(O)!\tauOne!(tauOneOne)$);
+                    \coordinate (tauOneMinusHalf) at (-0.75,0.4330);
+
+                    \draw[gray!70,thick] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+                    \draw[->,thick] (-2.35,0) -- (2.75,0) node[right] {$s_\upalpha^*$};
+                    \draw[->,thick] (tauTwoAxisStart) -- (tauTwoAxisEnd) node[right] {$s_\upbeta^*$};
+                    \draw[->,thick] (tauOneAxisStart) -- (tauOneAxisEnd) node[below right] {$\tau_1$};
+                    \node[left] at (tauTwoAxisEnd) {$\tau_2$};
+
+                    \draw[gray!70,dashed] (QtauTwo) -- (S);
+                    \draw[gray!70,dashed] (QtauOne) -- (S);
+                    \draw[gray!65,thin] (tauOneOne) -- (u1);
+                    \draw[gray!65,thin] (tauOneMinusHalf) -- (0,\h);
+
+                    \draw[gray!60,->,thick] (O) -- (u1);
+                    \draw[gray!60,->,thick] (O) -- (u2);
+                    \draw[signalalpha,->,thick] (O) -- (S1);
+                    \draw[signalbeta,->,thick] (O) -- (S2);
+                    \draw[->,thick] (O) -- (S);
+
+                    \node[gray!60,, below] at ($(O)!0.82!(u1)$) {$\bm{s}_{\mathrm{i}1}$};
+                    \node[gray!60,above right] at (u2) {$\bm{s}_{\mathrm{i}2}$};
+                    \node[signalalpha, below] at ($(O)!0.58!(S1)$) {$\tau_1\bm{s}_{\mathrm{i}1}$};
+                    \node[signalbeta, left, fill=white, inner sep=0.25pt] at ($(O)!0.63!(S2)$) {$\tau_2\bm{s}_{\mathrm{i}2}$};
+                    \node[above left] at (S) {$\bm{s}_{\upalpha\upbeta}^*$};
+
+                    \node[anchor=east, left] at (-0.22,\h+0.25) {$\tau_2=1$};
+                    \draw[thin] (-0.22,\h+0.25) -- (0,\h);
+                    \node[anchor=west, left] at (1.15,-1.03) {$\tau_1=1$};
+                    \draw[thin] (1.15,-1.03) -- (tauOneOne);
+                    \node[anchor=east, left, fill=white, inner sep=0.5pt] at (-0.999,0.38) {$\tau_1=-\frac{1}{2}$};
+                    \draw[thin] (-0.999,0.38) -- (tauOneMinusHalf);
+
+                    \node[anchor=west, right] at (0.22,\h+0.25) {$\frac{2}{\sqrt{3}}$};
+                    \draw[thin] (0.22,\h+0.25) -- (0,\h);
+                    \node[anchor=west, below right] at ($(u1)+(0.1,-0.1)$) {$\frac{4}{3}$};
+                    \draw[thin] ($(u1)+(0.1,-0.1)$)  -- (u1);
+                \end{tikzpicture}
+                \caption{Dual coordinates in first sector}
+                \label{fig:dual_coordinates_SVM_first_sector}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            For each sector, the SVM assignment problem \eqref
+            {eq:SVM_assignment_problem} can be solved algebraically or geometrically by introducing \hl{dual coordinates} perpendicular to the fundamental vectors of that sector. In sector one, the relevant active vectors form
+            \begin{equation}
+                \bm{s}_{\upalpha\upbeta}^* = \tau_1\bm{s}_{\mathrm{i}1} + \tau_2\bm{s}_{\mathrm{i}2}
+                \label{eq:dual_coord_sector1_example}
+            \end{equation}
+            with
+            \begin{equation*}
+                \bm{s}_{\mathrm{i}1} = \begin{bmatrix}\nicefrac{4}{3} & 0\end{bmatrix}^\top,
+                \qquad
+                \bm{s}_{\mathrm{i}2} = \begin{bmatrix}\nicefrac{2}{3} & \nicefrac{2}{\sqrt{3}}\end{bmatrix}^\top.
+            \end{equation*}
+            From the component-wise representation
+            \begin{equation*}
+                s_\upalpha^* = \frac{4}{3}\tau_1 + \frac{2}{3}\tau_2,
+                \qquad
+                s_\upbeta^* = \frac{2}{\sqrt{3}}\tau_2.
+            \end{equation*}
+            we can derive for the dwell factors
+            \begin{equation*}
+                \tau_2 = \frac{\sqrt{3}}{2}s_\upbeta^*,
+                \qquad
+                \tau_1 = \frac{3}{4}s_\upalpha^* - \frac{\sqrt{3}}{4}s_\upbeta^*.
+            \end{equation*}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Dwell factors for all sectors %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Dwell factors for all sectors}
+    Generalizing the dual coordinate approach to all sectors yields the following active-vector dwell factors table. Moreover, the inactive vectors are applied for the remaining time, i.e.,
+    \begin{equation}
+        \tau_0+\tau_7 = 1 - \sum_{j=1}^6 \tau_j.
+        \label{eq:zero_vector_dwell_time_SVM}
+    \end{equation}
+    \begin{table}
+        \centering
+        \setlength{\tabcolsep}{6pt}
+        \renewcommand{\arraystretch}{1.25}
+        \begin{tabular}{c c l}
+            \toprule
+            Sector & \multicolumn{2}{c}{Active-vector dwell factors}                                                                                                                     \\
+            \midrule
+            $1$    & $\tau_1 = \phantom{-}\nicefrac{3}{4}s_\upalpha^* - \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ & $\tau_2 = \phantom{-}\nicefrac{\sqrt{3}}{2}s_\upbeta^*$                     \\
+            $2$    & $\tau_2 = \phantom{-}\nicefrac{3}{4}s_\upalpha^* + \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ & $\tau_3 = -\nicefrac{3}{4}s_\upalpha^* + \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ \\
+            $3$    & $\tau_4 = -\nicefrac{3}{4}s_\upalpha^* - \nicefrac{\sqrt{3}}{4}s_\upbeta^*$           & $\tau_3 = \phantom{-}\nicefrac{\sqrt{3}}{2}s_\upbeta^*$                     \\
+            $4$    & $\tau_4 = -\nicefrac{3}{4}s_\upalpha^* + \nicefrac{\sqrt{3}}{4}s_\upbeta^*$           & $\tau_5 = -\nicefrac{\sqrt{3}}{2}s_\upbeta^*$                               \\
+            $5$    & $\tau_6 = \phantom{-}\nicefrac{3}{4}s_\upalpha^* - \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ & $\tau_5 = -\nicefrac{3}{4}s_\upalpha^* - \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ \\
+            $6$    & $\tau_1 = \phantom{-}\nicefrac{3}{4}s_\upalpha^* + \nicefrac{\sqrt{3}}{4}s_\upbeta^*$ & $\tau_6 = -\nicefrac{\sqrt{3}}{2}s_\upbeta^*$                               \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sector detection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Sector detection}
+    \small
+    To avoid evaluating a numerically heavy $\theta = \operatorname{atan2}(s_\upbeta^*, s_\upalpha^*)$, to detect the relevant hexagon sector, a simple sign test can be used based on the following table:
+    \begin{table}
+        \centering
+        \setlength{\tabcolsep}{10pt}
+        \renewcommand{\arraystretch}{1.35}
+        \begin{tabular}{c c c c}
+            \toprule
+            Sector & $s_\upbeta^*$ & $\sqrt{3}s_\upalpha^* + s_\upbeta^*$ & $\sqrt{3}s_\upalpha^* - s_\upbeta^*$ \\
+            \midrule
+            $1$    & $+$           & $+$                                  & $+$                                  \\
+            $2$    & $+$           & $+$                                  & $-$                                  \\
+            $3$    & $+$           & $-$                                  & $-$                                  \\
+            $4$    & $-$           & $-$                                  & $-$                                  \\
+            $5$    & $-$           & $-$                                  & $+$                                  \\
+            $6$    & $-$           & $+$                                  & $+$                                  \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    The factors are derived from the geometric condition that the reference vector $\bm{s}_{\upalpha\upbeta}^*$ lies between the two active vectors of the sector.
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Transition diagram of the elementary switching states %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Transition diagram of the elementary switching states}
+    One degree of freedom in the SVM assignment problem \eqref{eq:SVM_assignment_problem} is the choice of the elementary vector sequence which can be represented by the below transition diagram.
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[x=1cm,y=1cm,>=Latex]
+            \tikzset{
+                transitionedge/.style={signalalpha, line width=0.95pt},
+                statelabel/.style={font=\scriptsize, fill=white, inner sep=0.6pt}
+            }
+
+            \coordinate (u1) at (2.35,-0.10);
+            \coordinate (u2) at (1.10,2.05);
+            \coordinate (u3) at (-1.10,2.05);
+            \coordinate (u4) at (-2.25,0.35);
+            \coordinate (u5) at (-1.25,-1.95);
+            \coordinate (u6) at (1.25,-1.95);
+            \coordinate (z7) at (0,0.35);
+            \coordinate (z0) at (0,-0.10);
+
+            \draw[gray!70,->,thin] (0.10,2.45) -- (0.10,3.15) node[right] {$s_\upbeta$};
+            \draw[gray!70,->,thin] (4.15,0.05) -- (5.10,0.05) node[below] {$s_\upalpha$};
+
+            \draw[transitionedge] (u1) -- (u2) -- (u3) -- (u4) -- (u5) -- (u6) -- cycle;
+            \draw[transitionedge] (z0) -- (u1);
+            \draw[transitionedge] (z0) -- (u3);
+            \draw[transitionedge] (z0) -- (u5);
+            \draw[transitionedge] (z7) -- (u2);
+            \draw[transitionedge] (z7) -- (u4);
+            \draw[transitionedge] (z7) -- (u6);
+
+            \foreach \vertex in {u1,u2,u3,u4,u5,u6,z7,z0} {
+                    \fill[signaldelta] (\vertex) circle (2.4pt);
+                }
+
+            \node[statelabel, anchor=west] at ($(u1)+(0.22,0.10)$) {$\bm{s}_{\mathrm{i}1}\; +\; -\; -$};
+            \node[statelabel, anchor=south] at ($(u2)+(0.02,0.18)$) {$\bm{s}_{\mathrm{i}2}\; +\; +\; -$};
+            \node[statelabel, anchor=south] at ($(u3)+(-0.05,0.18)$) {$\bm{s}_{\mathrm{i}3}\; -\; +\; -$};
+            \node[statelabel, anchor=east] at ($(u4)+(-0.18,-0.02)$) {$\bm{s}_{\mathrm{i}4}\; -\; +\; +$};
+            \node[statelabel, anchor=north] at ($(u5)+(-0.03,-0.20)$) {$\bm{s}_{\mathrm{i}5}\; -\; -\; +$};
+            \node[statelabel, anchor=north] at ($(u6)+(0.02,-0.20)$) {$\bm{s}_{\mathrm{i}6}\; +\; -\; +$};
+            \node[statelabel, anchor=west] at ($(z7)+(0.20,0.12)$) {$\bm{s}_{\mathrm{i}7}\; +\; +\; +$};
+            \node[statelabel, anchor=east] at ($(z0)+(-0.20,-0.02)$) {$\bm{s}_{\mathrm{i}0}\; -\; -\; -$};
+        \end{tikzpicture}
+        \caption{Transition diagram of the elementary switching states of the 2L-VSI}
+        \label{fig:transition_diagram_elementary_switching_states}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternating SVM with equally distributed zero voltage vectors %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternating SVM with equally distributed zero voltage vectors}
+    The usual SVM sequence implementation is the \hl{centered and alternating SVM} scheme, which applies the zero vectors $\bm{s}_{\mathrm{i}0}$ and $\bm{s}_{\mathrm{i}7}$ for equal time at the beginning and end of the \hl{pulse period} $T_\mathrm{p}$. The active vectors are applied in an alternating sequence to minimize switching losses.
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[x=1.06cm,y=1cm,>=Latex]
+            \tikzset{
+                statelabel/.style={font=\small, fill=white, inner sep=0.8pt},
+                timelabel/.style={fill=white, inner sep=0.4pt}
+            }
+
+            \foreach \x in {0,...,8} {
+                    \draw[gray!55,dashed] (\x,-1.05) -- (\x,3.45);
+                }
+
+            \node[left] at (-0.15,2.55) {$s_\mathrm{a}(t)$};
+            \node[left] at (-0.15,1.45) {$s_\mathrm{b}(t)$};
+            \node[left] at (-0.15,0.35) {$s_\mathrm{c}(t)$};
+
+            \draw[black,thick] (0,2.30) -- (1,2.30) -- (1,3.00) -- (7,3.00) -- (7,2.30) -- (8,2.30);
+            \draw[black,thick] (0,1.20) -- (2,1.20) -- (2,1.90) -- (6,1.90) -- (6,1.20) -- (8,1.20);
+            \draw[black,thick] (0,0.10) -- (3,0.10) -- (3,0.80) -- (5,0.80) -- (5,0.10) -- (8,0.10);
+
+            \foreach \x/\state in {
+            0.5/{\bm{s}_{\mathrm{i}0}},
+            1.5/{\bm{s}_{\mathrm{i}1}},
+            2.5/{\bm{s}_{\mathrm{i}2}},
+            3.5/{\bm{s}_{\mathrm{i}7}},
+            4.5/{\bm{s}_{\mathrm{i}7}},
+            5.5/{\bm{s}_{\mathrm{i}2}},
+            6.5/{\bm{s}_{\mathrm{i}1}},
+            7.5/{\bm{s}_{\mathrm{i}0}}
+            } {
+            \node[statelabel] at (\x,3.25) {$\state$};
+            }
+
+            \foreach \x/\dwlabel in {
+            0.5/{\tau_0},
+            1.5/{\tau_1},
+            2.5/{\tau_2},
+            3.5/{\tau_7},
+            4.5/{\tau_7},
+            5.5/{\tau_2},
+            6.5/{\tau_1},
+            7.5/{\tau_0}
+            } {
+            \node[timelabel] at (\x,-0.52) {$\dwlabel$};
+            }
+
+            \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (0,-0.95) -- (4.0,-0.95);
+            \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (4.0,-0.95) -- (8.0,-0.95);
+            \node[timelabel] at (2.00,-0.95) {$T_\mathrm{p}$};
+            \node[timelabel] at (6.00,-0.95) {$T_\mathrm{p}$};
+        \end{tikzpicture}
+        \caption{Centered alternating SVM switching pattern (example for first sector).}
+        \label{fig:alternating_svm_equal_zero_distribution}
+    \end{figure}
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Centered SVM and equivalence to min-max injection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{SVM equivalence to PWM with min-max injection}
+    \small
+    According to \figref{fig:alternating_svm_equal_zero_distribution}, the SVM's average switching state over the pulse period is
+    \begin{equation}
+        \overline{\bm{s}}_\mathrm{abc}
+        =
+        \tau_0 \begin{bmatrix} -1 \\ -1 \\ -1 \end{bmatrix}
+        +
+        \tau_1 \begin{bmatrix} 1 \\ -1 \\ -1 \end{bmatrix}
+        +
+        \tau_2 \begin{bmatrix} 1 \\ 1 \\ -1 \end{bmatrix}
+        +
+        \tau_7 \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}.
+    \end{equation}
+    For the \hl{symmetric zero-vector distribution} of centered and alternating SVM,
+    \begin{equation}
+        \tau_0 = \tau_7 = \frac{1-\tau_1-\tau_2}{2}.
+    \end{equation}
+    Inserting this gives
+    \begin{equation}
+        \overline{\bm{s}}_\mathrm{abc}
+        =
+        \begin{bmatrix}
+            \tau_1+\tau_2  &
+            -\tau_1+\tau_2 &
+            -\tau_1-\tau_2
+        \end{bmatrix}^\top.
+    \end{equation}
+    This is exactly the shifted phase reference from the min-max zero-sequence PWM \eqref{eq:shifted_three_phase_PWM_modulation_indices_min_max}:
+    \begin{equation}
+        \overline{\bm{s}}_\mathrm{abc} = \bm{s}^{**}_\mathrm{abc}.
+    \end{equation}
+    Hence, \hl{centered and alternating SVM is identical to carrier-based PWM with min-max zero-sequence injection} in the linear range. This statement applies to all sectors due to symmetry.
+\end{frame}
 
 
 
