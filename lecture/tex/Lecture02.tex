@@ -3148,7 +3148,450 @@
     Hence, \hl{centered and alternating SVM is identical to carrier-based PWM with min-max zero-sequence injection} in the linear range. This statement applies to all sectors due to symmetry.
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Digital control implementation and regular sampling %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Digital control implementation and regular sampling}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Digital control implementation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Digital control implementation}
+    \centering
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[x=1cm,y=1cm,scale=0.62,transform shape,>=Latex]
+            \tikzset{
+            block/.style={draw=black, thick, fill=white, minimum width=1.10cm, minimum height=0.82cm, inner sep=3pt, font=\small, align=center},
+            ctrlblock/.style={draw=black, thick, fill=white, minimum width=1.55cm, minimum height=1.5cm, inner sep=3pt, font=\small, align=center},
+            pwmblock/.style={draw=black, thick, fill=white, minimum width=0.62cm, minimum height=0.34cm, inner sep=3pt, font=\small, align=center},
+            datapath/.style={signalalpha, thick, -{Latex[length=4pt,width=4pt]}},
+            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+            redlabel/.style={text=signalalpha, inner sep=2pt, font=\footnotesize},
+            blacklabel/.style={inner sep=2pt}
+            }
+
+            \coordinate (k0) at (1.35,-1.35);
+            \coordinate (k1) at (9.85,-1.35);
+            \coordinate (k2) at (18.35,-1.35);
+            \coordinate (focus) at (14.10,-2.5);
+
+            \foreach \x in {0.85,1.85,9.35,10.35,17.85,18.85} {
+                    \draw[dashed] (\x,-0.65) -- (\x,5.05);
+                }
+            \foreach \x in {1.35,9.85,18.35} {
+                    \draw[thick] (\x,-1.5) -- (\x,4.85);
+                }
+
+            \draw[-{Latex[length=4pt,width=4pt]},thick] (0.40,3.15) -- (19.3,3.15) node[right] {$t$};
+            \draw[signaldelta, thick] (0.85,4.55) -- (1.35,3.95) -- (1.85,3.35) -- (9.35,4.55) -- (9.85,3.95) -- (10.35,3.35) -- (17.85,4.55) -- (18.35,3.95) -- (18.85,3.35);
+
+            \fill[signalalpha] (1.35,3.95) circle (2.4pt);
+            \fill[signalalpha] (9.85,3.95) circle (2.4pt);
+
+            \draw[gray!65,thin] (1.35,3.95) -- (1.95,4.45);
+            \node[anchor=west] at (1.97,4.45) {$i_{\mathrm{a},k}$};
+            \draw[gray!65,thin] (5.45,4) -- (4.6,4.45);
+            \node[anchor=east] at (4.6,4.45) {$i_\mathrm{a}(t)$};
+            \draw[gray!65,thin] (9.85,3.95) -- (10.55,4.45);
+            \node[anchor=west] at (10.57,4.45) {$i_{\mathrm{a},k+1}$};
+
+            \node[block] (adc1) at (2.5,2.5) {S/H\\ADC};
+            \node[ctrlblock] (ctrl1) at (5.2,2.00) {Control};
+            \node[pwmblock] (pwm1) at (7.85,2.00) {PWM};
+
+            \node[block] (adc2) at (11.00,2.50) {S/H\\ADC};
+            \node[ctrlblock] (ctrl2) at (13.70,2.00) {Control};
+            \node[pwmblock] (pwm2) at (16.35,2.00) {PWM};
+
+            \draw[datapath] (1.35,3.95) |- (adc1.west);
+            \draw[datapath] (adc1.east) -- node[redlabel, above] {$i_{\mathrm{a},k}$} (adc1.east -| ctrl1.west);
+            \draw[datapath] (adc1.east |- 0,1.50) -- node[redlabel, above] {$T^*_{k}$} (ctrl1.west |- 0,1.50);
+            \draw[datapath] (ctrl1.east) -- node[redlabel, above] {$\bm{s}_{\upalpha\upbeta, k+1}^*$} (pwm1.west);
+            \draw[datapath] (pwm1.east) -- (k1 |- pwm1.east) -- (k1 |- 0,0.95);
+
+            \draw[datapath] (9.85,3.95) |- (adc2.west);
+            \draw[datapath] (adc2.east) -- node[redlabel, above] {$i_{\mathrm{a},k+1}$} (adc2.east -| ctrl2.west);
+            \draw[datapath] (adc2.east |- 0,1.50) -- node[redlabel, above] {$T^*_{k+1}$} (ctrl2.west |- 0,1.50);
+            \draw[datapath] (ctrl2.east) -- node[redlabel, pos=0.50, above] {$\bm{s}_{\upalpha\upbeta, k+1}^*$} (pwm2.west);
+            \draw[datapath] (pwm2.east) -- (k2 |- pwm2.east) -- (k2 |- 0,0.95);
+
+            \fill[black!18] (0.25,0.95) rectangle (1.35,0.35);
+            \draw[thick] (0.25,0.95) -- (1.35,0.95) -- (1.35,0.35) -- (0.25,0.35);
+            \draw[fill=black!18, thick] (1.35,0.95) rectangle (9.85,0.35);
+            \draw[fill=black!18, thick] (9.85,0.95) rectangle (18.35,0.35);
+            \fill[black!18] (18.35,0.95) rectangle (19.00,0.35);
+            \draw[thick] (19.00,0.95) -- (18.35,0.95) -- (18.35,0.35) -- (19.00,0.35);
+            \node at (5.60,0.65) {PWM-Timer};
+            \node at (14.10,0.65) {PWM-Timer};
+
+
+
+            \draw[signalalpha, thick] (0.25,-0.22) -- (0.85,-0.22) -- (0.85,-0.74) -- (1.85,-0.74) -- (1.85,-0.22) -- (9.35,-0.22) -- (9.35,-0.74) -- (10.35,-0.74) -- (10.35,-0.22) -- (17.85,-0.22) -- (17.85,-0.74) -- (18.85,-0.74) -- (18.85,-0.22) -- (19.00,-0.22);
+            \node[blacklabel, below] at (5.80,-0.22) {$s_\mathrm{a}(t)$};
+
+            \draw[periodmark] (k0) -- node[fill=white, inner sep=0.6pt] {$T_\mathrm{p}$} (k1);
+            \draw[periodmark] (k1) -- node[fill=white, inner sep=0.6pt] {$T_\mathrm{p}$} (k2);
+
+            \draw[periodmark] (k0 |- focus) -- node[fill=white, inner sep=0.8pt, align=center] {Average total dead time $1.5T_\mathrm{p}$} (focus);
+            \draw[thick] ([yshift=-0.15cm]k0 |- focus) -- ([yshift=0.15cm]k0 |- focus);
+            \draw[thick] ([yshift=-0.15cm]focus) -- ([yshift=0.15cm]focus);
+
+
+            \node[align=center, anchor=north] at ([yshift=-0.22cm]k0 |- focus) {Sampling of a\\phase-current reading};
+            \node[align=center, anchor=north] at ([yshift=-0.22cm]focus) {Effective focal point\\of the pulse-width modulated\\phase voltage};
+
+            \node[below, yshift=-0.25cm] at (k0) {$kT_\mathrm{p}$};
+            \node[below, yshift=-0.25cm] at (k1) {$(k+1)T_\mathrm{p}$};
+            \node[below, yshift=-0.25cm] at (k2) {$(k+2)T_\mathrm{p}$};
+        \end{tikzpicture}
+        \caption{Flow chart of typical digital control implementation with sample-and-hold analog-digital-converter (S/H ADC) delivering discrete-time sampled values $x_k$}
+        \label{fig:digital_control_implementation}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Digital control implementation (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Digital control implementation (cont.)}
+    Inverter control is implemented on digital control plattforms with a \hl{sampling frequency} $f_\mathrm{s}=\nicefrac{1}{T_\mathrm{s}}$ and a \hl{pulse frequency} $f_\mathrm{p}=\nicefrac{1}{T_\mathrm{p}}$. Here, several challenges arise:
+    \begin{itemize}
+        \item \textbf{Real-time requirement}: The control algorithm incl. I/O must be executed within the sampling period $T_\mathrm{s}$ (typically a few microseconds to a few hundred microseconds).
+        \item \textbf{Delay / dead time}: The control period acts a delay / dead time, which can affect the stability and performance of the system if not properly accounted for in the control design.
+        \item \textbf{Modulation induced current ripple}: The modulation introduces a ripple in the phase currents. If not properly accounted for, control loops will try to fight this system-immanent ripple, which can deteriorate the control performance.
+    \end{itemize}
+    \vspace{-0.2cm}
+    \begin{varblock}{Regular sampling}
+        To overcome the above issues in modulator-based control, regular sampling combines two key features:  \textbf{measurement synchronization} with the modulator to blank out the current ripple and \textbf{reference synchronization} to ensure that sampled control reference values deterministically impact the switching pattern of the next pulse period.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Measurement synchronization via regular sampling: ripple blanking %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Measurement synchronization via regular sampling: ripple blanking}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \pgfmathsetmacro{\numIntervals}{18}
+            \pgfmathsetmacro{\sampleStep}{360/\numIntervals}
+            \pgfmathsetmacro{\voltageAmplitude}{0.76}
+            \pgfmathsetmacro{\currentAmplitude}{0.84}
+            \pgfmathsetmacro{\loadAngle}{90}
+            \pgfmathsetmacro{\integrationGain}{pi/180*\currentAmplitude/\voltageAmplitude}
+            \pgfmathsetmacro{\currentInitial}{-\currentAmplitude}
+
+            \def\voltageSampleCoords{(0,0)}
+            \def\voltageHoldCoords{}
+            \def\switchCoords{}
+            \def\carrierCoords{}
+            \def\currentBaseCoords{(0,\currentInitial)}
+            \def\currentPwmCoords{(0,\currentInitial)}
+            \def\currentSampleCoords{(0,\currentInitial)}
+            \xdef\currentState{\currentInitial}
+
+            \foreach \k in {0,...,17} {
+                    \pgfmathsetmacro{\thetaLeft}{\k*\sampleStep}
+                    \pgfmathsetmacro{\thetaRight}{(\k+1)*\sampleStep}
+                    \pgfmathsetmacro{\heldVoltage}{\voltageAmplitude*sin(\thetaLeft)}
+                    \pgfmathsetmacro{\currentLeft}{\currentState}
+                    \pgfmathtruncatemacro{\parity}{mod(\k,2)}
+                    \ifnum\parity=0
+                        \pgfmathsetmacro{\switchStart}{1}
+                        \pgfmathsetmacro{\switchEnd}{-1}
+                        \pgfmathsetmacro{\switchEdge}{\thetaLeft + 0.5*\sampleStep*(1 + \heldVoltage)}
+                        \xdef\carrierCoords{\carrierCoords (\thetaLeft,-1) (\thetaRight,1)}
+                    \else
+                        \pgfmathsetmacro{\switchStart}{-1}
+                        \pgfmathsetmacro{\switchEnd}{1}
+                        \pgfmathsetmacro{\switchEdge}{\thetaLeft + 0.5*\sampleStep*(1 - \heldVoltage)}
+                        \xdef\carrierCoords{\carrierCoords (\thetaLeft,1) (\thetaRight,-1)}
+                    \fi
+                    \pgfmathsetmacro{\currentBaseRight}{\currentLeft + \integrationGain*\heldVoltage*(\thetaRight-\thetaLeft)}
+                    \pgfmathsetmacro{\currentEdge}{\currentLeft + \integrationGain*\switchStart*(\switchEdge-\thetaLeft)}
+                    \pgfmathsetmacro{\currentPwmRight}{\currentEdge + \integrationGain*\switchEnd*(\thetaRight-\switchEdge)}
+                    \pgfmathsetmacro{\nextVoltageSample}{\voltageAmplitude*sin(\thetaRight)}
+
+                    \xdef\voltageHoldCoords{\voltageHoldCoords (\thetaLeft,\heldVoltage) (\thetaRight,\heldVoltage)}
+                    \xdef\voltageSampleCoords{\voltageSampleCoords (\thetaRight,\nextVoltageSample)}
+                    \xdef\switchCoords{\switchCoords (\thetaLeft,\switchStart) (\switchEdge,\switchStart) (\switchEdge,\switchEnd) (\thetaRight,\switchEnd)}
+                    \xdef\currentBaseCoords{\currentBaseCoords (\thetaRight,\currentBaseRight)}
+                    \xdef\currentPwmCoords{\currentPwmCoords (\switchEdge,\currentEdge) (\thetaRight,\currentPwmRight)}
+                    \xdef\currentSampleCoords{\currentSampleCoords (\thetaRight,\currentBaseRight)}
+                    \xdef\currentState{\currentBaseRight}
+                }
+
+            \begin{groupplot}[
+                group style={group size=1 by 2, vertical sep=0.35cm},
+                width=0.95\textwidth,
+                height=0.52\textheight,
+                xmin=0,
+                xmax=360,
+                xtick distance=\sampleStep,
+                xticklabels={},
+                axis x line=middle,
+                axis y line=middle,
+                x axis line style={-{Latex[length=4pt,width=4pt]}},
+                ymin=-1.18,
+                ymax=1.18,
+                ytick={-1,0,1},
+                yticklabels={,,},
+                enlargelimits=false,
+                clip=false,
+                tick style={black},
+                every axis plot/.append style={line join=round}
+                ]
+                \nextgroupplot[]
+                \addplot[black, thick] coordinates {\carrierCoords};
+                \addplot[signalalpha, thick] coordinates {\switchCoords};
+                \addplot[signalbeta, dashed, thick, samples=401, domain=0:360] {\voltageAmplitude*sin(x)};
+                \addplot[signalbeta, thick] coordinates {\voltageHoldCoords};
+                \addplot[signalbeta, only marks, mark=o, mark size=2pt, mark options={draw=signalbeta, fill=white}] coordinates {\voltageSampleCoords};
+
+                \node[signalalpha, fill=white, inner sep=0.8pt] at (axis cs:41,0.8) {$s_\mathrm{a}(t)$};
+                \node[fill=white, inner sep=0.8pt] at (axis cs:80,0.26) {$c(t)$};
+                \node[signalbeta, fill=white, inner sep=0.8pt] at (axis cs:260,-0.42) {$s_{\mathrm{a},k}^{*}$};
+                \node[signalbeta, fill=white, inner sep=0.1pt] at (axis cs:221,-0.80) {$s_\mathrm{a}^{*}(t)$};
+                \node[overlay, anchor=west] at (axis description cs:1.01,0.5) {$t$};
+                \node[overlay, rotate=90, anchor=south] at (axis description cs:-0.01,0.5) {VSI voltage};
+
+
+
+                \nextgroupplot[]
+                \addplot[black!55, densely dotted, samples=2, domain=0:360] {0};
+                \addplot[signaldelta, thick, dashed] coordinates {\currentBaseCoords};
+                \addplot[signaldelta, thick] coordinates {\currentPwmCoords};
+                \addplot[signaldelta, only marks, mark=o, mark size=2pt, mark options={draw=signaldelta, fill=white}] coordinates {\currentSampleCoords};
+
+
+
+                \node[overlay, anchor=west] at (axis description cs:1.01,0.5) {$t$};
+                \node[overlay, rotate=90, anchor=south] at (axis description cs:-0.01,0.5) {Current response};
+                \draw[thin] (axis cs:105,0.55) -- (axis cs:125,0.45);
+                \node[signaldelta, left, anchor=east, fill=white, inner sep=0.5pt] at (axis cs:105,0.55) {$i_\mathrm{a}(t)$};
+                \draw[thin] (axis cs:275,0.64) -- (axis cs:262,0.35);
+                \node[signaldelta, align=center, above, fill=white, inner sep=0.5pt] at (axis cs:275,0.64) {$i_{\mathrm{a},k}$};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Zero-order-held voltage samples and ripple-free current sampling}
+    \end{figure}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PWM with continuous-time reference values %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]
+    \frametitle{PWM with continuous-time and zero-order-hold reference values}
+    \begin{figure}
+        \centering
+        \scriptsize
+        \textbf{Continuous-time reference $s^*(t)$}\par
+        \vspace{-0.3cm}
+        \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
+            \tikzset{
+            waveLabel/.style={fill=white, inner sep=0.8pt},
+            axisTick/.style={black, thick},
+            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+            carrierWave/.style={black, thick},
+            switchWave/.style={signalalpha, thick},
+            referenceWave/.style={signalbeta, thick}
+            }
+
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (0,-1.25) -- (0,1.35);
+
+            \foreach \y/\ylabel in {1/1,-1/-1} {
+                    \draw[axisTick] (-0.08,\y) -- (0.08,\y);
+                    \node[left] at (-0.14,\y) {$\ylabel$};
+                }
+            \foreach \x in {1.20,2.40,3.60,4.80,6.00,7.20,8.40} {
+                    \draw[axisTick] (\x,0.06) -- (\x,-0.06);
+                }
+
+            \draw[carrierWave] (0,1) -- (1.20,-1) -- (2.40,1) -- (3.60,-1) -- (4.80,1) -- (6.00,-1) -- (7.20,1) -- (8.40,-1);
+
+            \draw[switchWave]
+            (0,-1) -- (0.92,-1) -- (0.92,1) -- (1.48,1) -- (1.48,-1)
+            -- (2.95,-1) -- (2.95,1) -- (4.35,1) -- (4.35,-1)
+            -- (5.30,-1) -- (5.30,1) -- (6.84,1) -- (6.84,-1)
+            -- (7.48,-1) -- (7.48,1) -- (8.45,1);
+
+            \draw[referenceWave] plot[smooth] coordinates {
+                    (0.10,-0.60) (0.90,-0.58) (1.55,-0.46) (2.25,-0.18)
+                    (2.95,0.12) (3.70,0.32) (4.35,0.28) (5.10,0.18)
+                    (5.80,0.20) (6.55,0.32) (7.25,0.50) (8.30,0.75)
+                };
+
+            \node[signalalpha, waveLabel, above] at (1.26,1.06) {$s(t)$};
+            \node[waveLabel, below] at (2.42,0.52) {$c(t)$};
+            \node[signalbeta, waveLabel] at (3.7,0.55) {$s^*(t)$};
+
+            \draw[periodmark] (2.40,-0.35) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{p}$} (4.80,-0.35);
+        \end{tikzpicture}
+
+        \par\vspace{0.1cm}
+        \textbf{Discrete-time reference values and zero-order hold $s_k^*$}\par
+        \vspace{-0.08cm}
+        \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
+            \tikzset{
+            waveLabel/.style={fill=white, inner sep=0.8pt},
+            axisTick/.style={black, thick},
+            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+            carrierWave/.style={black, thick},
+            switchWave/.style={signalalpha, thick},
+            referenceWave/.style={signalbeta, thick}
+            }
+
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (0,-1.30) -- (0,1.58);
+
+            \foreach \y/\ylabel in {1/1,-1/-1} {
+                    \draw[axisTick] (-0.08,\y) -- (0.08,\y);
+                    \node[left] at (-0.14,\y) {$\ylabel$};
+                }
+            \foreach \x in {1.20,2.40,3.60,4.80,6.00,7.20,8.40} {
+                    \draw[axisTick] (\x,0.06) -- (\x,-0.06);
+                }
+
+            \draw[carrierWave] (0,1) -- (1.20,-1) -- (2.40,1) -- (3.60,-1) -- (4.80,1) -- (6.00,-1) -- (7.20,1) -- (8.40,-1);
+
+            \draw[switchWave]
+            (0,-1) -- (0.92,-1) -- (0.92,1) -- (1.48,1) -- (1.48,-1)
+            -- (3.02,-1) -- (3.02,1) -- (4.42,1) -- (4.42,-1)
+            -- (5.36,-1) -- (5.36,1) -- (6.84,1) -- (6.84,-1)
+            -- (7.48,-1) -- (7.48,1) -- (8.45,1);
+
+            \draw[referenceWave]
+            (0.18,-0.58) -- (0.86,-0.58) -- (0.86,-0.40) -- (1.56,-0.40)
+            -- (1.56,-0.28) -- (2.26,-0.28) -- (2.26,0.06) -- (3.02,0.06)
+            -- (3.02,0.30) -- (3.76,0.30) -- (3.76,0.36) -- (4.62,0.36)
+            -- (4.62,0.24) -- (5.34,0.24) -- (5.34,0.30) -- (6.08,0.30)
+            -- (6.08,0.38) -- (6.78,0.38) -- (6.78,0.58) -- (7.52,0.58)
+            -- (7.52,0.78) -- (8.42,0.78);
+
+            \node[signalalpha, waveLabel, above] at (1.26,1.06) {$s(t)$};
+            \node[waveLabel, below] at (2.42,0.52) {$c(t)$};
+            \node[signalbeta, waveLabel] at (3.5,0.55) {$s_k^*$};
+
+            \node[align=center, font=\scriptsize, text width=4.8cm] at (5.05,1.42) {Values between update instants do not influence the switching commands};
+            \draw[thin] (4.18,1.1) -- (3.95,0.48);
+            \draw[thin] (5.92,1.1) -- (6.08,0.42);
+
+            \draw[periodmark] (2.26,-0.52) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{s}$} (3.02,-0.52);
+            \draw[periodmark] (3.60,-0.35) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{p}$} (6.00,-0.35);
+        \end{tikzpicture}
+        \caption{PWM with continuous-time reference $s^*(t)$ (top) vs. discrete-time reference $s_k^*$ and zero-order hold (bottom) -- the latter sampling period $T_\mathrm{s}$ is not synchronized with the pulse period $T_\mathrm{p}$}
+    \end{figure}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Synchronized regular sampling schemes %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t]
+    \frametitle{Synchronized modulation schemes with regular sampling}
+    \begin{figure}
+        \centering
+        \scriptsize
+        \textbf{Regular sampling with $T_\mathrm{s}=\nicefrac{T_\mathrm{p}}{2}$}\par
+        \vspace{0.1cm}
+        \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
+            \tikzset{
+            waveLabel/.style={fill=white, inner sep=0.8pt},
+            axisTick/.style={black, thick},
+            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+            carrierWave/.style={black, thick},
+            switchWave/.style={signalalpha, thick},
+            referenceWave/.style={signalbeta, thick}
+            }
+
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (0,-1.25) -- (0,1.45);
+
+            \foreach \y/\ylabel in {1/1,-1/-1} {
+                    \draw[axisTick] (-0.08,\y) -- (0.08,\y);
+                    \node[left] at (-0.14,\y) {$\ylabel$};
+                }
+            \foreach \x in {1.20,2.40,3.60,4.80,6.00,7.20,8.40} {
+                    \draw[axisTick] (\x,0.06) -- (\x,-0.06);
+                }
+
+            \draw[carrierWave] (0,1) -- (1.20,-1) -- (2.40,1) -- (3.60,-1) -- (4.80,1) -- (6.00,-1) -- (7.20,1) -- (8.40,-1);
+
+            \draw[switchWave]
+            (0,-1) -- (0.92,-1) -- (0.92,1) -- (1.48,1) -- (1.48,-1)
+            -- (3.08,-1) -- (3.08,1) -- (4.60,1) -- (4.60,-1)
+            -- (5.42,-1) -- (5.42,1) -- (6.94,1) -- (6.94,-1)
+            -- (7.46,-1) -- (7.46,1) -- (8.45,1);
+
+            \draw[referenceWave]
+            (0.02,-0.58) -- (1.20,-0.58) -- (1.20,-0.46) -- (2.40,-0.46)
+            -- (2.40,-0.15) -- (3.60,-0.15) -- (3.60,0.34) -- (4.80,0.34)
+            -- (4.80,0.22) -- (6.00,0.22) -- (6.00,0.50) -- (7.20,0.50)
+            -- (7.20,0.80) -- (8.40,0.80);
+
+            \node[signalalpha, waveLabel, above] at (1.22,1.06) {$s(t)$};
+            \node[waveLabel, below] at (2.42,0.52) {$c(t)$};
+            \node[signalbeta, waveLabel] at (3.95,0.56) {$s_k^*$};
+
+            \node[align=center, font=\scriptsize, text width=5cm, fill=white, inner sep=1pt] at (6.10,1.5) {Each sampled reference value determines exactly one switching edge};
+            \draw[thin] (5.95,1.2) -- (5.6,0.35);
+
+            \draw[periodmark] (3.60,-0.70) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{s}$} (4.80,-0.70);
+            \draw[periodmark] (2.40,-0.40) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{p}$} (4.80,-0.40);
+        \end{tikzpicture}
+
+        \par\vspace{0.05cm}
+        \textbf{Regular sampling with $T_\mathrm{s}=T_\mathrm{p}$}\par
+        \vspace{-0.08cm}
+        \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
+            \tikzset{
+            waveLabel/.style={fill=white, inner sep=0.8pt},
+            axisTick/.style={black, thick},
+            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+            carrierWave/.style={black, thick},
+            switchWave/.style={signalalpha, thick},
+            referenceWave/.style={signalbeta, thick}
+            }
+
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
+            \draw[-{Latex[length=4pt,width=4pt]}, thick] (0,-1.25) -- (0,1.35);
+
+            \foreach \y/\ylabel in {1/1,-1/-1} {
+                    \draw[axisTick] (-0.08,\y) -- (0.08,\y);
+                    \node[left] at (-0.14,\y) {$\ylabel$};
+                }
+            \foreach \x in {1.20,2.40,3.60,4.80,6.00,7.20,8.40} {
+                    \draw[axisTick] (\x,0.06) -- (\x,-0.06);
+                }
+
+            \draw[carrierWave] (0,1) -- (1.20,-1) -- (2.40,1) -- (3.60,-1) -- (4.80,1) -- (6.00,-1) -- (7.20,1) -- (8.40,-1);
+
+            \draw[switchWave]
+            (0,-1) -- (0.92,-1) -- (0.92,1) -- (1.48,1) -- (1.48,-1)
+            -- (3.08,-1) -- (3.08,1) -- (4.60,1) -- (4.60,-1)
+            -- (5.42,-1) -- (5.42,1) -- (6.94,1) -- (6.94,-1)
+            -- (7.46,-1) -- (7.46,1) -- (8.45,1);
+
+            \draw[referenceWave]
+            (0.02,-0.58) -- (2.40,-0.58) -- (2.40,-0.10) -- (4.80,-0.10)
+            -- (4.80,0.32) -- (7.20,0.32) -- (7.20,0.78) -- (8.40,0.78);
+
+            \node[signalalpha, waveLabel, above] at (1.22,1.06) {$s(t)$};
+            \node[waveLabel, below] at (2.42,0.52) {$c(t)$};
+            \node[signalbeta, waveLabel] at (5.95,0.56) {$s_k^*$};
+
+            \draw[periodmark] (2.40,-0.40) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{s}=T_\mathrm{p}$} (4.80,-0.40);
+        \end{tikzpicture}
+        \caption{Synchronized regular sampling of the discrete-time reference $s_k^*$}
+    \end{figure}
+\end{frame}
 
 
 
