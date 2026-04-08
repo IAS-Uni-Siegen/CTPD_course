@@ -596,9 +596,9 @@
             \begin{equation}
                 s^*(t) = \frac{2}{u_\mathrm{dc}(t)} u^*(t).
             \end{equation}
-            Comparing $s^*(t)$ to a high frequency \hl{carrier signal} $c(t)$, e.g., a triangular signal, generates the switching function $s(t)$. Assuming that $s^*(t)$ only changes slowly compared to \hl{switching frequency $T_\mathrm{s}$} introduced by the carrier, we can approximate:
+            Comparing $s^*(t)$ to a high frequency \hl{carrier signal} $c(t)$, e.g., a triangular signal, generates the switching function $s(t)$. Assuming that $s^*(t)$ only changes slowly compared to \hl{pulse period $T_\mathrm{p}$} introduced by the carrier, we can approximate:
             \begin{equation}
-                \overline{s}(t) = \frac{1}{T_\mathrm{s}} \int_{t-T_\mathrm{s}}^{t} s(\tau) \, \mathrm{d}\tau \approx s^*(t).
+                \overline{s}(t) = \frac{1}{T_\mathrm{p}} \int_{t-T_\mathrm{p}}^{t} s(\tau) \, \mathrm{d}\tau \approx s^*(t).
             \end{equation}
         \end{column}
         \begin{column}{0.49\textwidth}
@@ -707,11 +707,11 @@
         \begin{column}{0.49\textwidth}
             To evaluate the error between the reference $s^*(t)$ and the switched output voltage $u(t)$, we introduce the following \hl{normalized integral difference}:
             \begin{equation}
-                e(t) = \frac{1}{T_\mathrm{s}}\int_{t_0}^{t}\left(s^*(\tau)-s(\tau)\right)\mathrm{d}\tau.
+                e(t) = \frac{1}{T_\mathrm{p}}\int_{t_0}^{t}\left(s^*(\tau)-s(\tau)\right)\mathrm{d}\tau.
             \end{equation}\pause
             This error can be interpreted as the resulting \hl{current ripple} assuming a pure inductive load $L$ at a constant input voltage $u_\mathrm{dc}(t)=u_\mathrm{dc}$:
             \begin{equation}
-                \Delta i(t) = \frac{T_\mathrm{s}u_\mathrm{dc}}{2 L } \left|e(t)\right|.
+                \Delta i(t) = \frac{T_\mathrm{p}u_\mathrm{dc}}{2 L } \left|e(t)\right|.
                 \label{eq:current_ripple_PWM_single_phase_ACDC}
             \end{equation}
         \end{column}
@@ -731,7 +731,7 @@
                             xmin=-0.1, xmax=1.1,
                             ymin=-1.10, ymax=1.10,
                             xtick={0, 1/2, 1},
-                            xticklabels={$0$,$\frac{T_\mathrm{s}}{2}$,$T_\mathrm{s}$},
+                            xticklabels={$0$,$\frac{T_\mathrm{p}}{2}$,$T_\mathrm{p}$},
                             ytick={-1,0,1},
                             yticklabels={$-1$,$0$,$1$},
                             grid=both,
@@ -743,9 +743,9 @@
                         \addplot[black, thick] coordinates {(-0.1,-0.6) (0,-1) (0.5,1) (1,-1)(1.1,-0.6)};
                         \addplot[domain = -0.1:1.1, samples = 10, signalalpha, thick] {\d};
                         \node[anchor=west] at (axis cs:1.1,\d) {$s^*$};
-                        \draw[<->] (axis cs:\t1,-1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{s}(1-s^*)}{2}$} (axis cs:1-\t1,-1);
-                        \draw[<->] (axis cs:0,1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{s}(1+s^*)}{4}$} (axis cs:\t1,1);
-                        \draw[<->] (axis cs:1-\t1,1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{s}(1+s^*)}{4}$} (axis cs:1,1);
+                        \draw[<->] (axis cs:\t1,-1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{p}(1-s^*)}{2}$} (axis cs:1-\t1,-1);
+                        \draw[<->] (axis cs:0,1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{p}(1+s^*)}{4}$} (axis cs:\t1,1);
+                        \draw[<->] (axis cs:1-\t1,1) -- node[above, fill=white, inner sep=1pt,yshift=2pt]{\footnotesize$\frac{T_\mathrm{p}(1+s^*)}{4}$} (axis cs:1,1);
                         \coordinate (a1) at (axis cs:\t1,1);
                         \coordinate (b1) at (axis cs:1-\t1,1);
 
@@ -2767,7 +2767,7 @@
         \begin{column}{0.45\textwidth}
             Using the elementary vectors from \figref{fig:elementary_voltages_alpha_beta}, define the normalized \hl{dwell factors}
             \begin{equation}
-                \tau_j = \frac{t_j}{T_\mathrm{s}}, \qquad j\in\{0,1,\ldots,7\}.
+                \tau_j = \frac{t_j}{T_\mathrm{p}}, \qquad j\in\{0,1,\ldots,7\}.
             \end{equation}
             In \hl{space vector modulation (SVM)}, the reference vector is synthesized as a linear combination of elementary vectors weighted by the dwell factors, i.e.,
             \begin{equation}
@@ -3246,7 +3246,7 @@
             \node[below, yshift=-0.25cm] at (k1) {$(k+1)T_\mathrm{p}$};
             \node[below, yshift=-0.25cm] at (k2) {$(k+2)T_\mathrm{p}$};
         \end{tikzpicture}
-        \caption{Flow chart of typical digital control implementation with sample-and-hold analog-digital-converter (S/H ADC) delivering discrete-time sampled values $x_k$}
+        \caption{Flow chart of typical digital control implementation with sample-and-hold analog-digital-converter (S/H ADC) delivering discrete-time sampled values $x_k$ (assuming equal sampling and pulse periods $T_\mathrm{s}=T_\mathrm{p}$)}
         \label{fig:digital_control_implementation}
     \end{figure}
 \end{frame}
@@ -3590,7 +3590,144 @@
             \draw[periodmark] (2.40,-0.40) -- node[fill=white, inner sep=0.8pt] {$T_\mathrm{s}=T_\mathrm{p}$} (4.80,-0.40);
         \end{tikzpicture}
         \caption{Synchronized regular sampling of the discrete-time reference $s_k^*$}
+        \label{fig:synchronized_references_regular_sampling}
     \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Delay model of discrete-time synchronized references  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Delay model of discrete-time synchronized references}
+    The synchronized reference sequence based on regular sampling as illustrated in \figref{fig:synchronized_references_regular_sampling} can be modeled as a sum of time-shifted step functions $\sigma(t)$ as follows:
+    \begin{equation}
+        s^*(t) = \sum_{k} s_k^* \left[ \sigma\left(t - kT_\mathrm{s}\right) - \sigma\left(t - (k+1)T_\mathrm{s}\right) \right].
+    \end{equation}
+    Using the Laplace transform of the step function $\mathcal{L}\left\{\sigma(t-t_0)\right\}=\nicefrac{e^{-t_0s}}{s}$, we get:
+    \begin{equation}
+        S^*(s) = \sum_{k} s_k^* \left[ \frac{e^{-kT_\mathrm{s}s}}{s} - \frac{e^{-(k+1)T_\mathrm{s}s}}{s} \right] = \sum_{k} s_k^*e^{-kT_\mathrm{s}s} \frac{1}{s}\left[1  - e^{-T_\mathrm{s}s} \right].
+    \end{equation}
+    Here, we can identify two terms:
+    \begin{align*}
+        S^*(z) & = \sum_{k} s_k^*z^{-k} \quad \text{with} \quad z = e^{T_\mathrm{s}s} \quad \text{(discrete-time reference sequence in the $z$-domain),} \\
+        H(s)   & = \frac{1}{T_\mathrm{s}s}\left[1  - e^{-T_\mathrm{s}s} \right] \quad \text{(transfer function of a sample and hold element)}.
+    \end{align*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Delay model of discrete-time synchronized references (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Delay model of discrete-time synchronized references (cont.)}
+    Hence, we can rewrite the Laplace transform of the synchronized reference sequence as follows:
+    \begin{equation}
+        S^*(s) = \sum_{k} s_k^*e^{-kT_\mathrm{s}s} \frac{1}{s}\left[1  - e^{-T_\mathrm{s}s} \right] = T_\mathrm{s} H(s) S^*(e^{T_\mathrm{s}s}).
+    \end{equation}
+    The transfer function $H(s)$ represents the impact of the synchronized regular sampling on the control loop. Rewriting $H(s=\mathrm{j}\omega)$, we get:
+    \begin{equation}
+        \begin{split}
+            H(\mathrm{j}\omega) & = \frac{1}{T_\mathrm{s}\mathrm{j}\omega}\left[1 - e^{-\mathrm{j}\omega T_\mathrm{s}}\right] = \frac{1}{T_\mathrm{s}\mathrm{j}\omega}e^{-\mathrm{j}\omega T_\mathrm{s}/2}\left[e^{\mathrm{j}\omega T_\mathrm{s}/2} - e^{-\mathrm{j}\omega T_\mathrm{s}/2}\right] \\
+                                & = \frac{2}{T_\mathrm{s}\mathrm{j}\omega}e^{-\mathrm{j}\omega T_\mathrm{s}/2}\sin\left(\frac{\omega T_\mathrm{s}}{2}\right) = e^{-\mathrm{j}\omega T_\mathrm{s}/2}\sinc\left(\frac{\omega T_\mathrm{s}}{2}\right)
+        \end{split}
+    \end{equation}
+    With the angular sampling frequency $\omega_\mathrm{s} = \nicefrac{2\pi}{T_\mathrm{s}}$, we can rewrite $H(\mathrm{j}\omega)$ as follows:
+    \begin{equation}
+        H(\mathrm{j}\omega) = e^{-\mathrm{j}\omega T_\mathrm{s}/2}\sinc\left(\pi\frac{\omega}{\omega_\mathrm{s}}\right).
+        \label{eq:regular_sampling_transfer_function_sinc}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Delay model of discrete-time synchronized references (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Delay model of discrete-time synchronized references (cont.)}
+    Since the $\sinc(\cdot)$ function can be a little abstract, two frequent approximations can be used. The first one is the \hl{first-order Pad\'e approach} of the exponential function:
+    \begin{equation}
+        e^{-\mathrm{j}\omega T_\mathrm{s}} \approx \frac{1 - \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}{1 + \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}} \quad \Rightarrow \quad H(\mathrm{j}\omega) \approx \frac{1}{T_\mathrm{s}\mathrm{j}\omega}\left(1-\frac{1 - \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}{1 + \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}\right)=\frac{1}{1+\mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}.
+    \end{equation}
+    This results in a first-order low-pass filter with a time constant of half the sampling time $T_\mathrm{s}$. The second one is derived by a \hl{Taylor series expansion} of the $\sinc(\cdot)$ function
+    \begin{equation}
+        \sinc\left(\pi\frac{\omega}{\omega_\mathrm{s}}\right) = 1 - \frac{\pi^2}{6}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^2 + \frac{\pi^4}{120}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^4 - \frac{\pi^6}{5040}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^6 + \ldots \approx 1,
+    \end{equation}
+    which yields:
+    \begin{equation}
+        H(\mathrm{j}\omega) \approx e^{-\mathrm{j}\omega T_\mathrm{s}/2}.
+    \end{equation}
+    Hence, this delivers a pure time delay of half the sampling time $T_\mathrm{s}$. In both approximations, \hl{$\nicefrac{T_\mathrm{s}}{2}$ can be interpreted as the relevant time constant of the synchronized regular sampling}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Delay model of discrete-time synchronized references (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Delay model of discrete-time synchronized references (cont.)}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \def\xmaxnorm{1.999}
+            \begin{groupplot}[
+                    group style={group size=1 by 2, xticklabels at=edge bottom, vertical sep=0.3cm},
+                    width=0.9\textwidth,
+                    height=0.45\textheight,
+                    xmin=0.1,
+                    xmax=2,
+                    xmode=log,
+                    log basis x=10,
+                    domain=0.1:\xmaxnorm,
+                    samples=250,
+                    grid,
+                    xtick={0.1,0.2,0.5,1,2},
+                    xticklabels={$0.1$,$0.2$,$0.5$,$1$,$2$},
+                    tick label style={font=\scriptsize},
+                    label style={font=\scriptsize},
+                    legend style={at={(0.5,1.025)}, anchor=south, legend columns=3, draw=none, fill=none, font=\scriptsize},
+                ]
+                \nextgroupplot[
+                    ylabel={Amplitude / dB},
+                    ymin=-20,
+                    ymax=2,
+                    ytick={0,-5,-10,-15,-20},
+                ]
+                \addplot[black, thick] {20*ln(abs(sin(deg(pi*x))/(pi*x)))/ln(10)};
+                \addlegendentry{$H(\mathrm{j}\omega)$}
+                \addplot[signalalpha, thick, dash dot] {-10*ln(1 + (pi*x)^2)/ln(10)};
+                \addlegendentry{Pad\'e approx.}
+                \addplot[signaldelta, thick, dashed] {0};
+                \addlegendentry{Taylor approx.}
+
+                \nextgroupplot[
+                    ylabel={Phase / deg},
+                    xlabel={Normalized frequency $\omega / \omega_\mathrm{s}$},
+                    ymin=-190,
+                    ymax=10,
+                    ytick={0,-45,-90,-135,-180},
+                ]
+                \addplot[black, thick] {-180*(x-floor(x))};
+                \addplot[signalalpha, thick, dash dot] {-atan(pi*x)};
+                \addplot[signaldelta, thick, dashed] {-180*x};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Bode plot of different transfer functions representing the reference synchronization as part of the regular sampling approach}
+        \label{fig:Bode_transfer_regular_sampling_reference}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Total control delay and compensation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Total control delay and compensation}
+    As already indicated in \figref{fig:digital_control_implementation}, the \hl{effective total control delay is $\nicefrac{3}{2}T_\mathrm{s}$} for a regular sampling digital control implementation. This delay is the sum of two components:
+    \begin{itemize}
+        \item \textbf{Reference synchronization}: $\nicefrac{T_\mathrm{s}}{2}$ (compare \eqref{eq:regular_sampling_transfer_function_sinc} and the approximations thereof).
+        \item \textbf{Controller processing}: $T_\mathrm{s}$ (incl. sensor data acquisition, control algorithm execution, and actuation signal generation).
+    \end{itemize}
+    While this impact must be considered for every control design, at least one $T_\mathrm{s}$ delay can be compensated by simple \hl{feedforward prediction} of the system's states:
+    \begin{equation}
+        \hat{\bm{x}}_{k+1} = \bm{f}(\bm{x}_k, \bm{u}_k),
+    \end{equation}
+    where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics. The input $\bm{u}_k$ is the control action from the last controller cycle, e.g., the average reference voltage $\bm{u}_k = \bm{u}_{\mathrm{abc},k}^*$. The next control cycle can then be based on the predicted state $\hat{\bm{x}}_{k+1}$ instead of the current state $\bm{x}_k$.
 \end{frame}
 
 
