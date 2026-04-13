@@ -3499,7 +3499,7 @@
     \begin{figure}
         \centering
         \scriptsize
-        \textbf{Regular sampling with $T_\mathrm{s}=\nicefrac{T_\mathrm{p}}{2}$}\par
+        \textbf{Regular sampling with $T_\mathrm{s}=\nicefrac{T_\mathrm{p}}{2}$}(a.k.a. asymmetrical regular sampling)\par
         \vspace{0.1cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
@@ -3548,7 +3548,7 @@
         \end{tikzpicture}
 
         \par\vspace{0.05cm}
-        \textbf{Regular sampling with $T_\mathrm{s}=T_\mathrm{p}$}\par
+        \textbf{Regular sampling with $T_\mathrm{s}=T_\mathrm{p}$} (a.k.a. symmetrical regular sampling)\par
         \vspace{-0.08cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
@@ -3729,6 +3729,319 @@
     \end{equation}
     where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics. The input $\bm{u}_k$ is the control action from the last controller cycle, e.g., the average reference voltage $\bm{u}_k = \bm{u}_{\mathrm{abc},k}^*$. The next control cycle can then be based on the predicted state $\hat{\bm{x}}_{k+1}$ instead of the current state $\bm{x}_k$.
 \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Harmonics}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Constant reference: local waveform and geometry %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: constant reference}
+    Consider a single-phase PWM with a constant reference $s^*$:
+    \[
+        s^*(t)=s^*=\mathrm{const.}
+    \]
+    \begin{figure}
+        \begin{tikzpicture}
+            \tikzmath{
+                real \sref, \halfTs, \Ts, \tOne, \tLeft, \tRight, \xMin, \xMax;
+                \sref = 0.48;
+                \halfTs = 1.2;
+                \Ts = 2*\halfTs;
+                \tOne = 0.5*\halfTs*(1-\sref);
+                \tLeft = -\Ts + \tOne;
+                \tRight = \Ts - \tOne;
+                \xMin = -\Ts;
+                \xMax = \Ts;
+            }
+            \begin{axis}[
+                    width=0.7\linewidth,
+                    height=0.3\linewidth,
+                    scale only axis,
+                    axis x line=middle,
+                    axis y line=middle,
+                    axis line style={-Latex, semithick},
+                    set layers=standard,
+                    xmin=\xMin, xmax=\xMax,
+                    ymin=-1.12, ymax=1.12,
+                    xtick={\xMin, -\tOne, 0, \tOne, \xMax},
+                    xticklabels={$-T_\mathrm{p}$, $-t_1$, $0$, $t_1$, $T_\mathrm{p}$},
+                    ytick={-1, 1},
+                    yticklabels={$-1$, $1$},
+                    tick style={black, semithick},
+                    xticklabel style={font=\footnotesize, fill=white, inner sep=1pt, yshift=-2pt, /pgfplots/on layer=axis foreground},
+                    yticklabel style={font=\footnotesize, fill=white, inner sep=1pt, xshift=-2pt, /pgfplots/on layer=axis foreground},
+                    xlabel={$t$},
+                    xlabel style={at={(axis description cs:0.99,0.5)}, anchor=west},
+                    grid=major,
+                    major grid style={draw=black!10},
+                    clip=false,
+                    enlargelimits=false,
+                    every axis plot/.append style={line join=round}
+                ]
+                \addplot[signalbeta, thick] coordinates {(\xMin,\sref) (\xMax,\sref)};
+                \addplot[thick] coordinates {(\xMin,1) (-\halfTs,-1) (0,1) (\halfTs,-1) (\xMax,1)};
+                \addplot[signalalpha, thick] coordinates {
+                        (\xMin,-1)
+                        (\tLeft,-1)
+                        (\tLeft,1)
+                        (-\tOne,1)
+                        (-\tOne,-1)
+                        (\tOne,-1)
+                        (\tOne,1)
+                        (\tRight,1)
+                        (\tRight,-1)
+                        (\xMax,-1)
+                    };
+                \draw[dashed, black!45] (axis cs:-\tOne,-1.02) -- (axis cs:-\tOne,1.02);
+                \draw[dashed, black!45] (axis cs:\tOne,-1.02) -- (axis cs:\tOne,1.02);
+                \node[signalbeta, fill=white, inner sep=1pt, anchor=south, yshift=2pt] at (axis cs:-0.5,\sref) {$s^*$};
+                \node[signalalpha, fill=white, inner sep=1pt, anchor=north] at (axis cs:1.25,0.97) {$s(t)$};
+                \node[fill=white, inner sep=1pt, anchor=south] at (axis cs:1.2,-0.75) {$c(t)$};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Single-phase PWM with constant reference $s^*$ over one pulse period $T_\mathrm{p}$}
+        \label{fig:single_phase_PWM_with_constant_reference_harmonics}
+    \end{figure}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: constant reference (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: constant reference (cont.)}
+    Since $s(t)$ of \figref{fig:single_phase_PWM_with_constant_reference_harmonics} is an even signal, only cosine terms remain in the Fourier series:
+    \[
+        s(t)=\frac{a_0}{2}+\sum_{k=1}^{\infty}a_k\cos\!\left(k\frac{2\pi}{T_\mathrm{p}}t\right) + b_k\sin\!\left(k\frac{2\pi}{T_\mathrm{p}}t\right)=\frac{a_0}{2}+\sum_{k=1}^{\infty}a_k\cos\!\left(k\omega_\mathrm{p}t\right).
+    \]
+    Here, $\omega_\mathrm{p}$ is the carrier angular frequency. The average term is immediate:
+    \[
+        a_0=\frac{2}{T_\mathrm{p}}\int_{-T_\mathrm{p}/2}^{T_\mathrm{p}/2}s(\tau)\,\mathrm{d}\tau=2s^*.
+    \]
+    Utilizing the signal symmetry, for $k\geq 1$ one obtains
+    \begin{align*}
+        a_k
+         & =\frac{2}{T_\mathrm{p}}\int_{-T_\mathrm{p}/2}^{T_\mathrm{p}/2}s(\tau)\cos\!\left(k\omega_\mathrm{p}\tau\right)\mathrm{d}\tau
+        =\frac{4}{T_\mathrm{p}}\left(\int_{t_1}^{T_\mathrm{p}/2}\cos\!\left(k\omega_\mathrm{p}\tau\right)\mathrm{d}\tau
+        -\int_{0}^{t_1}\cos\!\left(k\omega_\mathrm{p}\tau\right)\mathrm{d}\tau\right)                                                   \\
+         & =-\frac{4}{k\pi}\sin\!\left(k\omega_\mathrm{p}t_1\right)
+        =-\frac{4}{k\pi}\sin\!\left(\frac{k\pi}{2}(1-s^*)\right).
+    \end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: constant reference (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: constant reference (cont.)}
+    Hence, the \hl{Fourier series for constant $s^*$} is
+    \begin{equation}
+        s(t)=s^* - \frac{4}{\pi}\sum_{k=1}^{\infty}\frac{1}{k}
+        \sin\!\left(\frac{k\pi}{2}(1-s^*)\right)
+        \cos\!\left(k\omega_\mathrm{p}t\right).
+        \label{eq:Fourier_single_phase_PWM_constant_ref}
+    \end{equation}
+    Applying trigonometric identities, the series can be rearranged to separate the odd and even carrier groups:
+    \begin{align*}
+        s(t)  = & s^*+                                                                                                                                            \\
+                & \underbrace{\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}\sin(k\pi s^*)\cos\!\left(2k\omega_\mathrm{p}t\right)}_{\text{even carrier groups}}
+        -\underbrace{\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
+            \cos\!\left((k+\tfrac{1}{2})\pi s^*\right)
+            \cos\!\left((2k+1)\omega_\mathrm{p}t\right)}_{\text{odd carrier groups}}.
+    \end{align*}
+    Assuming a constant DC-link voltage $u_\mathrm{dc}(t)=U_\mathrm{dc}$, the switching harmonics can be directly translated to the voltage domain:
+    \begin{equation}
+        u(t)=\frac{U_\mathrm{dc}}{2}s(t).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: sinusoidal reference %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: sinusoidal reference}
+    Consider a single-phase PWM with a sinusoidal reference which is slowly varying compared to the carrier:
+    \[
+        s^*(t)=m^*\sin(\omega t), \qquad 0\leq m^*\leq 1, \qquad \omega\ll\omega_\mathrm{p}.
+    \]
+    Based on this assumption, the reference $s^*(t)$ remains practically constant during a pulse period $T_\mathrm{p}$ and hence we directly insert $s^* \leftarrow m^*\sin(\omega t)$ into \eqref{eq:Fourier_single_phase_PWM_constant_ref}. After rearranging, we obtain:
+    \begin{equation}
+        \begin{split}
+            s(t)=\; & m^*\sin(\omega t)
+            +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}\,h_k(\omega t)\cos\!\left(2k\omega_\mathrm{p}t\right) \\
+                    & -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}\,g_k(\omega t)
+            \cos\!\left((2k+1)\omega_\mathrm{p}t\right)
+        \end{split}
+    \end{equation}
+    with the envelope functions
+    \begin{equation}
+        g_k(\omega t)=\cos\!\left((2k+1)\frac{\pi}{2}m^*\sin(\omega t)\right), \quad h_k(\omega t)=\sin\!\left(k\pi m^*\sin(\omega t)\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: sinusoidal reference (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: sinusoidal reference (cont.)}
+    Set $\theta=\omega t$ and consider the symmetry properties of $g_k(\theta)$ and $h_k(\theta)$:
+    \begin{equation*}
+        g_k(-\theta)=g_k(\theta), \qquad g_k(\theta+\pi)=g_k(\theta),
+        \qquad
+        h_k(-\theta)=-h_k(\theta), \qquad h_k(\theta+\pi)=-h_k(\theta).
+    \end{equation*}
+    Therefore, expressing the envelope functions themselves as Fourier series in $\theta$ yields only even cosine terms for $g_k$ and odd sine terms for $h_k$:
+    \begin{equation}
+        g_k(\theta)=g_{k,0}+\sum_{\nu=1}^{\infty}g_{k,2\nu}\cos(2\nu\theta), \quad h_k(\theta)=\sum_{\nu=0}^{\infty}h_{k,2\nu+1}\sin\bigl((2\nu+1)\theta\bigr).
+    \end{equation}
+    Here, the Fourier coefficients are given by
+    \[
+        g_{k,0}=\frac{1}{2\pi}\int_{-\pi}^{\pi}g_k(\theta)\,\mathrm{d}\theta,
+        \qquad
+        g_{k,2\nu}=\frac{1}{\pi}\int_{-\pi}^{\pi}g_k(\theta)\cos(2\nu\theta)\,\mathrm{d}\theta,
+    \]
+    \[
+        h_{k,2\nu+1}=\frac{1}{\pi}\int_{-\pi}^{\pi}h_k(\theta)\sin\bigl((2\nu+1)\theta\bigr)\,\mathrm{d}\theta.
+    \]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: sinusoidal reference (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: sinusoidal reference (cont.)}
+    Utilizing the trigonometric identities
+    \[
+        \cos a\cos b=\frac{1}{2}\bigl(\cos(a+b)+\cos(a-b)\bigr),
+        \qquad
+        \sin a\cos b=\frac{1}{2}\bigl(\sin(a+b)+\sin(a-b)\bigr),
+    \]
+    the entire Fourier series of $s(t)$ can be rearranged to separate the odd and even carrier groups:
+    \begin{align}
+        s(t) & =  m^*\sin(\omega t)
+        -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
+        \Biggl[g_{k,0}\cos\!\left((2k+1)\omega_\mathrm{p}t\right) \notag                                                                             \\
+             & +\sum_{\nu=1}^{\infty}\frac{g_{k,2\nu}}{2}
+            \Biggl(\cos\!\left(\left((2k+1)\omega_\mathrm{p}+2\nu\omega\right)t\right)
+        +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \label{eq:Fourier_series_single_phase_PWM_sinusoidal_ref} \\
+             & +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}
+        \sum_{\nu=0}^{\infty}\frac{h_{k,2\nu+1}}{2}
+        \Biggl(\sin\!\left(\left(2k\omega_\mathrm{p}+(2\nu+1)\omega\right)t\right)
+        +\sin\!\left(\left((2\nu+1)\omega-2k\omega_\mathrm{p}\right)t\right)\Biggr). \notag
+    \end{align}
+    From that we can read off the \hl{harmonic structure}:
+    \begin{itemize}
+        \item Odd carrier groups: $\left(2k+1\right)\,\omega_\mathrm{p}$ with sidebands $0,\pm 2\omega,\pm 4\omega,\ldots$
+        \item Even carrier groups: $2k\,\omega_\mathrm{p}$ with sidebands $\pm \omega,\pm 3\omega,\pm 5\omega,\ldots$
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: sinusoidal reference (Bessel fct.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: sinusoidal reference (Bessel fct.)}
+    Since the previous solution \eqref{eq:Fourier_series_single_phase_PWM_sinusoidal_ref} involves the unhandy integrals for the Fourier coefficiencs of $g_k$ and $h_k$, we can directly solve these integrals via the \hl{Bessel functions} of the first kind $J_\nu$:
+    \begin{equation}
+        J_\nu(z)=\frac{1}{2\pi}\int_{-\pi}^{\pi}e^{\mathrm{j}(z\sin\theta-\nu\theta)}\,\mathrm{d}\theta.
+    \end{equation}
+    Or alternatively, rewritten by real and imaginary parts:
+    \[
+        \cos(z\sin\theta)=J_0(z)+2\sum_{\nu=1}^{\infty}J_{2\nu}(z)\cos(2\nu\theta),
+    \]
+    \[
+        \sin(z\sin\theta)=2\sum_{\nu=0}^{\infty}J_{2\nu+1}(z)\sin\bigl((2\nu+1)\theta\bigr).
+    \]
+    Applying this to $g_k(\theta)$ and $h_k(\theta)$ gives
+    \begin{equation*}
+        g_{k,0}=J_0\!\left((2k+1)\frac{\pi}{2}m^*\right),
+        \quad
+        g_{k,2\nu}=2J_{2\nu}\!\left((2k+1)\frac{\pi}{2}m^*\right), \quad h_{k,2\nu+1}=2J_{2\nu+1}(k\pi m^*).
+    \end{equation*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics: sinusoidal reference (Bessel fct. - cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics: sinusoidal reference (Bessel fct. - cont.)}
+    With the Bessel coefficients inserted, the entire Fourier series becomes
+    \begin{equation*}
+        \begin{aligned}
+            s(t) & =  m^*\sin(\omega t)
+            -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
+            \Biggl[J_0\!\left((2k+1)\frac{\pi}{2}m^*\right)
+            \cos\!\left((2k+1)\omega_\mathrm{p}t\right)                                        \\
+                 &
+                +\sum_{\nu=1}^{\infty}J_{2\nu}\!\left((2k+1)\frac{\pi}{2}m^*\right)
+                \Biggl(\cos\!\left(\left((2k+1)\omega_\mathrm{p}+2\nu\omega\right)t\right)
+            +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \\
+                 & +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}
+            \sum_{\nu=0}^{\infty}J_{2\nu+1}(k\pi m^*)
+            \Biggl(\sin\!\left(\left(2k\omega_\mathrm{p}+(2\nu+1)\omega\right)t\right)
+            +\sin\!\left(\left((2\nu+1)\omega-2k\omega_\mathrm{p}\right)t\right)\Biggr).
+        \end{aligned}
+    \end{equation*}
+    This is the same harmonic structure as before, but now with explicit expressions for the harmonic amplitudes via Bessel functions.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics:  pulse number %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics:  pulse number}
+    We define the \hl{pulse number} as
+    \begin{equation}
+        n_\mathrm{p}=\frac{\omega_\mathrm{p}}{\omega}.
+    \end{equation}
+    Here, we can distinguish two cases:
+    \begin{itemize}
+        \item \textbf{Non-integer pulse number:} $n_\mathrm{p}\notin\mathbb{N}$\\
+              The harmonic structure is as described before, with the sidebands located at non-integer multiples of the fundamental frequency $\omega$.
+        \item \textbf{Integer pulse number:} $n_\mathrm{p}\in\mathbb{N}$\\
+              All sidebands fold onto integer harmonic orders of $\omega$.
+    \end{itemize}
+    The latter is achieved by synchronizing the carrier frequency of the PWM to the fundamental frequency of the reference.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Single-phase PWM harmonics:  pulse number (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Single-phase PWM harmonics:  pulse number (cont.)}
+    For integer pulse number $n_\mathrm{p}\in\mathbb{N}$, the $s(t)$ Fourier expression results in
+    \begin{equation*}
+        \begin{aligned}
+            s(t) & =  m^* \sin(\omega t)
+            \\[0.5em]
+                 & -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
+            \Bigg[
+            J_0\left(\frac{(2k+1)\pi}{2}m^*\right)\cos\!\bigl((2k+1)n_p\omega t\bigr) \\
+                 &
+                +\sum_{\nu=1}^{\infty}
+                J_{2\nu}\left(\frac{(2k+1)\pi}{2}m^*\right)
+                \Bigl(
+                \cos\bigl(((2k+1)n_p+2\nu)\omega t\bigr)
+                +\cos\bigl(((2k+1)n_p-2\nu)\omega t\bigr)
+                \Bigr)
+                \Bigg]
+            \\[0.5em]
+                 & +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}
+            \sum_{\nu=0}^{\infty}
+            J_{2\nu+1}\!\left(k\pi m^*\right)
+            \Bigl(
+            \sin\bigl((2kn_p+2\nu+1)\omega t\bigr)
+            -\sin\bigl((2kn_p-(2\nu+1))\omega t\bigr)
+            \Bigr).
+        \end{aligned}
+    \end{equation*}
+\end{frame}
+
 
 
 
