@@ -90,20 +90,22 @@
                   \item R. De Doncker, D. Pulle and A. Veltman
                   \item Springer, 2020
               \end{itemize}
-              \vspace{0.5cm}
+              \vspace{0.3cm}
               \pause
         \item \href{https://onlinelibrary.wiley.com/doi/book/10.1002/9781119010883}{Model Predictive Control of High Power Converters and Industrial Drives}
               \begin{itemize}
                   \item T. Geyer
                   \item Wiley, 2017
               \end{itemize}
-              \vspace{0.5cm}
+              \vspace{0.3cm}
               \pause
         \item  \href{https://link.springer.com/book/10.1007/978-3-662-62700-6}{Elektrische Antriebe -- Regelung von Antriebssystemen (in German)}
               \begin{itemize}
                   \item D. Schröder and J. Böcker
                   \item Springer, 2021
               \end{itemize}
+              \vspace{0.3cm}
+              \pause
         \item \href{https://www.wiley-vch.de/de/fachgebiete/ingenieurwesen/pulse-width-modulation-for-power-converters-978-0-471-20814-3}{Pulse Width Modulation for Power Converters -- Principles and Practice}
               \begin{itemize}
                   \item D. G. Holmes and T. A. Lipo
@@ -119,12 +121,12 @@
     \frametitle{Learning objectives}
     \begin{itemize}
         \item Understand the general structure and components of controlled drive systems.
-        \item Differentiate key drive control concepts.
-        \item Understand the trade-offs of different drive control concepts and their suitability for different applications (incl. different machines and converter types).
-        \item Being able to simulate and implement drive control algorithms on virtual and real test benches.
-        \item Configure and optimize controller parameters.
-        \item Evaluate the achievable performance of drive control systems based on their physical constraints.
-        \item Have fun learning about drive control systems and their applications!
+        \item<2-> Differentiate key drive control concepts (incl. modulation schemes).
+        \item<3-> Understand the trade-offs of different drive control concepts and their suitability for different applications (incl. different machines and converter types).
+        \item<4-> Being able to simulate and implement drive control algorithms on virtual and real test benches.
+        \item<5-> Configure and optimize controller and modulation parameters.
+        \item<6-> Evaluate the achievable performance of drive control systems based on their physical constraints.
+        \item<7-> Have fun learning about drive control systems and their applications!
     \end{itemize}
 \end{frame}
 
@@ -137,17 +139,18 @@
     You should have a solid understanding of the following topics:
     \begin{itemize}
         \item Fundamentals of electric machines (cf. our  \href{https://github.com/IAS-Uni-Siegen/EMD_course/}{bachelor course})
-        \item Fundamentals of power electronics (cf. our  \href{https://github.com/IAS-Uni-Siegen/PE_course/}{bachelor course})
-        \item Fundamentals of system and control theory \\(e.g., book from K. J. Åström and R. M. Murray, \href{https://fbswiki.org/wiki/index.php/Feedback_Systems:_An_Introduction_for_Scientists_and_Engineers}{Feedback Systems})
-        \item Fundamentals of signal processing \\(e.g., TU Delft open book \href{https://books.open.tudelft.nl/home/catalog/book/247}{Engineering Signal Analysis} by C. Tiberius and M. Mulder)
+        \item<2-> Fundamentals of power electronics (cf. our  \href{https://github.com/IAS-Uni-Siegen/PE_course/}{bachelor course})
+        \item<3-> Fundamentals of system and control theory \\(e.g., book from K. J. Åström and R. M. Murray, \href{https://fbswiki.org/wiki/index.php/Feedback_Systems:_An_Introduction_for_Scientists_and_Engineers}{Feedback Systems})
+        \item<4-> Fundamentals of signal processing \\(e.g., TU Delft open book \href{https://books.open.tudelft.nl/home/catalog/book/247}{Engineering Signal Analysis} by C. Tiberius and M. Mulder)
     \end{itemize}
     \vspace{0.5cm}
-    What we will \underline{not} cover in this course:
-    \begin{itemize}
-        \item Mechanical load behavior,
-        \item Power supply behahavior,
-    \end{itemize}
-    i.e., we will focus only on the drive system and not the drive train.
+    \onslide<5->{
+        What we will \underline{not} cover in this course:
+        \begin{itemize}
+            \item Mechanical load behavior,
+            \item Power supply behavior,
+        \end{itemize}
+        i.e., we will focus only on the drive system and not the drive train.}
 \end{frame}
 
 
@@ -184,7 +187,7 @@
         \label{fig:drive_system_high_level}
         \caption{High-level overview of a controlled drive system}
     \end{figure}
-    \vspace{-0.75cm}
+    \vspace{-0.75cm}\pause
     \begin{varblock}{Drive system vs. drive train}
         A \hl{drive system} comprises the converter, machine, controller, and sensors. The \hl{drive~train} extends this by adding the power supply (e.g., battery, grid rectifier) and all mechanical torque-transmission components (e.g., gears, shafts, clutches).
     \end{varblock}
@@ -343,7 +346,7 @@
         \caption{Qualitative comparison of modulator-based and modulator-free inverter actuation}
         \label{tab:modulator_vs_modulatorfree}
     \end{table}
-    \vspace{-0.5cm}
+    \vspace{-0.5cm}\pause
     \begin{varblock}{}
         The modulator allows to map continuous control decisions to discrete switching actions. This enables standard linear feedback controllers (i.e., well-understood simple control design) and ensures a predefined switching frequency and harmonic spectrum. However, the modulator delay limits achievable transient control performance.
     \end{varblock}
@@ -371,7 +374,7 @@
         \caption{Qualitative comparison of direct and indirect torque control}
         \label{tab:direct_vs_indirect_torque}
     \end{table}
-    \vspace{-0.5cm}
+    \vspace{-0.5cm}\pause
     \begin{varblock}{}
         The indirect approach is slower since minimizing the current/flux control error is not garantuntying to minimize the torque control error at each time instant  (the torque to current / flux mapping comes with degrees of freedom for three-phase drives). However, in practice the transient control performance difference is typically minor.
     \end{varblock}
@@ -399,7 +402,7 @@
         \caption{Torque measurement (via torque-induced strain sensors)}
         \label{fig:torque_sensor}
     \end{figure}
-    \vspace{-0.5cm}
+    \vspace{-0.5cm}\pause
     \begin{varblock}{}
         Due to costs, weight and volume of torque sensors, drive systems typically rely on  model-based torque estimation. In practice, only test benches and special application needs warrant direct torque measurement.
     \end{varblock}
@@ -411,7 +414,7 @@
 
 \begin{frame}
     \frametitle{Control of mechanical loads}
-    If not only the motor's torque is controlled, but also the mechanical load's speed, an application-specific load model
+    If not only the motor's torque is controlled, but also the mechanical load's speed, an \hl{application-specific load model}
     $$
         \frac{\mathrm{d}}{\mathrm{d}t}\omega_\mathrm{me} = f_\mathrm{load}(\omega_\mathrm{me}, T_\mathrm{me})
     $$
@@ -453,14 +456,14 @@
     \begin{equation}
         x(t) = \hat{x}(t)\cos(\varphi_x(t))
     \end{equation}
-    with time-varying \hl{amplitude} $\hat{x}(t)\in\mathbb{R}_{\geq 0}$ and \hl{phase} $\varphi_x(t)\in\mathbb{R}$. The \hl{instantaneous angular frequency} of this signal is defined as
+    with time-varying \hl{amplitude} $\hat{x}(t)\in\mathbb{R}_{\geq 0}$ and \hl{phase} $\varphi_x(t)\in\mathbb{R}$.\pause The \hl{instantaneous angular frequency} of this signal is defined as
     \begin{equation}
         \omega_x(t) = \frac{\mathrm{d}}{\mathrm{d}t}\varphi_x(t).
-    \end{equation}
+    \end{equation}\pause
     Assuming that $\varphi_x(t)$ has a \hl{period} $T\in\mathbb{R}_{>0}$, typical (time-varying) signal properties are:
     \begin{itemize}
-        \item Average: $\overline{x}(t)=\frac{1}{T}\int_{t-T}^{t} x(\tau) \, \mathrm{d}\tau$,
-        \item Rectified average: $\overline{|x|}(t)=\frac{1}{T}\int_{t-T}^{t} |x(\tau)| \, \mathrm{d}\tau$,
+        \item Average: $\overline{x}(t)=\frac{1}{T}\int_{t-T}^{t} x(\tau) \, \mathrm{d}\tau$,\pause
+        \item Rectified average: $\overline{|x|}(t)=\frac{1}{T}\int_{t-T}^{t} |x(\tau)| \, \mathrm{d}\tau$,\pause
         \item Root mean square (RMS): $X(t)=\sqrt{\frac{1}{T}\int_{t-T}^{t} x^2(\tau) \, \mathrm{d}\tau}$.
     \end{itemize}
 \end{frame}
@@ -482,7 +485,7 @@
             \hat{x}_\mathrm{c}(t)\cos(\varphi_{x_\mathrm{c}}(t))
         \end{bmatrix}.
     \end{equation}
-    Here, again $\hat{x}_\mathrm{a}(t), \hat{x}_\mathrm{b}(t), \hat{x}_\mathrm{c}(t)\in\mathbb{R}_{\geq 0}$ are the time-varying amplitudes and $\varphi_{x_\mathrm{a}}(t), \varphi_{x_\mathrm{b}}(t), \varphi_{x_\mathrm{c}}(t)\in\mathbb{R}$ are the time-varying phase angles. Instead of phase signals, we can also define \hl{line-to-line signals} as
+    Here, again $\hat{x}_\mathrm{a}(t), \hat{x}_\mathrm{b}(t), \hat{x}_\mathrm{c}(t)\in\mathbb{R}_{\geq 0}$ are the time-varying amplitudes and $\varphi_{x_\mathrm{a}}(t), \varphi_{x_\mathrm{b}}(t), \varphi_{x_\mathrm{c}}(t)\in\mathbb{R}$ are the time-varying phase angles.\pause Instead of phase signals, we can also define \hl{line-to-line signals} as
     \begin{equation}
         \bm{x}_\mathrm{a\text{-}b\text{-}c} = \begin{bmatrix}
             x_\mathrm{a\text{-}b}(t) \\
@@ -556,7 +559,7 @@
                 u_\mathrm{a}+u_\mathrm{b}+u_\mathrm{c}\neq0
             \end{gathered}
             \label{eq:star_connection_conditions}
-        \end{equation}
+        \end{equation}\pause
         \column{0.5\textwidth}
         \begin{figure}
             \centering
@@ -746,7 +749,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Balanced three-phase systems}
-    A three-phase system is called \hl{balanced} if the three-phase signals have equal amplitude and are phase-shifted by $120^\circ$ (i.e., $\nicefrac{2\pi}{3}$ radians) with respect to each other. In this case, the three-phase signals can be expressed as
+    A three-phase system is called \hl{balanced} if the three-phase signals have equal amplitude and are phase-shifted by $120^\circ$ (i.e., $\nicefrac{2\pi}{3}$ radians) with respect to each other. \pause In this case, the three-phase signals can be expressed as
     \begin{equation}
         \begin{split}
             \bm{x}_{\mathrm{abc}}(t) = \begin{bmatrix}
@@ -760,13 +763,13 @@
                                                                   \end{bmatrix}
         \end{split}
     \end{equation}
-    with common amplitude and shifted phases
+    with common amplitude and regular phase shift:
     \begin{equation}
         \begin{gathered}
             \hat{x}(t)    =\hat{x}_\mathrm{a}(t)=\hat{x}_\mathrm{b}(t)=\hat{x}_\mathrm{c}(t),            \\
             \varphi_x(t)  =\varphi_a(t)=\varphi_b(t)+\nicefrac{2\pi}{3}=\varphi_c(t)+\nicefrac{4\pi}{3}.
         \end{gathered}
-    \end{equation}
+    \end{equation}\pause
     If these conditions apply, the \hl{zero-sequence component} of the three-phase systems is zero:
     \begin{equation}
         x_0(t) = \frac{1}{3}\left(x_\mathrm{a}(t)+x_\mathrm{b}(t)+x_\mathrm{c}(t)\right) = 0.
@@ -817,8 +820,7 @@
         \end{bmatrix} \begin{bmatrix} x_\mathrm{a}(t) \\ x_\mathrm{b}(t) \\ x_\mathrm{c}(t)\end{bmatrix} = \bm{T}_\mathrm{c} \bm{x}_\mathrm{abc}.
         \label{eq:Clarke_transformation}
     \end{equation}
-    \pause
-    Above, $\bm{T}_\mathrm{c}\in\mathbb{R}^{3\times 3}$ is the \hl{Clarke transformation matrix} and $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}\in\mathbb{R}^3$ the transformed vector. The values inside $\bm{T}_\mathrm{c}$ are originating from the angle displacement between the two coordinate system axes (cf. \figref{fig:abc_alphabeta_vectors}):
+    Above, $\bm{T}_\mathrm{c}\in\mathbb{R}^{3\times 3}$ is the \hl{Clarke transformation matrix} and $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}\in\mathbb{R}^3$ the transformed vector.\pause The values inside $\bm{T}_\mathrm{c}$ are originating from the angle displacement between the two coordinate system axes (cf. \figref{fig:abc_alphabeta_vectors}):
     \begin{equation}
         \renewcommand{\arraystretch}{1.2}
         \bm{T}_\mathrm{c} = \frac{2}{3}\begin{bmatrix}
@@ -829,7 +831,7 @@
             0                      & \nicefrac{1}{\sqrt{3}} & -\nicefrac{1}{\sqrt{3}} \\
             \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3}
         \end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause
     The factor $\nicefrac{2}{3}$ is a normalization factor to preserve the amplitude of the transformed vector, i.e., the amplitude of $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}(t)$ is identical to the amplitude of $\bm{x}_\mathrm{abc}(t)$.
 \end{frame}
 
@@ -846,8 +848,8 @@
             -\nicefrac{1}{2} & \nicefrac{\sqrt{3}}{2}  & \nicefrac{1}{\sqrt{2}} \\
             -\nicefrac{1}{2} & -\nicefrac{\sqrt{3}}{2} & \nicefrac{1}{\sqrt{2}}
         \end{bmatrix} \begin{bmatrix} x_\upalpha(t) \\ x_\upbeta(t) \\ x_\upgamma(t)\end{bmatrix} = \bm{T}_\mathrm{c}^{-1} \bm{x}_{\upalpha \upbeta \upgamma}(t).
-    \end{equation}
-
+    \end{equation}\pause
+    %
     \begin{varblock}{$\upgamma$ vs. zero-sequence component}
         The $\upgamma$ component is a scaled version of the zero-sequence component, i.e., $$x_\upgamma(t) = \sqrt{2} x_0(t).$$
         This choice is not unique, i.e., there are Clarke transformation variants which map directly to $x_0(t)$ instead of $x_\upgamma(t)$, but in this case the power-preserving variant from \eqref{eq:Clarke_transformation_power_preserving} is not a simple scalar mapping from \eqref{eq:Clarke_transformation}.
@@ -870,7 +872,7 @@
         \bm{T}'_\mathrm{c} = \frac{\sqrt{3}}{2} \bm{T}_\mathrm{c} \qquad \left(\bm{T}'_\mathrm{c}\right)^{-1} = \left(\bm{T}'_\mathrm{c}\right)\T,
         \label{eq:Clarke_transformation_power_preserving}
     \end{equation}
-    which utilizes an \hl{orthogonal transformation matrix}. \pause However, when using $\bm{T}'_\mathrm{c}$ the amplitude of the transformed vector is not preserved.0\hl{ While being an arbitrary choice, we will stick to \eqref{eq:Clarke_transformation} as a convention for the following.}
+    which utilizes an \hl{orthogonal transformation matrix}. \pause However, when using $\bm{T}'_\mathrm{c}$ the amplitude of the transformed vector is not preserved. \hl{ While being an arbitrary choice, we will stick to \eqref{eq:Clarke_transformation} as a convention for the following.}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1170,10 +1172,10 @@
         \qquad
         \bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix} i_{\mathrm{a}}(t) & i_{\mathrm{b}}(t) & i_{\mathrm{c}}(t) \end{bmatrix}^\top,
     \end{equation}
-    without assuming balanced sinusoidal operation or vanishing zero-sequence components. We define the \hl{instantaneous active power $p(t)$} as the inner product of the voltage and current vectors:
+    without assuming balanced sinusoidal operation or vanishing zero-sequence components.\pause We define the \hl{instantaneous active power $p(t)$} as the inner product of the voltage and current vectors:
     \begin{equation}
         p(t)=\bm{u}_{\mathrm{abc}}^{\top}(t)\bm{i}_{\mathrm{abc}}(t) = u_{\mathrm{a}}(t)i_{\mathrm{a}}(t) + u_{\mathrm{b}}(t)i_{\mathrm{b}}(t) + u_{\mathrm{c}}(t)i_{\mathrm{c}}(t).
-    \end{equation}
+    \end{equation}\pause
     Moreoever, we define the \hl{instantaneous reactive power vector $\bm{q}(t)$} as the cross product of the voltage and current vectors
     \begin{equation}
         \bm{q}_{\mathrm{abc}}(t)=\bm{u}_{\mathrm{abc}}(t)\times\bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix}
@@ -1181,7 +1183,7 @@
             u_{\mathrm{c}}(t)i_{\mathrm{a}}(t)-u_{\mathrm{a}}(t)i_{\mathrm{c}}(t) \\
             u_{\mathrm{a}}(t)i_{\mathrm{b}}(t)-u_{\mathrm{b}}(t)i_{\mathrm{a}}(t)
         \end{bmatrix}
-    \end{equation}
+    \end{equation}\pause
     leading to \hl{(scalar) instantaneous reactive power $q(t)$} as the norm of $\bm{q}_{\mathrm{abc}}(t)$, i.e.,
     \begin{equation}
         q(t)=\lVert\bm{q}_{\mathrm{abc}}(t)\rVert.
@@ -1271,11 +1273,11 @@
         \bm{u}_{\mathrm{\upalpha\upbeta\upgamma}}(t)=\begin{bmatrix} u_{\mathrm{\upalpha}}(t) & u_{\mathrm{\upbeta}}(t) & u_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
         \qquad
         \bm{i}_{\mathrm{\upalpha\upbeta\upgamma}}(t)=\begin{bmatrix} i_{\mathrm{\upalpha}}(t) & i_{\mathrm{\upbeta}}(t) & i_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
-    \end{equation}
+    \end{equation}\pause
     and the instantaneous active becomes
     \begin{equation}
         p(t)=\frac{3}{2}\bm{u}_{\upalpha\upbeta\upgamma}^{\top}(t)\bm{i}_{\upalpha\upbeta\upgamma}(t) = \frac{3}{2}\left(u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upalpha}}(t) + u_{\mathrm{\upbeta}}(t)i_{\mathrm{\upbeta}}(t) + u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upgamma}}(t)\right),
-    \end{equation}
+    \end{equation}\pause
     while the instantaneous reactive power vector becomes
     \begin{equation}
         \bm{q}_{\upalpha\upbeta\upgamma}(t)=\frac{3}{2}\left(\bm{u}_{\mathrm{\upalpha\upbeta\upgamma}}(t)\times\bm{i}_{\mathrm{\upalpha\upbeta\upgamma}}(t)\right)=\frac{3}{2}
@@ -1284,7 +1286,7 @@
             u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upalpha}}(t)-u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upgamma}}(t) \\
             u_{\mathrm{\upalpha}}(t)i_{\mathrm{\upbeta}}(t)-u_{\mathrm{\upbeta}}(t)i_{\mathrm{\upalpha}}(t)
         \end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause
     Moreover, we define the \hl{instantaneous apparent power} as the norm of the instantaneous active and reactive powers (which applies in any coordinate system):
     \begin{equation}
         s(t)=\sqrt{p^2(t)+q^2(t)}.
@@ -1301,11 +1303,11 @@
         \bm{u}_{\mathrm{dq}\upgamma}(t)=\begin{bmatrix} u_{\mathrm{d}}(t) & u_{\mathrm{q}}(t) & u_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top,
         \qquad
         \bm{i}_{\mathrm{dq}\upgamma}(t)=\begin{bmatrix} i_{\mathrm{d}}(t) & i_{\mathrm{q}}(t) & i_{\mathrm{\upgamma}}(t) \end{bmatrix}^\top.
-    \end{equation}
+    \end{equation}\pause
     Hence, the instantaneous active power becomes
     \begin{equation}
         p(t)=\frac{3}{2}\bm{u}_{\mathrm{dq}\upgamma}^{\top}(t)\bm{i}_{\mathrm{dq}\upgamma}(t) = \frac{3}{2}\left(u_{\mathrm{d}}(t)i_{\mathrm{d}}(t) + u_{\mathrm{q}}(t)i_{\mathrm{q}}(t) + u_{\mathrm{\upgamma}}(t)i_{\mathrm{\upgamma}}(t)\right),
-    \end{equation}
+    \end{equation}\pause
     while the instantaneous reactive power vector becomes
     \begin{equation}
         \bm{q}_{\mathrm{dq}\upgamma}(t)=\frac{3}{2}\left(\bm{u}_{\mathrm{dq}\upgamma}(t)\times\bm{i}_{\mathrm{dq}\upgamma}(t)\right)=\frac{3}{2}
@@ -1322,15 +1324,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{From instantaneous quantities to average active and reactive powers}
-    Let $T=\nicefrac{2\pi}{\omega}$ denote the \hl{fundamental period} of the system. Then, the classical \hl{average active power} follows directly from the instantaneous active power:
+    Let $T=\nicefrac{2\pi}{\omega}$ denote the \hl{fundamental period} of the system.\pause Then, the classical \hl{average active power} follows directly from the instantaneous active power:
     \begin{equation}
         P(t)=\overline{p}(t)=\frac{1}{T}\int_{t-T}^{t} p(\tau)\,\mathrm{d}\tau.
-    \end{equation}
+    \end{equation}\pause
     This relation is valid for all coordinate systems. Applying the same averaging to the instantaneous reactive power $q(t)$, however, does not in general recover the classical average reactive power $Q$:
     \begin{equation}
         \overline{q}(t)=\frac{1}{T}\int_{t-T}^{t} q(\tau)\,\mathrm{d}\tau \neq Q(t).
-    \end{equation}
-
+    \end{equation}\pause\vspace{-0.3cm}
     \begin{varblock}{Difference between $Q$ and $\overline{q}$}
         The classical average reactive power $Q$ and the average of the instantaneous reactive power $\overline{q}$ are different concepts: $Q$ is a signed reactive power which differentiates between inductive and capacitive behavior, whereas $\overline{q}$ is a non-negative norm describing the average magnitude of the reactive power vector.
     \end{varblock}
@@ -1346,7 +1347,7 @@
     If the three-phase currents and/or voltages are zero-sequence free, i.e.,
     \begin{equation}
         x_{\upgamma}(t)=0 \quad \Leftrightarrow \quad x_{\mathrm{a}}(t)+x_{\mathrm{b}}(t)+x_{\mathrm{c}}(t)=0,
-    \end{equation}
+    \end{equation}\pause
     the instantaneous active and reactive powers simplify to
     \begin{equation}
         \begin{split}
@@ -1355,11 +1356,11 @@
             q(t) & =\frac{3}{2}\left|v_{\upalpha}(t)i_{\upbeta}(t)-v_{\upbeta}(t)i_{\upalpha}(t)\right|
             =\frac{3}{2}\left|v_{\mathrm{d}}(t)i_{\mathrm{q}}(t)-v_{\mathrm{q}}(t)i_{\mathrm{d}}(t)\right|.
         \end{split}
-    \end{equation}
+    \end{equation}\pause
     Further assuming a steady-state balanced system, the instantaneous active and reactive powers become constant and equal to their average values, i.e.,
     \begin{equation}
         p(t)=P, \qquad q(t)=|Q|.
-    \end{equation}
+    \end{equation}\pause
     Hence, only in this special case, the instantaneous reactive power $q(t)$ can be used to determine the magnitude of the average reactive power $Q$.
 \end{frame}
 
