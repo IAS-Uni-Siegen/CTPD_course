@@ -1,0 +1,224 @@
+from __future__ import annotations
+
+import argparse
+import csv
+from dataclasses import dataclass
+from pathlib import Path
+
+import numpy as np
+from scipy.special import jv
+
+
+DEFAULT_MODULATION_INDEX = 0.9
+DEFAULT_PULSE_NUMBER = 10.4
+DEFAULT_FUNDAMENTAL_FREQUENCY_HZ = 100.0
+DEFAULT_MAX_CARRIER_GROUP_ORDER = 2
+DEFAULT_MAX_SIDEBAND_ORDER = 3
+FREQUENCY_KEY_DECIMALS = 10
+COEFFICIENT_TOLERANCE = 1e-14
+DEFAULT_FILENAME_STEM = "PWM_1ph_harm"
+
+
+@dataclass(frozen=True)
+class SpectrumConfig:
+    modulation_index: float
+    pulse_number: float
+    fundamental_frequency_hz: float
+    max_carrier_group_order: int
+    max_sideband_order: int
+    output_path: Path
+
+
+def compact_value_token(value: float) -> str:
+    return f"{value:.5g}".replace("-", "m").replace(".", "p")
+
+
+def default_output_path(script_path: Path, modulation_index: float, pulse_number: float, fundamental_frequency_hz: float) -> Path:
+    filename = (
+        f"{DEFAULT_FILENAME_STEM}_"
+        f"m{compact_value_token(modulation_index)}_"
+        f"np{compact_value_token(pulse_number)}_"
+        f"f{compact_value_token(fundamental_frequency_hz)}.csv"
+    )
+    return script_path.with_name(filename)
+
+
+def parse_args() -> SpectrumConfig:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Calculate the analytical harmonic spectrum of a single-phase PWM with "
+            "sinusoidal reference and save it as CSV."
+        )
+    )
+    parser.add_argument("--modulation-index", type=float, default=DEFAULT_MODULATION_INDEX)
+    parser.add_argument("--pulse-number", type=float, default=DEFAULT_PULSE_NUMBER)
+    parser.add_argument("--fundamental-frequency", type=float, default=DEFAULT_FUNDAMENTAL_FREQUENCY_HZ)
+    parser.add_argument("--max-k", type=int, default=DEFAULT_MAX_CARRIER_GROUP_ORDER)
+    parser.add_argument("--max-nu", type=int, default=DEFAULT_MAX_SIDEBAND_ORDER)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+    )
+    args = parser.parse_args()
+
+    output_path = args.output
+    if output_path is None:
+        output_path = default_output_path(
+            Path(__file__),
+            args.modulation_index,
+            args.pulse_number,
+            args.fundamental_frequency,
+        )
+
+    return SpectrumConfig(
+        modulation_index=args.modulation_index,
+        pulse_number=args.pulse_number,
+        fundamental_frequency_hz=args.fundamental_frequency,
+        max_carrier_group_order=args.max_k,
+        max_sideband_order=args.max_nu,
+        output_path=output_path,
+    )
+
+
+def validate_config(config: SpectrumConfig) -> None:
+    if not 0.0 <= config.modulation_index <= 1.0:
+        raise ValueError("The sinusoidal-reference derivation assumes 0 <= modulation index <= 1.")
+    if config.pulse_number <= 0.0:
+        raise ValueError("The pulse number must be positive.")
+    if config.fundamental_frequency_hz <= 0.0:
+        raise ValueError("The fundamental frequency must be positive.")
+    if config.max_carrier_group_order < 0:
+        raise ValueError("The maximum carrier group order k must be non-negative.")
+    if config.max_sideband_order < 0:
+        raise ValueError("The maximum sideband order nu must be non-negative.")
+
+
+def add_harmonic(
+    spectrum: dict[float, dict[str, float]],
+    normalized_frequency: float,
+    *,
+    sine_coefficient: float = 0.0,
+    cosine_coefficient: float = 0.0,
+) -> None:
+    if abs(sine_coefficient) < COEFFICIENT_TOLERANCE and abs(cosine_coefficient) < COEFFICIENT_TOLERANCE:
+        return
+
+    normalized_frequency = float(normalized_frequency)
+    if np.isclose(normalized_frequency, 0.0):
+        return
+
+    if normalized_frequency < 0.0:
+        normalized_frequency = -normalized_frequency
+        sine_coefficient = -sine_coefficient
+
+    frequency_key = round(normalized_frequency, FREQUENCY_KEY_DECIMALS)
+    if frequency_key not in spectrum:
+        spectrum[frequency_key] = {
+            "normalized_frequency": normalized_frequency,
+            "sine_coefficient": 0.0,
+            "cosine_coefficient": 0.0,
+        }
+
+    spectrum[frequency_key]["sine_coefficient"] += float(sine_coefficient)
+    spectrum[frequency_key]["cosine_coefficient"] += float(cosine_coefficient)
+
+
+def build_spectrum(config: SpectrumConfig) -> list[dict[str, float]]:
+    pulse_number = config.pulse_number
+    modulation_index = config.modulation_index
+    spectrum: dict[float, dict[str, float]] = {}
+
+    add_harmonic(spectrum, 1.0, sine_coefficient=modulation_index)
+
+    for k in range(config.max_carrier_group_order + 1):
+        odd_group_order = 2 * k + 1
+        odd_group_factor = -(4.0 / np.pi) * ((-1) ** k) / odd_group_order
+        odd_group_argument = odd_group_order * np.pi * modulation_index / 2.0
+        odd_group_center = odd_group_order * pulse_number
+
+        add_harmonic(
+            spectrum,
+            odd_group_center,
+            cosine_coefficient=odd_group_factor * jv(0, odd_group_argument),
+        )
+
+        for nu in range(1, config.max_sideband_order + 1):
+            coefficient = odd_group_factor * jv(2 * nu, odd_group_argument)
+            sideband_offset = 2.0 * nu
+            add_harmonic(spectrum, odd_group_center + sideband_offset, cosine_coefficient=coefficient)
+            add_harmonic(spectrum, odd_group_center - sideband_offset, cosine_coefficient=coefficient)
+
+    for k in range(1, config.max_carrier_group_order + 1):
+        even_group_factor = (2.0 / np.pi) * ((-1) ** k) / k
+        even_group_argument = k * np.pi * modulation_index
+        even_group_center = 2.0 * k * pulse_number
+
+        for nu in range(config.max_sideband_order + 1):
+            coefficient = even_group_factor * jv(2 * nu + 1, even_group_argument)
+            sideband_offset = 2.0 * nu + 1.0
+            add_harmonic(spectrum, even_group_center + sideband_offset, sine_coefficient=coefficient)
+            add_harmonic(spectrum, sideband_offset - even_group_center, sine_coefficient=coefficient)
+
+    rows = []
+    for frequency_key in sorted(spectrum):
+        entry = spectrum[frequency_key]
+        amplitude = float(np.hypot(entry["sine_coefficient"], entry["cosine_coefficient"]))
+        if amplitude < COEFFICIENT_TOLERANCE:
+            continue
+
+        normalized_frequency = entry["normalized_frequency"]
+        rows.append(
+            {
+                "normalized_frequency": normalized_frequency,
+                "frequency_hz": normalized_frequency * config.fundamental_frequency_hz,
+                "amplitude": amplitude,
+                "sine_coefficient": entry["sine_coefficient"],
+                "cosine_coefficient": entry["cosine_coefficient"],
+            }
+        )
+
+    return rows
+
+
+def write_spectrum_csv(rows: list[dict[str, float]], output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", newline="", encoding="ascii") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(
+            [
+                "normalized_frequency",
+                "frequency_hz",
+                "amplitude",
+                "sine_coefficient",
+                "cosine_coefficient",
+            ]
+        )
+        for row in rows:
+            writer.writerow(
+                [
+                    f"{row['normalized_frequency']:.12g}",
+                    f"{row['frequency_hz']:.12g}",
+                    f"{row['amplitude']:.12g}",
+                    f"{row['sine_coefficient']:.12g}",
+                    f"{row['cosine_coefficient']:.12g}",
+                ]
+            )
+
+
+def main() -> None:
+    config = parse_args()
+    validate_config(config)
+    rows = build_spectrum(config)
+    write_spectrum_csv(rows, config.output_path)
+    print(
+        "Saved "
+        f"{len(rows)} spectral lines to {config.output_path} "
+        f"(m={config.modulation_index}, n_p={config.pulse_number}, "
+        f"f_1={config.fundamental_frequency_hz} Hz, max k={config.max_carrier_group_order}, "
+        f"max nu={config.max_sideband_order})."
+    )
+
+
+if __name__ == "__main__":
+    main()
