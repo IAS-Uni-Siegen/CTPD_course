@@ -334,3 +334,8 @@ TSWLatexianTemp*
 *.nom
 *.nomc
 build_log.txt
+
+
+# python specific:
+__pycache__/
+.ipynb_checkpoints/
