@@ -1,7 +1,7 @@
-from functools import partial
 import ipywidgets as widgets
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 import jax
 import jax.numpy as jnp
@@ -42,7 +42,7 @@ class InteractivePWMVisualizer:
             min=1,
             max=25,
             value=2.5,
-            step=0.5,
+            step=0.25,
             description="$\\omega^*$",
             layout=widgets.Layout(width=f"{fig_left_width_px * 6/7}px"),
         )
@@ -160,15 +160,25 @@ class InteractivePWMVisualizer:
         axs.axvline(0, color="black", linewidth=0.5)
 
         active_arrow = axs.annotate(
-            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:blue", lw=2.5)
+            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:purple", lw=2.5)
         )
         reference_arrow = axs.annotate(
-            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:orange", lw=2.5)
+            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:cyan", lw=2.5)
         )
 
-        (active_dot,) = axs.plot(0, 0, "o", color="tab:blue", markersize=8, visible=False)
+        (active_dot,) = axs.plot(0, 0, "o", color="tab:purple", markersize=8, visible=False)
 
         lines_right = {"active_arrow": active_arrow, "reference_arrow": reference_arrow, "active_dot": active_dot}
+        axs.legend(
+            [Line2D([0], [0], color="tab:purple"), Line2D([0], [0], color="tab:cyan")],
+            ["active", "ref"],
+            prop={"size": 16},
+            framealpha=0.5,
+            loc="upper center",
+            fancybox=True,
+            shadow=False,
+            ncols=5,
+        )
 
         return fig_right, lines_right
 
