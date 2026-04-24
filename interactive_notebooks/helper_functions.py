@@ -17,7 +17,9 @@ class InteractivePWMVisualizer:
         compute_three_phase_signals,
         simplified_clarke_transformation,
         compute_pwm_space_vectors,
+        head_length=0.25,
     ):
+        self.head_length = head_length
         self.t = t
         self.c_t = c_t
         self.u_dc = u_dc
@@ -154,16 +156,40 @@ class InteractivePWMVisualizer:
                 "",
                 xy=(norm_u_alpha_beta[i, 0], norm_u_alpha_beta[i, 1]),
                 xytext=(0, 0),
-                arrowprops=dict(arrowstyle="->", color="lightgrey", lw=1.5),
+                arrowprops=dict(
+                    arrowstyle=f"->, head_length={self.head_length}",
+                    color="lightgrey",
+                    lw=1.5,
+                    shrinkA=0,
+                    shrinkB=0,
+                ),
             )
         axs.axhline(0, color="black", linewidth=0.5)
         axs.axvline(0, color="black", linewidth=0.5)
 
         active_arrow = axs.annotate(
-            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:purple", lw=2.5)
+            "",
+            xy=(0, 0),
+            xytext=(0, 0),
+            arrowprops=dict(
+                arrowstyle=f"->, head_length={self.head_length}",
+                color="tab:purple",
+                lw=2.5,
+                shrinkA=0,
+                shrinkB=0,
+            ),
         )
         reference_arrow = axs.annotate(
-            "", xy=(0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="->", color="tab:cyan", lw=2.5)
+            "",
+            xy=(0, 0),
+            xytext=(0, 0),
+            arrowprops=dict(
+                arrowstyle=f"->, head_length={self.head_length}",
+                color="tab:cyan",
+                lw=2.5,
+                shrinkA=0,
+                shrinkB=0,
+            ),
         )
 
         (active_dot,) = axs.plot(0, 0, "o", color="tab:purple", markersize=8, visible=False)
