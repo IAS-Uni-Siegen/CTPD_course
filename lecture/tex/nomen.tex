@@ -53,11 +53,25 @@
 	sort={current}
 }
 
+\newglossaryentry{dc_link_current}{
+	type=nomen,
+	name={$i_\mathrm{dc}$},
+	description={DC-link current},
+	sort={dc_link_current}
+}
+
 \newglossaryentry{voltage}{
 	type=nomen,
 	name={$u$},
 	description={Voltage},
 	sort={voltage}
+}
+
+\newglossaryentry{dc_link_voltage}{
+	type=nomen,
+	name={$u_\mathrm{dc}$},
+	description={DC-link voltage},
+	sort={dc_link_voltage}
 }
 
 \newglossaryentry{signal}{
@@ -104,17 +118,11 @@
 
 \newglossaryentry{phaseangle_signal}{
 	type=nomen,
-	name={$\varphi_x$},
-	description={Phase angle of a signal},
-	sort={phase_angle_signal}
+	name={$\varphi$},
+	description={Phase angle},
+	sort={phase_angle}
 }
 
-\newglossaryentry{instantaneous_angular_frequency_signal}{
-	type=nomen,
-	name={$\omega_x$},
-	description={Instantaneous angular frequency of a signal},
-	sort={instantaneous_angular_frequency_signal}
-}
 
 \newglossaryentry{zerosequence_component}{
 	type=nomen,
@@ -127,27 +135,21 @@
 	type=nomen,
 	name={$\bm{x}_{\mathrm{abc}}$},
 	description={Three-phase signal vector in abc coordinates},
-	sort={abc_signal_vector}
+	sort={Three-phase_signal_vector}
 }
 
 \newglossaryentry{alphabetagamma_signal_vector}{
 	type=nomen,
 	name={$\bm{x}_{\upalpha\upbeta\upgamma}$},
-	description={Signal vector in Clarke-transformed $\upalpha\upbeta\upgamma$ coordinates},
+	description={Signal vector in $\upalpha\upbeta\upgamma$ coordinates},
 	sort={alphabetagamma_signal_vector}
 }
 
-\newglossaryentry{alphabeta_signal_vector}{
-	type=nomen,
-	name={$\bm{x}_{\upalpha\upbeta}$},
-	description={Signal vector in $\upalpha\upbeta$ coordinates},
-	sort={alphabeta_signal_vector}
-}
 
 \newglossaryentry{dq_signal_vector}{
 	type=nomen,
-	name={$\bm{x}_{\mathrm{dq}}$},
-	description={Signal vector in rotating dq coordinates},
+	name={$\bm{x}_{\mathrm{dq}\upgamma}$},
+	description={Signal vector in rotating $\mathrm{dq}\upgamma$ coordinates},
 	sort={dq_signal_vector}
 }
 
@@ -189,8 +191,8 @@
 \newglossaryentry{active_power_instantaneous}{
 	type=nomen,
 	name={$p$},
-	description={Instantaneous active power},
-	sort={active_power_instantaneous}
+	description={Pole pair number / inst. active power /  (context-dependent)},
+	sort={pole_pair_number}
 }
 
 \newglossaryentry{reactive_power_instantaneous}{
@@ -205,6 +207,21 @@
 	name={$s$},
 	description={Switching signal or inst. apparent power (context-dependent)},
 	sort={apparent_power_instantaneous}
+}
+
+
+\newglossaryentry{carrier_signal}{
+	type=nomen,
+	name={$c$},
+	description={Carrier signal for PWM},
+	sort={carrier_signal}
+}
+
+\newglossaryentry{duty_cycle}{
+	type=nomen,
+	name={$d$},
+	description={Duty cycle},
+	sort={duty_cycle}
 }
 
 \newglossaryentry{active_power_average}{
@@ -226,6 +243,35 @@
 	name={$L$},
 	description={Inductance},
 	sort={inductance}
+}
+
+\newglossaryentry{pulse_period}{
+	type=nomen,
+	name={$T_\mathrm{p}$},
+	description={Pulse period / switching period},
+	sort={pulse_period}
+}
+
+\newglossaryentry{pulse_frequency}{
+	type=nomen,
+	name={$f_\mathrm{p}$},
+	description={Pulse frequency / switching frequency},
+	sort={pulse_frequency}
+}
+
+
+\newglossaryentry{modulation_index}{
+	type=nomen,
+	name={$m$},
+	description={Modulation index},
+	sort={modulation_index}
+}
+
+\newglossaryentry{pulse_number}{
+	type=nomen,
+	name={$n_\mathrm{p}$},
+	description={Pulse number},
+	sort={pulse_number}
 }
 
 
@@ -255,13 +301,6 @@
 	name={$\bm{u}_{\mathrm{i}}$},
 	description={Elementary inverter voltage vector in abc coordinates},
 	sort={elementary_voltage_vector}
-}
-
-\newglossaryentry{elementary_voltage_vector_alphabeta}{
-	type=nomen,
-	name={$\bm{u}_{\upalpha\upbeta i}$},
-	description={Elementary inverter voltage vector in $\upalpha\upbeta$ coordinates},
-	sort={elementary_voltage_vector_alphabeta}
 }
 
 

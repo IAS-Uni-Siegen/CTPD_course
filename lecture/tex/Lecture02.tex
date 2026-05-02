@@ -371,7 +371,7 @@
     \frametitle{Elementary voltage vectors}
     Based on \eqref{eq:2L_VSI_switching_functions} and \eqref{eq:VSI_phase_voltages} we define the \hl{elementary voltage vectors} as
     \begin{equation}
-        \bm{u}_\mathrm{i}(t) = \frac{u_\mathrm{dc}(t)}{2} \begin{bmatrix}
+        \bm{u}_{\mathrm{i}}(t) = \frac{u_\mathrm{dc}(t)}{2} \begin{bmatrix}
             s_\mathrm{a}(t) \\
             s_\mathrm{b}(t) \\
             s_\mathrm{c}(t)
@@ -2072,7 +2072,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Proof min-max zero-sequence injection voltage capacity}
-    Using symmetry we will focus on the \hl{first sector} of the hexagon, i.e., $\angle  \bm{s}_{\upalpha\upbeta}\in[\SI{0}{\degree}, \SI{60}{\degree}]$   (cf. \figref{fig:elementary_voltages_alpha_beta}).\pause  Any reference voltage in the first sector can be expressed as a linear combination of the two adjacent switching vectors, i.e.,
+    Using symmetry we will focus on the \hl{first sector} of the hexagon, i.e., $\angle  \bm{s}_{\upalpha\upbeta}\in[\SI{0}{\degree}, \SI{60}{\degree}]$   (cf. \figref{fig:elementary_voltages_alpha_beta}). \pause Any reference voltage in the first sector can be expressed as a linear combination of the two adjacent switching vectors, i.e.,
     \begin{equation}
         \bm{s}_{\upalpha\upbeta} = \frac{\bm{u}_{\upalpha\upbeta}^*}{\nicefrac{u_\mathrm{dc}}{2}} = \tau_1 \bm{s}_{\mathrm{i}1} + \tau_2 \bm{s}_{\mathrm{i}2}, \quad \text{with} \quad \tau_1, \tau_2 \geq 0, \quad \tau_1 + \tau_2 \leq 1.
     \end{equation}\pause
@@ -2366,7 +2366,7 @@
                         s_{i}^{**}(t)          & = \operatorname{clip}\!\left(s_{i}^{*}(t)-s_0(t)\right), \\
                         \operatorname{clip}(x) & = \min\!\left\{1,\max\!\left\{-1,x\right\}\right\}.
                     \end{split}
-                \end{equation}}
+                \end{equation}}\vspace{-0.5cm}
             \onslide<3->{
                 \begin{varblock}{Control disturbance}
                     The clipping renders itself a control disturbance and reduces the degrees of freedom: in the linear range, amplitude and phase of the voltage reference can be controlled independently, while in the overmodulation range those two are coupled.
@@ -2685,7 +2685,7 @@
     \begin{equation}
         \underline{s}^{**}(\theta) = s_{\upalpha}^{**}(\theta) + \mathrm{j}s_{\upbeta}^{**}(\theta)
     \end{equation}
-    denote the clipped realized normalized voltage vector.\pause  Then the positive-sequence fundamental amplitude follows from the first Fourier coefficient as
+    denote the clipped realized normalized voltage vector. \pause Then the positive-sequence fundamental amplitude follows from the first Fourier coefficient as
     \begin{equation}
         m^{(1)} = \left|\frac{1}{2\pi}\int_{0}^{2\pi} \underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\,\mathrm{d}\theta\right|.
     \end{equation}\pause
@@ -2693,7 +2693,7 @@
     \begin{equation}
         m^{(1)} = \frac{3}{\pi}\int_{0}^{\pi/3} \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}\,\mathrm{d}\theta.
     \end{equation}\pause
-    Here, $\Re\{\cdot\}$ denotes the real part.\pause  In region I, sector 1 splits into $[0,\gamma_1] \cup [\gamma_1,\gamma_2] \cup [\gamma_2,\pi/3]$. \pause
+    Here, $\Re\{\cdot\}$ denotes the real part. \pause In region I, sector 1 splits into $[0,\gamma_1] \cup [\gamma_1,\gamma_2] \cup [\gamma_2,\pi/3]$. \pause
     On the two outer intervals, the realizable vector equals the commanded one,
     \begin{equation}
         \underline{s}^{**}(\theta) = m^*e^{\mathrm{j}\theta}
@@ -3468,7 +3468,7 @@
     \begin{equation}
         H(\mathrm{j}\omega) \approx e^{-\mathrm{j}\omega T_\mathrm{s}/2}.
     \end{equation}\pause
-    Hence, this delivers a pure time delay of half the sampling time $T_\mathrm{s}$.\pause  In both approximations, \hl{$\nicefrac{T_\mathrm{s}}{2}$ can be interpreted as the relevant time constant of the synchronized regular sampling}.
+    Hence, this delivers a pure time delay of half the sampling time $T_\mathrm{s}$. \pause In both approximations, \hl{$\nicefrac{T_\mathrm{s}}{2}$ can be interpreted as the relevant time constant of the synchronized regular sampling}.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5425,33 +5425,7 @@
     \end{table}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Forward voltage drop %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-    \frametitle{Forward voltage drop}
-    Assuming a constant duty cycle $s^*$ within one pulse period $T_\mathrm{p}$, the average voltage distortion $\Delta u_\mathrm{fwd}$ due to the semiconductors' forward voltage drops can be approximated as:
-    \begin{equation}
-        \Delta u_\mathrm{fwd} = \begin{cases}
-            s^*\cdot u_\mathrm{T}(i) + (1-s^*)\cdot u_\mathrm{D}(i) & \text{if } i>0, \\
-            s^*\cdot u_\mathrm{D}(i) + (1-s^*)\cdot u_\mathrm{T}(i) & \text{if } i<0.
-        \end{cases}
-    \end{equation}
-    \vfill
-    \begin{figure}
-        \centering
-        \begin{tikzpicture}
-            \begin{groupplot}[group style={group size=2 by 1, horizontal sep=2.5cm}, width=0.45\textwidth, height=0.425\textheight, xmin=0, xmax=1.0, ymin=0, ymax=0.0020, grid=major, axis lines=left, xtick={0,0.25,0.5,0.75,1.0}, ytick={0,0.0005,0.0010,0.0015,0.0020}, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=4}, enlargelimits=false]
-                \nextgroupplot[title={Transistor}, xlabel={$i/i_\mathrm{nom}$}, ylabel={$u_\mathrm{T}/u_\mathrm{dc}$}]
-                \addplot[signaldelta, thick, smooth] coordinates {(0.00,0.00050) (0.125,0.00080) (0.25,0.00096) (0.50,0.00125) (0.75,0.00148) (1.00,0.00170)};
 
-                \nextgroupplot[title={Diode}, xlabel={$i/i_\mathrm{nom}$}, ylabel={$u_\mathrm{D}/u_\mathrm{dc}$}]
-                \addplot[signalalpha, thick, smooth] coordinates {(0.00,0.00072) (0.125,0.00098) (0.25,0.00117) (0.50,0.00143) (0.75,0.00164) (1.00,0.00182)};
-            \end{groupplot}
-        \end{tikzpicture}
-        \caption{Qualitative forward voltage drop of a typical power transistor $u_\mathrm{T}$ and its anti-parallel diode $u_\mathrm{D}$ as a function of normalized current}
-    \end{figure}
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Non-ideal switching %%
@@ -5532,6 +5506,499 @@
         \end{column}
     \end{columns}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Forward voltage drop %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Forward voltage drop}
+    Assuming a constant \hl{duty cycle} $d=\nicefrac{(s^*+1)}{2}$ within one pulse period $T_\mathrm{p}$, the average voltage distortion $\Delta u_\mathrm{fwd}$ due to the semiconductors' forward voltage drops can be approximated as:
+    \begin{equation}
+        \Delta u_\mathrm{fwd}(d,i) = \begin{cases}
+            d\cdot u_\mathrm{T}(i) + (1-d)\cdot u_\mathrm{D}(i) & \text{if } i>0, \\
+            d\cdot u_\mathrm{D}(i) + (1-d)\cdot u_\mathrm{T}(i) & \text{if } i<0.
+        \end{cases}
+    \end{equation}
+    \vfill
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{groupplot}[group style={group size=2 by 1, horizontal sep=2.5cm}, width=0.45\textwidth, height=0.425\textheight, xmin=0, xmax=1.0, ymin=0, ymax=0.0020, grid=major, axis lines=left, xtick={0,0.25,0.5,0.75,1.0}, ytick={0,0.0005,0.0010,0.0015,0.0020}, yticklabel style={/pgf/number format/fixed, /pgf/number format/precision=4}, enlargelimits=false]
+                \nextgroupplot[title={Transistor}, xlabel={$i/i_\mathrm{nom}$}, ylabel={$u_\mathrm{T}/u_\mathrm{dc}$}]
+                \addplot[signaldelta, thick, smooth] coordinates {(0.00,0.00050) (0.125,0.00080) (0.25,0.00096) (0.50,0.00125) (0.75,0.00148) (1.00,0.00170)};
+
+                \nextgroupplot[title={Diode}, xlabel={$i/i_\mathrm{nom}$}, ylabel={$u_\mathrm{D}/u_\mathrm{dc}$}]
+                \addplot[signalalpha, thick, smooth] coordinates {(0.00,0.00072) (0.125,0.00098) (0.25,0.00117) (0.50,0.00143) (0.75,0.00164) (1.00,0.00182)};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Qualitative forward voltage drop of a typical power transistor $u_\mathrm{T}$ and its anti-parallel diode $u_\mathrm{D}$ as a function of normalized current}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Overall inverter nonlinearity model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Overall inverter nonlinearity model}
+    For some given reference $d=\nicefrac{(s^*+1)}{2}$, the \hl{actual duty cycle} present at an inverter half-bridge output results from the interlocking time and non-ideal switching behavior as:
+    \begin{equation}
+        d'(d,i) = d - \frac{\operatorname{sgn}(i)}{T_\mathrm{p}}\left(t_0+t_\mathrm{T,on}(i)-t_\mathrm{D,on}(i)\right).
+    \end{equation}
+    Also considering the forward voltage drop, the \hl{actual average inverter output voltage} during a pulse period is
+    \begin{equation}
+        \overline{u}_\mathrm{i} = u_\mathrm{dc}\left(d'(d,i) - \frac{1}{2}\right) - \Delta u_\mathrm{fwd}(d',i).
+    \end{equation}
+    \begin{varblock}{Remark on model accuracy and compensation}
+        The presented model is a simplified approximation of the inverter nonlinearity. Among others, specific driver and device characteristics, temperature dependencies, and the load impact can further influence the actual voltage error. Nevertheless, it provides a useful estimation of the expected voltage error and can be used for compensation in the control design (by inverting the above model).
+    \end{varblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Multi-level inverters %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Multi-level inverter}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Outlook: Multi-level inverters %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{General concept of multi-level inverters: improve output voltage quality}
+    \begin{figure}
+        \centering
+        \begin{subfigure}{0.32\textwidth}
+            \centering
+            \begin{circuitikz}
+                \draw
+                (0,0) to [short, o-*] ++(1,0) coordinate (A)
+                to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
+                to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
+                to [short, -o] ++(-1,0) coordinate (D)
+                (B) to [short] ++(-0.5, 0) coordinate (E)
+                (E) node[rground, rotate=-90, name = gnd1]{};
+                \draw
+                ($(B) + (1.5,0)$) node[cute spdt up arrow, xscale=-1] (Sw1) {}
+                (A) -| (Sw1-out 1.n)
+                (C) -| (Sw1-out 2.s)
+                (Sw1-in) to [short, -o] ++(1,0) coordinate (F);
+                \draw
+                (F |- C) node[rground, anchor = south, name = gnd2]{}
+                (F) to [open, v={$u(t)$}, voltage = straight] (gnd2);
+            \end{circuitikz}\\[1em]
+            \begin{tikzpicture}
+                \begin{axis}[
+                        width=0.99\textwidth,
+                        height=0.375\textheight,
+                        xlabel={$t$},
+                        ylabel={$u$},
+                        xmin=0, xmax=1.2,
+                        ymin=-1.15, ymax=1.15,
+                        ytick={-1,0,1},
+                        yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
+                        xticklabels={},
+                        grid=both,
+                        axis lines=middle,
+                        xlabel style={anchor=west},
+                        ylabel style={anchor=south},
+                    ]
+                    \addplot[signalalpha, thick] coordinates {(0,-1) (0.1,-1) (0.1,1) (0.6,1) (0.6,-1) (1.1,-1) (1.1,1) (1.2,1)};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{2-level half bridge}
+        \end{subfigure}
+        \onslide<2->{%
+            \begin{subfigure}{0.32\textwidth}
+                \centering
+                \begin{circuitikz}
+                    \draw
+                    (0,0) to [short, o-*] ++(1,0) coordinate (A)
+                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
+                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
+                    to [short, -o] ++(-1,0) coordinate (D)
+                    (B) to [short] ++(-0.5, 0) coordinate (E)
+                    (E) node[rground, rotate=-90, name = gnd1]{};
+                    \draw
+                    ($(B) + (1.0,0)$) node[rotary switch ->=3 in 90 wiper 90, xscale=-1, anchor=out 2](Sw1){}
+                    (A) -| (Sw1-out 1.n)
+                    (C) -| (Sw1-out 3.s)
+                    (Sw1-in) to [short, -o] ++(1.25,0) coordinate (F)
+                    (Sw1-out 2.w) to [short] (B);
+                    \draw
+                    (F |- C) node[rground, anchor = south, name = gnd2]{}
+                    (F) to [open, v={$u(t)$}, voltage = straight] (gnd2);
+                \end{circuitikz}\\[1em]
+                \begin{tikzpicture}
+                    \begin{axis}[
+                            width=0.99\textwidth,
+                            height=0.375\textheight,
+                            xlabel={$t$},
+                            ylabel={$u$},
+                            xmin=0, xmax=1.2,
+                            ymin=-1.15, ymax=1.15,
+                            ytick={-1,0,1},
+                            yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
+                            xticklabels={},
+                            grid=both,
+                            axis lines=middle,
+                            xlabel style={anchor=west},
+                            ylabel style={anchor=south},
+                        ]
+                        \addplot[signalalpha, thick] coordinates {(0,-1) (0.1,-1) (0.1,0) (0.35,0) (0.35,1) (0.6,1) (0.6,0) (0.85,0) (0.85,-1) (1.1,-1) (1.1,0) (1.1,0) (1.2,0)};
+                    \end{axis}
+                \end{tikzpicture}
+                \caption{3-level half bridge}
+            \end{subfigure}
+        }%
+        \onslide<3->{%
+            \begin{subfigure}{0.32\textwidth}
+                \centering
+                \begin{circuitikz}
+                    \draw
+                    (0,0) to [short, o-*] ++(1,0) coordinate (A)
+                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (B)
+                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (C)
+                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (D)
+                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (E)
+                    to [short, -o] ++(-1,0) coordinate (F)
+                    (C) to [short] ++(-0.5, 0) coordinate (G)
+                    (G) node[rground, rotate=-90, name = gnd1]{};
+                    \draw
+                    ($(C) + (1.75,0)$) node[rotary switch ->=4 in 90 wiper 90, xscale=-1, anchor=in](Sw1){}
+                    (A) -| (Sw1-out 1.n)
+                    (E) -| (Sw1-out 4.s)
+                    (Sw1-in) to [short, -o] ++(1.25,0) coordinate (H)
+                    (Sw1-out 2.n) |- (B)
+                    (Sw1-out 3.s) |- (D);
+                    \draw
+                    (H |- E) node[rground, anchor = south, name = gnd2]{}
+                    (H) to [open, v={$u(t)$}, voltage = straight] (gnd2);
+                \end{circuitikz}\\[1em]
+                \begin{tikzpicture}
+                    \begin{axis}[
+                            width=0.99\textwidth,
+                            height=0.375\textheight,
+                            xlabel={$t$},
+                            ylabel={$u$},
+                            xmin=0, xmax=1.2,
+                            ymin=-1.15, ymax=1.15,
+                            ytick={-1,0,1},
+                            yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
+                            xticklabels={},
+                            grid=both,
+                            axis lines=middle,
+                            xlabel style={anchor=west},
+                            ylabel style={anchor=south},
+                        ]
+                        \addplot[signalalpha, thick] coordinates {(0,-1) (1/4,-1) (1/4,-1/3) (1/4+1/8,-1/3) (1/4+1/8,1/3) (2/4,1/3) (2/4,1) (3/4,1) (3/4,1/3) (3/4+1/8,1/3) (3/4+1/8,-1/3) (1,-1/3) (1,-1) (1.2,-1)};
+                    \end{axis}
+                \end{tikzpicture}
+                \caption{4-level half bridge}
+            \end{subfigure}
+        }%
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Neutral-point-clamped 3L-VSI %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{3L-VSI: neutral-clamped circuit realization}
+    \vspace{-0.2cm}
+    \begin{figure}
+        \centering
+        \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
+            \draw (0,8) coordinate (A)
+            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
+            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
+            (Z) node[rground, rotate=-90, name = gnd1]{}
+            (A) to [short, *-] ++(-2,0) coordinate (Y)
+            (B) to [short, *-] ++(-2,0) coordinate (X)
+            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
+
+            \draw (Z) node[anchor=east, xshift=-0.35cm] {$N$};
+
+            \draw (A)
+            to [short, i=$i_\mathrm{dc}(t)$] ++(2.5,0) coordinate (E)
+            to [short, *-*] ++(4.5,0) coordinate (I)
+            to [short, *-*] ++(4.5,0) coordinate (M);
+
+            \draw (E)
+            to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-1.6) coordinate (Aa1)
+            to [short, -] ++(0,-0.2) coordinate (Aa1s)
+            to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-1.6) coordinate (Ua)
+            to [short] ++(0,-0.35) coordinate (UaO)
+            to [short] ++(0,-0.65) coordinate (Ua3)
+            to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-1.6) coordinate (Aa2)
+            to [short, -] ++(0,-0.2) coordinate (Aa2s)
+            to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-1.6) coordinate (Da)
+            to [short, -] ++(0,-0.2) coordinate (DaB);
+
+            \node at (Z -| Aa1)[jump crossing] (cross1) {};
+
+            \draw ($(igbt2.E)!0.85!(igbt3.C)$) to [short, *-o, i_=$i_\mathrm{a}(t)$] ++ (2,0) coordinate (ua);
+            \draw ($(ua)+(0,-1.6)$) node[rground, name = gnd2]{};
+            \draw (ua) to [open, v={$u_\mathrm{ai}(t)$}, voltage = straight] (gnd2);
+
+            \draw (I)
+            to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-1.6) coordinate (Ba1)
+            to [short, -] ++(0,-0.2) coordinate (Ba1s)
+            to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-1.6) coordinate (Ub)
+            to [short] ++(0,-0.35) coordinate (UbO)
+            to [short] ++(0,-0.65) coordinate (Ub3)
+            to [TLnigbt, n=igbt7, invert, bodydiode] ++(0,-1.6) coordinate (Ba2)
+            to [short, -] ++(0,-0.2) coordinate (Ba2s)
+            to [TLnigbt, n=igbt8, invert, bodydiode] ++(0,-1.6) coordinate (Db)
+            to [short, -] ++(0,-0.2) coordinate (DbB);
+
+            \draw ($(igbt6.E)!0.85!(igbt7.C)$) to [short, *-o, i_=$i_\mathrm{b}(t)$] ++ (2,0) coordinate (ub);
+            \draw ($(ub)+(0,-1.6)$) node[rground, name = gnd3]{};
+            \draw (ub) to [open, v={$u_\mathrm{bi}(t)$}, voltage = straight] (gnd3);
+
+            \node at (Z -| Ba1)[jump crossing] (cross2) {};
+
+            \draw (M)
+            to [TLnigbt, n=igbt9, invert, bodydiode] ++(0,-1.6) coordinate (Ca1)
+            to [short, -] ++(0,-0.2) coordinate (Ca1s)
+            to [TLnigbt, n=igbt10, invert, bodydiode] ++(0,-1.6) coordinate (Uc)
+            to [short] ++(0,-0.35) coordinate (UcO)
+            to [short] ++(0,-0.65) coordinate (Uc3)
+            to [TLnigbt, n=igbt11, invert, bodydiode] ++(0,-1.6) coordinate (Ca2)
+            to [short, -] ++(0,-0.2) coordinate (Ca2s)
+            to [TLnigbt, n=igbt12, invert, bodydiode] ++(0,-1.6) coordinate (Dc)
+            to [short, -] ++(0,-0.2) coordinate (DcB);
+
+            \draw ($(igbt10.E)!0.85!(igbt11.C)$) to [short, *-o, i_=$i_\mathrm{c}(t)$] ++ (2,0) coordinate (uc);
+            \draw ($(uc)+(0,-1.6)$) node[rground, name = gnd4]{};
+            \draw (uc) to [open, v={$u_\mathrm{ci}(t)$}, voltage = straight] (gnd4);
+
+            \draw (DaB) to [short, *-*] (DbB) to [short, *-*] (DcB) to [short, -] (B);
+
+            \coordinate (Na) at ($(Z -| Ua3)+(-1.45,0)$);
+            \coordinate (Nb) at ($(Z -| Ub3)+(-1.45,0)$);
+            \coordinate (Nc) at ($(Z -| Uc3)+(-1.45,0)$);
+
+            %\draw (Z) to [short, *-*] (Na) to [short, *-*] (Nb) to [short, *-*] (Nc);
+            \draw (Z) to [short,-*] (Na) to [short] (cross1.west);
+            \draw (cross1.east) to [short,-*] (Nb) to [short] (cross2.west);
+            \draw (cross2.east) to [short, -*] (Nc);
+
+            \draw (Na) to [D] (Na |- Aa1s) to [short, -*] (Aa1s);
+            \draw (Aa2s) to [short, *-] (Aa2s -| Na) to [D] (Na);
+
+            \draw (Nb) to [D] (Nb |- Ba1s) to [short, -*] (Ba1s);
+            \draw (Ba2s) to [short, *-] (Ba2s -| Nb) to [D] (Nb);
+
+            \draw (Nc) to [D] (Nc |- Ca1s) to [short, -*] (Ca1s);
+            \draw (Ca2s) to [short, *-] (Ca2s -| Nc) to [D] (Nc);
+
+            \draw let \p1 = (igbt1.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_1$};
+            \draw let \p1 = (igbt2.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_2$};
+            \draw let \p1 = (igbt3.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_3$};
+            \draw let \p1 = (igbt4.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_4$};
+            \draw let \p1 = (igbt5.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_5$};
+            \draw let \p1 = (igbt6.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_6$};
+            \draw let \p1 = (igbt7.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_7$};
+            \draw let \p1 = (igbt8.B) in node[anchor=south east, xshift=0.3cm] at (\x1,\y1) {$T_8$};
+            \draw let \p1 = (igbt9.B) in node[anchor=south east, xshift=0.3cm] at (\x1,\y1) {$T_9$};
+            \draw let \p1 = (igbt10.B) in node[anchor=south east, xshift=0.3cm] at (\x1,\y1) {$T_{10}$};
+            \draw let \p1 = (igbt11.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_{11}$};
+            \draw let \p1 = (igbt12.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_{12}$};
+
+        \end{circuitikz}
+        \caption{Three-phase three-level neutral-point-clamped inverter (3L-NPC-VSI) with IGBTs}
+        \label{fig:3L-NPC-VSI_IGBT}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 3L-VSI: T-Type circuit realization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{3L-VSI: T-Type circuit realization}
+    \vspace{-0.2cm}
+    \begin{figure}
+        \centering
+        \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
+            \draw (0,8) coordinate (A)
+            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
+            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
+            (Z) node[rground, rotate=-90, name = gnd1]{}
+            (A) to [short, *-] ++(-2,0) coordinate (Y)
+            (B) to [short, *-] ++(-2,0) coordinate (X)
+            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
+
+            \draw (Z) node[anchor=east, xshift=-0.35cm] {$N$};
+            \draw (Z) to [short,-*] ++(0.75,0) coordinate (Zr);
+
+            \draw (A)
+            to [short, i=$i_\mathrm{dc}(t)$] ++(4,0) coordinate (E)
+            to [short, *-*] ++(3.8,0) coordinate (I)
+            to [short, *-*] ++(3.8,0) coordinate (M);
+
+            \draw (E)
+            to [TLnigbt, n=ttigbt1, invert, bodydiode] ++(0,-2.0) coordinate (Aa1)
+            to [short, -] ++(0,-2) coordinate (Ua)
+            to [short] ++(0,-2) coordinate (Aa2)
+            to [TLnigbt, n=ttigbt4, invert, bodydiode] ++(0,-2.0) coordinate (Da);
+
+            \draw (I)
+            to [TLnigbt, n=ttigbt5, invert, bodydiode] ++(0,-2.0) coordinate (Ba1)
+            to [short, -] ++(0,-2) coordinate (Ub)
+            to [short] ++(0,-2) coordinate (Ba2)
+            to [TLnigbt, n=ttigbt8, invert, bodydiode] ++(0,-2.0) coordinate (Db);
+
+            \draw (M)
+            to [TLnigbt, n=ttigbt9, invert, bodydiode] ++(0,-2.0) coordinate (Ca1)
+            to [short, -] ++(0,-2) coordinate (Uc)
+            to [short] ++(0,-2) coordinate (Ca2)
+            to [TLnigbt, n=ttigbt12, invert, bodydiode] ++(0,-2.0) coordinate (Dc);
+
+            \draw (Da) to [short, *-*] (Db) to [short, *-*] (Dc) to [short, -*] (B);
+
+            \coordinate (NaBase) at (Z -| Ua);
+            \coordinate (NbBase) at (Z -| Ub);
+            \coordinate (NcBase) at (Z -| Uc);
+
+            \coordinate (Na) at ($(NaBase)+(-1.5,0)$);
+            \coordinate (Nb) at ($(NbBase)+(-1.5,0)$);
+            \coordinate (Nc) at ($(NcBase)+(-1.5,0)$);
+
+            %\draw (Z) to [short, -*] (Na) to [short, -*] (Nb) to [short, -*] (Nc);
+
+            \coordinate (UaNmid) at ($(Na)!0.5!(Ua)$);
+            \coordinate (UbNmid) at ($(Nb)!0.5!(Ub)$);
+            \coordinate (UcNmid) at ($(Nc)!0.5!(Uc)$);
+            \coordinate (UaTop) at ($(ttigbt1.E)!0.15!(ttigbt4.C)$);
+            \coordinate (Ubmiddle) at ($(ttigbt5.E)!0.5!(ttigbt8.C)$);
+            \coordinate (UcLow) at ($(ttigbt9.E)!0.85!(ttigbt12.C)$);
+
+            %\draw (Na)
+            %to [TLnigbt, n=ttigbt2, bodydiode] (UaNmid)
+            %to [TLnigbt, n=ttigbt3, bodydiode, invert] (Ua);
+
+            \draw (Zr)
+            to [short] (Zr |- UaTop)
+            to [TLnigbt, n=ttigbt2, bodydiode, mirror, invert] ++ (1.6,0)
+            to [TLnigbt, n=ttigbt3, bodydiode] ++ (1.6,0)
+            to [short,-*] (UaTop);
+
+            \node at ($(ttigbt1.E)!0.5!(ttigbt4.C)$)[jump crossing] (cross1) {};
+            \draw (Zr) to [short] (cross1.west);
+            \draw (cross1.east) to [TLnigbt, n=ttigbt6, bodydiode, mirror, invert] ++ (1.65,0)
+            to [TLnigbt, n=ttigbt7, bodydiode] ++ (1.65,0)
+            to [short,-*] (Ubmiddle);
+
+            \node at ($(ttigbt1.E)!0.85!(ttigbt4.C)$)[jump crossing] (cross2) {};
+            \node at ($(ttigbt5.E)!0.85!(ttigbt8.C)$)[jump crossing] (cross3) {};
+
+            \node at ($(ttigbt5.E)!0.15!(ttigbt8.C)$)[jump crossing] (cross4) {};
+            \node at ($(ttigbt9.E)!0.15!(ttigbt12.C)$)[jump crossing] (cross5) {};
+            \node at ($(ttigbt9.E)!0.5!(ttigbt12.C)$)[jump crossing] (cross6) {};
+
+            \draw (Zr)
+            to [short] (Zr |- UcLow)
+            to [short] (cross2.west);
+            \draw (cross2.east) to [short] (cross3.west);
+            \draw (cross3.east) to [TLnigbt, n=ttigbt10, bodydiode, mirror, invert] ++ (1.65,0)
+            to [TLnigbt, n=ttigbt11, bodydiode] ++ (1.65,0)
+            to [short,-*] (UcLow);
+
+            \draw (UcLow) to [short, -o, i_=$i_\mathrm{c}(t)$] ++ (2.5,0) coordinate (uc);
+
+
+
+            \draw  (Ubmiddle) to [short] (cross6.west);
+            \draw (cross6.east) to [short, -o, i_=$i_\mathrm{b}(t)$] ++ (2.6,0) coordinate (ub);
+
+            \draw (UaTop) to [short] (cross4.west);
+            \draw (cross4.east) to (cross5.west);
+            \draw (cross5.east) to [short, -o, i_=$i_\mathrm{a}(t)$] ++ (2.85,0) coordinate (ua);
+
+
+            \draw (B -| ub) node[rground, name = gnd2, anchor=south]{};
+            \draw[->] ($(ua) + (0,-0.2)$) to ($(ua |- gnd2) + (0,0.2)$);
+            \draw[->] ($(ub) + (0,-0.2)$) to ($(ub |- gnd2) + (0,0.2)$);
+            \draw[->] ($(uc) + (0,-0.2)$) to ($(uc |- gnd2) + (0,0.2)$);
+            \draw ($(uc)!0.5!(gnd2) + (-0.5,0)$) node[anchor = east, xshift=0.35cm] {$u_{\mathrm{ai/bi/ci}}(t)$};
+
+            \draw let \p1 = (ttigbt1.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_1$};
+            \draw let \p1 = (ttigbt2.B) in node[anchor=south east, yshift=-0.35cm] at (\x1,\y1) {$T_2$};
+            \draw let \p1 = (ttigbt3.B) in node[anchor=south west, yshift=-0.35cm] at (\x1,\y1) {$T_3$};
+            \draw let \p1 = (ttigbt4.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_4$};
+            \draw let \p1 = (ttigbt5.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_5$};
+            \draw let \p1 = (ttigbt6.B) in node[anchor=south east, yshift=-0.35cm] at (\x1,\y1) {$T_6$};
+            \draw let \p1 = (ttigbt7.B) in node[anchor=south west, yshift=-0.35cm] at (\x1,\y1) {$T_7$};
+            \draw let \p1 = (ttigbt8.B) in node[anchor=south east, xshift=0.3cm] at (\x1,\y1) {$T_8$};
+            \draw let \p1 = (ttigbt9.B) in node[anchor=south east, xshift=0.3cm] at (\x1,\y1) {$T_9$};
+            \draw let \p1 = (ttigbt10.B) in node[anchor=south east, yshift=-0.35cm] at (\x1,\y1) {$T_{10}$};
+            \draw let \p1 = (ttigbt11.B) in node[anchor=south west, yshift=-0.35cm] at (\x1,\y1) {$T_{11}$};
+            \draw let \p1 = (ttigbt12.B) in node[anchor=south east, xshift=0.4cm] at (\x1,\y1) {$T_{12}$};
+
+        \end{circuitikz}
+        \caption{Three-phase three-level T-type inverter (3L-T-Type-VSI) with IGBTs}
+        \label{fig:3L-T-Type-VSI_IGBT}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Multi-level inverters: overview and component count %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Multi-level inverters: overview and component count}
+    \begin{table}
+        \centering
+        \begin{tabular}{lcccc}
+            \toprule
+            \multirow{2}{*}{Topology} & \multicolumn{4}{c}{Component count}                                                        \\
+                                      & Transistors                         & Anti-parallel diodes & Aux. diodes & Aux. capacitors \\
+            \midrule
+            2L-Half bridges           & $2n$                                & $2n$                 & $0$         & $0$             \\
+            3L-NPC                    & $4n$                                & $4n$                 & $2n$        & $2$             \\
+            3L-T type                 & $4n$                                & $4n$                 & $0$         & $2$             \\
+            3L-Active-NPC             & $6n$                                & $6n$                 & $0$         & $2$             \\
+            3L-Fyling capacitor       & $4n$                                & $4n$                 & $0$         & $2+n$           \\
+            4L-NPC                    & $6n$                                & $6n$                 & $2n$        & $2(n+1)$        \\
+            4L-T-type                 & $6n$                                & $6n$                 & $0$         & $2(n+1)$        \\
+            4L-Flying capacitor       & $6n$                                & $6n$                 & $0$         & $2(n+1)$        \\
+            \bottomrule
+        \end{tabular}
+        \caption{Overview of multi-level inverters and their component count for an $n$-phase system (it should be noted that the component count alone is only a very rough indicator of the complexity and cost of an inverter topology, especially since the voltage/current ratings can differ significantly between topologies)}
+    \end{table}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Multi-level inverters: overview and component count %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Multi-level inverters: advantages and disadvantages}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+            \toprule
+            Pros & Cons                                                                 \\
+            \midrule
+            \begin{itemize}
+                \item Improved output voltage quality (leading to less current harmonics)
+                \item Reduced voltage stress on individual components (lower $\mathrm{d}v/\mathrm{d}t$)
+                \item Potential for higher efficiency (lower switching losses)
+            \end{itemize}
+                 &
+            \begin{itemize}
+                \item Increased design and driver complexity (due to higher component count)
+                \item Higher control and balancing requirements
+                \item Eventually uneven thermal stress on components
+            \end{itemize} \\
+            \bottomrule
+        \end{tabular}
+        \caption{Evaluation of multi-level inverters: advantages and disadvantages}
+    \end{table}
+\end{frame}
+
+
+
+
+
 
 
 
