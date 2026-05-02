@@ -1,0 +1,374 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Basic control concepts for synchronous machines}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Synchronous machine models}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Synchronous machine (SM) rotor types %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Electrically excited synchronous machine (EESM) rotor types}
+    \begin{figure}
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_salient_pole.pdf}
+            \caption{Salient pole rotor}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_cylindrical_rotor.pdf}
+            \caption{Cylindrical rotor}
+        \end{subfigure}
+        \caption{Major rotor types of electrically excited synchronous machines (EESM) with dq reference frame axes aligned to the rotor flux produced by the field winding}
+        \label{fig:examples_EESM_rotor}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Summary: Cylindrical SM model in dq coordinates   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{EESM model in dq coordinates}
+    The most important equations of the EESM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
+    \begin{equation*}
+        \begin{alignedat}{4}
+             &  & \mbox{Stator voltage:}                     &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
+             &  & \mbox{Rotor / field winding  voltage:}     &  & \quad u_\mathrm{f}(            & t) &  & = R_\mathrm{f}i_\mathrm{f}(t)+\nicefrac{\mathrm{d}}{\mathrm{d}t}\psi_\mathrm{f}(t),                                                               \\
+             &  & \mbox{Stator flux linkage:}                &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{\psi}_\mathrm{s,dq}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{f}(t)),                                                                           \\
+             &  & \mbox{Rotor / field winding flux linkage:} &  & \psi_\mathrm{f}(               & t) &  & = \psi_\mathrm{f}(i_{\mathrm{f}}(t), \bm{i}_\mathrm{s,dq}(t)),                                                                                    \\
+             &  & \mbox{Torque:}                             &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
+        \end{alignedat}
+    \end{equation*}
+    with the further signals and parameters:
+    \begin{equation*}
+        \begin{aligned}
+            \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
+            \qquad i_\mathrm{f}  : \text{rotor / field winding current},                                                \\
+            R_\mathrm{s}:                                                          \text{stator winding resistances}, &
+            \qquad R_\mathrm{f} : \text{rotor / field winding resistance},                                              \\
+            p                                           : \text{pole pair number},                                    &
+            \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                 \\
+            \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}}.                                            &
+        \end{aligned}
+    \end{equation*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% EESM current-to-flux maps   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{EESM current-to-flux maps: nonlinear magnetic saturation}
+
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=3 by 1, horizontal sep=1.6cm},
+                    width=0.32\textwidth,
+                    height=0.33\textwidth,
+                    view={-45}{24},
+                    xlabel={$i_{\mathrm{d}}\,/\,\mathrm{A}$},
+                    ylabel={$i_{\mathrm{q}}\,/\,\mathrm{A}$},
+                    xmin=-30, xmax=10,
+                    ymin=-35, ymax=35,
+                    enlargelimits=false,
+                    xtick={-30,-15,0,10},
+                    ytick={-30,-15,0,15,30},
+                    grid=major,
+                    grid style={line width=.1pt, draw=gray!40},
+                    tick label style={font=\small},
+                    label style={font=\normalsize},
+                    zlabel style={font=\normalsize},
+                    title style={font=\normalsize},
+                    xlabel style={yshift=2ex},
+                    ylabel style={yshift=2ex},
+                ]
+                \nextgroupplot[
+                    zlabel={$\psi_{\mathrm{d}}\,/\,\mathrm{Vs}$},
+                    zmin=-0.50, zmax=1.05,
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=psi_d_Vs_if2,col sep=comma] {fig/lec03/EESM_psi_d.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=psi_d_Vs_if3,col sep=comma] {fig/lec03/EESM_psi_d.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=psi_d_Vs_if4,col sep=comma] {fig/lec03/EESM_psi_d.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=psi_d_Vs_if5,col sep=comma] {fig/lec03/EESM_psi_d.csv};
+
+                \nextgroupplot[
+                    zlabel={$\psi_{\mathrm{q}}\,/\,\mathrm{Vs}$},
+                    zmin=-1.35, zmax=1.05,
+                    zlabel style={yshift=-1ex},
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=psi_q_Vs_if2,col sep=comma] {fig/lec03/EESM_psi_q.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=psi_q_Vs_if3,col sep=comma] {fig/lec03/EESM_psi_q.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=psi_q_Vs_if4,col sep=comma] {fig/lec03/EESM_psi_q.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=psi_q_Vs_if5,col sep=comma] {fig/lec03/EESM_psi_q.csv};
+
+                \nextgroupplot[
+                    zlabel={$\psi_{\mathrm{f}}\,/\,\mathrm{Vs}$},
+                    zmin=0.24, zmax=1.10,
+                    zlabel style={yshift=-1ex},
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=psi_f_Vs_if2,col sep=comma] {fig/lec03/EESM_psi_f.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=psi_f_Vs_if3,col sep=comma] {fig/lec03/EESM_psi_f.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=psi_f_Vs_if4,col sep=comma] {fig/lec03/EESM_psi_f.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, draw=black, shader=flat, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=psi_f_Vs_if5,col sep=comma] {fig/lec03/EESM_psi_f.csv};
+            \end{groupplot}
+
+            \matrix[matrix of nodes,
+                ampersand replacement=\&,
+                anchor=south,
+                draw=black,
+                fill=white,
+                inner sep=1.4pt,
+                row sep=1pt,
+                column sep=5pt,
+                nodes={anchor=west, font=\small}]
+            at ($(group c1r1.north)!0.5!(group c3r1.north)+(0,0.5cm)$) {
+                \tikz{\draw[draw=black, fill=signaldelta] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=2\,\mathrm{A}$ \&
+                \tikz{\draw[draw=black, fill=signalgamma] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=3\,\mathrm{A}$ \&
+                \tikz{\draw[draw=black, fill=signalbeta] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=4\,\mathrm{A}$ \&
+                \tikz{\draw[draw=black, fill=signalalpha] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=5\,\mathrm{A}$ \\
+            };
+        \end{tikzpicture}
+        \caption{Exemplary current-to-flux maps for a \SI{11}{\kilo\watt} EESM (derived from \href{https://www.mdpi.com/2079-9292/14/24/4924}{10.3390/electronics14244924}, \href{https://creativecommons.org/licenses/by/4.0/deed.en}{CC BY 4.0})}
+        \label{fig:flux_maps_EESM}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% EESM differential inductance maps   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{EESM current-to-flux maps (cont.): differential inductances}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=2 by 2, horizontal sep=2.55cm, vertical sep=0.6cm},
+                    width=0.4\textwidth,
+                    height=0.285\textwidth,
+                    xlabel={$i_{\mathrm{d}}\,/\,\mathrm{A}$},
+                    ylabel={$i_{\mathrm{q}}\,/\,\mathrm{A}$},
+                    xmin=-30, xmax=10,
+                    ymin=-35, ymax=35,
+                    xtick={-30,-15,0,10},
+                    ytick={-30,-15,0,15,30},
+                    xlabel style={yshift=2ex},
+                    ylabel style={yshift=2ex},
+                    view={-45}{40},
+                    enlargelimits=false,
+                    grid=major,
+                    grid style={line width=.1pt, draw=gray!40},
+                    tick label style={font=\small},
+                    label style={font=\small},
+                    title style={font=\small},
+                ]
+                \nextgroupplot[
+                    zlabel={$L_{\mathrm{dd}}\,/\,\mathrm{mH}$},
+                    zmin=0, zmax=26,
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=Ldd_mH_if2,col sep=comma] {fig/lec03/EESM_Ldd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=Ldd_mH_if3,col sep=comma] {fig/lec03/EESM_Ldd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=Ldd_mH_if4,col sep=comma] {fig/lec03/EESM_Ldd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=Ldd_mH_if5,col sep=comma] {fig/lec03/EESM_Ldd.csv};
+
+                \nextgroupplot[
+                    zlabel={$L_{\mathrm{dq}}\,/\,\mathrm{mH}$},
+                    zmin=-3, zmax=10,
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=Ldq_mH_if2,col sep=comma] {fig/lec03/EESM_Ldq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=Ldq_mH_if3,col sep=comma] {fig/lec03/EESM_Ldq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=Ldq_mH_if4,col sep=comma] {fig/lec03/EESM_Ldq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=Ldq_mH_if5,col sep=comma] {fig/lec03/EESM_Ldq.csv};
+
+                \nextgroupplot[
+                    zlabel={$L_{\mathrm{qd}}\,/\,\mathrm{mH}$},
+                    zmin=-4, zmax=4,
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=Lqd_mH_if2,col sep=comma] {fig/lec03/EESM_Lqd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=Lqd_mH_if3,col sep=comma] {fig/lec03/EESM_Lqd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=Lqd_mH_if4,col sep=comma] {fig/lec03/EESM_Lqd.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=Lqd_mH_if5,col sep=comma] {fig/lec03/EESM_Lqd.csv};
+
+                \nextgroupplot[
+                    zlabel={$L_{\mathrm{qq}}\,/\,\mathrm{mH}$},
+                    zmin=-25, zmax=55,
+                ]
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signaldelta, opacity=0.78] table[x=id_A,y=iq_A,z=Lqq_mH_if2,col sep=comma] {fig/lec03/EESM_Lqq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalgamma, opacity=0.74] table[x=id_A,y=iq_A,z=Lqq_mH_if3,col sep=comma] {fig/lec03/EESM_Lqq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalbeta, opacity=0.70] table[x=id_A,y=iq_A,z=Lqq_mH_if4,col sep=comma] {fig/lec03/EESM_Lqq.csv};
+                \addplot3[surf, mesh/rows=15, mesh/cols=9, shader=flat, draw=black, fill=signalalpha, opacity=0.66] table[x=id_A,y=iq_A,z=Lqq_mH_if5,col sep=comma] {fig/lec03/EESM_Lqq.csv};
+            \end{groupplot}
+
+            % Legend    
+            % \matrix[matrix of nodes,
+            %     ampersand replacement=\&,
+            %     anchor=west,
+            %     draw=black,
+            %     fill=white,
+            %     inner sep=1.4pt,
+            %     row sep=3pt,
+            %     column sep=5pt,
+            %     nodes={anchor=west, font=\small}]
+            % at ($(group c2r1.east)!0.5!(group c2r2.east)+(0.5cm,0)$) {
+            %     \tikz{\draw[draw=black, fill=signaldelta] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=2\,\mathrm{A}$ \\
+            %     \tikz{\draw[draw=black, fill=signalgamma] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=3\,\mathrm{A}$ \\
+            %     \tikz{\draw[draw=black, fill=signalbeta] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=4\,\mathrm{A}$ \\
+            %     \tikz{\draw[draw=black, fill=signalalpha] (0,0) rectangle (0.40,0.16);} \& $i_{\mathrm{f}}=5\,\mathrm{A}$ \\
+            % };
+        \end{tikzpicture}
+        \caption{Exemplary differential inductance maps derived from \figref{fig:flux_maps_EESM}}
+        \label{fig:inductance_maps_EESM}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PMSM current-to-flux maps   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PMSM current-to-flux maps: nonlinear magnetic saturation}
+
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=2 by 1, horizontal sep=2.5cm},
+                    width=7cm,
+                    height=6.25cm,
+                    view={-45}{24},
+                    xlabel={$i_{\mathrm{d}}\,/\,\mathrm{A}$},
+                    ylabel={$i_{\mathrm{q}}\,/\,\mathrm{A}$},
+                    xmin=-250, xmax=0,
+                    ymin=-250, ymax=250,
+                    enlargelimits=false,
+                    xlabel style={yshift=2ex},
+                    ylabel style={yshift=2ex},
+                    xtick={-200,-100,0},
+                    ytick={-200,-100, 0,100,200},
+                    grid=major,
+                    grid style={line width=.1pt, draw=gray!40},
+                    tick label style={font=\small},
+                    label style={font=\normalsize},
+                    zlabel style={font=\normalsize},
+                    title style={font=\normalsize},
+                ]
+                \nextgroupplot[
+                    zlabel={$\psi_{\mathrm{d}}\,/\,\mathrm{mVs}$},
+                    ztick={0, 25, 50},
+                ]
+                \addplot3[
+                    surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    draw=black,
+                    shader=flat,
+                    fill=signalalpha,
+                    opacity=0.78,
+                ]
+                table[x=id,y=iq,z expr=1000*\thisrow{psi_d}] {fig/lec03/PMSM_flux_maps.dat};
+
+                \nextgroupplot[
+                    zlabel={$\psi_{\mathrm{q}}\,/\,\mathrm{mVs}$},
+                ]
+                \addplot3[
+                    surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    draw=black,
+                    shader=flat,
+                    fill=signalalpha,
+                    opacity=0.78,
+                ]
+                table[x=id,y=iq,z expr=1000*\thisrow{psi_q}] {fig/lec03/PMSM_flux_maps.dat};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Exemplary current-to-flux maps for a \SI{68}{\kilo\watt} PMSM (derived from \href{https://ieeexplore.ieee.org/document/10098161}{10.1109/TPEL.2023.3265705}, \href{https://creativecommons.org/licenses/by/4.0/deed.en}{CC BY 4.0})}
+        \label{fig:flux_maps_BRUSA}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PMSM current-to-flux maps (cont.): differential inductances   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PMSM current-to-flux maps (cont.): differential inductances}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=2 by 2, horizontal sep=2.55cm, vertical sep=0.6cm},
+                    width=0.4\textwidth,
+                    height=0.285\textwidth,
+                    xlabel={$i_\mathrm{d} / \mathrm{A}$},
+                    ylabel={$i_\mathrm{q} / \mathrm{A}$},
+                    xmin=-250, xmax=0,
+                    ymin=-250, ymax=250,
+                    xlabel style={yshift=2ex},
+                    ylabel style={yshift=2ex},
+                    view={-45}{40},
+                    enlargelimits=false,
+                    grid=major,
+                    grid style={line width=.1pt, draw=gray!40},
+                    minor tick num=1,
+                    tick label style={font=\small},
+                    label style={font=\small},
+                    title style={font=\small},
+                ]
+                \nextgroupplot[
+                    zlabel={$L_\mathrm{dd}/ \mathrm{mH}$}
+                ]
+                \addplot3[surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    shader=flat,
+                    draw=black,
+                    fill=signalalpha,
+                    opacity=0.78,]
+                table[x=id, y=iq, z expr=1000*\thisrow{L_dd}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+
+                \nextgroupplot[
+                    zlabel={$L_\mathrm{dq} / \mathrm{mH}$}
+                ]
+                \addplot3[surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    shader=flat,
+                    draw=black,
+                    fill=signalalpha,
+                    opacity=0.78,]
+                table[x=id, y=iq, z expr=1000*\thisrow{L_dq}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+                \nextgroupplot[
+                    zlabel={$L_\mathrm{qd}/ \mathrm{mH}$},
+                ]
+                \addplot3[surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    shader=flat,
+                    draw=black,
+                    fill=signalalpha,
+                    opacity=0.78,]
+                table[x=id, y=iq, z expr=1000*\thisrow{L_qd}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+
+                \nextgroupplot[
+                    zlabel={$L_\mathrm{qq}/ \mathrm{mH}$},
+                ]
+                \addplot3[surf,
+                    mesh/rows=26,
+                    mesh/cols=14,
+                    shader=flat,
+                    draw=black,
+                    fill=signalalpha,
+                    opacity=0.78,]
+                table[x=id, y=iq, z expr=1000*\thisrow{L_qq}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Exemplary differential inductance maps derived from \figref{fig:flux_maps_BRUSA}}
+    \end{figure}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Time discretization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
