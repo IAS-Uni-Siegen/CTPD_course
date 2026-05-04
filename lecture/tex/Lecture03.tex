@@ -73,6 +73,19 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux saturation animation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flux saturation in electric machines: animation}
+    \begin{figure}
+        \centering
+        \movie[height=0.74\textheight]{\includegraphics[height=0.678\textheight]{fig/lec03/PMSM_Saturation_BH_Example.png}}{fig/lec03/PMSM_Saturation_BH_Example.mp4}
+        \caption{Illustrative and simplified representation of flux saturation in a PMSM based on the \href{https://en.wikipedia.org/wiki/Jiles\%E2\%80\%93Atherton_model}{Jiles-Atherton} B-H curve model (animation)}
+        \label{fig:pmsm_saturation_bh_animation}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Flux saturation: apparent vs.\ differential inductance %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -148,7 +161,7 @@
                 {$(i_3,\psi_3)$};
             \end{axis}
         \end{tikzpicture}
-        \caption{Nonlinear flux linkage $\psi(i)$ with the differential inductance $L$ (slope of the tangent) and the apparent inductance $L_{\mathrm{app}}$ (slope of the secant from the origin)}
+        \caption{Nonlinear flux linkage $\psi(i)$ with the differential inductance $L$ (slope of the tangent) and the apparent inductance $L_{\mathrm{app}}$ (slope of the secant from the origin) -- inspired by \href{https://www.researchgate.net/publication/384459015_A_generic_approach_to_modern_electrical_drives_Tutorial_at_PEMC_2024}{10.13140/RG.2.2.33279.01443}}
         \label{fig:flux_saturation}
     \end{figure}
 \end{frame}
@@ -435,6 +448,83 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux linkage harmonics %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flux linkage harmonics}
+    The model \eqref{eq:basic_PMSM_model_set} is called the \hl{fundamental wave model} since it only considers the fundamental spatial harmonic of the flux linkage distribution. However, in a real machine multiple rotor angle-dependent effects shape the flux linkage distribution:
+    \begin{itemize}
+        \item Design: slot and winding distribution impacts, motor skew along the axial direction, etc.,
+        \item Production: geometry and material tolerances, assembly inaccuracies, etc.
+    \end{itemize}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=2 by 1, horizontal sep=2.4cm},
+                    width=0.43\textwidth,
+                    height=0.26\textwidth,
+                    xmin=0, xmax=360,
+                    xtick={0,90,180,270,360},
+                    xlabel={$\varepsilon\,/\,^\circ$},
+                    grid=major,
+                    grid style={line width=.1pt, draw=gray!40},
+                    tick label style={font=\small},
+                    label style={font=\normalsize},
+                    title style={font=\normalsize},
+                    enlargelimits=false,
+                ]
+                \nextgroupplot[
+                    ylabel={$\psi_\mathrm{d}\,/\,\mathrm{mVs}$},
+                    ymin=32, ymax=44,
+                    ytick={32,35,38,41,44},
+                ]
+                \addplot[
+                    signalalpha,
+                    very thick,
+                ]
+                table[x=Angle_el, y expr=1000*\thisrow{Psi_d}, col sep=comma] {fig/lec03/Harmonics_PMSM.csv};
+
+                \nextgroupplot[
+                    ylabel={$\psi_\mathrm{q}\,/\,\mathrm{mVs}$},
+                    ymin=-28.5, ymax=-20,
+                    ytick={-28,-26,-24,-22,-20},
+                ]
+                \addplot[
+                    signalalpha,
+                    very thick,
+                ]
+                table[x=Angle_el, y expr=1000*\thisrow{Psi_q}, col sep=comma] {fig/lec03/Harmonics_PMSM.csv};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Exemplary  rotor angle $\varepsilon$ dependent flux harmonics of a PMSM for a steady-state operating point (measured at test bench)}
+        \label{fig:flux_harmonics_PMSM}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux linkage harmonics %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flux linkage harmonics (cont.)}
+    Considering the above, the flux linkage model becomes rotor angle-dependent:
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq}(t) = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \varepsilon(t)).
+    \end{equation}
+    Consequently, the time derivative of the flux linkage becomes
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) & = \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\varepsilon}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\bigg|_{\bm{i}_\mathrm{s,dq}}\frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t) \\ & = \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}(\bm{i}_\mathrm{s,dq}, \varepsilon)\omega(t).
+        \end{split}
+    \end{equation}
+    Thus, the flux linkage harmonics introduce an additional induced voltage term into the stator voltage equation:
+    \begin{equation}
+        \begin{split}
+            \bm{u}_\mathrm{s,dq}(t) & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) \\ & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \varepsilon(t)) + \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\omega(t).
+        \end{split}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Synchronous machine (SM) rotor types %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -662,11 +752,11 @@
         \quad  \text{and} \quad
         \bm{\psi}_\mathrm{E}(t) = \begin{bmatrix} \psi_\mathrm{s,d}(t) & \psi_\mathrm{s,q}(t) & \psi_\mathrm{f}(t) \end{bmatrix}\T,
     \end{equation}
-    the nonlinear magnetic model can be written compactly as
+    its \hl{nonlinear magnetic model}\footnote{Extension towards rotor angle-dependent flux harmonics is analogous to PMSM and not explicitly shown here.} can be written compactly as
     \begin{equation}
         \bm{\psi}_\mathrm{E}(t) = \bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t)).
     \end{equation}
-    Applying the chain rule yields
+    Applying the chain rule yields the EESM differential inductance matrix
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t) = \underbrace{\frac{\partial \bm{f}_{\psi,\mathrm{E}}}{\partial \bm{i}_\mathrm{E}}}_{\displaystyle=\,\bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})} \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t)
         = \begin{bmatrix}
@@ -675,7 +765,6 @@
             L_{\mathrm{fd}}(\bm{i}_\mathrm{E}) & L_{\mathrm{fq}}(\bm{i}_\mathrm{E}) & L_{\mathrm{ff}}(\bm{i}_\mathrm{E})
         \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t).
     \end{equation}
-    Hence, the \hl{EESM differential inductance matrix} is the Jacobian of the combined flux map with respect to the three current components. The off-diagonal elements are the cross-coupling inductances between the stator d- and q-axis and the field winding.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
