@@ -339,3 +339,9 @@ build_log.txt
 # python specific:
 __pycache__/
 .ipynb_checkpoints/
+
+# Ignore Serena's local configuration file
+.serena/
+
+# Ignore Visual Studio Code settings folder
+.vscode/
