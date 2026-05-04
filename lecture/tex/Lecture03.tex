@@ -36,13 +36,14 @@
 \begin{frame}
     \frametitle{PMSM model in dq coordinates}
     The most important equations of the PMSM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
-    \begin{equation*}
+    \begin{equation}
         \begin{alignedat}{4}
              &  & \mbox{Stator voltage:}      &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
              &  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{PM}),                                                                            \\
              &  & \mbox{Torque:}              &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
         \end{alignedat}
-    \end{equation*}
+        \label{eq:basic_PMSM_model_set}
+    \end{equation}
     with the further signals and parameters:
     \begin{equation*}
         \begin{aligned}
@@ -58,57 +59,99 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Synchronous machine (SM) rotor types %%
+%% Flux saturation motor cross section %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}
-    \frametitle{Electrically excited synchronous machine (EESM) rotor types}
+    \frametitle{Flux saturation in electric machines: motor cross section}
     \begin{figure}
         \centering
-        \begin{subfigure}{0.49\textwidth}
-            \centering
-            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_salient_pole.pdf}
-            \caption{Salient pole rotor}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.49\textwidth}
-            \centering
-            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_cylindrical_rotor.pdf}
-            \caption{Cylindrical rotor}
-        \end{subfigure}
-        \caption{Major rotor types of electrically excited synchronous machines (EESM) with dq reference frame axes aligned to the rotor flux produced by the field winding}
-        \label{fig:examples_EESM_rotor}
+        \includegraphics[height=0.75\textheight]{fig/lec03/IPMSM_flux_density_example.png}
+        \caption{Exemplary cross-section of an IPMSM with flux density distribution (source: \href{https://www.mdpi.com/2076-3417/12/23/11956}{10.3390/app122311956}, \href{https://creativecommons.org/licenses/by/4.0/deed.en}{CC BY 4.0})}
+        \label{fig:motor_cross_section}
     \end{figure}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Summary: Cylindrical SM model in dq coordinates   %%
+%% Flux saturation: apparent vs.\ differential inductance %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{EESM model in dq coordinates}
-    The most important equations of the EESM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
-    \begin{equation*}
-        \begin{alignedat}{4}
-             &  & \mbox{Stator voltage:}                     &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
-             &  & \mbox{Rotor / field winding  voltage:}     &  & \quad u_\mathrm{f}(            & t) &  & = R_\mathrm{f}i_\mathrm{f}(t)+\nicefrac{\mathrm{d}}{\mathrm{d}t}\psi_\mathrm{f}(t),                                                               \\
-             &  & \mbox{Stator flux linkage:}                &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & =  \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{f}(t)),                                                                         \\
-             &  & \mbox{Rotor / field winding flux linkage:} &  & \psi_\mathrm{f}(               & t) &  & =  \bm{f}_{\psi_\mathrm{f}}(i_{\mathrm{f}}(t), \bm{i}_\mathrm{s,dq}(t)),                                                                          \\
-             &  & \mbox{Torque:}                             &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
-        \end{alignedat}
-    \end{equation*}
-    with the further signals and parameters:
-    \begin{equation*}
-        \begin{aligned}
-            \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
-            \qquad i_\mathrm{f}  : \text{rotor / field winding current},                                                                                                                                                      \\
-            R_\mathrm{s}:                                                          \text{stator winding resistances}, &
-            \qquad R_\mathrm{f} : \text{rotor / field winding resistance},                                                                                                                                                    \\
-            p                                           : \text{pole pair number},                                    &
-            \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                                                                                                                       \\
-            \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}},                                            & \qquad \bm{f}_{\psi_\mathrm{s}}, {f}_{\psi_\mathrm{f}} : \text{stator / rotor flux linkage function}.
-        \end{aligned}
-    \end{equation*}
-\end{frame}
+    \frametitle{Flux linkage saturation: apparent vs.\ differential inductance}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=0.72\textwidth,
+                    height=0.62\textheight,
+                    xlabel={$i$},
+                    ylabel={$\psi,\,  L,\,  L_{\mathrm{app}}$},
+                    xmin=-0.3, xmax=10.8,
+                    ymin=-0.08, ymax=3.40,
+                    axis lines=left,
+                    clip=false,
+                    xtick=\empty,
+                    ytick=\empty,
+                    xlabel style = {at={(axis description cs:1,0)},anchor=north east},
+                    ylabel style = {at={(axis description cs:0,1)},anchor=south east},
+                    legend style={at={(1.02,0.98)}, anchor=north west,
+                            draw=black, fill=white, font=\small,
+                            legend cell align=left,
+                            inner xsep=6pt, inner ysep=4pt},
+                ]
+                %-- Flux saturation curve: psi(i) = 3*tanh(i/3) --%
+                \addplot[black, very thick, smooth, domain=0:10.4, samples=120]
+                {3*tanh(x/3)};
+                \addlegendentry{$\psi$}
 
+                %-- Differential inductance: L = d(psi)/di = 1/cosh^2(i/3) --%
+                \addplot[signalalpha, thick, smooth, domain=0.01:10.4, samples=120]
+                {1/(cosh(x/3)^2)};
+                \addlegendentry{$L = \nicefrac{\mathrm{d}\psi}{\mathrm{d}i}$}
+
+                %-- Apparent inductance: L_app = psi/i = 3/i * tanh(i/3) --%
+                \addplot[signaldelta, thick, smooth, domain=0.10:10.4, samples=120]
+                {3/x * tanh(x/3)};
+                \addlegendentry{$L_{\mathrm{app}} = \nicefrac{\psi}{i}$}
+
+                %-- Tangent lines at operating points (signalalpha, dashed) --%
+                % i1=1.5: psi1=3*tanh(0.5)=1.3863, L1=1/cosh(0.5)^2=0.7864
+                \addplot[signalalpha, dashed, thick, domain=0:3.2, forget plot]
+                {0.7864*(x-1.5) + 1.3863};
+                % i2=4: psi2=3*tanh(4/3)=2.6141, L2=1/cosh(4/3)^2=0.2604
+                \addplot[signalalpha, dashed, thick, domain=1.3:6.5, forget plot]
+                {0.2604*(x-4) + 2.6141};
+                % i3=7: psi3=3*tanh(7/3)=2.9447, L3=1/cosh(7/3)^2=0.0387
+                \addplot[signalalpha, dashed, thick, domain=4.8:9.2, forget plot]
+                {0.0387*(x-7) + 2.9447};
+
+                %-- Secant lines from origin (signaldelta, dotted) --%
+                % L_app1 = 1.3863/1.5 = 0.9242
+                \addplot[signaldelta, dotted, thick, domain=0:2.0, forget plot]
+                {0.9242*x};
+                % L_app2 = 2.6141/4 = 0.6535
+                \addplot[signaldelta, dotted, thick, domain=0:4.8, forget plot]
+                {0.6535*x};
+                % L_app3 = 2.9447/7 = 0.4207
+                \addplot[signaldelta, dotted, thick, domain=0:7.8, forget plot]
+                {0.4207*x};
+
+                %-- Operating points --%
+                \addplot[black, mark=*, mark size=2.5pt, only marks, forget plot]
+                coordinates {(1.5, 1.3863) (4, 2.6141) (7, 2.9447)};
+
+                %-- Operating point labels --%
+                \node[above left, font=\small] at (axis cs:1.5, 1.3863)
+                {$(i_1,\psi_1)$};
+                \node[above left, font=\small] at (axis cs:4, 2.6141)
+                {$(i_2,\psi_2)$};
+                \node[above, font=\small] at (axis cs:7, 2.9447)
+                {$(i_3,\psi_3)$};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Nonlinear flux linkage $\psi(i)$ with the differential inductance $L$ (slope of the tangent) and the apparent inductance $L_{\mathrm{app}}$ (slope of the secant from the origin)}
+        \label{fig:flux_saturation}
+    \end{figure}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% PMSM current-to-flux maps   %%
@@ -249,7 +292,196 @@
             \end{groupplot}
         \end{tikzpicture}
         \caption{Exemplary differential inductance maps derived from \figref{fig:flux_maps_BRUSA}}
+        \label{fig:inductance_maps_BRUSA}
     \end{figure}
+\end{frame}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Nonlinear PMSM flux linkage model and inductances %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Nonlinear PMSM flux linkage model and inductances}
+    Consider the following nonlinear flux linkage model in dq coordinates for a PMSM:
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq}(t) = \begin{bmatrix}
+            \psi_\mathrm{s,d}(t) \\
+            \psi_\mathrm{s,q}(t)
+        \end{bmatrix} = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)).
+        \label{eq:nonlinear_flux_function_PMSM}
+    \end{equation}
+    Applying the chain rule yields the time derivative
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)
+            = \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}}_{\displaystyle=\,\bm{L}(\bm{i}_\mathrm{s,dq})}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \begin{bmatrix}
+                                                                          \text{\makebox[\widthof{$L_\mathrm{dd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,d}}$}} &
+                                                                          \text{\makebox[\widthof{$L_\mathrm{dq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,q}}$}}   \\[1.5ex]
+                                                                          \text{\makebox[\widthof{$L_\mathrm{qd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,d}}$}} &
+                                                                          \text{\makebox[\widthof{$L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,q}}$}}
+                                                                      \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\ &= \begin{bmatrix}
+                                                                                                                                                   L_\mathrm{dd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{dq}(\bm{i}_\mathrm{s,dq}) \\[1.6ex]
+                                                                                                                                                   L_\mathrm{qd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})
+                                                                                                                                               \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t).
+        \end{split}
+    \end{equation}
+    where the \hl{differential inductance matrix} $\bm{L}(\bm{i}_\mathrm{s,dq})$ is the Jacobian of $\bm{f}_{\psi_\mathrm{s}}$ with respect to $\bm{i}_\mathrm{s,dq}$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Nonlinear PMSM flux linkage model and inductances (cont) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Nonlinear PMSM flux linkage model and inductances (cont.)}
+    Representing the nonlinear flux linkage model \eqref{eq:nonlinear_flux_function_PMSM} based on the \hl{apparent inductance matrix} $\bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq})$ yields
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq}(t) = \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}(t))\bm{i}_\mathrm{s,dq}(t) + \bm{\psi}_\mathrm{PM}
+    \end{equation}
+    with
+    \begin{equation}
+        \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}) = \begin{bmatrix}
+            L_{\mathrm{dd,app}}(i_\mathrm{s,d})                 & L_{\mathrm{dq,app}}(i_\mathrm{s,d}, i_\mathrm{s,q}) \\[1.5ex]
+            L_{\mathrm{qd,app}}(i_\mathrm{s,d}, i_\mathrm{s,q}) & L_{\mathrm{qq,app}}(i_\mathrm{s,q})
+        \end{bmatrix}, \quad \bm{\psi}_\mathrm{PM} = \begin{bmatrix}
+            \psi_\mathrm{PM} \\[1.5ex]
+            0
+        \end{bmatrix}.
+    \end{equation}
+    Here, the following can be noted:
+    \begin{itemize}
+        \item Main diagonal elements of $\bm{L}_{\mathrm{app}}$ depend only on the respective current component since otherwise the current-to-flux maps would be not unique (overdetermined system).
+        \item Since the apparent inductance matrix represents the absolute flux linkage change due to the stator currents, the PM flux linkage $\bm{\psi}_\mathrm{PM}$ is explicitly included in the model.
+        \item Since the apparent inductance representation is less elegant than the original flux function $\bm{f}_{\psi_\mathrm{s}}$ and partly ambiguous, it is not commonly used for control-oriented modeling of PMSMs.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current differential equations of the nonlinear PMSM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current differential equations of the nonlinear PMSM model}
+    Utilizing the differential inductance concept, the \hl{current differential equation} can be derived as
+    \begin{equation}
+        \begin{split}
+            \bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)                                 \\&= R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)) + \bm{L}(\bm{i}_\mathrm{s,dq})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\
+            \Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}^{-1}(\bm{i}_\mathrm{s,dq})\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t))\right].
+        \end{split}
+    \end{equation}
+    \begin{itemize}
+        \item The model $\bm{f}_{\psi_\mathrm{s}}$ can be implemented as look-up table (LUT) plus interpolation or as a function approximator (e.g., neural network, polynomial, prototype functions).
+        \item  Inverse $\bm{L}^{-1}(\bm{i}_\mathrm{s,dq})$ can be precomputed offline based on finite difference or analytical differentiation depending on the implementation of $\bm{f}_{\psi_\mathrm{s}}$.
+        \item Alternatively, one can integrate the flux ODE \eqref{eq:basic_PMSM_model_set} and then compute  $\bm{i}_\mathrm{s,dq}=\bm{f}_{\psi_\mathrm{s}}^{-1}(\bm{\psi}_\mathrm{s,dq})$.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current differential equations of the nonlinear PMSM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear PMSM model with constant inductances}
+    Applying first-order Tayor expansions to the nonlinear flux function $\bm{f}_{\psi_\mathrm{s}}$ around some operating point (typically the origin $\bm{i}_\mathrm{s,dq}=\bm{0}$) yields the \hl{linear PMSM flux model}
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}_0}\bm{i}_\mathrm{s,dq}(t)  = \begin{bmatrix}
+            \psi_{\mathrm{PM}} \\
+            0
+        \end{bmatrix} + \begin{bmatrix}
+            L_{\mathrm{dd},0} & L_{\mathrm{dq},0} \\
+            L_{\mathrm{qd},0} & L_{\mathrm{qq},0}
+        \end{bmatrix}\bm{i}_\mathrm{s,dq}(t)
+    \end{equation}
+    With this linear flux model, the current ODE simplifies to
+    \begin{equation}
+        \begin{split}
+            \bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}_0\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\
+            \Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}_0^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right)\right].
+        \end{split}
+    \end{equation}
+    And the torque expressions results in
+    \begin{equation}
+        T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t) + L_{\mathrm{dq},0} i_\mathrm{s,d}^2(t) - L_{\mathrm{qd},0} i_\mathrm{s,q}^2(t)\right].
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current differential equations of the nonlinear PMSM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear PMSM model with constant inductances (cont.)}
+    As can be seen from \eqref{fig:inductance_maps_BRUSA} the off-diagonal inductance terms $L_{\mathrm{dq},0}$ and $L_{\mathrm{qd},0}$ are much smaller than the main diagonal terms $L_{\mathrm{dd},0}$ and $L_{\mathrm{qq},0}$. Thus, by further simplification
+    $$
+        L_{\mathrm{dq},0} \approx L_{\mathrm{qd},0} \approx 0
+    $$
+    we obtain the following current ODE
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) = \begin{bmatrix}
+            L_{\mathrm{dd},0}^{-1} & 0                      \\
+            0                      & L_{\mathrm{qq},0}^{-1}
+        \end{bmatrix}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \begin{bmatrix}
+                L_{\mathrm{dd},0} & 0                 \\
+                0                 & L_{\mathrm{qq},0}
+            \end{bmatrix} \bm{i}_\mathrm{s,dq}(t)\right)\right].
+    \end{equation}
+    and torque expression
+    \begin{equation}
+        T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
+    \end{equation}
+    This is the \hl{standard linear model for IPMSMs} with constant inductances. For \hl{SPMSMs}, there is no \hl{magnetic anistropy} in the dq-paths, i.e., $L_{\mathrm{dd},0} \approx L_{\mathrm{qq},0}$ and the torque expression further simplifies to $T(t) = \frac{3}{2}p\psi_\mathrm{PM} i_\mathrm{s,q}(t)$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Synchronous machine (SM) rotor types %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Electrically excited synchronous machine (EESM) rotor types}
+    \begin{figure}
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_salient_pole.pdf}
+            \caption{Salient pole rotor}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{fig/lec03/SM_cylindrical_rotor.pdf}
+            \caption{Cylindrical rotor}
+        \end{subfigure}
+        \caption{Major rotor types of electrically excited synchronous machines (EESM) with dq reference frame axes aligned to the rotor flux produced by the field winding}
+        \label{fig:examples_EESM_rotor}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Summary: Cylindrical SM model in dq coordinates   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{EESM model in dq coordinates}
+    The most important equations of the EESM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
+    \begin{alignat}{4}
+         &  & \text{Stator voltage:}                     &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \notag \\
+         &  & \text{Rotor / field winding voltage:}      &  & \quad u_\mathrm{f}(            & t) &  & = R_\mathrm{f}i_\mathrm{f}(t)+\nicefrac{\mathrm{d}}{\mathrm{d}t}\psi_\mathrm{f}(t), \notag                                                               \\
+         &  & \text{Stator flux linkage:}                &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & =  \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{f}(t)), \label{eq:basic_EESM_model_set}                                                \\
+         &  & \text{Rotor / field winding flux linkage:} &  & \psi_\mathrm{f}(               & t) &  & =  \bm{f}_{\psi_\mathrm{f}}(i_{\mathrm{f}}(t), \bm{i}_\mathrm{s,dq}(t)), \notag                                                                          \\
+         &  & \text{Torque:}                             &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t) \notag
+    \end{alignat}
+    with the further signals and parameters:
+    \begin{equation*}
+        \begin{aligned}
+            \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
+            \qquad i_\mathrm{f}  : \text{rotor / field winding current},                                                                                                                                                      \\
+            R_\mathrm{s}:                                                          \text{stator winding resistances}, &
+            \qquad R_\mathrm{f} : \text{rotor / field winding resistance},                                                                                                                                                    \\
+            p                                           : \text{pole pair number},                                    &
+            \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                                                                                                                       \\
+            \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}},                                            & \qquad \bm{f}_{\psi_\mathrm{s}}, {f}_{\psi_\mathrm{f}} : \text{stator / rotor flux linkage function}.
+        \end{aligned}
+    \end{equation*}
 \end{frame}
 
 
@@ -420,128 +652,87 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Flux saturation motor cross section %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-    \frametitle{Flux saturation in electric machines: motor cross section}
-    \begin{figure}
-        \centering
-        \includegraphics[height=0.75\textheight]{fig/lec03/IPMSM_flux_density_example.png}
-        \caption{Exemplary cross-section of an IPMSM with flux density distribution (source: \href{https://www.mdpi.com/2076-3417/12/23/11956}{10.3390/app122311956}, \href{https://creativecommons.org/licenses/by/4.0/deed.en}{CC BY 4.0})}
-        \label{fig:motor_cross_section}
-    \end{figure}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Flux saturation: apparent vs.\ differential inductance %%
+%% EESM differential inductance matrix %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Flux linkage saturation: apparent vs.\ differential inductance}
-    \begin{figure}
-        \centering
-        \begin{tikzpicture}
-            \begin{axis}[
-                    width=0.72\textwidth,
-                    height=0.62\textheight,
-                    xlabel={$i$},
-                    ylabel={$\psi,\,  L,\,  L_{\mathrm{app}}$},
-                    xmin=-0.3, xmax=10.8,
-                    ymin=-0.08, ymax=3.40,
-                    axis lines=left,
-                    clip=false,
-                    xtick=\empty,
-                    ytick=\empty,
-                    xlabel style = {at={(axis description cs:1,0)},anchor=north east},
-                    ylabel style = {at={(axis description cs:0,1)},anchor=south east},
-                    legend style={at={(1.02,0.98)}, anchor=north west,
-                            draw=black, fill=white, font=\small,
-                            legend cell align=left,
-                            inner xsep=6pt, inner ysep=4pt},
-                ]
-                %-- Flux saturation curve: psi(i) = 3*tanh(i/3) --%
-                \addplot[black, very thick, smooth, domain=0:10.4, samples=120]
-                {3*tanh(x/3)};
-                \addlegendentry{$\psi$}
-
-                %-- Differential inductance: L = d(psi)/di = 1/cosh^2(i/3) --%
-                \addplot[signalalpha, thick, smooth, domain=0.01:10.4, samples=120]
-                {1/(cosh(x/3)^2)};
-                \addlegendentry{$L = \nicefrac{\mathrm{d}\psi}{\mathrm{d}i}$}
-
-                %-- Apparent inductance: L_app = psi/i = 3/i * tanh(i/3) --%
-                \addplot[signaldelta, thick, smooth, domain=0.10:10.4, samples=120]
-                {3/x * tanh(x/3)};
-                \addlegendentry{$L_{\mathrm{app}} = \nicefrac{\psi}{i}$}
-
-                %-- Tangent lines at operating points (signalalpha, dashed) --%
-                % i1=1.5: psi1=3*tanh(0.5)=1.3863, L1=1/cosh(0.5)^2=0.7864
-                \addplot[signalalpha, dashed, thick, domain=0:3.2, forget plot]
-                {0.7864*(x-1.5) + 1.3863};
-                % i2=4: psi2=3*tanh(4/3)=2.6141, L2=1/cosh(4/3)^2=0.2604
-                \addplot[signalalpha, dashed, thick, domain=1.3:6.5, forget plot]
-                {0.2604*(x-4) + 2.6141};
-                % i3=7: psi3=3*tanh(7/3)=2.9447, L3=1/cosh(7/3)^2=0.0387
-                \addplot[signalalpha, dashed, thick, domain=4.8:9.2, forget plot]
-                {0.0387*(x-7) + 2.9447};
-
-                %-- Secant lines from origin (signaldelta, dotted) --%
-                % L_app1 = 1.3863/1.5 = 0.9242
-                \addplot[signaldelta, dotted, thick, domain=0:2.0, forget plot]
-                {0.9242*x};
-                % L_app2 = 2.6141/4 = 0.6535
-                \addplot[signaldelta, dotted, thick, domain=0:4.8, forget plot]
-                {0.6535*x};
-                % L_app3 = 2.9447/7 = 0.4207
-                \addplot[signaldelta, dotted, thick, domain=0:7.8, forget plot]
-                {0.4207*x};
-
-                %-- Operating points --%
-                \addplot[black, mark=*, mark size=2.5pt, only marks, forget plot]
-                coordinates {(1.5, 1.3863) (4, 2.6141) (7, 2.9447)};
-
-                %-- Operating point labels --%
-                \node[above left, font=\small] at (axis cs:1.5, 1.3863)
-                {$(i_1,\psi_1)$};
-                \node[above left, font=\small] at (axis cs:4, 2.6141)
-                {$(i_2,\psi_2)$};
-                \node[above, font=\small] at (axis cs:7, 2.9447)
-                {$(i_3,\psi_3)$};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Nonlinear flux linkage $\psi(i)$ with the differential inductance $L$ (slope of the tangent) and the apparent inductance $L_{\mathrm{app}}$ (slope of the secant from the origin)}
-        \label{fig:flux_saturation}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Nonlinear PMSM flux linkage model and inductances}
-    Consider the following nonlinear flux linkage model in dq coordinates for a PMSM:
+    \frametitle{EESM differential inductance matrix}
+    Introducing the combined current and flux vectors for the EESM
     \begin{equation}
-        \bm{\psi}_\mathrm{s,dq}(t) = \begin{bmatrix}
-            \psi_\mathrm{s,d}(t) \\
-            \psi_\mathrm{s,q}(t)
-        \end{bmatrix} = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)).
+        \bm{i}_\mathrm{E}(t) = \begin{bmatrix} i_\mathrm{s,d}(t) & i_\mathrm{s,q}(t) & i_\mathrm{f}(t) \end{bmatrix}\T
+        \quad  \text{and} \quad
+        \bm{\psi}_\mathrm{E}(t) = \begin{bmatrix} \psi_\mathrm{s,d}(t) & \psi_\mathrm{s,q}(t) & \psi_\mathrm{f}(t) \end{bmatrix}\T,
     \end{equation}
-    Applying the chain rule yields the time derivative
+    the nonlinear magnetic model can be written compactly as
     \begin{equation}
-        \begin{split}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)
-            = \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}}_{\displaystyle=\,\bm{L}(\bm{i}_\mathrm{s,dq})}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \begin{bmatrix}
-                                                                          \text{\makebox[\widthof{$L_\mathrm{dd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,d}}$}} &
-                                                                          \text{\makebox[\widthof{$L_\mathrm{dq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,q}}$}}   \\[1.5ex]
-                                                                          \text{\makebox[\widthof{$L_\mathrm{qd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,d}}$}} &
-                                                                          \text{\makebox[\widthof{$L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,q}}$}}
-                                                                      \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\ &= \begin{bmatrix}
-                L_\mathrm{dd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{dq}(\bm{i}_\mathrm{s,dq}) \\[1.6ex]
-                L_\mathrm{qd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})
-            \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t).
-        \end{split}
+        \bm{\psi}_\mathrm{E}(t) = \bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t)).
     \end{equation}
-    where the \hl{differential inductance matrix} $\bm{L}(\bm{i}_\mathrm{s,dq})$ is the Jacobian of $\bm{f}_{\psi_\mathrm{s}}$ with respect to $\bm{i}_\mathrm{s,dq}$.
+    Applying the chain rule yields
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t) = \underbrace{\frac{\partial \bm{f}_{\psi,\mathrm{E}}}{\partial \bm{i}_\mathrm{E}}}_{\displaystyle=\,\bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})} \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t)
+        = \begin{bmatrix}
+            L_{\mathrm{dd}}(\bm{i}_\mathrm{E}) & L_{\mathrm{dq}}(\bm{i}_\mathrm{E}) & L_{\mathrm{df}}(\bm{i}_\mathrm{E}) \\
+            L_{\mathrm{qd}}(\bm{i}_\mathrm{E}) & L_{\mathrm{qq}}(\bm{i}_\mathrm{E}) & L_{\mathrm{qf}}(\bm{i}_\mathrm{E}) \\
+            L_{\mathrm{fd}}(\bm{i}_\mathrm{E}) & L_{\mathrm{fq}}(\bm{i}_\mathrm{E}) & L_{\mathrm{ff}}(\bm{i}_\mathrm{E})
+        \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t).
+    \end{equation}
+    Hence, the \hl{EESM differential inductance matrix} is the Jacobian of the combined flux map with respect to the three current components. The off-diagonal elements are the cross-coupling inductances between the stator d- and q-axis and the field winding.
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% EESM current ODE %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current differential equations of the nonlinear EESM model}
+    With the compact voltage equation
+    \begin{equation}
+        \bm{u}_\mathrm{E}(t) = \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) + \bm{\Omega}(\omega)\bm{\psi}_\mathrm{E}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t),
+    \end{equation}
+    and
+    \begin{equation}
+        \bm{u}_\mathrm{E} = \begin{bmatrix} \bm{u}_\mathrm{s,dq} \\ u_\mathrm{f} \end{bmatrix},
+        \quad
+        \bm{R}_\mathrm{E} = \operatorname{diag}(R_\mathrm{s}, R_\mathrm{s}, R_\mathrm{f}),
+        \quad
+        \bm{\Omega}(\omega) = \begin{bmatrix}
+            \omega\bm{J}       & \bm{0}_{2\times 1} \\
+            \bm{0}_{1\times 2} & 0
+        \end{bmatrix},
+    \end{equation}
+    substitution of $\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E} = \bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}$ gives the \hl{EESM's nonlinear current ODE}
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E})\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t))\right].
+    \end{equation}
+    In this nonlinear case, the torque expression remains
+    \begin{equation}
+        T(t) = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Linear EESM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear EESM model with constant inductances}
+    Around some operating point, a compact linear magnetic model is obtained as
+    \begin{equation}
+        \bm{\psi}_\mathrm{E}(t) \approx \bm{L}_{\mathrm{E},0}\bm{i}_\mathrm{E}(t),
+        \qquad
+        \bm{L}_{\mathrm{E},0} = \begin{bmatrix}
+            L_{\mathrm{dd},0} & 0                 & L_{\mathrm{df},0} \\
+            0                 & L_{\mathrm{qq},0} & 0                 \\
+            L_{\mathrm{fd},0} & 0                 & L_{\mathrm{ff},0}
+        \end{bmatrix},
+    \end{equation}
+    where the weak cross-couplings $L_{\mathrm{dq},0}$, $L_{\mathrm{qd},0}$, $L_{\mathrm{qf},0}$ and $L_{\mathrm{fq},0}$ are neglected.
+    The corresponding \hl{linear EESM current} ODE becomes
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_{\mathrm{E},0}^{-1}\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{L}_{\mathrm{E},0}\bm{i}_\mathrm{E}(t)\right].
+    \end{equation}
+    For this simplified linear magnetic model, the torque expression simplifies to
+    \begin{equation}
+        T(t) = \frac{3}{2}p\left[L_{\mathrm{df},0} i_\mathrm{f}(t)i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
+    \end{equation}
+\end{frame}
 
 
 
