@@ -1,6 +1,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Basic control concepts for synchronous machines}
+\section{Synchronous machine drives -- basic models and control concepts}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,24 +38,24 @@
     The most important equations of the PMSM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
     \begin{equation}
         \begin{alignedat}{4}
-             &  & \mbox{Stator voltage:}      &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
-             &  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{PM}),                                                                            \\
-             &  & \mbox{Torque:}              &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
+             &  & \mbox{Stator voltage:} &  & \quad\bm{u}_\mathrm{s,dq}( & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
+            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{PM}),}                                                      \\\onslide<3->{
+                                                                                                                                                                                                                                                          &  & \mbox{Torque:}              &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)}
         \end{alignedat}
         \label{eq:basic_PMSM_model_set}
     \end{equation}
-    with the further signals and parameters:
-    \begin{equation*}
-        \begin{aligned}
-            \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
-            \qquad \psi_\mathrm{PM}  : \text{permanent magnet flux linkage},                                            \\
-            R_\mathrm{s}:                                                          \text{stator winding resistances}, &
-            \qquad \bm{f}_{\psi_\mathrm{s}} : \text{stator flux linkage function},                                      \\
-            p                                           : \text{pole pair number},                                    &
-            \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                 \\
-            \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}}.                                            &
-        \end{aligned}
-    \end{equation*}
+    \onslide<4->{with the further signals and parameters:
+            \begin{equation*}
+                \begin{aligned}
+                    \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
+                    \qquad \psi_\mathrm{PM}  : \text{permanent magnet flux linkage},                                            \\
+                    R_\mathrm{s}:                                                          \text{stator winding resistances}, &
+                    \qquad \bm{f}_{\psi_\mathrm{s}} : \text{stator flux linkage function},                                      \\
+                    p                                           : \text{pole pair number},                                    &
+                    \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                 \\
+                    \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}}.                                            &
+                \end{aligned}
+            \end{equation*}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,7 +63,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-    \frametitle{Flux saturation in electric machines: motor cross section}
+    \frametitle{Flux saturation in electric machines}
     \begin{figure}
         \centering
         \includegraphics[height=0.75\textheight]{fig/lec03/IPMSM_flux_density_example.png}
@@ -73,10 +73,10 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Flux saturation animation %%
+%% Flux saturation in electric machines (cont.) %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Flux saturation in electric machines: animation}
+    \frametitle{Flux saturation in electric machines (cont.)}
     \begin{figure}
         \centering
         \movie[height=0.74\textheight]{\includegraphics[height=0.678\textheight]{fig/lec03/PMSM_Saturation_BH_Example.png}}{fig/lec03/PMSM_Saturation_BH_Example.mp4}
@@ -117,35 +117,39 @@
                 \addlegendentry{$\psi$}
 
                 %-- Differential inductance: L = d(psi)/di = 1/cosh^2(i/3) --%
-                \addplot[signalalpha, thick, smooth, domain=0.01:10.4, samples=120]
+
+                \addplot[signalalpha, thick, smooth, domain=0.01:10.4, samples=120, visible on=<3->]
                 {1/(cosh(x/3)^2)};
-                \addlegendentry{$L = \nicefrac{\mathrm{d}\psi}{\mathrm{d}i}$}
+                \addlegendentry[visible on=<3->]{$L = \nicefrac{\mathrm{d}\psi}{\mathrm{d}i}$}
 
                 %-- Apparent inductance: L_app = psi/i = 3/i * tanh(i/3) --%
-                \addplot[signaldelta, thick, smooth, domain=0.10:10.4, samples=120]
+
+                \addplot[signaldelta, thick, smooth, domain=0.10:10.4, samples=120, visible on=<2->]
                 {3/x * tanh(x/3)};
-                \addlegendentry{$L_{\mathrm{app}} = \nicefrac{\psi}{i}$}
+                \addlegendentry[visible on=<2->]{$L_{\mathrm{app}} = \nicefrac{\psi}{i}$}
 
                 %-- Tangent lines at operating points (signalalpha, dashed) --%
+
                 % i1=1.5: psi1=3*tanh(0.5)=1.3863, L1=1/cosh(0.5)^2=0.7864
-                \addplot[signalalpha, dashed, thick, domain=0:3.2, forget plot]
+                \addplot[signalalpha, dashed, thick, domain=0:3.2, forget plot, visible on=<3->]
                 {0.7864*(x-1.5) + 1.3863};
                 % i2=4: psi2=3*tanh(4/3)=2.6141, L2=1/cosh(4/3)^2=0.2604
-                \addplot[signalalpha, dashed, thick, domain=1.3:6.5, forget plot]
+                \addplot[signalalpha, dashed, thick, domain=1.3:6.5, forget plot, visible on=<3->]
                 {0.2604*(x-4) + 2.6141};
                 % i3=7: psi3=3*tanh(7/3)=2.9447, L3=1/cosh(7/3)^2=0.0387
-                \addplot[signalalpha, dashed, thick, domain=4.8:9.2, forget plot]
+                \addplot[signalalpha, dashed, thick, domain=4.8:9.2, forget plot, visible on=<3->]
                 {0.0387*(x-7) + 2.9447};
 
                 %-- Secant lines from origin (signaldelta, dotted) --%
+
                 % L_app1 = 1.3863/1.5 = 0.9242
-                \addplot[signaldelta, dotted, thick, domain=0:2.0, forget plot]
+                \addplot[signaldelta, dotted, thick, domain=0:2.0, forget plot, visible on=<2->]
                 {0.9242*x};
                 % L_app2 = 2.6141/4 = 0.6535
-                \addplot[signaldelta, dotted, thick, domain=0:4.8, forget plot]
+                \addplot[signaldelta, dotted, thick, domain=0:4.8, forget plot, visible on=<2->]
                 {0.6535*x};
                 % L_app3 = 2.9447/7 = 0.4207
-                \addplot[signaldelta, dotted, thick, domain=0:7.8, forget plot]
+                \addplot[signaldelta, dotted, thick, domain=0:7.8, forget plot, visible on=<2->]
                 {0.4207*x};
 
                 %-- Operating points --%
@@ -328,23 +332,23 @@
         \end{bmatrix} = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)).
         \label{eq:nonlinear_flux_function_PMSM}
     \end{equation}
-    Applying the chain rule yields the time derivative
+    \onslide<2->{Applying the chain rule yields the time derivative}
     \begin{equation}
         \begin{split}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)
-            = \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}}_{\displaystyle=\,\bm{L}(\bm{i}_\mathrm{s,dq})}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \begin{bmatrix}
-                                                                          \text{\makebox[\widthof{$L_\mathrm{dd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,d}}$}} &
-                                                                          \text{\makebox[\widthof{$L_\mathrm{dq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,q}}$}}   \\[1.5ex]
-                                                                          \text{\makebox[\widthof{$L_\mathrm{qd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,d}}$}} &
-                                                                          \text{\makebox[\widthof{$L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,q}}$}}
-                                                                      \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\ &= \begin{bmatrix}
-                                                                                                                                                   L_\mathrm{dd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{dq}(\bm{i}_\mathrm{s,dq}) \\[1.6ex]
-                                                                                                                                                   L_\mathrm{qd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})
-                                                                                                                                               \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t).
+            \onslide<2->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)
+                               = \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}}_{\displaystyle=\,\bm{L}(\bm{i}_\mathrm{s,dq})}
+                               \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) &} \onslide<3->{= \begin{bmatrix}
+                                                                                                               \text{\makebox[\widthof{$L_\mathrm{dd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,d}}$}} &
+                                                                                                               \text{\makebox[\widthof{$L_\mathrm{dq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,d}}{\partial i_\mathrm{s,q}}$}}   \\[1.5ex]
+                                                                                                               \text{\makebox[\widthof{$L_\mathrm{qd}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,d}}$}} &
+                                                                                                               \text{\makebox[\widthof{$L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})$}][c]{$\dfrac{\partial \psi_\mathrm{s,q}}{\partial i_\mathrm{s,q}}$}}
+                                                                                                           \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\ & \onslide<4->{= \begin{bmatrix}
+                                                                                                                                                                                                           L_\mathrm{dd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{dq}(\bm{i}_\mathrm{s,dq}) \\[1.6ex]
+                                                                                                                                                                                                           L_\mathrm{qd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})
+                                                                                                                                                                                                       \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t).}
         \end{split}
     \end{equation}
-    where the \hl{differential inductance matrix} $\bm{L}(\bm{i}_\mathrm{s,dq})$ is the Jacobian of $\bm{f}_{\psi_\mathrm{s}}$ with respect to $\bm{i}_\mathrm{s,dq}$.
+    \onslide<4->{where the \hl{differential inductance matrix} $\bm{L}(\bm{i}_\mathrm{s,dq})$ is the Jacobian of $\bm{f}_{\psi_\mathrm{s}}$ with respect to $\bm{i}_\mathrm{s,dq}$.}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -355,7 +359,7 @@
     Representing the nonlinear flux linkage model \eqref{eq:nonlinear_flux_function_PMSM} based on the \hl{apparent inductance matrix} $\bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq})$ yields
     \begin{equation}
         \bm{\psi}_\mathrm{s,dq}(t) = \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}(t))\bm{i}_\mathrm{s,dq}(t) + \bm{\psi}_\mathrm{PM}
-    \end{equation}
+    \end{equation}\pause
     with
     \begin{equation}
         \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}) = \begin{bmatrix}
@@ -365,11 +369,11 @@
             \psi_\mathrm{PM} \\[1.5ex]
             0
         \end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause
     Here, the following can be noted:
     \begin{itemize}
-        \item Main diagonal elements of $\bm{L}_{\mathrm{app}}$ depend only on the respective current component since otherwise the current-to-flux maps would be not unique (overdetermined system).
-        \item Since the apparent inductance matrix represents the absolute flux linkage change due to the stator currents, the PM flux linkage $\bm{\psi}_\mathrm{PM}$ is explicitly included in the model.
+        \item Main diagonal elements of $\bm{L}_{\mathrm{app}}$ depend only on the respective current component since otherwise the current-to-flux maps would be not unique (overdetermined system).\pause
+        \item Since the apparent inductance matrix represents the absolute flux linkage change due to the stator currents, the PM flux linkage $\bm{\psi}_\mathrm{PM}$ is explicitly included in the model.\pause
         \item Since the apparent inductance representation is less elegant than the original flux function $\bm{f}_{\psi_\mathrm{s}}$ and partly ambiguous, it is not commonly used for control-oriented modeling of PMSMs.
     \end{itemize}
 \end{frame}
@@ -382,14 +386,14 @@
     Utilizing the differential inductance concept, the \hl{current differential equation} can be derived as
     \begin{equation}
         \begin{split}
-            \bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)                                 \\&= R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)) + \bm{L}(\bm{i}_\mathrm{s,dq})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\
-            \Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}^{-1}(\bm{i}_\mathrm{s,dq})\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t))\right].
+            \bm{u}_\mathrm{s,dq}(t) & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) \\ \onslide<2->{&= R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t)) + \bm{L}(\bm{i}_\mathrm{s,dq})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\
+            \onslide<3->{\Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}^{-1}(\bm{i}_\mathrm{s,dq})\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t))\right].}
         \end{split}
     \end{equation}
     \begin{itemize}
-        \item The model $\bm{f}_{\psi_\mathrm{s}}$ can be implemented as look-up table (LUT) plus interpolation or as a function approximator (e.g., neural network, polynomial, prototype functions).
-        \item  Inverse $\bm{L}^{-1}(\bm{i}_\mathrm{s,dq})$ can be precomputed offline based on finite difference or analytical differentiation depending on the implementation of $\bm{f}_{\psi_\mathrm{s}}$.
-        \item Alternatively, one can integrate the flux ODE \eqref{eq:basic_PMSM_model_set} and then compute  $\bm{i}_\mathrm{s,dq}=\bm{f}_{\psi_\mathrm{s}}^{-1}(\bm{\psi}_\mathrm{s,dq})$.
+        \item<4-> The model $\bm{f}_{\psi_\mathrm{s}}$ can be implemented as look-up table (LUT) plus interpolation or as a function approximator (e.g., neural network, polynomial, prototype functions).
+        \item<5-> Inverse $\bm{L}^{-1}(\bm{i}_\mathrm{s,dq})$ can be precomputed offline based on finite difference or analytical differentiation depending on the implementation of $\bm{f}_{\psi_\mathrm{s}}$.
+        \item<6-> Alternatively, one can integrate the flux ODE \eqref{eq:basic_PMSM_model_set} and then compute  $\bm{i}_\mathrm{s,dq}=\bm{f}_{\psi_\mathrm{s}}^{-1}(\bm{\psi}_\mathrm{s,dq})$.
     \end{itemize}
 \end{frame}
 
@@ -400,25 +404,25 @@
     \frametitle{Linear PMSM model with constant inductances}
     Applying first-order Tayor expansions to the nonlinear flux function $\bm{f}_{\psi_\mathrm{s}}$ around some operating point (typically the origin $\bm{i}_\mathrm{s,dq}=\bm{0}$) yields the \hl{linear PMSM flux model}
     \begin{equation}
-        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}_0}\bm{i}_\mathrm{s,dq}(t)  = \begin{bmatrix}
-            \psi_{\mathrm{PM}} \\
-            0
-        \end{bmatrix} + \begin{bmatrix}
-            L_{\mathrm{dd},0} & L_{\mathrm{dq},0} \\
-            L_{\mathrm{qd},0} & L_{\mathrm{qq},0}
-        \end{bmatrix}\bm{i}_\mathrm{s,dq}(t)
+        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}_0}\bm{i}_\mathrm{s,dq}(t)  \onslide<2->{= \begin{bmatrix}
+                    \psi_{\mathrm{PM}} \\
+                    0
+                \end{bmatrix} + \begin{bmatrix}
+                    L_{\mathrm{dd},0} & L_{\mathrm{dq},0} \\
+                    L_{\mathrm{qd},0} & L_{\mathrm{qq},0}
+                \end{bmatrix}\bm{i}_\mathrm{s,dq}(t)}
     \end{equation}
-    With this linear flux model, the current ODE simplifies to
+    \onslide<3->{With this linear flux model, the current ODE simplifies to}
     \begin{equation}
         \begin{split}
-            \bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}_0\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) \\
-            \Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}_0^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right)\right].
+            \onslide<3->{\bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}_0\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\
+            \onslide<4->{\Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}_0^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right)\right].}
         \end{split}
     \end{equation}
-    And the torque expressions results in
-    \begin{equation}
-        T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t) + L_{\mathrm{dq},0} i_\mathrm{s,d}^2(t) - L_{\mathrm{qd},0} i_\mathrm{s,q}^2(t)\right].
-    \end{equation}
+    \onslide<5->{And the torque expressions results in
+            \begin{equation}
+                T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t) + L_{\mathrm{dq},0} i_\mathrm{s,d}^2(t) - L_{\mathrm{qd},0} i_\mathrm{s,q}^2(t)\right].
+            \end{equation}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -426,10 +430,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Linear PMSM model with constant inductances (cont.)}
-    As can be seen from \eqref{fig:inductance_maps_BRUSA} the off-diagonal inductance terms $L_{\mathrm{dq},0}$ and $L_{\mathrm{qd},0}$ are much smaller than the main diagonal terms $L_{\mathrm{dd},0}$ and $L_{\mathrm{qq},0}$. Thus, by further simplification
+    As can be seen from \eqref{fig:inductance_maps_BRUSA} the off-diagonal inductance terms $L_{\mathrm{dq},0}$ and $L_{\mathrm{qd},0}$ are much smaller than the main diagonal terms $L_{\mathrm{dd},0}$ and $L_{\mathrm{qq},0}$. \pause Thus, by further simplification
     $$
         L_{\mathrm{dq},0} \approx L_{\mathrm{qd},0} \approx 0
-    $$
+    $$\pause
     we obtain the following current ODE
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) = \begin{bmatrix}
@@ -439,11 +443,11 @@
                 L_{\mathrm{dd},0} & 0                 \\
                 0                 & L_{\mathrm{qq},0}
             \end{bmatrix} \bm{i}_\mathrm{s,dq}(t)\right)\right].
-    \end{equation}
+    \end{equation}\pause
     and torque expression
     \begin{equation}
         T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
-    \end{equation}
+    \end{equation}\pause
     This is the \hl{standard linear model for IPMSMs} with constant inductances. For \hl{SPMSMs}, there is no \hl{magnetic anistropy} in the dq-paths, i.e., $L_{\mathrm{dd},0} \approx L_{\mathrm{qq},0}$ and the torque expression further simplifies to $T(t) = \frac{3}{2}p\psi_\mathrm{PM} i_\mathrm{s,q}(t)$.
 \end{frame}
 
@@ -452,10 +456,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Flux linkage harmonics}
-    The model \eqref{eq:basic_PMSM_model_set} is called the \hl{fundamental wave model} since it only considers the fundamental spatial harmonic of the flux linkage distribution. However, in a real machine multiple rotor angle-dependent effects shape the flux linkage distribution:
+    The model \eqref{eq:basic_PMSM_model_set} is called the \hl{fundamental wave model} since it only considers the fundamental spatial harmonic of the flux linkage distribution. \onslide<2->{However, in a real machine multiple rotor angle-dependent effects shape the flux linkage distribution:}
     \begin{itemize}
-        \item Design: slot and winding distribution impacts, motor skew along the axial direction, etc.,
-        \item Production: geometry and material tolerances, assembly inaccuracies, etc.
+        \item<2-> Design: slot and winding distribution impacts, motor skew along the axial direction, etc.,
+        \item<3-> Production: geometry and material tolerances, assembly inaccuracies, etc.
     \end{itemize}
     \begin{figure}
         \begin{tikzpicture}
@@ -510,16 +514,16 @@
     \begin{equation}
         \bm{\psi}_\mathrm{s,dq}(t) = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \varepsilon(t)).
     \end{equation}
-    Consequently, the time derivative of the flux linkage becomes
+    \onslide<2->{Consequently, the time derivative of the flux linkage becomes}
     \begin{equation}
         \begin{split}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) & = \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\varepsilon}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\bigg|_{\bm{i}_\mathrm{s,dq}}\frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t) \\ & = \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}(\bm{i}_\mathrm{s,dq}, \varepsilon)\omega(t).
+            \onslide<2->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) & = \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\varepsilon}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\bigg|_{\bm{i}_\mathrm{s,dq}}\frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)} \\ & \onslide<3->{= \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}(\bm{i}_\mathrm{s,dq}, \varepsilon)\omega(t).}
         \end{split}
     \end{equation}
-    Thus, the flux linkage harmonics introduce an additional induced voltage term into the stator voltage equation:
+    \onslide<4->{Thus, the flux linkage harmonics introduce an additional induced voltage term into the stator voltage equation:}
     \begin{equation}
         \begin{split}
-            \bm{u}_\mathrm{s,dq}(t) & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t) \\ & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \varepsilon(t)) + \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\omega(t).
+            \onslide<4->{\bm{u}_\mathrm{s,dq}(t) & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)} \\ \onslide<5->{& = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \varepsilon(t)) + \bm{L}(\bm{i}_\mathrm{s,dq}, \varepsilon)\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) + \frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \varepsilon}\omega(t).}
         \end{split}
     \end{equation}
 \end{frame}

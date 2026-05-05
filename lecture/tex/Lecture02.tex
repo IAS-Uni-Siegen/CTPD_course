@@ -64,32 +64,32 @@
     \begin{figure}
         \begin{circuitikz}[]
             \draw (0,4) coordinate (A) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (Z) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-o] ++(-2,0) coordinate (Y)
-            (B) to [short, *-o] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
-            (A) to [short, i=$i_\mathrm{dc}(t)$] ++(2,0) coordinate (E)
-            to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
-            to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
-            to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
-            (C) to [short] ++(0,-2)
-            to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
-            (E) to [short, *-] ++(2,0) coordinate (I)
-            to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
-            to [short] ++(0,-1) coordinate (F)
-            to [short] ++(0,-1)
-            to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            to [short, -o] (B)
-            (I) to [short, *-] ++(2,0)
-            to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
-            to [short] ++(0,-2) coordinate (K)
-            to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
-            (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L)
-            (G) to [open, o-o, v^=$u_{\mathrm{a\text{-}b}}(t)$, voltage = straight] (H)
-            (H) to [open, o-o, v^=$u_{\mathrm{b\text{-}c}}(t)$, voltage = straight] (L)
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-o] ++(-2,0) coordinate (Y)
+                (B) to [short, *-o] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
+                (A) to [short, i=$i_\mathrm{dc}(t)$] ++(2,0) coordinate (E)
+                to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
+                to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
+                to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
+                (C) to [short] ++(0,-2)
+                to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
+                (E) to [short, *-] ++(2,0) coordinate (I)
+                to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
+                to [short] ++(0,-1) coordinate (F)
+                to [short] ++(0,-1)
+                to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                to [short, -o] (B)
+                (I) to [short, *-] ++(2,0)
+                to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
+                to [short] ++(0,-2) coordinate (K)
+                to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
+                (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L)
+                (G) to [open, o-o, v^=$u_{\mathrm{a\text{-}b}}(t)$, voltage = straight] (H)
+                (H) to [open, o-o, v^=$u_{\mathrm{b\text{-}c}}(t)$, voltage = straight] (L)
             ($(L) + (1.5,0)$) to [open, v_=$u_{\mathrm{c\text{-}a}}(t)$, voltage = straight] ($(G) + (1.5,0)$);
             \draw let \p1 = (igbt1.B) in node[anchor=south east] at (\x1,\y1) {$T_1$};
             \draw let \p1 = (igbt2.B) in node[anchor=south east] at (\x1,\y1) {$T_2$};
@@ -118,32 +118,32 @@
     \begin{figure}
         \begin{circuitikz}[]
             \draw (0,4) coordinate (A) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (Z) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-o] ++(-2,0) coordinate (Y)
-            (B) to [short, *-o] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
-            (A) to [short, i=$i_\mathrm{dc}(t)$] ++(2,0) coordinate (E)
-            to [Tnigfete, n=mosfet1, invert, bodydiode] ++(0,-2) coordinate (C)
-            to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
-            to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
-            (C) to [short] ++(0,-2)
-            to [Tnigfete, n=mosfet2, invert, bodydiode] ++(0,-2) coordinate (D)
-            (E) to [short, *-] ++(2,0) coordinate (I)
-            to [Tnigfete, n=mosfet3, invert, bodydiode] ++(0,-2)
-            to [short] ++(0,-1) coordinate (F)
-            to [short] ++(0,-1)
-            to [Tnigfete, n=mosfet4, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            to [short, -o] (B)
-            (I) to [short, *-] ++(2,0)
-            to [Tnigfete, n=mosfet5, invert, bodydiode] ++(0,-2) coordinate (J)
-            to [short] ++(0,-2) coordinate (K)
-            to [Tnigfete, n=mosfet6, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
-            (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L)
-            (G) to [open, o-o, v^=$u_{\mathrm{a\text{-}b}}(t)$, voltage = straight] (H)
-            (H) to [open, o-o, v^=$u_{\mathrm{b\text{-}c}}(t)$, voltage = straight] (L)
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-o] ++(-2,0) coordinate (Y)
+                (B) to [short, *-o] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
+                (A) to [short, i=$i_\mathrm{dc}(t)$] ++(2,0) coordinate (E)
+                to [Tnigfete, n=mosfet1, invert, bodydiode] ++(0,-2) coordinate (C)
+                to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
+                to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
+                (C) to [short] ++(0,-2)
+                to [Tnigfete, n=mosfet2, invert, bodydiode] ++(0,-2) coordinate (D)
+                (E) to [short, *-] ++(2,0) coordinate (I)
+                to [Tnigfete, n=mosfet3, invert, bodydiode] ++(0,-2)
+                to [short] ++(0,-1) coordinate (F)
+                to [short] ++(0,-1)
+                to [Tnigfete, n=mosfet4, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                to [short, -o] (B)
+                (I) to [short, *-] ++(2,0)
+                to [Tnigfete, n=mosfet5, invert, bodydiode] ++(0,-2) coordinate (J)
+                to [short] ++(0,-2) coordinate (K)
+                to [Tnigfete, n=mosfet6, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
+                (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L)
+                (G) to [open, o-o, v^=$u_{\mathrm{a\text{-}b}}(t)$, voltage = straight] (H)
+                (H) to [open, o-o, v^=$u_{\mathrm{b\text{-}c}}(t)$, voltage = straight] (L)
             ($(L) + (1.5,0)$) to [open, v_=$u_{\mathrm{c\text{-}a}}(t)$, voltage = straight] ($(G) + (1.5,0)$);
             \draw let \p1 = (mosfet1.G) in node[anchor=south] at (\x1,\y1) {$T_1$};
             \draw let \p1 = (mosfet2.G) in node[anchor=south] at (\x1,\y1) {$T_2$};
@@ -257,32 +257,32 @@
     \begin{figure}
         \begin{circuitikz}[]
             \draw (0,4) coordinate (A) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (Z) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-o] ++(-2,0) coordinate (Y)
-            (B) to [short, *-o] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
-            (A) to [short, i=$i_{\mathrm{dc}}(t)$] ++(2,0) coordinate (E)
-            to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
-            to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
-            to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
-            (C) to [short] ++(0,-2)
-            to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
-            (E) to [short, *-] ++(2,0) coordinate (I)
-            to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
-            to [short] ++(0,-1) coordinate (F)
-            to [short] ++(0,-1)
-            to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            to [short, -o] (B)
-            (I) to [short, *-] ++(2,0)
-            to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
-            to [short] ++(0,-2) coordinate (K)
-            to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
-            (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L);
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-o] ++(-2,0) coordinate (Y)
+                (B) to [short, *-o] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
+                (A) to [short, i=$i_{\mathrm{dc}}(t)$] ++(2,0) coordinate (E)
+                to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
+                to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
+                to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
+                (C) to [short] ++(0,-2)
+                to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
+                (E) to [short, *-] ++(2,0) coordinate (I)
+                to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
+                to [short] ++(0,-1) coordinate (F)
+                to [short] ++(0,-1)
+                to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                to [short, -o] (B)
+                (I) to [short, *-] ++(2,0)
+                to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
+                to [short] ++(0,-2) coordinate (K)
+                to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
+                (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L);
             \draw (H) to [inductor, v^=$u_{\mathrm{b}}(t)$, voltage=straight] ++(1.5,0) to [short,-*] ++(1,0) coordinate (N)
-            (L) to [inductor, v^=$u_{\mathrm{c}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N)
+                (L) to [inductor, v^=$u_{\mathrm{c}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N)
             (G) to [inductor, v^=$u_{\mathrm{a}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N);
             \draw let \p1 = (igbt1.B) in node[anchor=south east] at (\x1,\y1) {$T_1$};
             \draw let \p1 = (igbt2.B) in node[anchor=south east] at (\x1,\y1) {$T_2$};
@@ -495,32 +495,32 @@
     \begin{figure}
         \begin{circuitikz}[scale=0.8, every node/.style={scale=0.8}]
             \draw (0,4) coordinate (A) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (Z) to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-3) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-] ++(-2,0) coordinate (Y)
-            (B) to [short, *-] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
-            (A) to [short, i_>=$i_{\mathrm{dc}}(t)$] ++(2,0) coordinate (E)
-            to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
-            to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
-            to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
-            (C) to [short] ++(0,-2)
-            to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
-            (E) to [short, *-] ++(2,0) coordinate (I)
-            to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
-            to [short] ++(0,-1) coordinate (F)
-            to [short] ++(0,-1)
-            to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
-            to [short, -*] ++(-2,0)
-            to [short] (B)
-            (I) to [short, *-] ++(2,0)
-            to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
-            to [short] ++(0,-2) coordinate (K)
-            to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2) coordinate (T6low)
-            to [short, -*] ++(-2,0)
-            (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
-            (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L);
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-] ++(-2,0) coordinate (Y)
+                (B) to [short, *-] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X)
+                (A) to [short, i_>=$i_{\mathrm{dc}}(t)$] ++(2,0) coordinate (E)
+                to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-2) coordinate (C)
+                to [short, *-] ++(1,0) to [crossing] ++(2,0) to [crossing] ++(2,0)
+                to [short, i=$i_{\mathrm{a}}(t)$] ++(1,0) coordinate (U) to [short] ++(1,0) coordinate (G)
+                (C) to [short] ++(0,-2)
+                to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-2) coordinate (D)
+                (E) to [short, *-] ++(2,0) coordinate (I)
+                to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-2)
+                to [short] ++(0,-1) coordinate (F)
+                to [short] ++(0,-1)
+                to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-2)
+                to [short, -*] ++(-2,0)
+                to [short] (B)
+                (I) to [short, *-] ++(2,0)
+                to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-2) coordinate (J)
+                to [short] ++(0,-2) coordinate (K)
+                to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-2) coordinate (T6low)
+                to [short, -*] ++(-2,0)
+                (F) to [short, *-] ++(1,0) to [crossing] ++(2,0) to [short, i=$i_{\mathrm{b}}(t)$] ++(1,0) coordinate (V) to [short] ++(1,0) coordinate (H)
+                (K) to [short, *-] ++(1,0) to [short, i=$i_{\mathrm{c}}(t)$] ++(1,0) to [short] ++(0.5,0) coordinate(W) to [short] ++(0.5,0) coordinate (L);
             \draw (H) to [inductor, v^=$u_{\mathrm{b}}(t)$, voltage=straight] ++(1.5,0) to [short,-*] ++(1,0) coordinate (N)
-            (L) to [inductor, v^=$u_{\mathrm{c}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N)
+                (L) to [inductor, v^=$u_{\mathrm{c}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N)
             (G) to [inductor, v^=$u_{\mathrm{a}}(t)$, voltage=straight] ++(1.5,0) to [short] (\tikztostart) -| (N);
             \draw let \p1 = (igbt1.B) in node[anchor=south east] at (\x1,\y1) {$T_1$};
             \draw let \p1 = (igbt2.B) in node[anchor=south east] at (\x1,\y1) {$T_2$};
@@ -606,7 +606,7 @@
                 \begin{circuitikz}[]
                     \ctikzset{amplifiers/scale=0.25} % Scale of amplifier       
                     \draw (0,0) to [Tnpn, n=npn1, invert, bodydiode] ++(0,-1.6) coordinate (A)
-                    to [Tnpn, n=npn2, invert, bodydiode] ++(0,-1.6) coordinate (B)
+                        to [Tnpn, n=npn2, invert, bodydiode] ++(0,-1.6) coordinate (B)
                     ($(npn1.E)!0.5!(npn2.C)$) to [short, i=$i(t)$, *-o] ++(1.5,0) coordinate (C);
                     \draw (npn1.B) node[plain mono amp, anchor = out, name=amp1]{};
                     \draw (npn2.B) node[plain mono amp, anchor = out, name=amp2]{};
@@ -822,9 +822,9 @@
             \end{itemize}
             \vspace{-0.25cm}
             \onslide<2->{%
-                \begin{varblock}{Harmonics}
-                    Increasing the modulation ratio beyond unity leads to increased PWM deviations and thus increased harmonics.
-                \end{varblock}}
+                    \begin{varblock}{Harmonics}
+                        Increasing the modulation ratio beyond unity leads to increased PWM deviations and thus increased harmonics.
+                    \end{varblock}}
         \end{column}
         \begin{column}{0.55\textwidth}
             \begin{figure}
@@ -974,8 +974,8 @@
         s(t)  = & s^*+                                                                                                                                            \\
                 & \underbrace{\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}\sin(k\pi s^*)\cos\!\left(2k\omega_\mathrm{p}t\right)}_{\text{even carrier groups}}
         -\underbrace{\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
-            \cos\!\left((k+\tfrac{1}{2})\pi s^*\right)
-            \cos\!\left((2k+1)\omega_\mathrm{p}t\right)}_{\text{odd carrier groups}}.
+             \cos\!\left((k+\tfrac{1}{2})\pi s^*\right)
+             \cos\!\left((2k+1)\omega_\mathrm{p}t\right)}_{\text{odd carrier groups}}.
     \end{align*}
     Assuming a constant DC-link voltage $u_\mathrm{dc}(t)=U_\mathrm{dc}$, the switching harmonics can be directly translated to the voltage domain:
     \begin{equation}
@@ -1049,9 +1049,9 @@
         s(t) & =  m^*\sin(\omega t)
         -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
         \Biggl[g_{k,0}\cos\!\left((2k+1)\omega_\mathrm{p}t\right) \notag                                                                             \\
-             & +\sum_{\nu=1}^{\infty}\frac{g_{k,2\nu}}{2}
+            & +\sum_{\nu=1}^{\infty}\frac{g_{k,2\nu}}{2}
             \Biggl(\cos\!\left(\left((2k+1)\omega_\mathrm{p}+2\nu\omega\right)t\right)
-        +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \label{eq:Fourier_series_single_phase_PWM_sinusoidal_ref} \\
+            +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \label{eq:Fourier_series_single_phase_PWM_sinusoidal_ref} \\
              & +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}
         \sum_{\nu=0}^{\infty}\frac{h_{k,2\nu+1}}{2}
         \Biggl(\sin\!\left(\left(2k\omega_\mathrm{p}+(2\nu+1)\omega\right)t\right)
@@ -1099,11 +1099,11 @@
             s(t) & =  m^*\sin(\omega t)
             -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
             \Biggl[J_0\!\left((2k+1)\frac{\pi}{2}m^*\right)
-            \cos\!\left((2k+1)\omega_\mathrm{p}t\right)                                        \\
-                 &
+                \cos\!\left((2k+1)\omega_\mathrm{p}t\right)                                        \\
+                &
                 +\sum_{\nu=1}^{\infty}J_{2\nu}\!\left((2k+1)\frac{\pi}{2}m^*\right)
                 \Biggl(\cos\!\left(\left((2k+1)\omega_\mathrm{p}+2\nu\omega\right)t\right)
-            +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \\
+                +\cos\!\left(\left((2k+1)\omega_\mathrm{p}-2\nu\omega\right)t\right)\Biggr)\Biggr] \\
                  & +\frac{2}{\pi}\sum_{k=1}^{\infty}\frac{(-1)^k}{k}
             \sum_{\nu=0}^{\infty}J_{2\nu+1}(k\pi m^*)
             \Biggl(\sin\!\left(\left(2k\omega_\mathrm{p}+(2\nu+1)\omega\right)t\right)
@@ -1144,8 +1144,8 @@
             \\[0.5em]
                  & -\frac{4}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^k}{2k+1}
             \Bigg[
-            J_0\left(\frac{(2k+1)\pi}{2}m^*\right)\cos\!\bigl((2k+1)n_p\omega t\bigr) \\
-                 &
+                J_0\left(\frac{(2k+1)\pi}{2}m^*\right)\cos\!\bigl((2k+1)n_p\omega t\bigr) \\
+                &
                 +\sum_{\nu=1}^{\infty}
                 J_{2\nu}\left(\frac{(2k+1)\pi}{2}m^*\right)
                 \Bigl(
@@ -2361,68 +2361,68 @@
     \begin{columns}[onlytextwidth]
         \begin{column}{0.53\textwidth}
             \onslide<1->{Beyond $m^* > \nicefrac{2}{\sqrt{3}}$ the phase voltage references leave the linear modulation range and are no longer realizable.} \onslide<2->{The resulting overmodulation strategy is a simple \hl{clipping}, i.e.,
-                \begin{equation}
-                    \begin{split}
-                        s_{i}^{**}(t)          & = \operatorname{clip}\!\left(s_{i}^{*}(t)-s_0(t)\right), \\
-                        \operatorname{clip}(x) & = \min\!\left\{1,\max\!\left\{-1,x\right\}\right\}.
-                    \end{split}
-                \end{equation}}\vspace{-0.5cm}
+                    \begin{equation}
+                        \begin{split}
+                            s_{i}^{**}(t)          & = \operatorname{clip}\!\left(s_{i}^{*}(t)-s_0(t)\right), \\
+                            \operatorname{clip}(x) & = \min\!\left\{1,\max\!\left\{-1,x\right\}\right\}.
+                        \end{split}
+                    \end{equation}}\vspace{-0.5cm}
             \onslide<3->{
-                \begin{varblock}{Control disturbance}
-                    The clipping renders itself a control disturbance and reduces the degrees of freedom: in the linear range, amplitude and phase of the voltage reference can be controlled independently, while in the overmodulation range those two are coupled.
-                \end{varblock}}
+                    \begin{varblock}{Control disturbance}
+                        The clipping renders itself a control disturbance and reduces the degrees of freedom: in the linear range, amplitude and phase of the voltage reference can be controlled independently, while in the overmodulation range those two are coupled.
+                    \end{varblock}}
         \end{column}
         \begin{column}{0.45\textwidth}
             \vspace{-0.2cm}
             \onslide<1->{
-                \begin{figure}
-                    \begin{tikzpicture}[x=1.2cm,y=1.2cm,>=Latex]
-                        \pgfmathsetmacro{\outerRadius}{2}
-                        \pgfmathsetmacro{\mStar}{1.24}
-                        \pgfmathsetmacro{\commandedRadius}{1.5*\mStar}
-                        \pgfmathsetmacro{\clipGamma}{acos(2/(sqrt(3)*\mStar))}
-                        \pgfmathsetmacro{\innerRadius}{sqrt(3)}
-                        \pgfmathsetmacro{\tickHalf}{0.08}
-                        \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
-                        \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
-                        \pgfmathsetmacro{\alphaLeaderDx}{0.10}
-                        \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
-                        \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
-                        \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
-                        \pgfmathsetmacro{\betaLeaderDx}{0.35}
-                        \pgfmathsetmacro{\betaLeaderDy}{0.20}
-                        \coordinate (O) at (0,0);
-                        \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
-                                \coordinate (\name) at (\angle:\outerRadius);
-                            }
-                        \coordinate (betaMax) at (90:\innerRadius);
-                        \draw[gray!70,thick] (u1)--(u2)--(u3)--(u4)--(u5)--(u6)--cycle;
-                        \draw[signalalpha,dotted,thick] (O) circle [radius=\commandedRadius];
-                        \draw[->,thin] (-2.25,0) -- (2.25,0) node[right] {$s_\upalpha^*$};
-                        \draw[->,thin] (0,-2.15) -- (0,2.15) node[above] {$s_\upbeta^*$};
+                    \begin{figure}
+                        \begin{tikzpicture}[x=1.2cm,y=1.2cm,>=Latex]
+                            \pgfmathsetmacro{\outerRadius}{2}
+                            \pgfmathsetmacro{\mStar}{1.24}
+                            \pgfmathsetmacro{\commandedRadius}{1.5*\mStar}
+                            \pgfmathsetmacro{\clipGamma}{acos(2/(sqrt(3)*\mStar))}
+                            \pgfmathsetmacro{\innerRadius}{sqrt(3)}
+                            \pgfmathsetmacro{\tickHalf}{0.08}
+                            \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
+                            \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
+                            \pgfmathsetmacro{\alphaLeaderDx}{0.10}
+                            \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
+                            \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
+                            \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
+                            \pgfmathsetmacro{\betaLeaderDx}{0.35}
+                            \pgfmathsetmacro{\betaLeaderDy}{0.20}
+                            \coordinate (O) at (0,0);
+                            \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                                    \coordinate (\name) at (\angle:\outerRadius);
+                                }
+                            \coordinate (betaMax) at (90:\innerRadius);
+                            \draw[gray!70,thick] (u1)--(u2)--(u3)--(u4)--(u5)--(u6)--cycle;
+                            \draw[signalalpha,dotted,thick] (O) circle [radius=\commandedRadius];
+                            \draw[->,thin] (-2.25,0) -- (2.25,0) node[right] {$s_\upalpha^*$};
+                            \draw[->,thin] (0,-2.15) -- (0,2.15) node[above] {$s_\upbeta^*$};
 
-                        \draw[thin] (u1) ++(0,\tickHalf) -- ++(0,-2*\tickHalf);
-                        \draw[thin] ($(u1) + (\alphaLeaderShiftX,\alphaLeaderShiftY)$) -- ++(\alphaLeaderDx,\alphaLeaderDy) node[below right] {$\frac{4}{3}$};
+                            \draw[thin] (u1) ++(0,\tickHalf) -- ++(0,-2*\tickHalf);
+                            \draw[thin] ($(u1) + (\alphaLeaderShiftX,\alphaLeaderShiftY)$) -- ++(\alphaLeaderDx,\alphaLeaderDy) node[below right] {$\frac{4}{3}$};
 
-                        \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
-                        \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
+                            \draw[thin] (betaMax) ++(\betaLeaderShiftX,\betaLeaderShiftY) -- ++(\betaLeaderDx,\betaLeaderDy) node[above right] {$\frac{2}{\sqrt{3}}$};
+                            \draw[thin] (betaMax) ++(\betaLeaderShiftX,0) -- ++(-2*\betaLeaderShiftX,0);
 
-                        \foreach \sector in {0,...,5} {
-                                \pgfmathsetmacro{\sectorCenter}{30 + 60*\sector}
-                                \pgfmathsetmacro{\clipStart}{\sectorCenter - \clipGamma}
-                                \pgfmathsetmacro{\clipEnd}{\sectorCenter + \clipGamma}
-                                \pgfmathsetmacro{\nextArcEnd}{\sectorCenter + 60 - \clipGamma}
+                            \foreach \sector in {0,...,5} {
+                                    \pgfmathsetmacro{\sectorCenter}{30 + 60*\sector}
+                                    \pgfmathsetmacro{\clipStart}{\sectorCenter - \clipGamma}
+                                    \pgfmathsetmacro{\clipEnd}{\sectorCenter + \clipGamma}
+                                    \pgfmathsetmacro{\nextArcEnd}{\sectorCenter + 60 - \clipGamma}
 
-                                \draw[signalbeta,dashed,thick] (\clipStart:\commandedRadius) -- (\clipEnd:\commandedRadius);
-                                \draw[signalbeta,dashed,thick] (\clipEnd:\commandedRadius) arc[start angle=\clipEnd,end angle=\nextArcEnd,radius=\commandedRadius];
-                            }
+                                    \draw[signalbeta,dashed,thick] (\clipStart:\commandedRadius) -- (\clipEnd:\commandedRadius);
+                                    \draw[signalbeta,dashed,thick] (\clipEnd:\commandedRadius) arc[start angle=\clipEnd,end angle=\nextArcEnd,radius=\commandedRadius];
+                                }
 
-                        \node[signalalpha, fill=white, inner sep=1pt, right, align=left] at (1.86,1.22) {\scriptsize reference\\[-2pt]\scriptsize $m^*=1.24$};
-                        \node[signalbeta, fill=white, inner sep=1pt, left] at (1.54,0.64) {\scriptsize clipping};
-                    \end{tikzpicture}
-                    \caption{Beyond $m^*=\nicefrac{2}{\sqrt{3}}$, the desired sinusoidal trajectory leaves the linear range and is clipped at the inverter hexagon.}
-                    \label{fig:min_max_injection_overmodulation_hexagon_clipping}
-                \end{figure}}
+                            \node[signalalpha, fill=white, inner sep=1pt, right, align=left] at (1.86,1.22) {\scriptsize reference\\[-2pt]\scriptsize $m^*=1.24$};
+                            \node[signalbeta, fill=white, inner sep=1pt, left] at (1.54,0.64) {\scriptsize clipping};
+                        \end{tikzpicture}
+                        \caption{Beyond $m^*=\nicefrac{2}{\sqrt{3}}$, the desired sinusoidal trajectory leaves the linear range and is clipped at the inverter hexagon.}
+                        \label{fig:min_max_injection_overmodulation_hexagon_clipping}
+                    \end{figure}}
         \end{column}
     \end{columns}
 \end{frame}
@@ -2800,8 +2800,8 @@
     \begin{equation}
         \begin{split}
             m^{(1)} = \frac{3}{\pi}\Bigg[ & \int_{0}^{\delta_1} \frac{4}{3}\cos\theta\,\mathrm{d}\theta
-            + \int_{-\nicefrac{\Delta\delta}{2}}^{\nicefrac{\Delta\delta}{2}}\left(\frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi\right)\mathrm{d}\psi                        \\
-                                          & + \int_{\delta_2}^{\nicefrac{\pi}{3}}\left(\frac{2}{3}\cos\theta + \frac{2}{\sqrt{3}}\sin\theta\right)\mathrm{d}\theta\Bigg].
+                                       + \int_{-\nicefrac{\Delta\delta}{2}}^{\nicefrac{\Delta\delta}{2}}\left(\frac{2}{\sqrt{3}}\cos\psi + m^*\sin^2\psi\right)\mathrm{d}\psi                        \\
+                                       & + \int_{\delta_2}^{\nicefrac{\pi}{3}}\left(\frac{2}{3}\cos\theta + \frac{2}{\sqrt{3}}\sin\theta\right)\mathrm{d}\theta\Bigg].
         \end{split}
     \end{equation}
 \end{frame}
@@ -2977,13 +2977,13 @@
         \centering
         \begin{tikzpicture}[x=1cm,y=1cm,scale=0.62,transform shape,>=Latex]
             \tikzset{
-            block/.style={draw=black, thick, fill=white, minimum width=1.10cm, minimum height=0.82cm, inner sep=3pt, font=\small, align=center},
-            ctrlblock/.style={draw=black, thick, fill=white, minimum width=1.55cm, minimum height=1.5cm, inner sep=3pt, font=\small, align=center},
-            pwmblock/.style={draw=black, thick, fill=white, minimum width=0.62cm, minimum height=0.34cm, inner sep=3pt, font=\small, align=center},
-            datapath/.style={signalalpha, thick, -{Latex[length=4pt,width=4pt]}},
-            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
-            redlabel/.style={text=signalalpha, inner sep=2pt, font=\footnotesize},
-            blacklabel/.style={inner sep=2pt}
+                block/.style={draw=black, thick, fill=white, minimum width=1.10cm, minimum height=0.82cm, inner sep=3pt, font=\small, align=center},
+                ctrlblock/.style={draw=black, thick, fill=white, minimum width=1.55cm, minimum height=1.5cm, inner sep=3pt, font=\small, align=center},
+                pwmblock/.style={draw=black, thick, fill=white, minimum width=0.62cm, minimum height=0.34cm, inner sep=3pt, font=\small, align=center},
+                datapath/.style={signalalpha, thick, -{Latex[length=4pt,width=4pt]}},
+                periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+                redlabel/.style={text=signalalpha, inner sep=2pt, font=\footnotesize},
+                blacklabel/.style={inner sep=2pt}
             }
 
             \coordinate (k0) at (1.35,-1.35);
@@ -3139,24 +3139,24 @@
                 }
 
             \begin{groupplot}[
-                group style={group size=1 by 2, vertical sep=0.35cm},
-                width=0.95\textwidth,
-                height=0.52\textheight,
-                xmin=0,
-                xmax=360,
-                xtick distance=\sampleStep,
-                xticklabels={},
-                axis x line=middle,
-                axis y line=middle,
-                x axis line style={-{Latex[length=4pt,width=4pt]}},
-                ymin=-1.18,
-                ymax=1.18,
-                ytick={-1,0,1},
-                yticklabels={,,},
-                enlargelimits=false,
-                clip=false,
-                tick style={black},
-                every axis plot/.append style={line join=round}
+                    group style={group size=1 by 2, vertical sep=0.35cm},
+                    width=0.95\textwidth,
+                    height=0.52\textheight,
+                    xmin=0,
+                    xmax=360,
+                    xtick distance=\sampleStep,
+                    xticklabels={},
+                    axis x line=middle,
+                    axis y line=middle,
+                    x axis line style={-{Latex[length=4pt,width=4pt]}},
+                    ymin=-1.18,
+                    ymax=1.18,
+                    ytick={-1,0,1},
+                    yticklabels={,,},
+                    enlargelimits=false,
+                    clip=false,
+                    tick style={black},
+                    every axis plot/.append style={line join=round}
                 ]
                 \nextgroupplot[]
                 \addplot[black, thick] coordinates {\carrierCoords};
@@ -3208,12 +3208,12 @@
         \vspace{-0.3cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
-            waveLabel/.style={fill=white, inner sep=0.8pt},
-            axisTick/.style={black, thick},
-            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
-            carrierWave/.style={black, thick},
-            switchWave/.style={signalalpha, thick},
-            referenceWave/.style={signalbeta, thick}
+                waveLabel/.style={fill=white, inner sep=0.8pt},
+                axisTick/.style={black, thick},
+                periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+                carrierWave/.style={black, thick},
+                switchWave/.style={signalalpha, thick},
+                referenceWave/.style={signalbeta, thick}
             }
 
             \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
@@ -3253,12 +3253,12 @@
         \vspace{-0.08cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
-            waveLabel/.style={fill=white, inner sep=0.8pt},
-            axisTick/.style={black, thick},
-            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
-            carrierWave/.style={black, thick},
-            switchWave/.style={signalalpha, thick},
-            referenceWave/.style={signalbeta, thick}
+                waveLabel/.style={fill=white, inner sep=0.8pt},
+                axisTick/.style={black, thick},
+                periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+                carrierWave/.style={black, thick},
+                switchWave/.style={signalalpha, thick},
+                referenceWave/.style={signalbeta, thick}
             }
 
             \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
@@ -3317,12 +3317,12 @@
         \vspace{0.1cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
-            waveLabel/.style={fill=white, inner sep=0.8pt},
-            axisTick/.style={black, thick},
-            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
-            carrierWave/.style={black, thick},
-            switchWave/.style={signalalpha, thick},
-            referenceWave/.style={signalbeta, thick}
+                waveLabel/.style={fill=white, inner sep=0.8pt},
+                axisTick/.style={black, thick},
+                periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+                carrierWave/.style={black, thick},
+                switchWave/.style={signalalpha, thick},
+                referenceWave/.style={signalbeta, thick}
             }
 
             \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
@@ -3366,12 +3366,12 @@
         \vspace{-0.08cm}
         \begin{tikzpicture}[x=1.0cm,y=1.0cm,>=Latex]
             \tikzset{
-            waveLabel/.style={fill=white, inner sep=0.8pt},
-            axisTick/.style={black, thick},
-            periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
-            carrierWave/.style={black, thick},
-            switchWave/.style={signalalpha, thick},
-            referenceWave/.style={signalbeta, thick}
+                waveLabel/.style={fill=white, inner sep=0.8pt},
+                axisTick/.style={black, thick},
+                periodmark/.style={{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick},
+                carrierWave/.style={black, thick},
+                switchWave/.style={signalalpha, thick},
+                referenceWave/.style={signalbeta, thick}
             }
 
             \draw[-{Latex[length=4pt,width=4pt]}, thick] (-0.55,0) -- (8.95,0) node[right] {$t$};
@@ -3423,7 +3423,7 @@
     \end{equation}\pause
     Here, we can identify two terms:
     \begin{align*}
-        S^*(z) & = \sum_{k} s_k^*z^{-k} \quad \text{with} \quad z = e^{T_\mathrm{s}s} \quad \text{(discrete-time reference sequence in the $z$-domain),}\pause \\
+        S^*(z) & = \sum_{k} s_k^*z^{-k} \quad \text{with} \quad z = e^{T_\mathrm{s}s} \quad \text{(discrete-time reference sequence in the $z$-domain),} \\
         H(s)   & = \frac{1}{T_\mathrm{s}s}\left[1  - e^{-T_\mathrm{s}s} \right] \quad \text{(transfer function of a sample and hold element)}.
     \end{align*}
 \end{frame}
@@ -3456,11 +3456,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Delay model of discrete-time synchronized references (cont.)}
-    Since the $\sinc(\cdot)$ function can be a little abstract, two frequent approximations can be used.\pause  The first one is the \hl{first-order Pad\'e approach} of the exponential function:
+    Since the $\sinc(\cdot)$ function can be a little abstract, two frequent approximations can be used. \pause  The first one is the \hl{first-order Pad\'e approach} of the exponential function:
     \begin{equation}
         e^{-\mathrm{j}\omega T_\mathrm{s}} \approx \frac{1 - \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}{1 + \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}} \quad \Rightarrow \quad H(\mathrm{j}\omega) \approx \frac{1}{T_\mathrm{s}\mathrm{j}\omega}\left(1-\frac{1 - \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}{1 + \mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}\right)=\frac{1}{1+\mathrm{j}\omega \nicefrac{T_\mathrm{s}}{2}}.
     \end{equation}\pause
-    This results in a first-order low-pass filter with a time constant of half the sampling time $T_\mathrm{s}$.\pause  The second one is derived by a \hl{Taylor series expansion} of the $\sinc(\cdot)$ function
+    This results in a first-order low-pass filter with a time constant of half the sampling time $T_\mathrm{s}$. \pause The second one is derived by a \hl{Taylor series expansion} of the $\sinc(\cdot)$ function
     \begin{equation}
         \sinc\left(\pi\frac{\omega}{\omega_\mathrm{s}}\right) = 1 - \frac{\pi^2}{6}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^2 + \frac{\pi^4}{120}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^4 - \frac{\pi^6}{5040}\left(\frac{\omega}{\omega_\mathrm{s}}\right)^6 + \ldots \approx 1,
     \end{equation}
@@ -3532,16 +3532,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Total control delay and compensation}
-    As already indicated in \figref{fig:digital_control_implementation}, the \hl{effective total control delay is $\nicefrac{3}{2}T_\mathrm{s}$} for a regular sampling digital control implementation. This delay is the sum of two components:\pause
+    As already indicated in \figref{fig:digital_control_implementation}, the \hl{effective total control delay is $\nicefrac{3}{2}\cdot T_\mathrm{s}$} for a regular sampling digital control implementation. This delay is the sum of two components:\pause
     \begin{itemize}
-        \item \textbf{Reference synchronization}: $\nicefrac{T_\mathrm{s}}{2}$ (compare \eqref{eq:regular_sampling_transfer_function_sinc} and the approximations thereof).\pause
+        \item \textbf{Reference synchronization}: $\nicefrac{T_\mathrm{s}}{2}$ (compare \eqref{eq:regular_sampling_transfer_function_sinc} and the approximations thereof),\pause
         \item \textbf{Controller processing}: $T_\mathrm{s}$ (incl. sensor data acquisition, control algorithm execution, and actuation signal generation).
     \end{itemize}\pause
     While this impact must be considered for every control design, at least one $T_\mathrm{s}$ delay can be compensated by simple \hl{one-step feedforward prediction} of the system's states:
     \begin{equation}
         \hat{\bm{x}}_{k+1} = \bm{f}(\bm{x}_k, \bm{u}_k),
     \end{equation}
-    where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics.\pause The input $\bm{u}_k$ is the control action from the last controller cycle, e.g., the average reference voltage $\bm{u}_k = \bm{u}_{\mathrm{abc},k}^*$. \pause The next control cycle can then be based on the predicted state $\hat{\bm{x}}_{k+1}$ instead of the current state $\bm{x}_k$.
+    where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics. \pause The input $\bm{u}_k$ is the control action from the last controller cycle, e.g., the average reference voltage $\bm{u}_k = \bm{u}_{\mathrm{abc},k}^*$. \pause The next control cycle can then be based on the predicted state $\hat{\bm{x}}_{k+1}$ instead of the current state $\bm{x}_k$.
 \end{frame}
 
 
@@ -3564,20 +3564,22 @@
             \end{itemize}
         \end{column}
         \begin{column}{0.49\textwidth}
-            \textbf{Discontinuous PWM}
-            \begin{itemize}
-                \item The zero-sequence is chosen such that (at least) one phase satisfies
-                      \begin{equation}
-                          s_p^{**}(t)=\pm 1, \quad p\in\{\mathrm{a,b,c}\},
-                      \end{equation}
-                      over a finite interval (\hl{clamped leg}).
-                \item This reduces switching losses, but changes the harmonic spectrum.
-            \end{itemize}
+            \onslide<2->{
+                    \textbf{Discontinuous PWM}
+                    \begin{itemize}
+                        \item The zero-sequence is chosen such that (at least) one phase satisfies
+                              \begin{equation}
+                                  s_p^{**}(t)=\pm 1, \quad p\in\{\mathrm{a,b,c}\},
+                              \end{equation}
+                              over a finite interval (\hl{clamped leg}).
+                        \item This reduces switching losses, but changes the harmonic spectrum.
+                    \end{itemize}}
         \end{column}
-    \end{columns}
-    \begin{block}{Remark}
-        Discontinuous PWM (DPWM) schemes offer similar fundamental modulation capability as continuous schemes, but with reduced switching losses at the cost of increased low-order harmonics. There are several DPWM variants which differ in the choice of the clamping angle and the clamped leg with the flat-top modulation, as considered next, being a common scheme.
-    \end{block}
+    \end{columns}%
+    \onslide<3->{%
+            \begin{block}{Remark}
+                Discontinuous PWM (DPWM) schemes offer similar fundamental modulation capability as continuous schemes, but with reduced switching losses at the cost of increased low-order harmonics. There are several DPWM variants which differ in the choice of the clamping angle and the clamped leg with the flat-top modulation, as considered next, being a common scheme.
+            \end{block}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3588,12 +3590,12 @@
     Consider a balanced sinusoidal reference as from \eqref{eq:balanced_sinusoidal_reference_PWM}. Define the phase with the largest absolute instantaneous reference as
     \begin{equation}
         p(\theta)\in \operatorname*{arg\,max}_{i\in\{\mathrm{a,b,c}\}}\left|s_i^*(\theta)\right|.
-    \end{equation}
+    \end{equation}\pause
     The \hl{flat-top zero-sequence injection} is then chosen as
     \begin{equation}
         s_0(\theta)=s_{p(\theta)}^*(\theta)-\operatorname{sgn}\!\left(s_{p(\theta)}^*(\theta)\right).
         \label{eq:flat_top_zero_sequence_general}
-    \end{equation}
+    \end{equation}\pause
     With
     \begin{equation}
         s^*_{\max}=\max\{s_\mathrm{a}^*,s_\mathrm{b}^*,s_\mathrm{c}^*\}, \qquad
@@ -3607,7 +3609,7 @@
             s^*_{\min}+1, & s^*_{\max}< -s^*_{\min}.
         \end{cases}
         \label{eq:flat_top_zero_sequence_piecewise}
-    \end{equation}
+    \end{equation}\pause
     Thus, one phase is clamped to \(+1\) or \(-1\) in each \(60^\circ\) interval, yielding the characteristic \hl{flat-top PWM sequence}.
 \end{frame}
 
@@ -3725,23 +3727,23 @@
         \qquad
         \tau_1,\tau_2\geq 0, \quad \tau_1+\tau_2\leq 1,
     \end{equation*}
-    the \hl{flat-top PWM definition} clamps the leading positive phase to the upper rail for $\theta\in[-\nicefrac{\pi}{6}, \nicefrac{\pi}{6}]$. Hence, within the upper first sector part, phase \(\mathrm{a}\) is clamped, yielding
+    the \hl{flat-top PWM definition} clamps the leading positive phase to the upper rail for $\theta\in[-\nicefrac{\pi}{6}, \nicefrac{\pi}{6}]$. \pause Hence, within the upper first sector part, phase \(\mathrm{a}\) is clamped, yielding
     \begin{equation}
         s_0=s_\mathrm{a}^*-1
         \qquad \Rightarrow \qquad
         s_\mathrm{a}^{**}=s_\mathrm{a}^*-s_0=1.
         \label{eq:flat_top_clamping_phase_a}
     \end{equation}
-    Consequently, only the modulated phases \(\mathrm{b}\) and \(\mathrm{c}\) must be checked. Inserting \eqref{eq:flat_top_clamping_phase_a} into \eqref{eq:first_sector_hexagon_lin_comb_abc} gives
+    Consequently, only the modulated phases \(\mathrm{b}\) and \(\mathrm{c}\) must be checked. \pause Inserting \eqref{eq:flat_top_clamping_phase_a} into \eqref{eq:first_sector_hexagon_lin_comb_abc} gives
     \begin{equation}
         s_\mathrm{b}^{**}=1-2\tau_1, \qquad
         s_\mathrm{c}^{**}=1-2(\tau_1+\tau_2).
-    \end{equation}
+    \end{equation}\pause
     Because \(0\leq \tau_1\leq 1\) and \(0\leq \tau_1+\tau_2\leq 1\), it follows directly that
     \begin{equation}
         -1\leq s_\mathrm{b}^{**}\leq 1, \qquad -1\leq s_\mathrm{c}^{**}\leq 1.
-    \end{equation}
-    Thus, every reference in the \hl{first upper sector part of the hexagon} is realizable with flat-top PWM: phase \(\mathrm{a}\) is fixed at \(+1\), while phases \(\mathrm{b}\) and \(\mathrm{c}\) remain within the admissible interval. By symmetry, the \hl{entire voltage hexagon}, including its corners, can be reached.
+    \end{equation}\pause
+    Thus, every reference in the \hl{first upper sector part of the hexagon} is realizable with flat-top PWM: phase \(\mathrm{a}\) is fixed at \(+1\), while phases \(\mathrm{b}\) and \(\mathrm{c}\) remain within the admissible interval. \pause By symmetry, the \hl{entire voltage hexagon}, including its corners, can be reached.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3757,12 +3759,12 @@
         \qquad
         s_\mathrm{c}^{**}(\theta)=1-\sqrt{3}m^*\cos\!\left(\theta-\frac{\pi}{6}\right).
         \label{eq:flat_top_positive_a_sector}
-    \end{equation}
+    \end{equation}\pause
     Since
     \begin{equation}
         \cos\!\left(\theta\pm\frac{\pi}{6}\right)\in\left[\frac{1}{2},1\right]
         \qquad \forall\, \theta\in\left[-\frac{\pi}{6},\frac{\pi}{6}\right],
-    \end{equation}
+    \end{equation}\pause
     the following must hold to prevent clipping of a further phase:
     \begin{equation}
         1-\sqrt{3}m^*
@@ -3770,7 +3772,7 @@
         s_\mathrm{b}^{**}(\theta),\, s_\mathrm{c}^{**}(\theta)
         \leq
         1-\frac{\sqrt{3}}{2}m^*.
-    \end{equation}
+    \end{equation}\pause
     Therefore, requiring the non-clamped phases to stay within the \hl{linear modulation} range yields
     \begin{equation}
         1-\sqrt{3}m^* \geq -1
@@ -3790,17 +3792,17 @@
         \qquad
         \frac{2}{\sqrt{3}}<m^*\leq \frac{4}{\sqrt{3}}.
         \label{eq:flat_top_gamma_definition}
-    \end{equation}
+    \end{equation}\pause
     With \eqref{eq:flat_top_gamma_definition} and \eqref{eq:flat_top_positive_a_sector}, on the positive half-sector \(0\leq \theta\leq \nicefrac{\pi}{6}\), phase \(\mathrm{c}\) is clipped for
     \begin{equation}
         \theta\in\left[\frac{\pi}{6}-\gamma,\frac{\pi}{6}\right].
         \label{eq:region_I_flat_top_theta}
-    \end{equation}
+    \end{equation}\pause
     If \(\gamma>\nicefrac{\pi}{6}\), then additionally phase \(\mathrm{b}\) is clipped for
     \begin{equation}
         \theta\in\left[0,\gamma-\frac{\pi}{6}\right].
         \label{eq:region_II_flat_top_theta}
-    \end{equation}
+    \end{equation}\pause
     Hence, from inserting \eqref{eq:flat_top_gamma_definition} in \eqref{eq:region_I_flat_top_theta} and \eqref{eq:region_II_flat_top_theta}, the flat-top overmodulation splits into
     \begin{itemize}
         \item \textbf{Region I:} \(\nicefrac{2}{\sqrt{3}}<m^*\leq \nicefrac{4}{3}\),
@@ -3915,7 +3917,7 @@
     \begin{equation}
         \underline{s}^{**}(\theta)=s_{\upalpha}^{**}(\theta)+\mathrm{j}s_{\upbeta}^{**}(\theta)
     \end{equation}
-    denote the realized normalized voltage vector. Using the six clamping sectors and mirror symmetry around each sector center, the positive-sequence fundamental amplitude is
+    denote the realized normalized voltage vector. \pause Using the six clamping sectors and mirror symmetry around each sector center, the \hl{positive-sequence fundamental amplitude} is
     \begin{equation}
         m^{(1)}=
         \left|
@@ -3924,19 +3926,19 @@
         =
         \frac{6}{\pi}\int_{0}^{\pi/6}\Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}\,\mathrm{d}\theta.
         \label{eq:flat_top_fundamental_half_sector}
-    \end{equation}
+    \end{equation}\pause
     In \textbf{region I}, define the clipping onset
     \begin{equation}
         \theta_\mathrm{c}=\frac{\pi}{6}-\gamma,
         \qquad
         \frac{2}{\sqrt{3}}<m^*\leq \frac{4}{3}.
-    \end{equation}
+    \end{equation}\pause
     Then, on \(0\leq \theta\leq \theta_\mathrm{c}\) the reference is still realizable:
     \begin{equation}
         \underline{s}^{**}(\theta)=m^*e^{\mathrm{j}\theta}
         \qquad \Rightarrow \qquad
         \Re\!\left\{\underline{s}^{**}(\theta)e^{-\mathrm{j}\theta}\right\}=m^*.
-    \end{equation}
+    \end{equation}\pause
     On the clipped interval \(\theta_\mathrm{c}\leq \theta\leq \nicefrac{\pi}{6}\), one has
     \begin{equation}
         s_\mathrm{a}^{**}=1, \qquad
@@ -3965,7 +3967,7 @@
         =
         \frac{2}{3}\cos\theta+\frac{2}{\sqrt{3}}\sin\theta+\frac{m^*}{2}-\frac{\sqrt{3}m^*}{3}\sin(2\theta).
         \label{eq:flat_top_region1_integrand}
-    \end{equation}
+    \end{equation}\pause
     Therefore, the region-I fundamental amplitude follows from
     \begin{equation}
         m^{(1)}=
@@ -3979,7 +3981,7 @@
             \right)\mathrm{d}\theta
             \right].
         \label{eq:flat_top_region1_integral}
-    \end{equation}
+    \end{equation}\pause
     Evaluating the integrals and using \(\cos\gamma=\nicefrac{2}{\sqrt{3}m^*}\) yields
     \begin{equation}
         \begin{split}
@@ -4010,24 +4012,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Flat-top overmodulation: transition to full six-step}
-    In \textbf{region II}, i.e. $m^*>\nicefrac{4}{3}$, phase \(\mathrm{c}\) is clipped over the entire half-sector \(0\leq \theta\leq \nicefrac{\pi}{6}\), while phase \(\mathrm{b}\) is clipped additionally for
+    In \textbf{region II}, i.e., $m^*>\nicefrac{4}{3}$, phase \(\mathrm{c}\) is clipped over the entire half-sector \(0\leq \theta\leq \nicefrac{\pi}{6}\), while phase \(\mathrm{b}\) is clipped additionally for
     \begin{equation}
         0\leq \theta\leq \theta_\mathrm{b},
         \qquad
         \theta_\mathrm{b}=\gamma-\frac{\pi}{6}.
-    \end{equation}
-    The \hl{full six-step waveform} is reached when phase \(\mathrm{b}\) is also clipped over the complete half-sector, i.e.
+    \end{equation}\pause
+    The \hl{full six-step waveform} is reached when phase \(\mathrm{b}\) is also clipped over the complete half-sector, i.e.,
     \begin{equation}
         \theta_\mathrm{b}=\frac{\pi}{6}
         \qquad \Leftrightarrow \qquad
         \gamma=\frac{\pi}{3}.
-    \end{equation}
+    \end{equation}\pause
     Inserting this in \eqref{eq:flat_top_gamma_definition} gives the command value at which flat-top PWM reaches six-step operation:
     \begin{equation}
         \arccos\!\left(\frac{2}{\sqrt{3}m^*}\right)=\frac{\pi}{3}
         \qquad \Leftrightarrow \qquad
         m^*=\frac{4}{\sqrt{3}}.
-    \end{equation}
+    \end{equation}\pause
     Thus, the following derivation applies to the strict region-II interval
     \begin{equation}
         \frac{4}{3}<m^*<\frac{4}{\sqrt{3}}.
@@ -4048,7 +4050,7 @@
         \end{cases}
         \label{eq:flat_top_region2_piecewise_vector}
     \end{equation}
-    where on the second interval the same expressions as in region I apply, i.e. \eqref{eq:flat_top_region1_integrand}.
+    where on the second interval the same expressions as in region I apply, i.e., \eqref{eq:flat_top_region1_integrand}. \pause
     Hence,
     \begin{equation}
         m^{(1)}=
@@ -4062,7 +4064,7 @@
             \right)\mathrm{d}\theta
             \right].
         \label{eq:flat_top_region2_integral}
-    \end{equation}
+    \end{equation}\pause
     Evaluating \eqref{eq:flat_top_region2_integral} and again using \(\cos\gamma=\nicefrac{2}{\sqrt{3}m^*}\) yields
     \begin{equation}
         \begin{split}
@@ -4351,7 +4353,7 @@
         \end{column}
         \begin{column}{0.46\textwidth}
             For each sector, the SVM assignment problem \eqref
-            {eq:SVM_assignment_problem} can be solved algebraically or geometrically by introducing \hl{dual coordinates} perpendicular to the fundamental vectors of that sector. In sector one, the relevant active vectors form
+            {eq:SVM_assignment_problem} can be solved algebraically or geometrically by introducing \hl{dual coordinates perpendicular to the fundamental vectors} of that sector. In sector one, the relevant active vectors form
             \begin{equation}
                 \bm{s}_{\upalpha\upbeta}^* = \tau_1\bm{s}_{\mathrm{i}1} + \tau_2\bm{s}_{\mathrm{i}2}
                 \label{eq:dual_coord_sector1_example}
@@ -4362,18 +4364,18 @@
                 \qquad
                 \bm{s}_{\mathrm{i}2} = \begin{bmatrix}\nicefrac{2}{3} & \nicefrac{2}{\sqrt{3}}\end{bmatrix}^\top.
             \end{equation*}
-            From the component-wise representation
-            \begin{equation*}
-                s_\upalpha^* = \frac{4}{3}\tau_1 + \frac{2}{3}\tau_2,
-                \qquad
-                s_\upbeta^* = \frac{2}{\sqrt{3}}\tau_2.
-            \end{equation*}
-            we can derive for the dwell factors
-            \begin{equation*}
-                \tau_2 = \frac{\sqrt{3}}{2}s_\upbeta^*,
-                \qquad
-                \tau_1 = \frac{3}{4}s_\upalpha^* - \frac{\sqrt{3}}{4}s_\upbeta^*.
-            \end{equation*}
+            \onslide<2->{From the component-wise representation
+                    \begin{equation*}
+                        s_\upalpha^* = \frac{4}{3}\tau_1 + \frac{2}{3}\tau_2,
+                        \qquad
+                        s_\upbeta^* = \frac{2}{\sqrt{3}}\tau_2
+                    \end{equation*}}\onslide<3->{
+                    we can derive for the dwell factors
+                    \begin{equation*}
+                        \tau_2 = \frac{\sqrt{3}}{2}s_\upbeta^*,
+                        \qquad
+                        \tau_1 = \frac{3}{4}s_\upalpha^* - \frac{\sqrt{3}}{4}s_\upbeta^*.
+                    \end{equation*}}
         \end{column}
     \end{columns}
 \end{frame}
@@ -4383,7 +4385,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Dwell factors for all sectors}
-    Generalizing the dual coordinate approach to all sectors yields the following active-vector dwell factors table. Moreover, the inactive vectors are applied for the remaining time, i.e.,
+    Generalizing the dual coordinate approach to all sectors yields the following \hl{active-vector dwell factors table}. Moreover, the \hl{inactive vectors} are applied for the remaining time, i.e.,
     \begin{equation}
         \tau_0+\tau_7 = 1 - \sum_{j=1}^6 \tau_j.
         \label{eq:zero_vector_dwell_time_SVM}
@@ -4415,7 +4417,7 @@
 \begin{frame}
     \frametitle{Sector detection}
     \small
-    To avoid evaluating a numerically heavy $\theta = \operatorname{atan2}(s_\upbeta^*, s_\upalpha^*)$, to detect the relevant hexagon sector, a simple sign test can be used based on the following table:
+    To avoid evaluating a numerically heavy $\theta = \operatorname{atan2}(s_\upbeta^*, s_\upalpha^*)$, to detect the relevant hexagon sector, a simple sign test can be used based on the following table.
     \begin{table}
         \centering
         \setlength{\tabcolsep}{10pt}
@@ -4517,30 +4519,30 @@
             \draw[black,thick] (0,0.10) -- (3,0.10) -- (3,0.80) -- (5,0.80) -- (5,0.10) -- (8,0.10);
 
             \foreach \x/\state in {
-            0.5/{\bm{s}_{\mathrm{i}0}},
-            1.5/{\bm{s}_{\mathrm{i}1}},
-            2.5/{\bm{s}_{\mathrm{i}2}},
-            3.5/{\bm{s}_{\mathrm{i}7}},
-            4.5/{\bm{s}_{\mathrm{i}7}},
-            5.5/{\bm{s}_{\mathrm{i}2}},
-            6.5/{\bm{s}_{\mathrm{i}1}},
-            7.5/{\bm{s}_{\mathrm{i}0}}
-            } {
-            \node[statelabel] at (\x,3.25) {$\state$};
-            }
+                    0.5/{\bm{s}_{\mathrm{i}0}},
+                    1.5/{\bm{s}_{\mathrm{i}1}},
+                    2.5/{\bm{s}_{\mathrm{i}2}},
+                    3.5/{\bm{s}_{\mathrm{i}7}},
+                    4.5/{\bm{s}_{\mathrm{i}7}},
+                    5.5/{\bm{s}_{\mathrm{i}2}},
+                    6.5/{\bm{s}_{\mathrm{i}1}},
+                    7.5/{\bm{s}_{\mathrm{i}0}}
+                } {
+                    \node[statelabel] at (\x,3.25) {$\state$};
+                }
 
             \foreach \x/\dwlabel in {
-            0.5/{\tau_0},
-            1.5/{\tau_1},
-            2.5/{\tau_2},
-            3.5/{\tau_7},
-            4.5/{\tau_7},
-            5.5/{\tau_2},
-            6.5/{\tau_1},
-            7.5/{\tau_0}
-            } {
-            \node[timelabel] at (\x,-0.52) {$\dwlabel$};
-            }
+                    0.5/{\tau_0},
+                    1.5/{\tau_1},
+                    2.5/{\tau_2},
+                    3.5/{\tau_7},
+                    4.5/{\tau_7},
+                    5.5/{\tau_2},
+                    6.5/{\tau_1},
+                    7.5/{\tau_0}
+                } {
+                    \node[timelabel] at (\x,-0.52) {$\dwlabel$};
+                }
 
             \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (0,-0.95) -- (4.0,-0.95);
             \draw[{Latex[length=4pt,width=4pt]}-{Latex[length=4pt,width=4pt]}, thick] (4.0,-0.95) -- (8.0,-0.95);
@@ -4572,11 +4574,11 @@
         \tau_2 \begin{bmatrix} 1 \\ 1 \\ -1 \end{bmatrix}
         +
         \tau_7 \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}.
-    \end{equation}
-    For the \hl{symmetric zero-vector distribution} of centered and alternating SVM,
+    \end{equation}\pause
+    For the \hl{symmetric zero-vector distribution} of centered and alternating SVM, the passive dwell factors are
     \begin{equation}
         \tau_0 = \tau_7 = \frac{1-\tau_1-\tau_2}{2}.
-    \end{equation}
+    \end{equation}\pause
     Inserting this gives
     \begin{equation}
         \overline{\bm{s}}_\mathrm{abc}
@@ -4586,18 +4588,13 @@
             -\tau_1+\tau_2 &
             -\tau_1-\tau_2
         \end{bmatrix}^\top.
-    \end{equation}
+    \end{equation}\pause
     This is exactly the shifted phase reference from the min-max zero-sequence PWM \eqref{eq:shifted_three_phase_PWM_modulation_indices_min_max}:
     \begin{equation}
         \overline{\bm{s}}_\mathrm{abc} = \bm{s}^{**}_\mathrm{abc}.
     \end{equation}
     Hence, \hl{centered and alternating SVM is identical to carrier-based PWM with min-max zero-sequence injection} in the linear range. This statement applies to all sectors due to symmetry.
 \end{frame}
-
-
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4616,16 +4613,16 @@
         \qquad \theta=\omega t,
         \qquad 0\leq \theta<2\pi.
     \end{equation}
-    For harmonic analysis, we parameterize the same switching function over the \hl{electrical angle} \(\theta\), which is \hl{synchronized} with the fundamental control frequency. If the pattern has \(M\) commutations within one electrical period, it is characterized by the ordered \hl{switching-angle vector}
-    \begin{equation}
-        \bm{\alpha}=
-        \begin{bmatrix}
-            \alpha_1 & \alpha_2 & \ldots & \alpha_M
-        \end{bmatrix}^{\top},
-        \qquad
-        0<\alpha_1<\alpha_2<\ldots<\alpha_M<2\pi.
-    \end{equation}
-
+    \onslide<2->{For harmonic analysis, we parameterize the same switching function over the \hl{electrical angle} \(\theta\), which is \hl{synchronized} with the fundamental control frequency.}\onslide<2->{ If the pattern has \(M\) commutations within one electrical period, it is characterized by the ordered \hl{switching-angle vector}
+            \begin{equation}
+                \bm{\alpha}=
+                \begin{bmatrix}
+                    \alpha_1 & \alpha_2 & \ldots & \alpha_M
+                \end{bmatrix}^{\top},
+                \qquad
+                0<\alpha_1<\alpha_2<\ldots<\alpha_M<2\pi.
+            \end{equation}}%
+    \vspace{-0.4cm}
     \begin{figure}
         \begin{tikzpicture}[x=1.15cm,y=0.75cm,>=Latex]
             \draw[->] (0,0) -- (6.62,0) node[right] {$\theta$};
@@ -4667,83 +4664,85 @@
     \begin{columns}[t,onlytextwidth]
         \begin{column}{0.375\textwidth}
 
-            \par\vspace{0.25em}
-            \textbf{Half-wave symmetry (HWS):}
-            \[
-                s(\theta+\pi)=-s(\theta)
-            \]
-            the second half wave is obtained from the first half by sign inversion.
-
-            \vspace{1em}
-            \textbf{Quarter-wave symmetry (QWS):}
-            \[
-                s(\theta)=s(\pi-\theta),
-                \qquad
-                0\leq\theta\leq\frac{\pi}{2},
-            \]
-            is applied together with HWS.
+            \par\vspace{0.25em}%
+            \onslide<2->{%
+                    \textbf{Half-wave symmetry (HWS):}
+                    \[
+                        s(\theta+\pi)=-s(\theta)
+                    \]
+                    the second half wave is obtained from the first half by sign inversion.}
+            \onslide<3->{%
+                    \par\vspace{1em}%
+                    \textbf{Quarter-wave symmetry (QWS):}
+                    \[
+                        s(\theta)=s(\pi-\theta),
+                        \qquad
+                        0\leq\theta\leq\frac{\pi}{2},
+                    \]
+                    is applied together with HWS.}
         \end{column}
         \hfill
         \begin{column}{0.6\textwidth}
             \par\vspace{0.25em}
-            \begin{tikzpicture}[x=1.15cm,y=0.75cm,>=Latex]
-                \fill[signaldelta!30] (0,-1.28) rectangle (3.142,1.28);
-                \fill[signalepsilon!30] (3.142,-1.28) rectangle (6.283,1.28);
+            \onslide<2->{%
+                    \begin{tikzpicture}[x=1.15cm,y=0.75cm,>=Latex]
+                        \fill[signaldelta!30] (0,-1.28) rectangle (3.142,1.28);
+                        \fill[signalepsilon!30] (3.142,-1.28) rectangle (6.283,1.28);
 
-                \draw[->] (0,0) -- (6.55,0) node[right] {$\theta$};
-                \draw[->] (0,-1.42) -- (0,1.48) node[left, xshift=-1pt, yshift=6pt] {$s(\theta)$};
+                        \draw[->] (0,0) -- (6.55,0) node[right] {$\theta$};
+                        \draw[->] (0,-1.42) -- (0,1.48) node[left, xshift=-1pt, yshift=6pt] {$s(\theta)$};
 
-                \foreach \x in {1.571,3.142,4.712,6.283} {
-                        \draw[thin] (\x,0.08) -- (\x,-0.08);
-                    }
+                        \foreach \x in {1.571,3.142,4.712,6.283} {
+                                \draw[thin] (\x,0.08) -- (\x,-0.08);
+                            }
 
-                \draw[signalalpha, thick]
-                (0,1) -- (0.78,1) -- (0.78,-1) -- (1.62,-1) -- (1.62,1) -- (2.30,1) -- (2.30,-1) -- (3.142,-1);
-                \draw[signalalpha, thick, dashed]
-                (3.142,-1) -- (3.922,-1) -- (3.922,1) -- (4.762,1) -- (4.762,-1) -- (5.442,-1) -- (5.442,1) -- (6.283,1);
+                        \draw[signalalpha, thick]
+                        (0,1) -- (0.78,1) -- (0.78,-1) -- (1.62,-1) -- (1.62,1) -- (2.30,1) -- (2.30,-1) -- (3.142,-1);
+                        \draw[signalalpha, thick, dashed]
+                        (3.142,-1) -- (3.922,-1) -- (3.922,1) -- (4.762,1) -- (4.762,-1) -- (5.442,-1) -- (5.442,1) -- (6.283,1);
 
-                \node[font=\scriptsize] at (1.57,1.5) {independent};
-                \node[font=\scriptsize] at (4.71,1.5) {derived by HW};
+                        \node[font=\scriptsize] at (1.57,1.5) {independent};
+                        \node[font=\scriptsize] at (4.71,1.5) {derived by HW};
 
-                \node[below, yshift=-2pt] at (1.571,0) {$\nicefrac{\pi}{2}$};
-                \node[below, yshift=-2pt] at (3.142,0) {$\pi$};
-                \node[below, yshift=-2pt] at (4.712,0) {$\nicefrac{3\pi}{2}$};
-                \node[below, yshift=-2pt, xshift=-2pt] at (6.283,0) {$2\pi$};
-                \node[left, xshift=-2pt] at (0,1) {$+1$};
-                \node[left, xshift=-2pt] at (0,-1) {$-1$};
-            \end{tikzpicture}
-            \vspace{1em}
+                        \node[below, yshift=-2pt] at (1.571,0) {$\nicefrac{\pi}{2}$};
+                        \node[below, yshift=-2pt] at (3.142,0) {$\pi$};
+                        \node[below, yshift=-2pt] at (4.712,0) {$\nicefrac{3\pi}{2}$};
+                        \node[below, yshift=-2pt, xshift=-2pt] at (6.283,0) {$2\pi$};
+                        \node[left, xshift=-2pt] at (0,1) {$+1$};
+                        \node[left, xshift=-2pt] at (0,-1) {$-1$};
+                    \end{tikzpicture}}
+            \vspace{1em}%
+            \onslide<3->{
+                    \begin{tikzpicture}[x=1.15cm,y=0.75cm,>=Latex]
+                        \fill[signaldelta!30] (0,-1.28) rectangle (1.571,1.28);
+                        \fill[signalepsilon!30] (1.571,-1.28) rectangle (3.142,1.28);
+                        \fill[signalzeta!30] (3.142,-1.28) rectangle (6.283,1.28);
 
-            \begin{tikzpicture}[x=1.15cm,y=0.75cm,>=Latex]
-                \fill[signaldelta!30] (0,-1.28) rectangle (1.571,1.28);
-                \fill[signalepsilon!30] (1.571,-1.28) rectangle (3.142,1.28);
-                \fill[signalzeta!30] (3.142,-1.28) rectangle (6.283,1.28);
+                        \draw[->] (0,0) -- (6.55,0) node[right] {$\theta$};
+                        \draw[->] (0,-1.42) -- (0,1.48) node[left, xshift=-1pt, yshift=6pt] {$s(\theta)$};
 
-                \draw[->] (0,0) -- (6.55,0) node[right] {$\theta$};
-                \draw[->] (0,-1.42) -- (0,1.48) node[left, xshift=-1pt, yshift=6pt] {$s(\theta)$};
+                        \foreach \x in {1.571,3.142,4.712,6.283} {
+                                \draw[thin] (\x,0.08) -- (\x,-0.08);
+                            }
 
-                \foreach \x in {1.571,3.142,4.712,6.283} {
-                        \draw[thin] (\x,0.08) -- (\x,-0.08);
-                    }
+                        \draw[signalalpha, thick]
+                        (0,-1) -- (0.60,-1) -- (0.60,1) -- (1.12,1) -- (1.12,-1) -- (1.571,-1);
+                        \draw[signalalpha, thick, dashed]
+                        (1.571,-1) -- (2.022,-1) -- (2.022,1) -- (2.542,1) -- (2.542,-1) -- (3.142,-1)
+                        -- (3.142,1) -- (3.742,1) -- (3.742,-1) -- (4.262,-1) -- (4.262,1) -- (5.163,1) -- (5.163,-1) -- (5.683,-1) -- (5.683,1) -- (6.283,1);
 
-                \draw[signalalpha, thick]
-                (0,-1) -- (0.60,-1) -- (0.60,1) -- (1.12,1) -- (1.12,-1) -- (1.571,-1);
-                \draw[signalalpha, thick, dashed]
-                (1.571,-1) -- (2.022,-1) -- (2.022,1) -- (2.542,1) -- (2.542,-1) -- (3.142,-1)
-                -- (3.142,1) -- (3.742,1) -- (3.742,-1) -- (4.262,-1) -- (4.262,1) -- (5.163,1) -- (5.163,-1) -- (5.683,-1) -- (5.683,1) -- (6.283,1);
-
-                \node[font=\scriptsize] at (0.79,1.5) {independent};
-                \node[font=\scriptsize] at (2.36,1.5) {mirror by QW};
-                \node[font=\scriptsize] at (4.71,1.5) {derived by HW};
+                        \node[font=\scriptsize] at (0.79,1.5) {independent};
+                        \node[font=\scriptsize] at (2.36,1.5) {mirror by QW};
+                        \node[font=\scriptsize] at (4.71,1.5) {derived by HW};
 
 
-                \node[below, yshift=-2pt] at (1.571,0) {$\nicefrac{\pi}{2}$};
-                \node[below, yshift=-2pt] at (3.142,0) {$\pi$};
-                \node[below, yshift=-2pt] at (4.712,0) {$\nicefrac{3\pi}{2}$};
-                \node[below, yshift=-2pt, xshift=-2pt] at (6.283,0) {$2\pi$};
-                \node[left, xshift=-2pt] at (0,1) {$+1$};
-                \node[left, xshift=-2pt] at (0,-1) {$-1$};
-            \end{tikzpicture}
+                        \node[below, yshift=-2pt] at (1.571,0) {$\nicefrac{\pi}{2}$};
+                        \node[below, yshift=-2pt] at (3.142,0) {$\pi$};
+                        \node[below, yshift=-2pt] at (4.712,0) {$\nicefrac{3\pi}{2}$};
+                        \node[below, yshift=-2pt, xshift=-2pt] at (6.283,0) {$2\pi$};
+                        \node[left, xshift=-2pt] at (0,1) {$+1$};
+                        \node[left, xshift=-2pt] at (0,-1) {$-1$};
+                    \end{tikzpicture}}
         \end{column}
     \end{columns}
 \end{frame}
@@ -4758,19 +4757,19 @@
         0<\alpha_1<\ldots<\alpha_N<\pi,
         \qquad
         s(\theta+\pi)=-s(\theta).
-    \end{equation}
+    \end{equation}\pause
     With \(\alpha_0=0\) and \(\alpha_{N+1}=\pi\), the first half wave is
     \begin{equation}
         s_\mathrm{h}(\theta;\bm{\alpha}) = (-1)^i,
         \qquad
         \theta\in[\alpha_i,\alpha_{i+1}),
         \quad i\in\{0,\ldots,N\}.
-    \end{equation}
-    The evaluate the harmonic spectrum of \(s(\theta)\), we use the Fourier series expansion
+    \end{equation}\pause
+    To evaluate the harmonic spectrum of \(s(\theta)\), we use the Fourier series expansion
     \begin{equation}
         s(\theta)=\frac{a_0}{2}+\sum_{k=1}^{\infty}\left(a_k\cos(k\theta)+b_k\sin(k\theta)\right).
-    \end{equation}
-    Because of \hl{HWS}, \(a_0=0\) and only odd harmonics remain, i.e., \(a_k=b_k=0\) for even \(k\). Evaluating the Fourier integrals interval by interval gives for HWS, for odd \(k\),
+    \end{equation}\pause
+    Because of \hl{HWS}, \(a_0=0\) and only odd harmonics remain, i.e., \(a_k=b_k=0\) for even \(k\). \pause Evaluating the Fourier integrals interval by interval gives for HWS, for odd \(k\),
     \begin{equation}
         a_k(\bm{\alpha})=\frac{4}{k\pi}\sum_{i=1}^{N}(-1)^{i+1}\sin(k\alpha_i),
         \qquad
@@ -4788,7 +4787,7 @@
         s(\theta)=s(\pi-\theta),
         \qquad
         0\leq\theta\leq\frac{\pi}{2},
-    \end{equation}
+    \end{equation}\pause
     then only the first quarter wave must be parameterized:
     \begin{equation}
         \mathcal{A}_{\mathrm{QW}}=
@@ -4796,7 +4795,7 @@
         \bm{\alpha}\in\mathbb{R}^N \;\middle|\;
         0<\alpha_1<\ldots<\alpha_N<\frac{\pi}{2}
         \right\}.
-    \end{equation}
+    \end{equation}\pause
     We define that the first quarter wave starts at \(-1\), which, however, is an arbitrary choice:
     \begin{equation}
         s_\mathrm{q}(\theta;\bm{\alpha}) = (-1)^{i+1},
@@ -4805,7 +4804,7 @@
         \quad i\in\{0,\ldots,N\},
         \qquad
         \alpha_0=0,\; \alpha_{N+1}=\frac{\pi}{2}.
-    \end{equation}
+    \end{equation}\pause
     Then mirror symmetry eliminates the cosine family, so for odd \(k\) the \hl{QWS spectrum is fully described by}
     \begin{equation}
         a_k(\bm{\alpha})=0,
@@ -4847,10 +4846,10 @@
     \end{equation}
 
     \begin{itemize}
-        \item \(\mathcal{A}\) collects angle ordering, chosen symmetries (HW, QW, \dots), and further admissibility constraints.
-        \item \(\gamma_\ell\) denotes the selected spectral quantity, e.g. \(a_h\), \(b_h\), or a harmonic magnitude; \(\mathcal{S}\) indexes the weighted spectrum components.
-        \item \(\gamma_{\mathrm{fund}}\) is the quantity used to impose the desired fundamental amplitude \(m^*\).
-        \item Problem \eqref{eq:general_plant_independent_opp_rev3} is generally non-convex and requires a thoughtful numerical solver selection choice. As it is plant-independent, it can be pre-solved for arbitrary applications.
+        \item<2-> \(\mathcal{A}\) collects angle ordering, chosen symmetries (HW, QW, \dots), and further admissibility constraints.
+        \item<3-> \(\gamma_\ell\) denotes the selected spectral quantity, e.g. \(a_h\), \(b_h\), or a harmonic magnitude; \(\mathcal{S}\) indexes the weighted spectrum components.
+        \item<4-> \(\gamma_{\mathrm{fund}}\) is the quantity used to impose the desired fundamental amplitude \(m^*\).
+        \item<5-> Problem \eqref{eq:general_plant_independent_opp_rev3} is generally non-convex and requires a thoughtful numerical solver selection choice. As it is plant-independent, it can be pre-solved for arbitrary applications.
     \end{itemize}
 \end{frame}
 
@@ -4863,7 +4862,7 @@
     \begin{equation}
         \mathcal{A}_{\mathrm{HWS}}=
         \left\{\bm{\alpha}\in\mathbb{R}^N\;\middle|\;0<\alpha_1<\ldots<\alpha_N<\pi\right\}.
-    \end{equation}
+    \end{equation}\pause
     Both coefficient families \(a_h\) and \(b_h\) of odd order may be present, so exact harmonic elimination must be formulated coefficient-wise:
     \begin{equation}
         \begin{aligned}
@@ -4875,11 +4874,11 @@
             \qquad r\in\left\{1,\ldots,\left\lfloor\frac{N-2}{2}\right\rfloor\right\}.
         \end{aligned}
         \label{eq:general_she_hw_rev1}
-    \end{equation}
+    \end{equation}\pause
     Here, \(h_r\) are the targeted odd harmonic orders.
 
-    \begin{itemize}
-        \item The cost function $J$ is dropped since SHE targets exact elimination, i.e., zero magnitude of the selected harmonics (enforced by the constraints).
+    \begin{itemize}\pause
+        \item The cost function $J$ is dropped since SHE targets exact elimination, i.e., zero magnitude of the selected harmonics (enforced by the constraints).\pause
         \item Each canceled odd harmonic order \(h_r\) requires two scalar equalities, namely \(a_{h_r}=0\) and \(b_{h_r}=0\), i.e., at most \(\left\lfloor\frac{N-2}{2}\right\rfloor\) odd harmonic orders can be canceled in the HW case.
     \end{itemize}
 \end{frame}
@@ -4889,7 +4888,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Selective harmonic elimination (SHE): QWS case}
-    If quarter-wave symmetry is imposed in addition, then \(\bm{\alpha}\in\mathcal{A}_{\mathrm{QWS}}\) and the cosine family vanishes identically, i.e. \(a_h(\bm{\alpha})=0\). The SHE problem therefore simplifies to
+    If quarter-wave symmetry is imposed in addition, then \(\bm{\alpha}\in\mathcal{A}_{\mathrm{QWS}}\) and the cosine family vanishes, i.e., \(a_h(\bm{\alpha})=0\). \pause The SHE problem therefore simplifies to
     \begin{equation}
         \begin{aligned}
             \min_{\bm{\alpha}\in\mathcal{A}_{\mathrm{QWS}}} \quad & 0                       \\
@@ -4898,11 +4897,11 @@
             \qquad r\in\{1,\ldots,N-1\}.
         \end{aligned}
         \label{eq:general_she_qw_rev4}
-    \end{equation}
-    Here, \(h_r\) are the odd harmonic orders to be eliminated, for example \(5,7,11,13,\ldots\).
+    \end{equation}\pause
+    Here, \(h_r\) are the odd harmonic orders to be eliminated, for example \(5,7,11,13,\ldots\). \pause
 
     \begin{itemize}
-        \item QWS symmetry reduces each eliminated harmonic to one scalar constraint only.
+        \item QWS symmetry reduces each eliminated harmonic to one scalar constraint only.\pause
         \item Hence, with one fundamental constraint and \(N-1\) harmonic constraints, the number of switching angles \(N\) equals the number of constraints, which is a necessary condition for the existence of a solution.
     \end{itemize}
 \end{frame}
@@ -4919,7 +4918,7 @@
         b_5=0,
         \qquad
         b_7=0.
-    \end{equation}
+    \end{equation} \pause
     Here, the fundamental reference voltage is an arbitrary value. This yields the equation system
     \begin{equation}
         \begin{aligned}
@@ -4927,8 +4926,7 @@
             \frac{4}{5\pi}\left(-1+2\cos(5\alpha_1)-2\cos(5\alpha_2)+2\cos(5\alpha_3)\right) & = 0,   \\
             \frac{4}{7\pi}\left(-1+2\cos(7\alpha_1)-2\cos(7\alpha_2)+2\cos(7\alpha_3)\right) & = 0.
         \end{aligned}
-    \end{equation}
-
+    \end{equation}\pause
     One feasible solution is
     \begin{equation}
         \alpha_1=\SI{18.35}{\degree},
@@ -4936,7 +4934,7 @@
         \alpha_2=\SI{37.03}{\degree},
         \qquad
         \alpha_3=\SI{48.45}{\degree}.
-    \end{equation}
+    \end{equation}\pause
     In practice, such transcendental SHE equation systems are solved numerically by nonlinear root-finding solvers (e.g., Newton method).
 \end{frame}
 
@@ -5010,8 +5008,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Plant-dependent optimized pulse patterns}
-    In many applications, the relevant performance variable is not the converter voltage itself but a plant variable.
-    Then the OPP problem must include the \hl{plant dynamics} explicitly:
+    In many applications, the relevant performance variable is not the converter voltage itself but a plant variable. \pause Then the OPP problem must include the \hl{plant dynamics} explicitly:
     \begin{equation}
         \dot{\bm{x}}(t)=\bm{f}\bigl(\bm{x}(t),\bm{u}(t)\bigr),
         \qquad
@@ -5020,7 +5017,7 @@
     with the switched converter input
     \begin{equation}
         \bm{u}(t)=\frac{u_\mathrm{dc}(t)}{2}\,\bm{s}(t;\bm{\alpha}).
-    \end{equation}
+    \end{equation}\pause
     A general application-agnostic formulation is
     \begin{equation}
         \begin{aligned}
@@ -5049,17 +5046,17 @@
     \frametitle{Plant-dependent optimized pulse patterns: example applications}
     In \eqref{eq:general_plant_dependent_opp_rev3}, the cost function \(J\) is defined as a time average of a stage cost \(\ell\), which may address:
     \begin{itemize}
-        \item load-current mean-square-error reduction,
-        \item torque-ripple or acoustic-noise reduction,
+        \item load-current mean-square-error reduction,\pause
+        \item torque-ripple or acoustic-noise reduction,\pause
         \item power loss reduction within the plant and/or converter.
-    \end{itemize}
+    \end{itemize}\pause
     Further, the constraints \(c_r\) and \(d_q\) may enforce:
     \begin{itemize}
-        \item periodicity of the state trajectory,
-        \item admissible switching angle ranges,
-        \item maximum harmonic magnitudes,
+        \item periodicity of the state trajectory,\pause
+        \item admissible switching angle ranges,\pause
+        \item maximum harmonic magnitudes,\pause
         \item upper power loss limits, etc.
-    \end{itemize}
+    \end{itemize}\pause
     \begin{varblock}{Key idea}
         The optimization problem is no longer formulated directly on the converter behavior alone, but on the plant response generated by a converter switching pattern.
     \end{varblock}
@@ -5094,9 +5091,10 @@
         \end{circuitikz}
     \end{figure}
     \vspace{-0.25cm}
-    \begin{varblock}{}
-        An inverter is not an ideal actuator: its average terminal voltage does not exactly follow the commanded signal due to parasitic effects -- the so-called \hl{inverter nonlinearity}.
-    \end{varblock}
+    \onslide<2->{%
+            \begin{varblock}{}
+                An inverter is not an ideal actuator: its average terminal voltage does not exactly follow the commanded signal due to parasitic effects -- the so-called \hl{inverter nonlinearity}.
+            \end{varblock}}
     \vspace{-0.2cm}
     \begin{figure}
         \centering
@@ -5141,7 +5139,7 @@
                 \begin{circuitikz}[]
                     \ctikzset{amplifiers/scale=0.25} % Scale of amplifier
                     \draw (0,0) to [Tnpn, n=npn1, invert, bodydiode] ++(0,-2) coordinate (A)
-                    to [Tnpn, n=npn2, invert, bodydiode] ++(0,-2) coordinate (B)
+                        to [Tnpn, n=npn2, invert, bodydiode] ++(0,-2) coordinate (B)
                     ($(npn1.E)!0.5!(npn2.C)$) to [short, i=$i(t)$, *-o] ++(1.5,0) coordinate (C);
                     \draw (npn1.B) node[plain mono amp, anchor = out, name=amp1]{};
                     \draw (npn2.B) node[plain mono amp, anchor = out, name=amp2]{};
@@ -5193,57 +5191,57 @@
         \end{subfigure}
         %
         \onslide<2->{%
-            \begin{subfigure}{0.32\textwidth}
-                \centering
-                \begin{circuitikz}[]
-                    \draw (0,0) node[npn, name=npn1, bodydiode]{};
-                    \draw[signaldelta] (0,-1.5) node[npn, name=npn2, bodydiode, color=signaldelta]{};
-                    \draw (0,-1.5) node[npn]{};
-                    \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i>0$}, color=signaldelta] ++(0.5,0);
-                    \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
-                    \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=1$};
-                    \draw[signaldelta] (npn2.body E in) to (npn2.E);
-                    \draw[signaldelta] (npn2.body C in) to (npn2.C);
-                \end{circuitikz}
-                \\[1em]
-                \begin{circuitikz}[]
-                    \draw (0,0) node[npn, name=npn1, bodydiode]{};
-                    \draw (0,-1.5) node[npn, name=npn2, bodydiode]{};
-                    \draw[signaldelta] (0,-1.5) node[npn, color=signaldelta]{};
-                    \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i<0$}, color=signaldelta] ++(0.5,0);
-                    \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
-                    \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=1$};
-                \end{circuitikz}
-                \caption{Lower transistor on}
-            \end{subfigure}
-        }%
+                \begin{subfigure}{0.32\textwidth}
+                    \centering
+                    \begin{circuitikz}[]
+                        \draw (0,0) node[npn, name=npn1, bodydiode]{};
+                        \draw[signaldelta] (0,-1.5) node[npn, name=npn2, bodydiode, color=signaldelta]{};
+                        \draw (0,-1.5) node[npn]{};
+                        \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i>0$}, color=signaldelta] ++(0.5,0);
+                        \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
+                        \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=1$};
+                        \draw[signaldelta] (npn2.body E in) to (npn2.E);
+                        \draw[signaldelta] (npn2.body C in) to (npn2.C);
+                    \end{circuitikz}
+                    \\[1em]
+                    \begin{circuitikz}[]
+                        \draw (0,0) node[npn, name=npn1, bodydiode]{};
+                        \draw (0,-1.5) node[npn, name=npn2, bodydiode]{};
+                        \draw[signaldelta] (0,-1.5) node[npn, color=signaldelta]{};
+                        \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i<0$}, color=signaldelta] ++(0.5,0);
+                        \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
+                        \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=1$};
+                    \end{circuitikz}
+                    \caption{Lower transistor on}
+                \end{subfigure}
+            }%
         \onslide<3->{%
-            \begin{subfigure}{0.32\textwidth}
-                \centering
-                \begin{circuitikz}[]
-                    \draw (0,0) node[npn, name=npn1, bodydiode]{};
-                    \draw[signaldelta] (0,-1.5) node[npn, name=npn2, bodydiode, color=signaldelta]{};
-                    \draw (0,-1.5) node[npn]{};
-                    \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i>0$}, color=signaldelta] ++(0.5,0);
-                    \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
-                    \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=0$};
-                    \draw[signaldelta] (npn2.body E in) to (npn2.E);
-                    \draw[signaldelta] (npn2.body C in) to (npn2.C);
-                \end{circuitikz}
-                \\[1em]
-                \begin{circuitikz}[]
-                    \draw[signaldelta] (0,0) node[npn, bodydiode, color=signaldelta]{};
-                    \draw (0,0) node[npn, name=npn1]{};
-                    \draw[signaldelta] (npn1.body E in) to (npn1.E);
-                    \draw[signaldelta] (npn1.body C in) to (npn1.C);
-                    \draw (0,-1.5) node[npn, name=npn2, bodydiode]{};
-                    \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i<0$}, color=signaldelta] ++(0.5,0);
-                    \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
-                    \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=0$};
-                \end{circuitikz}
-                \caption{Both transistors off}
-            \end{subfigure}
-        }%
+                \begin{subfigure}{0.32\textwidth}
+                    \centering
+                    \begin{circuitikz}[]
+                        \draw (0,0) node[npn, name=npn1, bodydiode]{};
+                        \draw[signaldelta] (0,-1.5) node[npn, name=npn2, bodydiode, color=signaldelta]{};
+                        \draw (0,-1.5) node[npn]{};
+                        \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i>0$}, color=signaldelta] ++(0.5,0);
+                        \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
+                        \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=0$};
+                        \draw[signaldelta] (npn2.body E in) to (npn2.E);
+                        \draw[signaldelta] (npn2.body C in) to (npn2.C);
+                    \end{circuitikz}
+                    \\[1em]
+                    \begin{circuitikz}[]
+                        \draw[signaldelta] (0,0) node[npn, bodydiode, color=signaldelta]{};
+                        \draw (0,0) node[npn, name=npn1]{};
+                        \draw[signaldelta] (npn1.body E in) to (npn1.E);
+                        \draw[signaldelta] (npn1.body C in) to (npn1.C);
+                        \draw (0,-1.5) node[npn, name=npn2, bodydiode]{};
+                        \draw[signaldelta] (npn1.E) to [short,*-, color=signaldelta] ++(0.5,0) to [short, i={$i<0$}, color=signaldelta] ++(0.5,0);
+                        \draw (npn1.B) node[anchor=east, yshift=-1pt] {$s_{1}=0$};
+                        \draw (npn2.B) node[anchor=east, yshift=-1pt] {$s_{2}=0$};
+                    \end{circuitikz}
+                    \caption{Both transistors off}
+                \end{subfigure}
+            }%
     \end{figure}
 \end{frame}
 
@@ -5432,7 +5430,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Non-ideal switching}
-    During the on-switching \hl{commutation}, the semiconductor voltage does not change instantaneously due to various \hl{parasitic effects} (e.g., gate capacitance). The difference between an ideal and real switching trajectory can be interpreted as an \hl{equivalent delay}.
+    During the on-switching \hl{commutation}, the semiconductor voltage does not change instantaneously due to various \hl{parasitic effects} (e.g., gate capacitance). \onslide<2->{The difference between an ideal and real switching trajectory can be interpreted as an \hl{equivalent delay}.}
     \vspace{0.15cm}
     \begin{columns}[T,onlytextwidth]
         \begin{column}{0.55\textwidth}
@@ -5453,8 +5451,8 @@
 
 
                     % equivalent rectangular approximation
-                    \path[pattern=north west lines, pattern color=signalbeta] (\xone,0) rectangle (\xeq,\yhigh);
-                    \draw[signalbeta, thick] (\xone,\yhigh) -- (\xeq,\yhigh) -- (\xeq,0);
+                    \onslide<2->{\path[pattern=north west lines, pattern color=signalbeta] (\xone,0) rectangle (\xeq,\yhigh);
+                            \draw[signalbeta, thick] (\xone,\yhigh) -- (\xeq,\yhigh) -- (\xeq,0);}
 
                     % real commutation voltage and its area
                     \path[pattern=north east lines, pattern color=signaldelta] (\xone,0) -- (\xone,\yhigh)
@@ -5472,15 +5470,15 @@
                     \node[below] at (\xtwo,-0.92) {$t_2$};
 
                     % identified delays
-                    \draw[<->] (\xone,\yhigh+0.25) -- node[above, fill=white, inner sep=1pt, yshift=0.2cm] {$t_{\mathrm{T,on}}/t_{\mathrm{D,on}}$} (\xeq,\yhigh+0.25);
+                    \onslide<2->{\draw[<->] (\xone,\yhigh+0.25) -- node[above, fill=white, inner sep=1pt, yshift=0.2cm] {$t_{\mathrm{T,on}}/t_{\mathrm{D,on}}$} (\xeq,\yhigh+0.25);}
                     \draw[<->] (\xone,-0.78) -- node[below, fill=white, inner sep=1pt, yshift=-0.1cm] {$T_{\mathrm{comm}}$} (\xtwo,-0.78);
 
                     % annotations
                     \draw[thin] (3.7,1.95) -- (\xone,1.95);
                     \node[anchor=east, fill=white, inner sep=1pt] at (3.65,1.95) {$u_{\mathrm{ideal}}$};
 
-                    \draw[thin] (\xeq,3.0) -- (7.55,3.0);
-                    \node[anchor=west, fill=white, inner sep=1pt] at (7.6,3.0) {$u_{\mathrm{eq}}$};
+                    \onslide<2->{\draw[thin] (\xeq,3.0) -- (7.55,3.0);
+                            \node[anchor=west, fill=white, inner sep=1pt] at (7.6,3.0) {$u_{\mathrm{eq}}$};}
 
                     \draw[thin] (7.15,1.35) -- (8.15,1.7);
                     \node[anchor=west, fill=white, inner sep=1pt] at (8.2,1.7) {$u=u_{\mathrm{real}}$};
@@ -5490,19 +5488,19 @@
         \end{column}
         \hfill
         \begin{column}{0.41\textwidth}
-            \vspace{0.75cm}
-            The equiv. on-switching time delays
-            \[
-                t_{\mathrm{T,on}}(i)
-                = \frac{1}{u_\mathrm{dc}} \int_{t_1}^{t_2} u(\tau)\,\mathrm{d}\tau
-                \quad \text{if } i < 0
-            \]
-            \[
-                t_{\mathrm{D,on}}(i)
-                = \frac{1}{u_\mathrm{dc}} \int_{t_1}^{t_2} u(\tau)\,\mathrm{d}\tau
-                \quad \text{if } i > 0
-            \]
-            are load-dependent and can be obtained from measurements or device datasheets.
+            \vspace{0.75cm}\onslide<3->{
+                    The equiv. on-switching time delays
+                    \[
+                        t_{\mathrm{T,on}}(i)
+                        = \frac{1}{u_\mathrm{dc}} \int_{t_1}^{t_2} u(\tau)\,\mathrm{d}\tau
+                        \quad \text{if } i < 0
+                    \]
+                    \[
+                        t_{\mathrm{D,on}}(i)
+                        = \frac{1}{u_\mathrm{dc}} \int_{t_1}^{t_2} u(\tau)\,\mathrm{d}\tau
+                        \quad \text{if } i > 0
+                    \]
+                    are load-dependent and can be obtained from measurements or device datasheets.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -5543,11 +5541,11 @@
     For some given reference $d=\nicefrac{(s^*+1)}{2}$, the \hl{actual duty cycle} present at an inverter half-bridge output results from the interlocking time and non-ideal switching behavior as:
     \begin{equation}
         d'(d,i) = d - \frac{\operatorname{sgn}(i)}{T_\mathrm{p}}\left(t_0+t_\mathrm{T,on}(i)-t_\mathrm{D,on}(i)\right).
-    \end{equation}
+    \end{equation}\pause
     Also considering the forward voltage drop, the \hl{actual average inverter output voltage} during a pulse period is
     \begin{equation}
         \overline{u}_\mathrm{i} = u_\mathrm{dc}\left(d'(d,i) - \frac{1}{2}\right) - \Delta u_\mathrm{fwd}(d',i).
-    \end{equation}
+    \end{equation}\pause\vspace{-0.25cm}
     \begin{varblock}{Remark on model accuracy and compensation}
         The presented model is a simplified approximation of the inverter nonlinearity. Among others, specific driver and device characteristics, temperature dependencies, and the load impact can further influence the actual voltage error. Nevertheless, it provides a useful estimation of the expected voltage error and can be used for compensation in the control design (by inverting the above model).
     \end{varblock}
@@ -5571,11 +5569,11 @@
             \begin{circuitikz}
                 \draw
                 (0,0) to [short, o-*] ++(1,0) coordinate (A)
-                to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
-                to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
-                to [short, -o] ++(-1,0) coordinate (D)
-                (B) to [short] ++(-0.5, 0) coordinate (E)
-                (E) node[rground, rotate=-90, name = gnd1]{};
+                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
+                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
+                    to [short, -o] ++(-1,0) coordinate (D)
+                    (B) to [short] ++(-0.5, 0) coordinate (E)
+                    (E) node[rground, rotate=-90, name = gnd1]{};
                 \draw
                 ($(B) + (1.5,0)$) node[cute spdt up arrow, xscale=-1] (Sw1) {}
                 (A) -| (Sw1-out 1.n)
@@ -5607,94 +5605,94 @@
             \caption{2-level half bridge}
         \end{subfigure}
         \onslide<2->{%
-            \begin{subfigure}{0.32\textwidth}
-                \centering
-                \begin{circuitikz}
-                    \draw
-                    (0,0) to [short, o-*] ++(1,0) coordinate (A)
-                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
-                    to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
-                    to [short, -o] ++(-1,0) coordinate (D)
-                    (B) to [short] ++(-0.5, 0) coordinate (E)
-                    (E) node[rground, rotate=-90, name = gnd1]{};
-                    \draw
-                    ($(B) + (1.0,0)$) node[rotary switch ->=3 in 90 wiper 90, xscale=-1, anchor=out 2](Sw1){}
-                    (A) -| (Sw1-out 1.n)
-                    (C) -| (Sw1-out 3.s)
-                    (Sw1-in) to [short, -o] ++(1.25,0) coordinate (F)
-                    (Sw1-out 2.w) to [short] (B);
-                    \draw
-                    (F |- C) node[rground, anchor = south, name = gnd2]{}
-                    (F) to [open, v={$u(t)$}, voltage = straight] (gnd2);
-                \end{circuitikz}\\[1em]
-                \begin{tikzpicture}
-                    \begin{axis}[
-                            width=0.99\textwidth,
-                            height=0.375\textheight,
-                            xlabel={$t$},
-                            ylabel={$u$},
-                            xmin=0, xmax=1.2,
-                            ymin=-1.15, ymax=1.15,
-                            ytick={-1,0,1},
-                            yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
-                            xticklabels={},
-                            grid=both,
-                            axis lines=middle,
-                            xlabel style={anchor=west},
-                            ylabel style={anchor=south},
-                        ]
-                        \addplot[signalalpha, thick] coordinates {(0,-1) (0.1,-1) (0.1,0) (0.35,0) (0.35,1) (0.6,1) (0.6,0) (0.85,0) (0.85,-1) (1.1,-1) (1.1,0) (1.1,0) (1.2,0)};
-                    \end{axis}
-                \end{tikzpicture}
-                \caption{3-level half bridge}
-            \end{subfigure}
-        }%
+                \begin{subfigure}{0.32\textwidth}
+                    \centering
+                    \begin{circuitikz}
+                        \draw
+                        (0,0) to [short, o-*] ++(1,0) coordinate (A)
+                            to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (B)
+                            to [capacitor, -*, v={$\frac{u_\mathrm{dc}}{2}$}, voltage = straight] ++(0,-2) coordinate (C)
+                            to [short, -o] ++(-1,0) coordinate (D)
+                            (B) to [short] ++(-0.5, 0) coordinate (E)
+                            (E) node[rground, rotate=-90, name = gnd1]{};
+                        \draw
+                        ($(B) + (1.0,0)$) node[rotary switch ->=3 in 90 wiper 90, xscale=-1, anchor=out 2](Sw1){}
+                        (A) -| (Sw1-out 1.n)
+                        (C) -| (Sw1-out 3.s)
+                        (Sw1-in) to [short, -o] ++(1.25,0) coordinate (F)
+                            (Sw1-out 2.w) to [short] (B);
+                        \draw
+                        (F |- C) node[rground, anchor = south, name = gnd2]{}
+                        (F) to [open, v={$u(t)$}, voltage = straight] (gnd2);
+                    \end{circuitikz}\\[1em]
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                                width=0.99\textwidth,
+                                height=0.375\textheight,
+                                xlabel={$t$},
+                                ylabel={$u$},
+                                xmin=0, xmax=1.2,
+                                ymin=-1.15, ymax=1.15,
+                                ytick={-1,0,1},
+                                yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
+                                xticklabels={},
+                                grid=both,
+                                axis lines=middle,
+                                xlabel style={anchor=west},
+                                ylabel style={anchor=south},
+                            ]
+                            \addplot[signalalpha, thick] coordinates {(0,-1) (0.1,-1) (0.1,0) (0.35,0) (0.35,1) (0.6,1) (0.6,0) (0.85,0) (0.85,-1) (1.1,-1) (1.1,0) (1.1,0) (1.2,0)};
+                        \end{axis}
+                    \end{tikzpicture}
+                    \caption{3-level half bridge}
+                \end{subfigure}
+            }%
         \onslide<3->{%
-            \begin{subfigure}{0.32\textwidth}
-                \centering
-                \begin{circuitikz}
-                    \draw
-                    (0,0) to [short, o-*] ++(1,0) coordinate (A)
-                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (B)
-                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (C)
-                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (D)
-                    to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (E)
-                    to [short, -o] ++(-1,0) coordinate (F)
-                    (C) to [short] ++(-0.5, 0) coordinate (G)
-                    (G) node[rground, rotate=-90, name = gnd1]{};
-                    \draw
-                    ($(C) + (1.75,0)$) node[rotary switch ->=4 in 90 wiper 90, xscale=-1, anchor=in](Sw1){}
-                    (A) -| (Sw1-out 1.n)
-                    (E) -| (Sw1-out 4.s)
-                    (Sw1-in) to [short, -o] ++(1.25,0) coordinate (H)
-                    (Sw1-out 2.n) |- (B)
-                    (Sw1-out 3.s) |- (D);
-                    \draw
-                    (H |- E) node[rground, anchor = south, name = gnd2]{}
-                    (H) to [open, v={$u(t)$}, voltage = straight] (gnd2);
-                \end{circuitikz}\\[1em]
-                \begin{tikzpicture}
-                    \begin{axis}[
-                            width=0.99\textwidth,
-                            height=0.375\textheight,
-                            xlabel={$t$},
-                            ylabel={$u$},
-                            xmin=0, xmax=1.2,
-                            ymin=-1.15, ymax=1.15,
-                            ytick={-1,0,1},
-                            yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
-                            xticklabels={},
-                            grid=both,
-                            axis lines=middle,
-                            xlabel style={anchor=west},
-                            ylabel style={anchor=south},
-                        ]
-                        \addplot[signalalpha, thick] coordinates {(0,-1) (1/4,-1) (1/4,-1/3) (1/4+1/8,-1/3) (1/4+1/8,1/3) (2/4,1/3) (2/4,1) (3/4,1) (3/4,1/3) (3/4+1/8,1/3) (3/4+1/8,-1/3) (1,-1/3) (1,-1) (1.2,-1)};
-                    \end{axis}
-                \end{tikzpicture}
-                \caption{4-level half bridge}
-            \end{subfigure}
-        }%
+                \begin{subfigure}{0.32\textwidth}
+                    \centering
+                    \begin{circuitikz}
+                        \draw
+                        (0,0) to [short, o-*] ++(1,0) coordinate (A)
+                            to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (B)
+                            to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (C)
+                            to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{6}$}, voltage = straight] ++(0,-1.0) coordinate (D)
+                            to [capacitor, -*, v={$\frac{U_\mathrm{dc}}{3}$}, voltage = straight] ++(0,-1.0) coordinate (E)
+                            to [short, -o] ++(-1,0) coordinate (F)
+                            (C) to [short] ++(-0.5, 0) coordinate (G)
+                            (G) node[rground, rotate=-90, name = gnd1]{};
+                        \draw
+                        ($(C) + (1.75,0)$) node[rotary switch ->=4 in 90 wiper 90, xscale=-1, anchor=in](Sw1){}
+                        (A) -| (Sw1-out 1.n)
+                        (E) -| (Sw1-out 4.s)
+                        (Sw1-in) to [short, -o] ++(1.25,0) coordinate (H)
+                        (Sw1-out 2.n) |- (B)
+                        (Sw1-out 3.s) |- (D);
+                        \draw
+                        (H |- E) node[rground, anchor = south, name = gnd2]{}
+                        (H) to [open, v={$u(t)$}, voltage = straight] (gnd2);
+                    \end{circuitikz}\\[1em]
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                                width=0.99\textwidth,
+                                height=0.375\textheight,
+                                xlabel={$t$},
+                                ylabel={$u$},
+                                xmin=0, xmax=1.2,
+                                ymin=-1.15, ymax=1.15,
+                                ytick={-1,0,1},
+                                yticklabels={$-\frac{u_\mathrm{dc}}{2}$,$0$,$\frac{u_\mathrm{dc}}{2}$},
+                                xticklabels={},
+                                grid=both,
+                                axis lines=middle,
+                                xlabel style={anchor=west},
+                                ylabel style={anchor=south},
+                            ]
+                            \addplot[signalalpha, thick] coordinates {(0,-1) (1/4,-1) (1/4,-1/3) (1/4+1/8,-1/3) (1/4+1/8,1/3) (2/4,1/3) (2/4,1) (3/4,1) (3/4,1/3) (3/4+1/8,1/3) (3/4+1/8,-1/3) (1,-1/3) (1,-1) (1.2,-1)};
+                        \end{axis}
+                    \end{tikzpicture}
+                    \caption{4-level half bridge}
+                \end{subfigure}
+            }%
     \end{figure}
 \end{frame}
 
@@ -5709,30 +5707,30 @@
         \centering
         \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
             \draw (0,8) coordinate (A)
-            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
-            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-] ++(-2,0) coordinate (Y)
-            (B) to [short, *-] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
+                to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
+                to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-] ++(-2,0) coordinate (Y)
+                (B) to [short, *-] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
 
             \draw (Z) node[anchor=east, xshift=-0.35cm] {$N$};
 
             \draw (A)
             to [short, i=$i_\mathrm{dc}(t)$] ++(2.5,0) coordinate (E)
-            to [short, *-*] ++(4.5,0) coordinate (I)
-            to [short, *-*] ++(4.5,0) coordinate (M);
+                to [short, *-*] ++(4.5,0) coordinate (I)
+                to [short, *-*] ++(4.5,0) coordinate (M);
 
             \draw (E)
             to [TLnigbt, n=igbt1, invert, bodydiode] ++(0,-1.6) coordinate (Aa1)
-            to [short, -] ++(0,-0.2) coordinate (Aa1s)
-            to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-1.6) coordinate (Ua)
-            to [short] ++(0,-0.35) coordinate (UaO)
-            to [short] ++(0,-0.65) coordinate (Ua3)
-            to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-1.6) coordinate (Aa2)
-            to [short, -] ++(0,-0.2) coordinate (Aa2s)
-            to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-1.6) coordinate (Da)
-            to [short, -] ++(0,-0.2) coordinate (DaB);
+                to [short, -] ++(0,-0.2) coordinate (Aa1s)
+                to [TLnigbt, n=igbt2, invert, bodydiode] ++(0,-1.6) coordinate (Ua)
+                to [short] ++(0,-0.35) coordinate (UaO)
+                to [short] ++(0,-0.65) coordinate (Ua3)
+                to [TLnigbt, n=igbt3, invert, bodydiode] ++(0,-1.6) coordinate (Aa2)
+                to [short, -] ++(0,-0.2) coordinate (Aa2s)
+                to [TLnigbt, n=igbt4, invert, bodydiode] ++(0,-1.6) coordinate (Da)
+                to [short, -] ++(0,-0.2) coordinate (DaB);
 
             \node at (Z -| Aa1)[jump crossing] (cross1) {};
 
@@ -5742,14 +5740,14 @@
 
             \draw (I)
             to [TLnigbt, n=igbt5, invert, bodydiode] ++(0,-1.6) coordinate (Ba1)
-            to [short, -] ++(0,-0.2) coordinate (Ba1s)
-            to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-1.6) coordinate (Ub)
-            to [short] ++(0,-0.35) coordinate (UbO)
-            to [short] ++(0,-0.65) coordinate (Ub3)
-            to [TLnigbt, n=igbt7, invert, bodydiode] ++(0,-1.6) coordinate (Ba2)
-            to [short, -] ++(0,-0.2) coordinate (Ba2s)
-            to [TLnigbt, n=igbt8, invert, bodydiode] ++(0,-1.6) coordinate (Db)
-            to [short, -] ++(0,-0.2) coordinate (DbB);
+                to [short, -] ++(0,-0.2) coordinate (Ba1s)
+                to [TLnigbt, n=igbt6, invert, bodydiode] ++(0,-1.6) coordinate (Ub)
+                to [short] ++(0,-0.35) coordinate (UbO)
+                to [short] ++(0,-0.65) coordinate (Ub3)
+                to [TLnigbt, n=igbt7, invert, bodydiode] ++(0,-1.6) coordinate (Ba2)
+                to [short, -] ++(0,-0.2) coordinate (Ba2s)
+                to [TLnigbt, n=igbt8, invert, bodydiode] ++(0,-1.6) coordinate (Db)
+                to [short, -] ++(0,-0.2) coordinate (DbB);
 
             \draw ($(igbt6.E)!0.85!(igbt7.C)$) to [short, *-o, i_=$i_\mathrm{b}(t)$] ++ (2,0) coordinate (ub);
             \draw ($(ub)+(0,-1.6)$) node[rground, name = gnd3]{};
@@ -5759,14 +5757,14 @@
 
             \draw (M)
             to [TLnigbt, n=igbt9, invert, bodydiode] ++(0,-1.6) coordinate (Ca1)
-            to [short, -] ++(0,-0.2) coordinate (Ca1s)
-            to [TLnigbt, n=igbt10, invert, bodydiode] ++(0,-1.6) coordinate (Uc)
-            to [short] ++(0,-0.35) coordinate (UcO)
-            to [short] ++(0,-0.65) coordinate (Uc3)
-            to [TLnigbt, n=igbt11, invert, bodydiode] ++(0,-1.6) coordinate (Ca2)
-            to [short, -] ++(0,-0.2) coordinate (Ca2s)
-            to [TLnigbt, n=igbt12, invert, bodydiode] ++(0,-1.6) coordinate (Dc)
-            to [short, -] ++(0,-0.2) coordinate (DcB);
+                to [short, -] ++(0,-0.2) coordinate (Ca1s)
+                to [TLnigbt, n=igbt10, invert, bodydiode] ++(0,-1.6) coordinate (Uc)
+                to [short] ++(0,-0.35) coordinate (UcO)
+                to [short] ++(0,-0.65) coordinate (Uc3)
+                to [TLnigbt, n=igbt11, invert, bodydiode] ++(0,-1.6) coordinate (Ca2)
+                to [short, -] ++(0,-0.2) coordinate (Ca2s)
+                to [TLnigbt, n=igbt12, invert, bodydiode] ++(0,-1.6) coordinate (Dc)
+                to [short, -] ++(0,-0.2) coordinate (DcB);
 
             \draw ($(igbt10.E)!0.85!(igbt11.C)$) to [short, *-o, i_=$i_\mathrm{c}(t)$] ++ (2,0) coordinate (uc);
             \draw ($(uc)+(0,-1.6)$) node[rground, name = gnd4]{};
@@ -5821,38 +5819,38 @@
         \centering
         \begin{circuitikz}[scale=0.82, every node/.style={scale=0.82}]
             \draw (0,8) coordinate (A)
-            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
-            to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
-            (Z) node[rground, rotate=-90, name = gnd1]{}
-            (A) to [short, *-] ++(-2,0) coordinate (Y)
-            (B) to [short, *-] ++(-2,0) coordinate (X)
-            (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
+                to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (Z)
+                to [capacitor, *-*, v = $\frac{u_\mathrm{dc}(t)}{2}$, voltage = straight] ++(0,-4) coordinate (B)
+                (Z) node[rground, rotate=-90, name = gnd1]{}
+                (A) to [short, *-] ++(-2,0) coordinate (Y)
+                (B) to [short, *-] ++(-2,0) coordinate (X)
+                (Y) to [open, o-o, v = $u_\mathrm{dc}(t)$, voltage = straight] (X);
 
             \draw (Z) node[anchor=east, xshift=-0.35cm] {$N$};
             \draw (Z) to [short,-*] ++(0.75,0) coordinate (Zr);
 
             \draw (A)
             to [short, i=$i_\mathrm{dc}(t)$] ++(4,0) coordinate (E)
-            to [short, *-*] ++(3.8,0) coordinate (I)
-            to [short, *-*] ++(3.8,0) coordinate (M);
+                to [short, *-*] ++(3.8,0) coordinate (I)
+                to [short, *-*] ++(3.8,0) coordinate (M);
 
             \draw (E)
             to [TLnigbt, n=ttigbt1, invert, bodydiode] ++(0,-2.0) coordinate (Aa1)
-            to [short, -] ++(0,-2) coordinate (Ua)
-            to [short] ++(0,-2) coordinate (Aa2)
-            to [TLnigbt, n=ttigbt4, invert, bodydiode] ++(0,-2.0) coordinate (Da);
+                to [short, -] ++(0,-2) coordinate (Ua)
+                to [short] ++(0,-2) coordinate (Aa2)
+                to [TLnigbt, n=ttigbt4, invert, bodydiode] ++(0,-2.0) coordinate (Da);
 
             \draw (I)
             to [TLnigbt, n=ttigbt5, invert, bodydiode] ++(0,-2.0) coordinate (Ba1)
-            to [short, -] ++(0,-2) coordinate (Ub)
-            to [short] ++(0,-2) coordinate (Ba2)
-            to [TLnigbt, n=ttigbt8, invert, bodydiode] ++(0,-2.0) coordinate (Db);
+                to [short, -] ++(0,-2) coordinate (Ub)
+                to [short] ++(0,-2) coordinate (Ba2)
+                to [TLnigbt, n=ttigbt8, invert, bodydiode] ++(0,-2.0) coordinate (Db);
 
             \draw (M)
             to [TLnigbt, n=ttigbt9, invert, bodydiode] ++(0,-2.0) coordinate (Ca1)
-            to [short, -] ++(0,-2) coordinate (Uc)
-            to [short] ++(0,-2) coordinate (Ca2)
-            to [TLnigbt, n=ttigbt12, invert, bodydiode] ++(0,-2.0) coordinate (Dc);
+                to [short, -] ++(0,-2) coordinate (Uc)
+                to [short] ++(0,-2) coordinate (Ca2)
+                to [TLnigbt, n=ttigbt12, invert, bodydiode] ++(0,-2.0) coordinate (Dc);
 
             \draw (Da) to [short, *-*] (Db) to [short, *-*] (Dc) to [short, -*] (B);
 
@@ -5976,18 +5974,18 @@
         \centering
         \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
             \toprule
-            Pros & Cons                                                                 \\
+            Pros & Cons                                                                         \\
             \midrule
             \begin{itemize}
                 \item Improved output voltage quality (leading to less current harmonics)
-                \item Reduced voltage stress on individual components (lower $\mathrm{d}v/\mathrm{d}t$)
-                \item Potential for higher efficiency (lower switching losses)
+                \item<2-> Reduced voltage stress on individual components (lower $\mathrm{d}v/\mathrm{d}t$)
+                \item<3-> Potential for higher efficiency (lower switching losses)
             \end{itemize}
                  &
             \begin{itemize}
-                \item Increased design and driver complexity (due to higher component count)
-                \item Higher control and balancing requirements
-                \item Eventually uneven thermal stress on components
+                \item<4-> Increased design and driver complexity (due to higher component count)
+                \item<5-> Higher control and balancing requirements
+                \item<6-> Eventually uneven thermal stress on components
             \end{itemize} \\
             \bottomrule
         \end{tabular}
