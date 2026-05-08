@@ -1,0 +1,315 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Time discretization of dynamical systems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Runge-Kutta method %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Runge-Kutta method}
+    Consider a general nonlinear ODE
+    \begin{equation}\label{eq:system_det_dyn}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t) & = \bm{f}(\bm{x}(t), \bm{u}(t),t)\, , \quad \bm{x}(t_0)=\bm{x}_0\, , \\
+            \bm{y}(t)                               & =\bm{g}\left(\bm{x}(t),\bm{u}(t),t\right)
+        \end{split}
+    \end{equation}
+    with state $\bm{x}(t)\in \mathbb{R}^n$, input $\bm{u}(t)\in \mathbb{R}^m$, output $\bm{y}(t)\in \mathbb{R}^p$, time $t\in \mathbb{R}$, and nonlinear functions $\bm{f}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^n$ and $\bm{g}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^p$. For each discrete time step $k\in \mathbb{N}_0$ with step size $T_\mathrm{s}$, the state and output at time $t=(k+1)T_\mathrm{s}$ are approximated by the \hl{ Runge-Kutta (RK) method} as
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}\sum_{j=1}^{s}b_j\bm{h}_j\, , \quad \bm{h}_j  = \bm{f}\left(\bm{x}(t)+T_\mathrm{s} \sum_{l=1}^{s}\alpha_{j,l}\cdot\bm{h}_l, \,\,\bm{u}(t+c_j T_\mathrm{s})\right), \\
+            \bm{y}[k]   & = \bm{g}\left(\bm{x}[k],\bm{u}[k]\right)\,.
+        \end{split}
+        \label{eq:system_det_dyn_RK_explizit}
+    \end{equation}
+    Here, $s\in \mathbb{N}$ is the number of stages, $\bm{h}_j\in \mathbb{R}^n$ are the stage derivatives, and $b_j$, $\alpha_{j,l}$, and $c_j$ are the method coefficients (chosen for minimal integration error, e.g., \href{https://en.wikipedia.org/wiki/Butcher_tableau}{Butcher tableau}).
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Explicit Runge-Kutta method}
+    The RK-method \eqref{eq:system_det_dyn_RK_explizit} is called \hl{explicit} if $\alpha_{j,l}=0$ for all $l\geq j$, which allows to compute the stage derivatives sequentially without solving implicit equations.\\[1em]
+
+    \textbf{RK1 / explicit Euler}: The simplest explicit RK method  with $s=1$, $b_1=1$, $\alpha_{1,1}=0$, and $c_1=0$ leading to
+    \begin{equation}
+        \bm{x}[k+1] = \bm{x}[k] + T_\mathrm{s}\cdot \bm{f}\left(\bm{x}[k],\bm{u}[k]\right)\,.
+        \label{eq:RK1}
+    \end{equation}
+    \\[1em]
+    \textbf{RK4 / classical Runge-Kutta method}: A widely used explicit RK method is the fourth-order method (RK4) with $s=4$ stages and coefficients
+    \begin{equation}
+        \begin{split}
+            b_1          & = b_4 = \frac{1}{6}, \quad b_2 = b_3 = \frac{1}{3}, \\
+            c_1          & = 0, \quad c_2 = c_3 = \frac{1}{2}, \quad c_4 = 1,  \\
+            \alpha_{j,l} & =
+            \begin{cases}
+                0,   & l\geq j, \\
+                c_j, & l<j,
+            \end{cases}
+        \end{split}
+        \label{eq:RK4_coeff}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Explicit Runge-Kutta method(cont.)}
+    From \eqref{eq:RK4_coeff} one can calculate the next discrete time state using \hl{RK4} as
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1] & = \bm{x}[k] + \frac{T_\mathrm{s}}{6}\left(\bm{h}_1 + 2\bm{h}_2 + 2\bm{h}_3 + \bm{h}_4\right),                                                    \\
+            \bm{h}_1    & = \bm{f}\left(\vphantom{\frac{T_\mathrm{s}}{2}}\bm{x}(kT_\mathrm{s}),\bm{u}(kT_\mathrm{s})\right),                                               \\
+            \bm{h}_2    & = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + \frac{T_\mathrm{s}}{2}\cdot\bm{h}_1, \,\,\bm{u}((k+\frac{1}{2})T_\mathrm{s})\right),                       \\
+            \bm{h}_3    & = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + \frac{T_\mathrm{s}}{2}\cdot\bm{h}_2, \,\,\bm{u}((k+\frac{1}{2})T_\mathrm{s})\right),                       \\
+            \bm{h}_4    & = \bm{f}\left(\vphantom{\frac{T_\mathrm{s}}{2}}\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_3, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right).
+        \end{split}
+        \label{eq:RK4_calculation_law}
+    \end{equation}
+    \vspace{-0.2cm}
+    \begin{varblock}{}
+        While higher order methods can achieve better accuracy for the same step size, they require more function evaluations per step, which increases computational cost. The choice of method and step size should balance accuracy and numerical resources.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Runge-Kutta method(cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Explicit Runge-Kutta method(cont.)}
+    \begin{figure}[htbp]
+        \centering
+
+        %--------------------------------------------------
+        % Subfigure (a)
+        %--------------------------------------------------
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=1.0,>=Latex,line cap=round,line join=round]
+
+                % Axes
+                \draw[black, line width=0.9pt, -{Latex[length=3.6mm,width=2.4mm]}]
+                (0,0) -- (6.65,0) node[right=-1pt] {$\dfrac{t}{T_\mathrm{s}}$};
+                \draw[black, line width=0.9pt, -{Latex[length=3.6mm,width=2.4mm]}]
+                (0,0) -- (0,4.25) node[right] {$x$};
+
+                % Key x-positions
+                \def\xk{0.8}
+                \def\xkp{5.85}
+
+                % Curve x(t)
+                \draw[signaldelta, thick, domain=0:6.25, smooth, samples=200]
+                plot (\x,{0.42 + 0.07*\x + 0.075*\x*\x});
+
+                % Important points
+                \coordinate (Pk)  at (\xk,{0.42 + 0.07*\xk + 0.075*\xk*\xk});
+                \coordinate (Pkp) at (\xkp,{0.42 + 0.07*\xkp + 0.075*\xkp*\xkp});
+
+                % Euler extrapolation point
+                \coordinate (Pe) at (\xkp,1.48);
+
+                % Dotted helper lines
+                \draw[dashed] (\xk,0) -- (Pk);
+                \draw[dashed] (0,0 |- Pk) -- (Pk);
+                \draw[dashed] (\xkp,0) -- (Pkp);
+                \draw[dashed] (0,0 |- Pkp) -- (Pkp);
+
+                % Grey construction line
+                \draw[signalalpha, densely dotted, thick]
+                (Pk) -- (Pe);
+
+                % Short tangent-like segment h1
+                \draw[signalalpha, very thick]
+                ($(Pk)+(-0.35,-0.06)$) -- ($(Pk)+(0.35,0.06)$);
+
+                % Markers
+                \fill[black] (Pk) circle (1.8pt);
+                \fill[black] (Pkp) circle (1.8pt);
+                \fill[black] (Pe) circle (1.5pt);
+
+                % Error arrow e
+                \draw[black, thick, <->, >=Latex]
+                ($(Pkp)+(0.18,0)$) -- ($(Pe)+(0.18,0)$)
+                node[midway,right=2pt] {$e$};
+
+                % Labels
+                \node[below] at (\xk,0) {$k$};
+                \node[below] at (\xkp,0) {$k+1$};
+
+                \node[above] at (Pk) {$x[k]$};
+                \node[above left=0pt] at (Pkp) {$x[k+1]$};
+                \node at (3.75,2.25) {$x(t)$};
+
+                \node[below right=-2pt] at ($(Pk)+(0.02,-0.02)$) {$h_{1}$};
+
+            \end{tikzpicture}
+            \caption{Explicit Euler method (RK1)}
+            \label{fig:rk_euler}
+        \end{subfigure}
+        \hfill
+        %--------------------------------------------------
+        % Subfigure (b)
+        %--------------------------------------------------
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=1.0,>=Latex,line cap=round,line join=round]
+
+                % Axes
+                \draw[black, line width=0.9pt, -{Latex[length=3.6mm,width=2.4mm]}]
+                (0,0) -- (6.65,0) node[right=-1pt] {$\dfrac{t}{T_\mathrm{s}}$};
+                \draw[black, line width=0.9pt, -{Latex[length=3.6mm,width=2.4mm]}]
+                (0,0) -- (0,4.25) node[right] {$x$};
+
+                % Key x-positions
+                \def\xk{0.8}
+                \def\xkh{3.05}
+                \def\xkp{5.85}
+
+                % Curve x(t)
+                \draw[signaldelta, thick, domain=0:6.25, smooth, samples=200]
+                plot (\x,{0.42 + 0.07*\x + 0.075*\x*\x});
+
+                % Important points on curve
+                \coordinate (Pk)   at (\xk,{0.42 + 0.07*\xk + 0.075*\xk*\xk});
+                \coordinate (Ph)   at (\xkh,{0.42 + 0.07*\xkh + 0.075*\xkh*\xkh});
+                \coordinate (Pkp)  at (\xkp,{0.42 + 0.07*\xkp + 0.075*\xkp*\xkp});
+
+                % RK stage approximation points
+                \coordinate (P2) at (\xkh,0.96);
+                \coordinate (P3) at (\xkh,1.57);
+                \coordinate (P4) at (\xkp,3.10);
+
+                % Helper lines
+                \draw[dashed] (\xk,0) -- (Pk);
+                \draw[dashed] (0,0 |- Pk) -- (Pk);
+                \draw[dashed] (\xkh,0) -- (P2);
+                \draw[dashed] (\xkh,0) -- (P3);
+                \draw[dashed] (\xkp,0) -- (Pkp);
+                \draw[dashed] (0,0 |- Pkp) -- (Pkp);
+
+                % Construction lines
+                \draw[signalalpha, densely dotted, thick] (Pk) -- (P2);
+                \draw[signalalpha, densely dotted, thick] (Pk) -- (P3);
+                \draw[signalalpha, densely dotted, thick] (Pk) -- (P4);
+
+                % Stage slopes
+                \draw[signalalpha, very thick]
+                ($(Pk)+(-0.35,-0.06)$) -- ($(Pk)+(0.35,0.06)$);
+
+                \draw[signalalpha, very thick]
+                ($(P2)+(-0.35,-0.13)$) -- ($(P2)+(0.35,0.13)$);
+
+                \draw[signalalpha, very thick]
+                ($(P3)+(-0.35,-0.17)$) -- ($(P3)+(0.35,0.17)$);
+
+                \draw[signalalpha, very thick]
+                ($(P4)+(-0.35,-0.29)$) -- ($(P4)+(0.35,0.29)$);
+
+                % Markers
+                \fill[black] (Pk) circle (1.8pt);
+                \fill[black] (Pkp) circle (1.8pt);
+                \fill[black] (P4) circle (1.5pt);
+                \fill[black] (P2) circle (1.5pt);
+                \fill[black] (P3) circle (1.5pt);
+
+                % Labels
+                \node[below] at (\xk,0) {$k$};
+                \node[below] at (\xkh,0) {$k+\nicefrac{1}{2}$};
+                \node[below] at (\xkp,0) {$k+1$};
+
+                \node[above = 1pt] at (Pk) {$x[k]$};
+                \node[above left] at (Pkp) {$x[k+1]$};
+                \node at (4.75,2.0) {$x(t)$};
+
+                \node[below right=-2pt] at ($(Pk)+(0.02,-0.02)$) {$h_{1}$};
+                \node[below right=-2pt] at (P2) {$h_{2}$};
+                \node[above=2pt] at (P3) {$h_{3}$};
+                \node[right=1pt] at ($(P4)+(0.02,-0.02)$) {$h_{4}$};
+
+            \end{tikzpicture}
+            \caption{Classical Runge-Kutta method (RK4)}
+            \label{fig:rk_classical}
+        \end{subfigure}
+
+        \caption{Basic principle of explicit Runge-Kutta discretization for a representative scalar state $x$}
+        \label{fig:rk_principle}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Implicit Runge-Kutta method}
+    A RK method is called \hl{implicit} if $\alpha_{j,l}\neq 0$ for some $l\geq j$, which requires to solve implicit equations for the stage derivatives $\bm{h}_j$. Implicit methods are typically more computationally expensive per step but can offer better stability properties.\\
+    \textbf{Implicit Euler method (IRK1)}: The implicit Euler method is a first-order implicit RK method with $s=1$, $b_1=1$, $\alpha_{1,1}=1$, and $c_1=1$ leading to
+    \begin{equation}
+        \bm{x}[k+1] = \bm{x}[k] + T_\mathrm{s}\cdot \bm{f}\left(\bm{x}[k+1],\bm{u}[k+1]\right)\,.
+        \label{eq:IRK1}
+    \end{equation}
+    \\
+    \textbf{Implicit classical Runge-Kutta (IRK4)}: The implicit version of the classical RK4 method can be defined by using the same coefficients as in \eqref{eq:RK4_coeff} but with $\alpha_{j,l}=c_j$ for all $l<j$ and $\alpha_{j,j}=c_j$ for all $j$ leading to
+    \begin{equation}
+        \begin{gathered}
+            \bm{x}[k+1]  = \bm{x}[k] + \frac{T_\mathrm{s}}{6}\left(\bm{h}_1 + 2\bm{h}_2 + 2\bm{h}_3 + \bm{h}_4\right),                   \\
+            \bm{h}_1     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_1, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \quad
+            \bm{h}_2     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_2, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \\
+            \bm{h}_3     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_3, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \quad
+            \bm{h}_4     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_4, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right).
+        \end{gathered}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Exact discretization for linear systems}
+    Consider a linear time-invariant system (LTI) state-space representation
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t) & = \bm{A}\bm{x}(t) + \bm{B}\bm{u}(t), \quad \bm{x}(t_0)=\bm{x}_0, \\
+            \bm{y}(t)                               & = \bm{C}\bm{x}(t) + \bm{D}\bm{u}(t),
+        \end{split}
+        \label{eq:LTI_state_space}
+    \end{equation}
+    with the constant matrices $\bm{A}\in \mathbb{R}^{n\times n}$, $\bm{B}\in \mathbb{R}^{n\times m}$, $\bm{C}\in \mathbb{R}^{p\times n}$, and $\bm{D}\in \mathbb{R}^{p\times m}$. Assuming zero-order hold (ZOH) for the input $\bm{u}(t)$, the \hl{exact discrete-time representation} is given by
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1] & = \bm{A}_\mathrm{d}\bm{x}[k] + \bm{B}_\mathrm{d}\bm{u}[k], \\
+            \bm{y}[k]   & = \bm{C}_\mathrm{d}\bm{x}[k] + \bm{D}_\mathrm{d}\bm{u}[k],
+        \end{split}
+        \label{eq:exact_discretization}
+    \end{equation}
+    where $\bm{C}_\mathrm{d}  = \bm{C}$, $\bm{D}_\mathrm{d}  = \bm{D}$, and
+    \begin{equation}
+        \begin{split}
+            \bm{A}_\mathrm{d}  = e^{\bm{A}T_\mathrm{s}}=\sum_{i=0}^{\infty} \frac{(\bm{A}T_\mathrm{s})^i}{i!}, \quad
+            \bm{B}_\mathrm{d}  = \int_{0}^{T_\mathrm{s}} e^{\bm{A}\tau}\mathrm{d}\tau \cdot \bm{B}=\bm{A}^{-1}(e^{\bm{A}T_\mathrm{s}}-\bm{I})\bm{B}.
+        \end{split}
+        \label{eq:exact_discretization_matrices}
+    \end{equation}
+    The \hl{matrix exponential} $e^{\bm{A}T_\mathrm{s}}$ can be numerically expensive to compute and, therefore, is typically precomputed offline.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Approximate discretization for linear systems}
+    The \hl{explicit Euler method (RK1)} for the LTI system \eqref{eq:LTI_state_space} is given by
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k] + \bm{B}\bm{u}[k]) = (\bm{I} + T_\mathrm{s}\bm{A})\bm{x}[k] + T_\mathrm{s}\bm{B}\bm{u}[k], \\
+            \bm{y}[k]   & = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k].
+        \end{split}
+    \end{equation}
+    This can be found by either a first-order Taylor series expansion of the matrix exponential \eqref{eq:exact_discretization_matrices} or by applying the RK1 method \eqref{eq:RK1} directly to the LTI system. Likwise, the \hl{implicit Euler method (IRK1)} for the LTI system is given by
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1]  = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k+1] + \bm{B}\bm{u}[k+1])\quad             \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k]
+        \end{split}
+    \end{equation}
+    leading to
+    \begin{equation}
+        \begin{split}
+            \bm{x}[k+1]  = (\bm{I} - T_\mathrm{s}\bm{A})^{-1}\bm{x}[k] + (\bm{I} - T_\mathrm{s}\bm{A})^{-1}T_\mathrm{s}\bm{B}\bm{u}[k+1], \quad
+            \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k].
+        \end{split}
+    \end{equation}
+
+\end{frame}

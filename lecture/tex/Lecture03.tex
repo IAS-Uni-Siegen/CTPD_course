@@ -528,6 +528,8 @@
     \end{equation}
 \end{frame}
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Synchronous machine (SM) rotor types %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -828,7 +830,234 @@
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Discrete-time machine models}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Time discretization}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RK1 discrete-time model of the nonlinear PMSM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{RK1 discrete-time model of the nonlinear PMSM model}
+    Based on the nonlinear flux ODE PMSM \eqref{eq:basic_PMSM_model_set}
+    \begin{equation*}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)  = \bm{u}_\mathrm{s,dq}(t) - R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
+    \end{equation*}
+    pplying the \hl{excplicit Euler method (RK1)} from \eqref{eq:RK1} yields the discrete-time model
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq}[k+1] = \bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k]- \omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k]\right),
+    \end{equation}
+    where $T_\mathrm{s}$ is the sampling period and $k$ is the \hl{discrete time index}. Likewise, the \hl{implicit Euler method (IRK1)} from \eqref{eq:IRK1} gives
+    \begin{equation}
+        \begin{split}
+            \bm{\psi}_\mathrm{s,dq}[k+1]                 & = \bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k+1] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k+1]- \omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1]\right)                        \\
+            \Leftrightarrow \bm{\psi}_\mathrm{s,dq}[k+1] & = \left(\bm{I} + T_\mathrm{s}\omega[k+1]\bm{J}\right)^{-1}\left(\bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k+1] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k+1]\right)\right).
+        \end{split}
+        \label{eq:IRK1_nonlinear_flux_ODE_PMSM}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RK1 discrete-time model of the nonlinear PMSM model (con.t) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{RK1 discrete-time model of the nonlinear PMSM model (cont.)}
+    Since  the first-order RK methods are known to be inaccurate, we analyze the \hl{induced voltage terms} of the RK1 and IRK1 discrete-time models:
+    \begin{equation}
+        \text{RK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k] \quad \text{vs.} \quad \text{IRK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].
+        \label{eq:induc_voltages_RK1_IRK1_nonlinear_flux_ODE_PMSM}
+    \end{equation}
+    Considering the $\nicefrac{\pi}{2}$ rotation of $\bm{J}$ from \eqref{eq:J_rotation}, we can directly conclude that the induced voltage is orthogonal to the flux linkage vector at time $k$:
+    \begin{equation*}
+        \text{RK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \frac{\pi}{2}.
+    \end{equation*}
+    For the IRK1 method, we first need to express $\bm{\psi}_\mathrm{s,dq}[k+1]$ in terms of $\bm{\psi}_\mathrm{s,dq}[k]$: neglecting the input and ohmic voltage terms in \eqref{eq:IRK1_nonlinear_flux_ODE_PMSM} gives
+    $$
+        \bm{\psi}_\mathrm{s,dq}[k+1] \approx \left(\bm{I} + T_\mathrm{s}\omega[k+1]\bm{J}\right)^{-1}\bm{\psi}_\mathrm{s,dq}[k] = \frac{1}{1+(T_\mathrm{s}\omega[k+1])^2}\left(\bm{I} - T_\mathrm{s}\omega[k+1]\bm{J}\right)\bm{\psi}_\mathrm{s,dq}[k].
+    $$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RK1 discrete-time model of the nonlinear PMSM model (con.t) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{RK1 discrete-time model of the nonlinear PMSM model (cont.)}
+    Substituting this approximation into the IRK1 induced voltage term from \eqref{eq:induc_voltages_RK1_IRK1_nonlinear_flux_ODE_PMSM} yields
+    \begin{equation*}
+        \begin{split}
+            \bm{u}_\mathrm{ind.} & = -\omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1] \\ &\approx -\frac{\omega[k+1]}{1+(T_\mathrm{s}\omega[k+1])^2}(\underbrace{\bm{J}\bm{\psi}_{\mathrm{s,dq}}[k]}_{\text{orthogonal to } \bm{\psi}_\mathrm{s,dq}[k]} - \underbrace{T_\mathrm{s}\omega[k+1]\bm{I}\bm{\psi}_\mathrm{s,dq}[k]}_{\text{parallel to} \bm{\psi}_\mathrm{s,dq}[k]} ).
+        \end{split}
+    \end{equation*}
+    Hence, the IRK1 induced voltage vector relative to the flux vector $\bm{\psi}_\mathrm{s,dq}[k]$ is given by
+    \begin{equation*}
+        \text{IRK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \arctan\left(\frac{1}{T_\mathrm{s}\omega[k+1]}\right) = \frac{\pi}{2} - \arctan\left(T_\mathrm{s}\omega[k+1]\right).
+    \end{equation*}
+    Hence, for any $\omega[k+1]>0$, the IRK1 induced voltage vector is less than $\nicefrac{\pi}{2}$ shifted towards the flux vector.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RK1 discrete-time model of the nonlinear PMSM model (con.t) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{RK1 discrete-time model of the nonlinear PMSM model (cont.)}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[scale=0.93, >=Latex, line cap=round, line join=round]
+            % fixed axes
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[below right=-1pt] {$\alpha$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above left=-1pt] {$\beta$};
+
+            % dq axes for the beginning of the step
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$d$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$q$};
+
+            % only the relevant circular arc between the alpha-axis and the larger angle
+            \draw[black, dashed, line width=0.8pt] (3.55,0) arc[start angle=0,end angle=180,radius=3.55];
+
+            % flux vectors
+            \coordinate (Psik) at (70:3.553);
+            \coordinate (Psikp) at (42:3.553);
+            \draw[signalalpha, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}] (0,0) -- (Psik);
+            \draw[signalalpha, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}] (0,0) -- (Psikp);
+            \fill[black] (Psik) circle (1.6pt);
+            \fill[black] (Psikp) circle (1.6pt);
+
+            % induced voltages
+            \draw[signaldelta, dashed, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}]
+            (Psik) -- ++(70-90:1.5);
+            \draw[signaldelta, dashed, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}]
+            (Psik) -- ++(42-90:1.5);
+            \draw[signaldelta, dashed, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}]
+            (Psikp) -- ++(42-90:1.5);
+
+
+            % labels
+            \node[above, signalalpha] at (Psik) {$\bm{\psi}_{\mathrm{dq}}[k]$};
+            \node[right, signalalpha] at (Psikp) {$\bm{\psi}_{\mathrm{dq}}[k{+}1]$};
+
+            \node[above right, signaldelta] at (55:3.6) {$-\omega_{\mathrm{rs}}[k]\,\bm{J}\bm{\psi}_{\mathrm{dq}}[k]$ (RK1)};
+            \node[right, signaldelta] at (27:3.75) {$-\omega_{\mathrm{rs}}[k{+}1]\,\bm{J}\bm{\psi}_{\mathrm{dq}}[k{+}1]$ (IRK1)};
+        \end{tikzpicture}
+        \caption{Impact of the time discretization on the induced voltage interpretation: in the explicit RK1 case, the induced voltage vector tends to increase the flux vector length in the next time step (excess virtual energy; lack of damping), while in the implicit IRK1 case, the induced voltage vector tends to decrease the flux vector length in the next time step (virtual energy dissipation; added damping).}
+        \label{fig:rk1_irk1_induced_voltage_angle_dependency}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: discretize in $\upalpha\upbeta$-frame first  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path: discretize in $\upalpha\upbeta$-frame first}
+    Instead of the $\mathrm{dq}$ model \eqref{eq:basic_PMSM_model_set}, we can also start from the \hl{$\upalpha\upbeta$ flux linkage ODE}\footnote{Compare derivation again: \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\upalpha\upbeta}(t) = \bm{u}_{\upalpha\upbeta}(t) - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(t).
+        \label{eq:PMSM_flux_ODE_alpha_beta}
+    \end{equation}
+    The \hl{explicit RK1 discretization} of this ODE is given by
+    \begin{equation}
+        \bm{\psi}_{\upalpha\upbeta}[k+1] = \bm{\psi}_{\upalpha\upbeta}[k] + T_\mathrm{s}\left(\bm{u}_{\upalpha\upbeta}[k] - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}[k]\right).
+    \end{equation}
+    Applying the Park transformation \eqref{eq:Park_transformation} to both sides yields
+    \begin{equation}
+        \bm{T}_\mathrm{p}(\varepsilon[k+1])\bm{\psi}_{\mathrm{dq}}[k+1] = \bm{T}_\mathrm{p}(\varepsilon[k])\left(\bm{\psi}_\mathrm{dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{dq}[k] - R_\mathrm{s}\,\bm{i}_\mathrm{dq}[k]\right)\right).
+    \end{equation}
+    Assuming a nearly constant rotor speed $\omega[k]=\omega[k+1]$ during two sampling steps
+    $$
+        \bm{T}^{-1}_\mathrm{p}(\varepsilon[k+1])\bm{T}_\mathrm{p}(\varepsilon[k])=\bm{T}_\mathrm{p}(-\varepsilon[k+1])\bm{T}_\mathrm{p}(\varepsilon[k]) = \bm{T}_\mathrm{p}(\varepsilon[k]-\varepsilon[k+1]) = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s}),
+    $$
+    we can rewrite the above equation as
+    \begin{equation}
+        \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_{\mathrm{dq}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right)\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.)}
+    Mildly rearranging the above equation yields for the \hl{RK1 case}
+    \begin{equation}
+        \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{\psi}_{\mathrm{dq}}[k] - \left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]+\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right).
+    \end{equation}
+    Applying the \hl{analogous steps for the IRK1} case starting from \eqref{eq:PMSM_flux_ODE_alpha_beta} yields
+    \begin{equation}
+        \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{\psi}_{\mathrm{dq}}[k] - \left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]+T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k+1] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k+1]\right).
+    \end{equation}
+    Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that the induced voltage terms are identical for both discretization paths:
+    \begin{equation*}
+        \bm{u}_\mathrm{ind.}=T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k] = T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k].
+    \end{equation*}
+    Not considering the input and ohmic voltage impacts, this term can be interpreted as the \hl{flux change in between two sampling steps}:
+    \begin{equation}
+        \frac{\bm{\psi}_{\mathrm{dq}}[k+1] - \bm{\psi}_{\mathrm{dq}}[k]}{T_\mathrm{s}}=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k].
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.)}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[scale=0.93, >=Latex, line cap=round, line join=round]
+            % fixed axes
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[below right=-1pt] {$\alpha$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above left=-1pt] {$\beta$};
+
+            % dq axes for the beginning of the step
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$d$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$q$};
+
+            % only the relevant circular arc between the alpha-axis and the larger angle
+            \draw[black, dashed, line width=0.8pt] (3.55,0) arc[start angle=0,end angle=180,radius=3.55];
+
+            % flux vectors
+            \coordinate (Psik) at (70:3.553);
+            \coordinate (Psikp) at (42:3.553);
+            \draw[signalalpha, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}] (0,0) -- (Psik);
+            \draw[signalalpha, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}] (0,0) -- (Psikp);
+            \fill[black] (Psik) circle (1.6pt);
+            \fill[black] (Psikp) circle (1.6pt);
+
+            % induced voltages
+            \draw[signaldelta, dashed, line width=1.0pt, -{Latex[length=3.0mm,width=2.1mm]}]
+            (Psik) -- (Psikp);
+
+
+
+            % labels
+            \node[above, signalalpha] at (Psik) {$\bm{\psi}_{\mathrm{dq}}[k]$};
+            \node[right, signalalpha] at (Psikp) {$\bm{\psi}_{\mathrm{dq}}[k{+}1]$};
+
+            \node[above right, signaldelta] at (55:3.6) {$\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]$};
+
+        \end{tikzpicture}
+        \caption{Interpretation of the induced voltage vector as the flux change in between two sampling steps when: \hl{discretize in $\upalpha\upbeta$-frame first, then utilize the Park transformation}. }
+        \label{fig:rk1_irk1_induced_voltage_angle_dependency}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.)}
+    Since the IRK1 model is unhandy for control-related implementations due to the implicit nature, we consider the \hl{explicit RK1 model as a simple standard model} (discretized from the $\upalpha\upbeta$-frame):
+    \begin{equation}
+        \begin{alignedat}{4}
+             &  & \mbox{Difference eq.:} &  & \quad\bm{\psi}_{\mathrm{dq}}[&k+1] &  & = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_{\mathrm{dq}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right)\right), \\
+            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}[ & k+1] &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k+1], \psi_\mathrm{PM}),}                                                                                  \\\onslide<3->{
+                                                                                                                                                                                                                                                                                          &  & \mbox{Torque:}              &  & \quad T[                       & k+1] &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}[k+1])\T\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].}
+        \end{alignedat}
+        \label{eq:basic_PMSM_model_set_RK1}
+    \end{equation}
+    A few remarks on the above model set:
+    \begin{itemize}
+        \item Although typically more accurate and numerical robust than a direct RK1 discretization of the $\mathrm{dq}$-frame model, the above RK1 model is still an approximation of the continuous-time dynamics.
+        \item Consequently, numerical errors cannot be completely avoided. The severity of the numerical errors depend on the specific machine parameters, operating point and sampling time.
+        \item If interested in the stator currents, one can solve \eqref{eq:basic_PMSM_model_set_RK1} and then apply the inverse flux linkage maps $\bm{f}_{\psi_\mathrm{s}}^{-1}(\cdot)$.
+    \end{itemize}
+\end{frame}
