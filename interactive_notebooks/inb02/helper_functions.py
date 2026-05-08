@@ -161,14 +161,7 @@ def get_amplitude_at_freq(amps, freqs, target_freq):
 @jax.jit
 def compute_THD(amps, freqs, f_fundamental, max_n=300):
     amp_fundamental = get_amplitude_at_freq(amps, freqs, f_fundamental)
-
-    n = jnp.arange(3, max_n, 2)  # all odd numbers from 3 to max_n
-
-    # parallelizes over the target frequencies but not over the other two inputs:
-    target_freqs = n * f_fundamental
-    amps_harmonic = jax.vmap(get_amplitude_at_freq, in_axes=(None, None, 0))(amps, freqs, target_freqs)
-
-    return jnp.sqrt(jnp.sum(amps_harmonic**2) / amp_fundamental**2)
+    return jnp.sqrt((jnp.sum(amps**2) - amp_fundamental**2) / amp_fundamental**2)
 
 
 @jax.jit
@@ -183,6 +176,7 @@ class InteractivePWMVisualizer:
         t,
         c_t,
         u_dc,
+        f_p,
         compute_three_phase_signals,
         compute_three_phase_signals_zsi_minmax,
         compute_three_phase_signals_zsi_clipping,
@@ -195,6 +189,7 @@ class InteractivePWMVisualizer:
         self.t = t
         self.c_t = c_t
         self.u_dc = u_dc
+        self.f_p = f_p
         self.compute_three_phase_signals = compute_three_phase_signals
         self.compute_three_phase_signals_zsi_minmax = compute_three_phase_signals_zsi_minmax
         self.compute_three_phase_signals_zsi_clipping = compute_three_phase_signals_zsi_clipping
@@ -435,6 +430,18 @@ class InteractivePWMVisualizer:
 
         fig_right.canvas.draw()
 
+    def get_three_phase_signals(self, m, u_ref_freq, pwm_mode, t, c_t, u_dc):
+
+        if pwm_mode == "basic":
+            _, s_ref_t, s_t = self.compute_three_phase_signals(m, u_ref_freq, t=t, c_t=c_t, u_dc=u_dc)
+        elif pwm_mode == "minmax_ZSI":
+            _, s_ref_t, s_t, s_0_t = self.compute_three_phase_signals_zsi_minmax(m, u_ref_freq, t=t, c_t=c_t, u_dc=u_dc)
+        elif pwm_mode == "clipped_minmax_ZSI":
+            _, s_ref_t, s_t, s_0_t = self.compute_three_phase_signals_zsi_clipping(
+                m, u_ref_freq, t=t, c_t=c_t, u_dc=u_dc
+            )
+        return s_ref_t, s_t
+
     def update(
         self,
         m,
@@ -442,21 +449,27 @@ class InteractivePWMVisualizer:
         position,
         pwm_mode,
     ):
-        if pwm_mode == "basic":
-            _, s_ref_t, s_t = self.compute_three_phase_signals(m, u_ref_freq, t=self.t, c_t=self.c_t, u_dc=self.u_dc)
-        elif pwm_mode == "minmax_ZSI":
-            _, s_ref_t, s_t, s_0_t = self.compute_three_phase_signals_zsi_minmax(
-                m, u_ref_freq, t=self.t, c_t=self.c_t, u_dc=self.u_dc
-            )
-        elif pwm_mode == "clipped_minmax_ZSI":
-            _, s_ref_t, s_t, s_0_t = self.compute_three_phase_signals_zsi_clipping(
-                m, u_ref_freq, t=self.t, c_t=self.c_t, u_dc=self.u_dc
-            )
+        s_ref_t, s_t = self.get_three_phase_signals(m, u_ref_freq, pwm_mode, self.t, self.c_t, self.u_dc)
 
-        amps, freqs = get_fft_spectrum(s_t[..., 0] - s_t[..., 1], self.f_sampling, self.N)
+        if (self.t[-1] * u_ref_freq) % 1 == 0:
+            amps, freqs = get_fft_spectrum(s_t[..., 0] - s_t[..., 1], self.f_sampling, self.N)
+            effective_value = get_effective_value(s_t[..., 0] - s_t[..., 1])
+        else:
+            # we need to ensure that the FFT window is an integer multiple of the fundamental frequency
+            # here, the window is set so that it is exactly two periods long if the window is not already
+            # an integer mutliple of the period
+            fft_T_full = 2 / u_ref_freq
+            fft_t = jnp.linspace(0, fft_T_full, self.N)
+            fft_f_sampling = self.N / fft_T_full
+            fft_c_t = triangular_signal(fft_t, frequency=self.f_p, amplitude=1.0, phase=0.0)
+
+            _, fft_s_t = self.get_three_phase_signals(m, u_ref_freq, pwm_mode, t=fft_t, c_t=fft_c_t, u_dc=self.u_dc)
+
+            amps, freqs = get_fft_spectrum(fft_s_t[..., 0] - fft_s_t[..., 1], fft_f_sampling, self.N)
+
+            effective_value = get_effective_value(fft_s_t[..., 0] - fft_s_t[..., 1])
+
         THD = compute_THD(amps, freqs, u_ref_freq)
-
-        effective_value = get_effective_value(s_t[..., 0] - s_t[..., 1])
 
         print(f"l2l THD:            {THD:.5f}")
         print(f"l2l eff. value:     {effective_value:.5f}")
