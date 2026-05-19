@@ -14,14 +14,14 @@
             \bm{y}(t)                               & =\bm{g}\left(\bm{x}(t),\bm{u}(t),t\right)
         \end{split}
     \end{equation}
-    with state $\bm{x}(t)\in \mathbb{R}^n$, input $\bm{u}(t)\in \mathbb{R}^m$, output $\bm{y}(t)\in \mathbb{R}^p$, time $t\in \mathbb{R}$, and nonlinear functions $\bm{f}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^n$ and $\bm{g}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^p$. For each discrete time step $k\in \mathbb{N}_0$ with step size $T_\mathrm{s}$, the state and output at time $t=(k+1)T_\mathrm{s}$ are approximated by the \hl{ Runge-Kutta (RK) method} as
+    with state $\bm{x}(t)\in \mathbb{R}^n$, input $\bm{u}(t)\in \mathbb{R}^m$, output $\bm{y}(t)\in \mathbb{R}^p$, time $t\in \mathbb{R}$, and nonlinear functions $\bm{f}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^n$ and $\bm{g}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^p$. \pause For each discrete time step $k\in \mathbb{N}_0$ with step size $T_\mathrm{s}$, the state and output at time $t=(k+1)T_\mathrm{s}$ are approximated by the \hl{ Runge-Kutta (RK) method} as
     \begin{equation}
         \begin{split}
             \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}\sum_{j=1}^{s}b_j\bm{h}_j\, , \quad \bm{h}_j  = \bm{f}\left(\bm{x}(t)+T_\mathrm{s} \sum_{l=1}^{s}\alpha_{j,l}\cdot\bm{h}_l, \,\,\bm{u}(t+c_j T_\mathrm{s})\right), \\
             \bm{y}[k]   & = \bm{g}\left(\bm{x}[k],\bm{u}[k]\right)\,.
         \end{split}
         \label{eq:system_det_dyn_RK_explizit}
-    \end{equation}
+    \end{equation}\pause
     Here, $s\in \mathbb{N}$ is the number of stages, $\bm{h}_j\in \mathbb{R}^n$ are the stage derivatives, and $b_j$, $\alpha_{j,l}$, and $c_j$ are the method coefficients (chosen for minimal integration error, e.g., \href{https://en.wikipedia.org/wiki/Butcher_tableau}{Butcher tableau}).
 \end{frame}
 
@@ -29,14 +29,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Explicit Runge-Kutta method}
-    The RK-method \eqref{eq:system_det_dyn_RK_explizit} is called \hl{explicit} if $\alpha_{j,l}=0$ for all $l\geq j$, which allows to compute the stage derivatives sequentially without solving implicit equations.\\[1em]
+    The RK-method \eqref{eq:system_det_dyn_RK_explizit} is called \hl{explicit} if $\alpha_{j,l}=0$ for all $l\geq j$, which allows to compute the stage derivatives sequentially without solving implicit equations.\\[1em]\pause
 
     \textbf{RK1 / explicit Euler}: The simplest explicit RK method  with $s=1$, $b_1=1$, $\alpha_{1,1}=0$, and $c_1=0$ leading to
     \begin{equation}
         \bm{x}[k+1] = \bm{x}[k] + T_\mathrm{s}\cdot \bm{f}\left(\bm{x}[k],\bm{u}[k]\right)\,.
         \label{eq:RK1}
     \end{equation}
-    \\[1em]
+    \\[1em]\pause
     \textbf{RK4 / classical Runge-Kutta method}: A widely used explicit RK method is the fourth-order method (RK4) with $s=4$ stages and coefficients
     \begin{equation}
         \begin{split}
@@ -66,7 +66,7 @@
         \end{split}
         \label{eq:RK4_calculation_law}
     \end{equation}
-    \vspace{-0.2cm}
+    \vspace{-0.2cm}\pause%
     \begin{varblock}{}
         While higher order methods can achieve better accuracy for the same step size, they require more function evaluations per step, which increases computational cost. The choice of method and step size should balance accuracy and numerical resources.
     \end{varblock}
@@ -239,13 +239,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Implicit Runge-Kutta method}
-    A RK method is called \hl{implicit} if $\alpha_{j,l}\neq 0$ for some $l\geq j$, which requires to solve implicit equations for the stage derivatives $\bm{h}_j$. Implicit methods are typically more computationally expensive per step but can offer better stability properties.\\
+    A RK method is called \hl{implicit} if $\alpha_{j,l}\neq 0$ for some $l\geq j$, which requires to solve implicit equations for the stage derivatives $\bm{h}_j$. Implicit methods are typically more computationally expensive per step but can offer better stability properties.\\\pause
     \textbf{Implicit Euler method (IRK1)}: The implicit Euler method is a first-order implicit RK method with $s=1$, $b_1=1$, $\alpha_{1,1}=1$, and $c_1=1$ leading to
     \begin{equation}
         \bm{x}[k+1] = \bm{x}[k] + T_\mathrm{s}\cdot \bm{f}\left(\bm{x}[k+1],\bm{u}[k+1]\right)\,.
         \label{eq:IRK1}
     \end{equation}
-    \\
+    \\\pause
     \textbf{Implicit classical Runge-Kutta (IRK4)}: The implicit version of the classical RK4 method can be defined by using the same coefficients as in \eqref{eq:RK4_coeff} but with $\alpha_{j,l}=c_j$ for all $l<j$ and $\alpha_{j,j}=c_j$ for all $j$ leading to
     \begin{equation}
         \begin{gathered}
@@ -269,14 +269,14 @@
         \end{split}
         \label{eq:LTI_state_space}
     \end{equation}
-    with the constant matrices $\bm{A}\in \mathbb{R}^{n\times n}$, $\bm{B}\in \mathbb{R}^{n\times m}$, $\bm{C}\in \mathbb{R}^{p\times n}$, and $\bm{D}\in \mathbb{R}^{p\times m}$. Assuming zero-order hold (ZOH) for the input $\bm{u}(t)$, the \hl{exact discrete-time representation} is given by
+    with the constant matrices $\bm{A}\in \mathbb{R}^{n\times n}$, $\bm{B}\in \mathbb{R}^{n\times m}$, $\bm{C}\in \mathbb{R}^{p\times n}$, and $\bm{D}\in \mathbb{R}^{p\times m}$. \pause Assuming zero-order hold (ZOH) for the input $\bm{u}(t)$, the \hl{exact discrete-time representation} is given by
     \begin{equation}
         \begin{split}
             \bm{x}[k+1] & = \bm{A}_\mathrm{d}\bm{x}[k] + \bm{B}_\mathrm{d}\bm{u}[k], \\
             \bm{y}[k]   & = \bm{C}_\mathrm{d}\bm{x}[k] + \bm{D}_\mathrm{d}\bm{u}[k],
         \end{split}
         \label{eq:exact_discretization}
-    \end{equation}
+    \end{equation}\pause
     where $\bm{C}_\mathrm{d}  = \bm{C}$, $\bm{D}_\mathrm{d}  = \bm{D}$, and
     \begin{equation}
         \begin{split}
@@ -284,7 +284,7 @@
             \bm{B}_\mathrm{d}  = \int_{0}^{T_\mathrm{s}} e^{\bm{A}\tau}\mathrm{d}\tau \cdot \bm{B}=\bm{A}^{-1}(e^{\bm{A}T_\mathrm{s}}-\bm{I})\bm{B}.
         \end{split}
         \label{eq:exact_discretization_matrices}
-    \end{equation}
+    \end{equation}\pause
     The \hl{matrix exponential} $e^{\bm{A}T_\mathrm{s}}$ can be numerically expensive to compute and, therefore, is typically precomputed offline.
 \end{frame}
 
@@ -297,13 +297,13 @@
             \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k] + \bm{B}\bm{u}[k]) = (\bm{I} + T_\mathrm{s}\bm{A})\bm{x}[k] + T_\mathrm{s}\bm{B}\bm{u}[k], \\
             \bm{y}[k]   & = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k].
         \end{split}
-    \end{equation}
-    This can be found by either a first-order Taylor series expansion of the matrix exponential \eqref{eq:exact_discretization_matrices} or by applying the RK1 method \eqref{eq:RK1} directly to the LTI system. Likwise, the \hl{implicit Euler method (IRK1)} for the LTI system is given by
+    \end{equation}\pause
+    This can be found by either a first-order Taylor series expansion of the matrix exponential \eqref{eq:exact_discretization_matrices} or by applying the RK1 method \eqref{eq:RK1} directly to the LTI system. \pause Likewise, the \hl{implicit Euler method (IRK1)} for the LTI system is given by
     \begin{equation}
         \begin{split}
             \bm{x}[k+1]  = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k+1] + \bm{B}\bm{u}[k+1])\quad             \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k]
         \end{split}
-    \end{equation}
+    \end{equation}\pause
     leading to
     \begin{equation}
         \begin{split}
