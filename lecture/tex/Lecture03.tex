@@ -345,7 +345,7 @@
                                                                                                            \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\ & \onslide<4->{= \begin{bmatrix}
                                                                                                                                                                                                            L_\mathrm{dd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{dq}(\bm{i}_\mathrm{s,dq}) \\[1.6ex]
                                                                                                                                                                                                            L_\mathrm{qd}(\bm{i}_\mathrm{s,dq}) & L_\mathrm{qq}(\bm{i}_\mathrm{s,dq})
-                                                                                                                                                                                                       \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t).}
+                                                                                                                                                                                                       \end{bmatrix}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t),}
         \end{split}
     \end{equation}
     \onslide<4->{where the \hl{differential inductance matrix} $\bm{L}(\bm{i}_\mathrm{s,dq})$ is the Jacobian of $\bm{f}_{\psi_\mathrm{s}}$ with respect to $\bm{i}_\mathrm{s,dq}$.}
@@ -402,15 +402,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Linear PMSM model with constant inductances}
-    Applying first-order Tayor expansions to the nonlinear flux function $\bm{f}_{\psi_\mathrm{s}}$ around some operating point (typically the origin $\bm{i}_\mathrm{s,dq}=\bm{0}$) yields the \hl{linear PMSM flux model}
+    Applying the \hl{first-order Taylor expansion} to the nonlinear flux function $\bm{f}_{\psi_\mathrm{s}}$ around some operating point (typically the origin $\bm{i}_\mathrm{s,dq}=\bm{0}$) yields the \hl{linear PMSM flux model}
     \begin{equation}
-        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}_0}\bm{i}_\mathrm{s,dq}(t)  \onslide<2->{= \begin{bmatrix}
+        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})\vphantom{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}_0}\bm{i}_\mathrm{s,dq}(t)  \onslide<2->{= \begin{bmatrix}
                     \psi_{\mathrm{PM}} \\
                     0
                 \end{bmatrix} + \begin{bmatrix}
                     L_{\mathrm{dd},0} & L_{\mathrm{dq},0} \\
                     L_{\mathrm{qd},0} & L_{\mathrm{qq},0}
-                \end{bmatrix}\bm{i}_\mathrm{s,dq}(t)}
+                \end{bmatrix}\bm{i}_\mathrm{s,dq}(t)}.
     \end{equation}
     \onslide<3->{With this linear flux model, the current ODE simplifies to}
     \begin{equation}
@@ -430,7 +430,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Linear PMSM model with constant inductances (cont.)}
-    As can be seen from \eqref{fig:inductance_maps_BRUSA} the off-diagonal inductance terms $L_{\mathrm{dq},0}$ and $L_{\mathrm{qd},0}$ are much smaller than the main diagonal terms $L_{\mathrm{dd},0}$ and $L_{\mathrm{qq},0}$. \pause Thus, by further simplification
+    As can be seen from \figref{fig:inductance_maps_BRUSA} the off-diagonal inductance terms $L_{\mathrm{dq},0}$ and $L_{\mathrm{qd},0}$ are much smaller than the main diagonal terms $L_{\mathrm{dd},0}$ and $L_{\mathrm{qq},0}$. \pause Thus, by further simplification
     $$
         L_{\mathrm{dq},0} \approx L_{\mathrm{qd},0} \approx 0
     $$\pause
@@ -560,24 +560,24 @@
     \frametitle{EESM model in dq coordinates}
     The most important equations of the EESM model in the  dq coordinates are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}.}:
     \begin{alignat}{4}
-         &  & \text{Stator voltage:}                     &  & \quad\bm{u}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \notag \\
-         &  & \text{Rotor / field winding voltage:}      &  & \quad u_\mathrm{f}(            & t) &  & = R_\mathrm{f}i_\mathrm{f}(t)+\nicefrac{\mathrm{d}}{\mathrm{d}t}\psi_\mathrm{f}(t), \notag                                                               \\
-         &  & \text{Stator flux linkage:}                &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & =  \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{f}(t)), \label{eq:basic_EESM_model_set}                                                \\
-         &  & \text{Rotor / field winding flux linkage:} &  & \psi_\mathrm{f}(               & t) &  & =  \bm{f}_{\psi_\mathrm{f}}(i_{\mathrm{f}}(t), \bm{i}_\mathrm{s,dq}(t)), \notag                                                                          \\
-         &  & \text{Torque:}                             &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t) \notag
+         &  & \text{Stator voltage:} &  & \quad\bm{u}_\mathrm{s,dq}( & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \notag \\
+        \onslide<2->{&  & \text{Rotor / field winding voltage:}      &  & \quad u_\mathrm{f}(            & t) &  & = R_\mathrm{f}i_\mathrm{f}(t)+\nicefrac{\mathrm{d}}{\mathrm{d}t}\psi_\mathrm{f}(t), \notag}                          \\
+        \onslide<3->{&  & \text{Stator flux linkage:}                &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & =  \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{f}(t)), \label{eq:basic_EESM_model_set}}           \\
+        \onslide<4->{&  & \text{Rotor / field winding flux linkage:} &  & \psi_\mathrm{f}(               & t) &  & =  \bm{f}_{\psi_\mathrm{f}}(i_{\mathrm{f}}(t), \bm{i}_\mathrm{s,dq}(t)), \notag}                                     \\
+        \onslide<5->{&  & \text{Torque:}                             &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t) \notag}
     \end{alignat}
-    with the further signals and parameters:
-    \begin{equation*}
-        \begin{aligned}
-            \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
-            \qquad i_\mathrm{f}  : \text{rotor / field winding current},                                                                                                                                                      \\
-            R_\mathrm{s}:                                                          \text{stator winding resistances}, &
-            \qquad R_\mathrm{f} : \text{rotor / field winding resistance},                                                                                                                                                    \\
-            p                                           : \text{pole pair number},                                    &
-            \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                                                                                                                       \\
-            \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}},                                            & \qquad \bm{f}_{\psi_\mathrm{s}}, {f}_{\psi_\mathrm{f}} : \text{stator / rotor flux linkage function}.
-        \end{aligned}
-    \end{equation*}
+    \onslide<6->{with the further signals and parameters:
+            \begin{equation*}
+                \begin{aligned}
+                    \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
+                    \qquad i_\mathrm{f}  : \text{rotor / field winding current},                                                                                                                                                      \\
+                    R_\mathrm{s}:                                                          \text{stator winding resistances}, &
+                    \qquad R_\mathrm{f} : \text{rotor / field winding resistance},                                                                                                                                                    \\
+                    p                                           : \text{pole pair number},                                    &
+                    \qquad \omega = p\omega_\mathrm{me}                   : \text{electrical angular velocity,}                                                                                                                       \\
+                    \bm{J}: \text{90° rotation matrix, cf. \eqref{eq:J_rotation}},                                            & \qquad \bm{f}_{\psi_\mathrm{s}}, {f}_{\psi_\mathrm{f}} : \text{stator / rotor flux linkage function}.
+                \end{aligned}
+            \end{equation*}}
 \end{frame}
 
 
@@ -757,11 +757,11 @@
         \bm{i}_\mathrm{E}(t) = \begin{bmatrix} i_\mathrm{s,d}(t) & i_\mathrm{s,q}(t) & i_\mathrm{f}(t) \end{bmatrix}\T
         \quad  \text{and} \quad
         \bm{\psi}_\mathrm{E}(t) = \begin{bmatrix} \psi_\mathrm{s,d}(t) & \psi_\mathrm{s,q}(t) & \psi_\mathrm{f}(t) \end{bmatrix}\T,
-    \end{equation}
+    \end{equation}\pause
     its \hl{nonlinear magnetic model}\footnote{Extension towards rotor angle-dependent flux harmonics is analogous to PMSM and not explicitly shown here.} can be written compactly as
     \begin{equation}
         \bm{\psi}_\mathrm{E}(t) = \bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t)).
-    \end{equation}
+    \end{equation}\pause
     Applying the chain rule yields the EESM differential inductance matrix
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t) = \underbrace{\frac{\partial \bm{f}_{\psi,\mathrm{E}}}{\partial \bm{i}_\mathrm{E}}}_{\displaystyle=\,\bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})} \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t)
@@ -792,11 +792,11 @@
             \omega\bm{J}       & \bm{0}_{2\times 1} \\
             \bm{0}_{1\times 2} & 0
         \end{bmatrix},
-    \end{equation}
+    \end{equation}\pause
     substitution of $\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E} = \bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}$ gives the \hl{EESM's nonlinear current ODE}
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E})\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t))\right].
-    \end{equation}
+    \end{equation}\pause
     In this nonlinear case, the torque expression remains
     \begin{equation}
         T(t) = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t).
@@ -818,11 +818,11 @@
             L_{\mathrm{fd},0} & 0                 & L_{\mathrm{ff},0}
         \end{bmatrix},
     \end{equation}
-    where the weak cross-couplings $L_{\mathrm{dq},0}$, $L_{\mathrm{qd},0}$, $L_{\mathrm{qf},0}$ and $L_{\mathrm{fq},0}$ are neglected.
+    where the weak cross-couplings $L_{\mathrm{dq},0}$, $L_{\mathrm{qd},0}$, $L_{\mathrm{qf},0}$ and $L_{\mathrm{fq},0}$ are neglected. \pause
     The corresponding \hl{linear EESM current} ODE becomes
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_{\mathrm{E},0}^{-1}\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{L}_{\mathrm{E},0}\bm{i}_\mathrm{E}(t)\right].
-    \end{equation}
+    \end{equation}\pause
     For this simplified linear magnetic model, the torque expression simplifies to
     \begin{equation}
         T(t) = \frac{3}{2}p\left[L_{\mathrm{df},0} i_\mathrm{f}(t)i_\mathrm{s,q}(t) + (L_{\mathrm{dd},0}-L_{\mathrm{qq},0})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
@@ -842,12 +842,12 @@
     Based on the nonlinear flux ODE PMSM \eqref{eq:basic_PMSM_model_set}
     \begin{equation*}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)  = \bm{u}_\mathrm{s,dq}(t) - R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
-    \end{equation*}
-    pplying the \hl{excplicit Euler method (RK1)} from \eqref{eq:RK1} yields the discrete-time model
+    \end{equation*}\pause
+    applying the \hl{explicit Euler method (RK1)} from \eqref{eq:RK1} yields the discrete-time model
     \begin{equation}
         \bm{\psi}_\mathrm{s,dq}[k+1] = \bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k]- \omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k]\right),
     \end{equation}
-    where $T_\mathrm{s}$ is the sampling period and $k$ is the \hl{discrete time index}. Likewise, the \hl{implicit Euler method (IRK1)} from \eqref{eq:IRK1} gives
+    where $T_\mathrm{s}$ is the sampling period and $k$ is the \hl{discrete time index}. \pause Likewise, the \hl{implicit Euler method (IRK1)} from \eqref{eq:IRK1} gives
     \begin{equation}
         \begin{split}
             \bm{\psi}_\mathrm{s,dq}[k+1]                 & = \bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k+1] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k+1]- \omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1]\right)                        \\
@@ -867,11 +867,11 @@
     \begin{equation}
         \text{RK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k] \quad \text{vs.} \quad \text{IRK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].
         \label{eq:induc_voltages_RK1_IRK1_nonlinear_flux_ODE_PMSM}
-    \end{equation}
+    \end{equation}\pause
     Considering the $\nicefrac{\pi}{2}$ rotation of $\bm{J}$ from \eqref{eq:J_rotation}, we can directly conclude that the induced voltage is orthogonal to the flux linkage vector at time $k$:
     \begin{equation*}
         \text{RK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \frac{\pi}{2}.
-    \end{equation*}
+    \end{equation*}\pause
     For the IRK1 method, we first need to express $\bm{\psi}_\mathrm{s,dq}[k+1]$ in terms of $\bm{\psi}_\mathrm{s,dq}[k]$: neglecting the input and ohmic voltage terms in \eqref{eq:IRK1_nonlinear_flux_ODE_PMSM} gives
     $$
         \bm{\psi}_\mathrm{s,dq}[k+1] \approx \left(\bm{I} + T_\mathrm{s}\omega[k+1]\bm{J}\right)^{-1}\bm{\psi}_\mathrm{s,dq}[k] = \frac{1}{1+(T_\mathrm{s}\omega[k+1])^2}\left(\bm{I} - T_\mathrm{s}\omega[k+1]\bm{J}\right)\bm{\psi}_\mathrm{s,dq}[k].
@@ -888,12 +888,12 @@
         \begin{split}
             \bm{u}_\mathrm{ind.} & = -\omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1] \\ &\approx -\frac{\omega[k+1]}{1+(T_\mathrm{s}\omega[k+1])^2}(\underbrace{\bm{J}\bm{\psi}_{\mathrm{s,dq}}[k]}_{\text{orthogonal to } \bm{\psi}_\mathrm{s,dq}[k]} - \underbrace{T_\mathrm{s}\omega[k+1]\bm{I}\bm{\psi}_\mathrm{s,dq}[k]}_{\text{parallel to} \bm{\psi}_\mathrm{s,dq}[k]} ).
         \end{split}
-    \end{equation*}
+    \end{equation*}\pause
     Hence, the IRK1 induced voltage vector relative to the flux vector $\bm{\psi}_\mathrm{s,dq}[k]$ is given by
     \begin{equation*}
         \text{IRK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \arctan\left(\frac{1}{T_\mathrm{s}\omega[k+1]}\right) = \frac{\pi}{2} - \arctan\left(T_\mathrm{s}\omega[k+1]\right).
-    \end{equation*}
-    Hence, for any $\omega[k+1]>0$, the IRK1 induced voltage vector is less than $\nicefrac{\pi}{2}$ shifted towards the flux vector.
+    \end{equation*}\pause
+    Consequently, for any $\omega[k+1]>0$, the IRK1 induced voltage vector is less than $\nicefrac{\pi}{2}$ shifted towards the flux vector.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -953,19 +953,19 @@
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\upalpha\upbeta}(t) = \bm{u}_{\upalpha\upbeta}(t) - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(t).
         \label{eq:PMSM_flux_ODE_alpha_beta}
-    \end{equation}
+    \end{equation}\pause
     The \hl{explicit RK1 discretization} of this ODE is given by
     \begin{equation}
         \bm{\psi}_{\upalpha\upbeta}[k+1] = \bm{\psi}_{\upalpha\upbeta}[k] + T_\mathrm{s}\left(\bm{u}_{\upalpha\upbeta}[k] - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}[k]\right).
-    \end{equation}
+    \end{equation}\pause
     Applying the Park transformation \eqref{eq:Park_transformation} to both sides yields
     \begin{equation}
         \bm{T}_\mathrm{p}(\varepsilon[k+1])\bm{\psi}_{\mathrm{dq}}[k+1] = \bm{T}_\mathrm{p}(\varepsilon[k])\left(\bm{\psi}_\mathrm{dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{dq}[k] - R_\mathrm{s}\,\bm{i}_\mathrm{dq}[k]\right)\right).
-    \end{equation}
+    \end{equation}\pause
     Assuming a nearly constant rotor speed $\omega[k]=\omega[k+1]$ during two sampling steps
     $$
         \bm{T}^{-1}_\mathrm{p}(\varepsilon[k+1])\bm{T}_\mathrm{p}(\varepsilon[k])=\bm{T}_\mathrm{p}(-\varepsilon[k+1])\bm{T}_\mathrm{p}(\varepsilon[k]) = \bm{T}_\mathrm{p}(\varepsilon[k]-\varepsilon[k+1]) = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s}),
-    $$
+    $$\pause
     we can rewrite the above equation as
     \begin{equation}
         \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_{\mathrm{dq}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right)\right).
@@ -980,15 +980,15 @@
     Mildly rearranging the above equation yields for the \hl{RK1 case}
     \begin{equation}
         \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{\psi}_{\mathrm{dq}}[k] - \left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]+\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right).
-    \end{equation}
+    \end{equation}\pause
     Applying the \hl{analogous steps for the IRK1} case starting from \eqref{eq:PMSM_flux_ODE_alpha_beta} yields
     \begin{equation}
         \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{\psi}_{\mathrm{dq}}[k] - \left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]+T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k+1] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k+1]\right).
-    \end{equation}
+    \end{equation}\pause
     Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that the induced voltage terms are identical for both discretization paths:
     \begin{equation*}
         \bm{u}_\mathrm{ind.}=T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k] = T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k].
-    \end{equation*}
+    \end{equation*}\pause
     Not considering the input and ohmic voltage impacts, this term can be interpreted as the \hl{flux change in between two sampling steps}:
     \begin{equation}
         \frac{\bm{\psi}_{\mathrm{dq}}[k+1] - \bm{\psi}_{\mathrm{dq}}[k]}{T_\mathrm{s}}=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k].
@@ -1054,10 +1054,18 @@
         \end{alignedat}
         \label{eq:basic_PMSM_model_set_RK1}
     \end{equation}
-    A few remarks on the above model set:
+    \onslide<4->{A few remarks on the above model set:}
     \begin{itemize}
-        \item Although typically more accurate and numerical robust than a direct RK1 discretization of the $\mathrm{dq}$-frame model, the above RK1 model is still an approximation of the continuous-time dynamics.
-        \item Consequently, numerical errors cannot be completely avoided. The severity of the numerical errors depend on the specific machine parameters, operating point and sampling time.
-        \item If interested in the stator currents, one can solve \eqref{eq:basic_PMSM_model_set_RK1} and then apply the inverse flux linkage maps $\bm{f}_{\psi_\mathrm{s}}^{-1}(\cdot)$.
+        \item<4-> Although typically more accurate and numerical robust than a direct RK1 discretization of the $\mathrm{dq}$-frame model, the above RK1 model is still an approximation of the continuous-time dynamics.
+        \item<5-> Consequently, numerical errors cannot be completely avoided. The severity of the numerical errors depend on the specific machine parameters, operating point and sampling time.
+        \item<6-> If interested in the stator currents, one can solve \eqref{eq:basic_PMSM_model_set_RK1} and then apply the inverse flux linkage map $\bm{f}_{\psi_\mathrm{s}}^{-1}(\cdot)$.
     \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current difference equation of the RK1 discrete-time model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current difference equation of the RK1 discrete-time model}
+
 \end{frame}
