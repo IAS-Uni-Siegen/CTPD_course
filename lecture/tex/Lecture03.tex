@@ -418,6 +418,7 @@
             \onslide<3->{\bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}_0\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\
             \onslide<4->{\Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}_0^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \bm{L}_0 \bm{i}_\mathrm{s,dq}(t)\right)\right].}
         \end{split}
+        \label{eq:linear_current_ODE_PMSM}
     \end{equation}
     \onslide<5->{And the torque expressions results in
             \begin{equation}
@@ -443,6 +444,7 @@
                 L_{\mathrm{dd},0} & 0                 \\
                 0                 & L_{\mathrm{qq},0}
             \end{bmatrix} \bm{i}_\mathrm{s,dq}(t)\right)\right].
+        \label{eq:PMSM_current_ODE_linear_mdl}
     \end{equation}\pause
     and torque expression
     \begin{equation}
@@ -780,7 +782,7 @@
     \frametitle{Current differential equations of the nonlinear EESM model}
     With the compact voltage equation
     \begin{equation}
-        \bm{u}_\mathrm{E}(t) = \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) + \bm{\Omega}(\omega)\bm{\psi}_\mathrm{E}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t),
+        \bm{u}_\mathrm{E}(t) = \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) + \bm{J}_\mathrm{E}(\omega)\bm{\psi}_\mathrm{E}(t) + \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t),
     \end{equation}
     and
     \begin{equation}
@@ -788,14 +790,14 @@
         \quad
         \bm{R}_\mathrm{E} = \operatorname{diag}(R_\mathrm{s}, R_\mathrm{s}, R_\mathrm{f}),
         \quad
-        \bm{\Omega}(\omega) = \begin{bmatrix}
+        \bm{J}_\mathrm{E}(\omega) = \begin{bmatrix}
             \omega\bm{J}       & \bm{0}_{2\times 1} \\
             \bm{0}_{1\times 2} & 0
         \end{bmatrix},
     \end{equation}\pause
     substitution of $\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E} = \bm{L}_\mathrm{E}(\bm{i}_\mathrm{E})\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}$ gives the \hl{EESM's nonlinear current ODE}
     \begin{equation}
-        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E})\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t))\right].
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E})\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{J}_\mathrm{E}(\omega)\bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}(t))\right].
     \end{equation}\pause
     In this nonlinear case, the torque expression remains
     \begin{equation}
@@ -821,7 +823,7 @@
     where the weak cross-couplings $L_{\mathrm{dq},0}$, $L_{\mathrm{qd},0}$, $L_{\mathrm{qf},0}$ and $L_{\mathrm{fq},0}$ are neglected. \pause
     The corresponding \hl{linear EESM current} ODE becomes
     \begin{equation}
-        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_{\mathrm{E},0}^{-1}\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{\Omega}(\omega)\bm{L}_{\mathrm{E},0}\bm{i}_\mathrm{E}(t)\right].
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_{\mathrm{E},0}^{-1}\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{J}_\mathrm{E}(\omega)\bm{L}_{\mathrm{E},0}\bm{i}_\mathrm{E}(t)\right].
     \end{equation}\pause
     For this simplified linear magnetic model, the torque expression simplifies to
     \begin{equation}
@@ -839,13 +841,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{RK1 discrete-time model of the nonlinear PMSM model}
-    Based on the nonlinear flux ODE PMSM \eqref{eq:basic_PMSM_model_set}
+    Based on the nonlinear flux PMSM ODE \eqref{eq:basic_PMSM_model_set}
     \begin{equation*}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t)  = \bm{u}_\mathrm{s,dq}(t) - R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t)
     \end{equation*}\pause
     applying the \hl{explicit Euler method (RK1)} from \eqref{eq:RK1} yields the discrete-time model
     \begin{equation}
         \bm{\psi}_\mathrm{s,dq}[k+1] = \bm{\psi}_\mathrm{s,dq}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{s,dq}[k] - R_\mathrm{s} \bm{i}_\mathrm{s,dq}[k]- \omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k]\right),
+        \label{eq:RK1_dq_flux_linkage_PMSM}
     \end{equation}
     where $T_\mathrm{s}$ is the sampling period and $k$ is the \hl{discrete time index}. \pause Likewise, the \hl{implicit Euler method (IRK1)} from \eqref{eq:IRK1} gives
     \begin{equation}
@@ -868,7 +871,7 @@
         \text{RK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k] \quad \text{vs.} \quad \text{IRK1:} \, \bm{u}_\mathrm{ind.} = -\omega[k+1]\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].
         \label{eq:induc_voltages_RK1_IRK1_nonlinear_flux_ODE_PMSM}
     \end{equation}\pause
-    Considering the $\nicefrac{\pi}{2}$ rotation of $\bm{J}$ from \eqref{eq:J_rotation}, we can directly conclude that the induced voltage is orthogonal to the flux linkage vector at time $k$:
+    Considering the $\nicefrac{\pi}{2}$ rotation of $\bm{J}$ from \eqref{eq:J_rotation}, we can directly conclude for the RK1 method that the induced voltage is orthogonal to the flux linkage vector at time $k$:
     \begin{equation*}
         \text{RK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \frac{\pi}{2}.
     \end{equation*}\pause
@@ -893,7 +896,7 @@
     \begin{equation*}
         \text{IRK1:} \, \angle\left(\bm{u}_\mathrm{ind.}, \bm{\psi}_\mathrm{s,dq}[k]\right) = \arctan\left(\frac{1}{T_\mathrm{s}\omega[k+1]}\right) = \frac{\pi}{2} - \arctan\left(T_\mathrm{s}\omega[k+1]\right).
     \end{equation*}\pause
-    Consequently, for any $\omega[k+1]>0$, the IRK1 induced voltage vector is less than $\nicefrac{\pi}{2}$ shifted towards the flux vector.
+    Consequently, for any $\omega[k+1]>0$, the IRK1 induced voltage vector is less than $\nicefrac{\pi}{2}$ compared to the flux vector.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -940,7 +943,7 @@
             \node[right, signaldelta] at (27:3.75) {$-\omega_{\mathrm{rs}}[k{+}1]\,\bm{J}\bm{\psi}_{\mathrm{dq}}[k{+}1]$ (IRK1)};
         \end{tikzpicture}
         \caption{Impact of the time discretization on the induced voltage interpretation: in the explicit RK1 case, the induced voltage vector tends to increase the flux vector length in the next time step (excess virtual energy; lack of damping), while in the implicit IRK1 case, the induced voltage vector tends to decrease the flux vector length in the next time step (virtual energy dissipation; added damping).}
-        \label{fig:rk1_irk1_induced_voltage_angle_dependency}
+        \label{fig:rk1_alpha_beta_flux_change_interpretation}
     \end{figure}
 \end{frame}
 
@@ -985,7 +988,7 @@
     \begin{equation}
         \bm{\psi}_{\mathrm{dq}}[k+1] = \bm{\psi}_{\mathrm{dq}}[k] - \left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k]+T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k+1] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k+1]\right).
     \end{equation}\pause
-    Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that the induced voltage terms are identical for both discretization paths:
+    Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that \hl{the induced voltage terms are identical for both discretization methods} when starting from the $\upalpha\upbeta$-frame:
     \begin{equation*}
         \bm{u}_\mathrm{ind.}=T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k] = T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{dq}}[k].
     \end{equation*}\pause
@@ -1045,7 +1048,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Alternative discretization path: discretize in $\upalpha\upbeta$-frame first (cont.)}
-    Since the IRK1 model is unhandy for control-related implementations due to the implicit nature, we consider the \hl{explicit RK1 model as a simple standard model} (discretized from the $\upalpha\upbeta$-frame):
+    Since the IRK1 model is unhandy for control-related implementations due to the implicit nature, we consider the \hl{PMSM's explicit RK1 model as a simple standard model} (discretized from the $\upalpha\upbeta$-frame):
     \begin{equation}
         \begin{alignedat}{4}
              &  & \mbox{Difference eq.:} &  & \quad\bm{\psi}_{\mathrm{dq}}[&k+1] &  & = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_{\mathrm{dq}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{dq}}[k]\right)\right), \\
@@ -1066,6 +1069,276 @@
 %% Current difference equation of the RK1 discrete-time model %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Current difference equation of the RK1 discrete-time model}
+    \frametitle{PMSM current difference equation of the RK1 discrete-time model}
+    For control-related applications, it can be desirable to have a current difference equation. Utilizing a first-order approximation of the flux-to-current map
+    \begin{equation}
+        \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k+1]) \approx \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k]) +\bm{L}_\mathrm{s}(\bm{i}_\mathrm{s,dq}[k])\left(\bm{i}_\mathrm{s,dq}[k+1] - \bm{i}_\mathrm{s,dq}[k]\right),
+    \end{equation}
+    we can rewrite the stator flux linkage equation from \eqref{eq:basic_PMSM_model_set_RK1} as a \hl{current difference equation} and identify relevant terms:
+    \begin{equation}
+        \begin{split}
+            \bm{i}_\mathrm{s,dq}[k+1]  = & \underbrace{\left(\bm{I} - \bm{L}^{-1}_\mathrm{s}(\bm{i}_\mathrm{s,dq}[k]) \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})T_\mathrm{s}R_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k]}_{\text{discrete-time PT1 element}}  \\
+                                         & + \bm{L}_\mathrm{s}^{-1}(\bm{i}_\mathrm{s,dq}[k])\underbrace{\left(\vphantom{\bm{L}_\mathrm{s}^{-1}}\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})-\bm{I}\right)\bm{\psi}_{\mathrm{dq}}[k]}_{\text{induced voltage}} \\
+                                         & +\left( \bm{L}_\mathrm{s}^{-1}(\bm{i}_\mathrm{s,dq}[k])\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s}) T_\mathrm{s}\right)\underbrace{\bm{u}_{\mathrm{dq}}[k]}_{\text{input voltage}}.
+        \end{split}
+        \label{eq:current_diff_eq_RK1_alpha_beta}
+    \end{equation}
+\end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical instability due to the explicit RK1 discretization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Numerical instability due to the explicit RK1 discretization}
+    For demonstration purposes, we consider a linear magnetic model:
+    $$
+        \bm{\psi}_\mathrm{s,dq} = \begin{bmatrix}
+            L_{\mathrm{d}} & 0              \\
+            0              & L_{\mathrm{q}}
+        \end{bmatrix}\bm{i}_\mathrm{s,dq} + \begin{bmatrix}
+            \psi_\mathrm{PM} \\
+            0
+        \end{bmatrix} = \bm{L}_0\bm{i}_\mathrm{s,dq} + \bm{\psi}_\mathrm{PM}.
+    $$
+    This was already the case in \eqref{eq:PMSM_current_ODE_linear_mdl} from which we can derive the continous-time system matrix $\bm{A}_\mathrm{c}$ assuming a constant speed $\omega(t) = \omega$
+    \begin{equation}
+        \bm{A}_\mathrm{c}  = \bm{L}_0^{-1}\left(-R_\mathrm{s}\bm{I}-\omega\bm{J}\bm{L}_0\right) = \begin{bmatrix}
+            -\frac{R_\mathrm{s}}{L_{\mathrm{d}}}         & -\omega\frac{L_{\mathrm{q}}}{L_{\mathrm{d}}} \\[1ex]
+            -\omega\frac{L_{\mathrm{d}}}{L_{\mathrm{q}}} & -\frac{R_\mathrm{s}}{L_{\mathrm{q}}}
+        \end{bmatrix}.
+    \end{equation}
+    The eigenvalues of this continuous-time system matrix are given by
+    \begin{equation}
+        \lambda_{1,2} = -\frac{R_\mathrm{s}}{2}\left(\frac{1}{L_{\mathrm{d}}}+\frac{1}{L_{\mathrm{q}}}\right) \pm \frac{1}{2}\sqrt{\left(\frac{R_\mathrm{s}}{L_{\mathrm{d}}}-\frac{R_\mathrm{s}}{L_{\mathrm{q}}}\right)^2 - 4\omega^2}.
+    \end{equation}
+    Since the real part of the eigenvalues is always negative for physically reasonable assumptions $\left\{L_{\mathrm{d}}, L_{\mathrm{q}}, R_\mathrm{s}, \omega \right\}> 0$, \hl{the continuous-time system is stable}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical instability due to the explicit RK1 discretization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Numerical instability due to the explicit RK1 discretization (cont.)}
+    Applying the RK1 discretization to the linear current ODE \eqref{eq:linear_current_ODE_PMSM} in the $\mathrm{dq}$-frame yields the following current difference equation:
+    \begin{equation}
+        \begin{split}
+            \bm{i}_\mathrm{s,dq}[k+1] = \left(\bm{I} - \bm{L}_0^{-1}R_\mathrm{s}-\omega T_\mathrm{s}\bm{J}\right)\bm{i}_\mathrm{s,dq}[k] + \bm{L}_0^{-1}\bm{u}_\mathrm{dq}[k] - \bm{L}_0^{-1}\omega T_\mathrm{s}\bm{J}\bm{\psi}_\mathrm{PM}.
+        \end{split}
+    \end{equation}
+    In this case, the system matrix is
+    \begin{equation}
+        \bm{A}_{\text{RK1}} = \bm{I} - \bm{L}_0^{-1}R_\mathrm{s}-\omega T_\mathrm{s}\bm{J} = \begin{bmatrix}
+            1-\frac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{d}}}         & -\omega T_\mathrm{s}\frac{L_{\mathrm{q}}}{L_{\mathrm{d}}} \\[1ex]
+            -\omega T_\mathrm{s}\frac{L_{\mathrm{d}}}{L_{\mathrm{q}}} & 1-\frac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{q}}}
+        \end{bmatrix}.
+    \end{equation}
+    The resulting eigenvalues of the system matrix are given by
+    \begin{equation}
+        \lambda_{1,2} = 1 - \frac{T_\mathrm{s}R_\mathrm{s}}{2}\left(\frac{1}{L_{\mathrm{d}}}+\frac{1}{L_{\mathrm{q}}}\right) \pm \frac{T_\mathrm{s}}{2}\sqrt{\left(\frac{R_\mathrm{s}}{L_{\mathrm{d}}}-\frac{R_\mathrm{s}}{L_{\mathrm{q}}}\right)^2 - 4\omega^2}.
+    \end{equation}
+    The eigenvalues are in the unit circle (i.e., the discrete-time system is stable) if
+    \begin{equation}
+        \|\lambda_{1,2}\| < 1 \quad \Leftrightarrow \quad T_\mathrm{s} < \frac{R_\mathrm{s}\left(L_\mathrm{d} + L_\mathrm{q}\right)}{R_\mathrm{s}^2 + \omega^2 L_\mathrm{d}L_\mathrm{q}}.
+        \label{eq:eigenvalues_RK1_PMSM_model_linear_magn}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical instability due to the explicit RK1 discretization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Numerical instability due to the explicit RK1 discretization (cont.)}
+    \begin{varblock}{Numerical instability due to the explicit RK1 discretization}
+        For the above linear magnetic case, the RK1 discrete-time model is only stable for sampling times $T_\mathrm{s}$ smaller than a critical value given by \eqref{eq:eigenvalues_RK1_PMSM_model_linear_magn}. For larger sampling times, the RK1 discrete-time model is numerically unstable, which leads to diverging trajectories and unbounded states. This instability is not related to the physical system, but is solely caused by the numerical discretization method.
+    \end{varblock}
+    Consider the example values
+    $$
+        L_\mathrm{d} = \SI{0.5}{\milli\henry}, \quad L_\mathrm{q} = \SI{1}{\milli\henry}, \quad R_\mathrm{s} = \SI{0.01}{\ohm}, \quad \omega = \SI{2\pi \cdot \frac{1000}{60}\cdot10}{\radian\per\second}.
+    $$
+    The latter represents the electrical angular speed of a machine rotating at \SI[per-mode=fraction, fraction-command=\nicefrac]{1000}{\per\minute} with $p=10$ pole pairs. In this case, the critical sampling time is given by
+    $$
+        T_\mathrm{s} < \SI{27.35}{\micro\second} \quad \Leftrightarrow \quad f_\mathrm{s} > \SI{36.57}{\kilo\hertz}.
+    $$
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical instability due to the explicit RK1 discretization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Numerical instability due to the explicit RK1 discretization (cont.)}
+    Applying the same assumptions (linear magnetization, constant speed) to the RK1 model derived from the $\upalpha\upbeta$-frame as from \eqref{eq:current_diff_eq_RK1_alpha_beta} yields the following current difference equation:
+    \begin{equation}
+        \begin{split}
+            \bm{i}_\mathrm{s,dq}[k+1] = & \left(\bm{I} - \bm{L}_0^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}_0^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\left(\bm{L}_0\bm{i}_\mathrm{s,dq}[k] + \bm{\psi}_\mathrm{PM}\right) + \bm{L}_0^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k]\\
+            =                           & \bm{T}_\mathrm{p}(-\omega T_\mathrm{s})\left(\bm{I} - \bm{L}_0^{-1}R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}_0^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\bm{\psi}_\mathrm{PM} + \bm{L}_0^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k].
+        \end{split}
+    \end{equation}
+    Hence, the system matrix is given by
+    \begin{equation}
+        \bm{A}_{\text{RK1}}^{\upalpha\upbeta\rightarrow\mathrm{dq}} = \begin{bmatrix}
+            \cos\!\left(\omega T_\mathrm{s}\right)
+            \left(1-\dfrac{T_\mathrm{s} R_\mathrm{s}}{L_{\mathrm{d}}}\right)
+             &
+            \sin\!\left(\omega T_\mathrm{s}\right)
+            \dfrac{L_{\mathrm{q}}}{L_{\mathrm{d}}}
+            \left(1-\dfrac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{q}}}\right)
+            \\[2ex]
+            -\sin\!\left(\omega T_\mathrm{s}\right)
+            \dfrac{L_{\mathrm{d}}}{L_{\mathrm{q}}}
+            \left(1-\dfrac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{d}}}\right)
+             &
+            \cos\!\left(\omega T_\mathrm{s}\right)
+            \left(1-\dfrac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{q}}}\right)
+        \end{bmatrix}
+        \label{eq:system_matrix_PMSM_RK1_alpha_beta}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical instability due to the explicit RK1 discretization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Numerical instability due to the explicit RK1 discretization (cont.)}
+    The eigenvalues of \eqref{eq:system_matrix_PMSM_RK1_alpha_beta} are given by
+    \begin{equation}
+        \begin{split}
+            \lambda_{1,2} = &
+            \frac{1}{2}
+            \cos\!\left(\omega T_\mathrm{s}\right)
+            \left[
+                2
+                -
+                T_\mathrm{s}R_\mathrm{s}
+                \left(
+                \frac{1}{L_{\mathrm{d}}}
+                +
+                \frac{1}{L_{\mathrm{q}}}
+                \right)
+                \right] \\
+                            & \pm
+            \frac{1}{2}
+            \sqrt{
+                \cos^2\!\left(\omega T_\mathrm{s}\right)
+                \left[
+                    2
+                    -
+                    T_\mathrm{s}R_\mathrm{s}
+                    \left(
+                    \frac{1}{L_{\mathrm{d}}}
+                    +
+                    \frac{1}{L_{\mathrm{q}}}
+                    \right)
+                    \right]^2
+                -
+                4
+                \left(
+                1-\frac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{d}}}
+                \right)
+                \left(
+                1-\frac{T_\mathrm{s}R_\mathrm{s}}{L_{\mathrm{q}}}
+                \right)
+            }
+        \end{split}
+    \end{equation}
+    For $\left\{L_{\mathrm{d}}, L_{\mathrm{q}}, R_\mathrm{s}, \omega \right\}> 0$ it can be shown that
+    \begin{equation}
+        \|\lambda_{1,2}\| < 1 \quad \Leftrightarrow \quad T_\mathrm{s} < 2\frac{\min\left\{L_\mathrm{d}, L_\mathrm{q}\right\}}{R_\mathrm{s}}
+    \end{equation}
+    holds. Hence, the sampling time must be smaller than two times the smallest time constant of the system to ensure (numerical) stability, which is independent of the machine speed $\omega$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RK1 discretization of the dq flux ODE for the nonlinear EESM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{RK1 discretization of the nonlinear EESM dq flux ODE}
+    Based on the compact EESM flux ODE in dq coordinates
+    \begin{equation*}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{E}(t) = \bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{J}_\mathrm{E}(\omega(t))\bm{\psi}_\mathrm{E}(t)
+    \end{equation*}\pause
+    the \hl{explicit Euler method (RK1)} yields
+    \begin{equation}
+        \bm{\psi}_\mathrm{E}[k+1] = \bm{\psi}_\mathrm{E}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{E}[k] - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}[k] - \bm{J}_\mathrm{E}(\omega[k])\bm{\psi}_\mathrm{E}[k]\right).
+        \label{eq:RK1_dq_flux_linkage_EESM}
+    \end{equation}
+    \onslide<2->{Here, the induced voltage term is
+            \begin{equation*}
+                \bm{J}_\mathrm{E}(\omega[k])\bm{\psi}_\mathrm{E}[k] = \begin{bmatrix}
+                    \omega[k]\bm{J}\bm{\psi}_\mathrm{s,dq}[k] \\
+                    0
+                \end{bmatrix},
+            \end{equation*}
+            i.e., only the stator $\mathrm{dq}$ subspace is directly affected. Here, the induced voltage vector is again perpendicular to the stator flux vector analogously to the PMSM case, i.e., leading to the same numerical issues.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: start in $\upalpha\upbeta$-frame %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path for EESM: start in $\upalpha\upbeta$-frame}
+    We can also start from the mixed-frame EESM flux linkage ODE
+    \begin{equation*}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}(t) = \bm{u}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}(t) - \bm{R}_\mathrm{E}\bm{i}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}(t)
+    \end{equation*}\pause
+    with
+    \begin{equation*}
+        \bm{\psi}_{\mathrm{E},\upalpha\upbeta \mathrm{f}} = \begin{bmatrix}
+            \bm{\psi}_{\mathrm{s},\upalpha\upbeta} \\
+            \psi_\mathrm{f}
+        \end{bmatrix}, \quad
+        \bm{i}_{\mathrm{E},\upalpha\upbeta \mathrm{f}} = \begin{bmatrix}
+            \bm{i}_{\mathrm{s},\upalpha\upbeta} \\
+            i_\mathrm{f}
+        \end{bmatrix}, \quad
+        \bm{u}_{\mathrm{E},\upalpha\upbeta \mathrm{f}} = \begin{bmatrix}
+            \bm{u}_{\mathrm{s},\upalpha\upbeta} \\
+            u_\mathrm{f}
+        \end{bmatrix},
+    \end{equation*}\pause
+    whose explicit RK1 discretization is
+    \begin{equation}
+        \bm{\psi}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}[k+1] = \bm{\psi}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}[k] - \bm{R}_\mathrm{E}\bm{i}_{\mathrm{E},\upalpha\upbeta \mathrm{f}}[k]\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Alternative discretization path: start in $\upalpha\upbeta$-frame (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Alternative discretization path for EESM: start in $\upalpha\upbeta$-frame (cont.)}
+    Introducing the extended transformation matrix
+    \begin{equation*}
+        \bm{T}_\mathrm{E}(\varepsilon) = \begin{bmatrix}
+            \bm{T}_\mathrm{p}(\varepsilon) & \bm{0}_{2\times 1} \\
+            \bm{0}_{1\times 2}             & 1
+        \end{bmatrix},
+    \end{equation*}
+    and assuming a nearly constant speed $\omega[k]=\omega[k+1]$ over two sampling steps,  the \hl{EESM's explicit RK1 model as a simple standard model} (discretized from the $\upalpha\upbeta$-frame) can be written as:
+    \begin{equation}
+        \begin{alignedat}{4}
+             &  & \mbox{Difference eq.:} &  & \bm{\psi}_\mathrm{E}[&k+1]            &  & = \bm{T}_\mathrm{E}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_\mathrm{E}[k] + T_\mathrm{s}\left(\bm{u}_\mathrm{E}[k] - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}[k]\right)\right). \\
+             &  & \mbox{Flux linkage:}   &  & \quad \bm{\psi}_\mathrm{€}[ & k+1]    &  & = \bm{f}_{\psi, \mathrm{E}}(\bm{i}_\mathrm{E}[k+1]),                                                                                                                     \\
+             &  & \mbox{Torque:}         &  & \quad T[                       & k+1] &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}[k+1])\T\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].
+        \end{alignedat}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current difference equation of the RK1 discrete-time EESM model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current difference equation of the RK1 discrete-time EESM model}
+    Utilizing the first-order approximation of the EESM flux-to-current map
+    \begin{equation}
+        \bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}[k+1]) \approx \bm{f}_{\psi,\mathrm{E}}(\bm{i}_\mathrm{E}[k]) + \bm{L}_\mathrm{E}(\bm{i}_\mathrm{E}[k])\left(\bm{i}_\mathrm{E}[k+1] - \bm{i}_\mathrm{E}[k]\right),
+    \end{equation}
+    the \hl{EESM's current  difference equation} can be rewritten as
+    \begin{equation}
+        \begin{split}
+            \bm{i}_\mathrm{E}[k+1] = & \underbrace{\left(\bm{I} - \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E}[k])\bm{T}_\mathrm{E}(-\omega[k]T_\mathrm{s})T_\mathrm{s}\bm{R}_\mathrm{E}\right)\bm{i}_\mathrm{E}[k]}_{\text{discrete-time PT1 element}} \\
+                                     & + \bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E}[k])\underbrace{\left(\bm{T}_\mathrm{E}(-\omega[k]T_\mathrm{s}) - \bm{I}\right)\bm{\psi}_\mathrm{E}[k]}_{\text{induced voltage term}}                              \\
+                                     & + \left(\bm{L}_\mathrm{E}^{-1}(\bm{i}_\mathrm{E}[k])\bm{T}_\mathrm{E}(-\omega[k]T_\mathrm{s})T_\mathrm{s}\right)\underbrace{\bm{u}_\mathrm{E}[k]}_{\text{input voltage}}.
+        \end{split}
+        \label{eq:current_diff_eq_RK1_EESM}
+    \end{equation}
 \end{frame}
