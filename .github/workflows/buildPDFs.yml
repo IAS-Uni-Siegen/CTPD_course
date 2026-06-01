@@ -3,6 +3,7 @@ on:
   push: 
     paths:
         - '**.tex'
+        - 'lecture/build.py'
   workflow_dispatch:
   
 jobs:

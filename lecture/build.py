@@ -1,9 +1,18 @@
 import fileinput
 import os
-from subprocess import call
+from subprocess import run
 
 os.makedirs("built", exist_ok=True)
-call_pdflatex_l = ["pdflatex", "-synctex=1", "-interaction=nonstopmode", "main.tex"]
+latex_engine = os.environ.get("LATEX_ENGINE", "lualatex")
+call_latex_l = [
+    latex_engine,
+    "-synctex=1",
+    "-interaction=nonstopmode",
+    "-halt-on-error",
+    "-file-line-error",
+    "-shell-escape",
+    "main.tex",
+]
 
 
 def clear_tex_binaries():
@@ -30,8 +39,8 @@ with fileinput.input("main.tex", inplace=True) as f:
         else:
             print(line, end="")
 
-call(call_pdflatex_l)
-call(call_pdflatex_l)
+run(call_latex_l, check=True)
+run(call_latex_l, check=True)
 
 
 # go into the parent directory

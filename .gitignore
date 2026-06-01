@@ -342,6 +342,3 @@ __pycache__/
 
 # Ignore Serena's local configuration file
 .serena/
-
-# Ignore Visual Studio Code settings folder
-.vscode/
