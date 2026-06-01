@@ -3532,16 +3532,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Total control delay and compensation}
-    As already indicated in \figref{fig:digital_control_implementation}, the \hl{effective total control delay is $\nicefrac{3}{2}\cdot T_\mathrm{s}$} for a regular sampling digital control implementation. This delay is the sum of two components:\pause
+    As already indicated in \figref{fig:digital_control_implementation}, the \hl{effective total control delay is $\nicefrac{3}{2}\cdot T_\mathrm{s}$} for a regular sampling control implementation. This delay is the sum of two components:\pause
     \begin{itemize}
         \item \textbf{Reference synchronization}: $\nicefrac{T_\mathrm{s}}{2}$ (compare \eqref{eq:regular_sampling_transfer_function_sinc} and the approximations thereof),\pause
-        \item \textbf{Controller processing}: $T_\mathrm{s}$ (incl. sensor data acquisition, control algorithm execution, and actuation signal generation).
+        \item \textbf{Controller processing}: $T_\mathrm{s}$ (incl. sensor data acquisition, control algorithm execution, ...).
     \end{itemize}\pause
-    While this impact must be considered for every control design, at least one $T_\mathrm{s}$ delay can be compensated by simple \hl{one-step feedforward prediction} of the system's states:
-    \begin{equation}
-        \hat{\bm{x}}_{k+1} = \bm{f}(\bm{x}_k, \bm{u}_k),
-    \end{equation}
-    where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics. \pause The input $\bm{u}_k$ is the control action from the last controller cycle, e.g., the average reference voltage $\bm{u}_k = \bm{u}_{\mathrm{abc},k}^*$. \pause The next control cycle can then be based on the predicted state $\hat{\bm{x}}_{k+1}$ instead of the current state $\bm{x}_k$.
+    The consideration of these effects depends on the control realization:
+    \begin{itemize}
+        \item \textbf{Quasi-continous control design}: The control design is based on a continuous-time system model, and the control law is discretized for implementation. The impact of the total control delay must be explicitly considered in the control design, e.g., by a PT1 delay element with a time constant of $\nicefrac{3}{2}\cdot T_\mathrm{s}$ as an additional plant part.\pause
+        \item \textbf{Discrete-time control design}: The control design is directly based on a discrete-time system model, which includes the impact of the reference synchronization and controller processing. Hence, compensation can be achieved by a one-step feedforward prediction $\hat{\bm{x}}_{k+1} = \bm{f}(\bm{x}_k, \bm{u}_k),$ where $\hat{\bm{x}}_{k+1}$ is the predicted state at the next sampling instant, $\bm{x}_k$ is the current state, and $\bm{f}(\cdot)$ represents the system's dynamics.
+    \end{itemize}
 \end{frame}
 
 

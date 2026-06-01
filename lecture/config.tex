@@ -1,0 +1,116 @@
+% Course-related individual configuration deviating from the general course template settings 
+
+\hypersetup{bookmarksdepth=4} % Set depth of PDF bookmarks to include sections, subsections, and subsubsections
+
+
+% Reconfiguration of TOC (Table of Contents) to include subsubsections
+\AtBeginSection[]
+{
+    \hypertarget{sec\thesection}{}
+    \begin{frame}{Table of contents}
+        \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/show/hide,
+            subsubsectionstyle=hide/hide/hide/hide]
+    \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+    \ifnum\value{subsection} > 1 % show TOC again after the second subsection
+        \begin{frame}{Table of contents}
+            \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide,
+                subsubsectionstyle=show/show/hide/hide]
+        \end{frame}
+    \fi
+}
+
+\AtBeginSubsubsection[]
+{
+
+    \ifnum\value{subsubsection} > 1 % show TOC again after the second subsection
+        \begin{frame}{Table of contents}
+            \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide,
+                subsubsectionstyle=show/shaded/hide/hide]
+        \end{frame}
+    \fi
+}
+
+
+% Helper functions and parameters for OPS plots / normalize IPMSM
+%-------------------------------------------------------------------------
+% Simplified linear IPMSM model for visualizing the operating regions:
+%   psi_d = psi_PM + L_d i_{s,d},
+%   psi_q = L_q i_{s,q},
+%   T = K_T (psi_PM - (L_q-L_d)i_{s,d}) i_{s,q}.
+%
+% Normalization:
+%   x = i_{s,d}/I_max, y = i_{s,q}/I_max.
+% Thus, the current constraint becomes x^2 + y^2 = 1.
+%
+% Voltage model for the loci, with R_s neglected for clarity:
+%   (psi_PM + L_d I_max x)^2 + (L_q I_max y)^2 = c^2,
+%   c = u_{s,max}/omega.
+%
+% Color convention used below:
+%   signaldelta   -> current constraint
+%   signalalpha   -> voltage constraint
+%   signalbeta    -> MTPC contour
+%   signalepsilon -> MTPV contour
+% -------------------------------------------------------------------------
+
+\pgfmathsetmacro{\psim}{1.1}
+\pgfmathsetmacro{\Ld}{0.4}
+\pgfmathsetmacro{\Lq}{0.8}
+\pgfmathsetmacro{\DeltaL}{\Lq-\Ld}
+\pgfmathsetmacro{\Kt}{1.0}
+\pgfmathsetmacro{\Imax}{5.0}
+
+% Analytic functions in physical coordinates.
+\pgfmathdeclarefunction{torque}{2}{%
+    \pgfmathparse{\Kt*(\psim-\DeltaL*(#1))*(#2)}%
+}
+\pgfmathdeclarefunction{idmtpc}{1}{%
+    \pgfmathparse{\psim/(2*\DeltaL)-sqrt((\psim/(2*\DeltaL))^2 + (#1)^2)}%
+}
+\pgfmathdeclarefunction{iqvoltage}{2}{%
+    \pgfmathparse{sqrt(max(0,(#2)*(#2)-(\psim+\Ld*(#1))*(\psim+\Ld*(#1))))/\Lq}%
+}
+\pgfmathdeclarefunction{iqtorque}{2}{%
+    \pgfmathparse{(#2)/(\Kt*(\psim-\DeltaL*(#1)))}%
+}
+\pgfmathdeclarefunction{iqmtpv}{1}{%
+    \pgfmathparse{sqrt(max(0,-\Ld*(\psim+\Ld*(#1))*(\psim-\DeltaL*(#1))/(\DeltaL*\Lq*\Lq)))}%
+}
+
+% Analytic functions in normalized coordinates.
+\pgfmathdeclarefunction{xmtpcnorm}{1}{%
+    \pgfmathparse{idmtpc(\Imax*abs(#1))/\Imax}%
+}
+\pgfmathdeclarefunction{ycurrentnorm}{1}{%
+    \pgfmathparse{sqrt(max(0,1-(#1)*(#1)))}%
+}
+\pgfmathdeclarefunction{xcurrentnorm}{1}{%
+    \pgfmathparse{-sqrt(max(0,1-(#1)*(#1)))}%
+}
+\pgfmathdeclarefunction{yvoltnorm}{2}{%
+    \pgfmathparse{iqvoltage(\Imax*(#1),#2)/\Imax}%
+}
+\pgfmathdeclarefunction{ytorquenorm}{2}{%
+    \pgfmathparse{iqtorque(\Imax*(#1),#2)/\Imax}%
+}
+\pgfmathdeclarefunction{ymtpvnorm}{1}{%
+    \pgfmathparse{iqmtpv(\Imax*(#1))/\Imax}%
+}
+
+% Inverse MTPV relation x = x_MTPV(y), derived from the quadratic equation
+% of the analytic MTPV locus. The negative root gives the relevant branch.
+\pgfmathdeclarefunction{xmtpvnorm}{1}{%
+    \pgfmathparse{%
+        -(-\Ld*\psim*(\Ld*\Imax-\DeltaL*\Imax))/(2*\Ld*(\Ld*\Imax)*(\DeltaL*\Imax))
+        -
+        sqrt((-\Ld*\psim*(\Ld*\Imax-\DeltaL*\Imax))^2
+        -4*(\Ld*(\Ld*\Imax)*(\DeltaL*\Imax))
+        *(-\Ld*\psim*\psim-\DeltaL*\Lq*\Lq*\Imax*\Imax*(#1)*(#1)))
+        /(2*\Ld*(\Ld*\Imax)*(\DeltaL*\Imax))%
+    }%
+}
+
