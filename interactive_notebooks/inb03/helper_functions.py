@@ -2,6 +2,8 @@ from typing import Callable
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+from matplotlib import cm
+import numpy as np
 
 import jax
 import jax.numpy as jnp
@@ -248,4 +250,188 @@ def visualize_trajectories(
         ax.tick_params(which="major", axis="y", direction="in")
         ax.tick_params(which="both", axis="x", direction="in")
 
+    return fig, all_axs
+
+
+def visualize_flux(lut_raw):
+
+    selected_fontsize = 12
+
+    plt.rcParams["text.usetex"] = True
+    plt.rcParams["font.size"] = selected_fontsize
+
+    psi_d = lut_raw["Psi_d"]
+    psi_q = lut_raw["Psi_q"]
+    i_d = lut_raw["i_d_vec"]
+    i_q = lut_raw["i_q_vec"]
+
+    X, Y = np.meshgrid(i_d, i_q)
+    R = psi_d
+    Z = psi_q
+
+    fig20 = plt.figure(figsize=(6, 6))
+
+    gs = gridspec.GridSpec(
+        1, 2, figure=fig20, left=0.12, bottom=0.18, right=1.0, top=0.99, wspace=0.3, hspace=0, width_ratios=[2, 2]
+    )
+
+    ax20 = fig20.add_subplot(
+        gs[0, 0],
+        projection="3d",
+    )
+    ax20.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax20.view_init(35, 240, 0)
+    ax20.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="center")
+    ax20.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="top")
+    ax20.zaxis.set_rotate_label(False)
+    ax20.set_zlabel(r"$\psi_{\mathrm{d}}\ \mathrm{in \ Vs}$", fontsize=selected_fontsize, rotation=90)
+    ax20.zaxis.labelpad = -0.5
+    ax20.set_xticks([-200, -100, 0])
+    ax20.set_yticks([-200, 0, 200])
+    ax20.set_zticks([0, 0.03, 0.06])
+    ax20.set_zlim([0, 0.065])
+
+    ax20.xaxis.labelpad = 0
+    ax20.yaxis.labelpad = 0.5
+    ax20.tick_params(axis="both", direction="in")
+
+    ax21 = fig20.add_subplot(gs[0, 1], projection="3d")
+    ax21.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax21.view_init(35, 240, 0)
+    ax21.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax21.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax21.zaxis.set_rotate_label(False)
+    ax21.set_zlabel(r"$\psi_{\mathrm{q}}\ \mathrm{in \ Vs}$", fontsize=selected_fontsize, rotation=90)
+    ax21.set_xticks([-200, -100, 0])
+    ax21.set_yticks([-200, 0, 200])
+    ax21.set_zticks([-0.1, 0, 0.1])
+    ax21.set_zlim([-0.15, 0.15])
+    ax21.zaxis.labelpad = -0.5
+    ax21.xaxis.labelpad = 0
+    ax21.yaxis.labelpad = 0.5
+
+    ax21.set_box_aspect([1, 1, 1])
+    ax21.set_adjustable("box")
+    ax21.tick_params(axis="both", direction="in")
+
     plt.show()
+
+    return fig20
+
+
+def visualize_diff_inductance(lut_raw):
+
+    selected_fontsize = 12
+
+    plt.rcParams["text.usetex"] = True
+    plt.rcParams["font.size"] = selected_fontsize
+
+    i_d = lut_raw["i_d_vec"]
+    i_q = lut_raw["i_q_vec"]
+
+    X, Y = np.meshgrid(i_d, i_q)
+    L_dd = lut_raw["L_dd"]
+    L_dq = lut_raw["L_dq"]
+    L_qd = lut_raw["L_qd"]
+    L_qq = lut_raw["L_qq"]
+
+    fig4 = plt.figure(figsize=(6, 6))
+
+    gs = gridspec.GridSpec(
+        2, 2, figure=fig4, left=0.11, bottom=0.12, right=1.0, top=0.999, wspace=0.3, hspace=0.5, width_ratios=[2, 2]
+    )
+
+    ########################################################################
+    ## L_dd
+    ########################################################################
+    ax41 = fig4.add_subplot(
+        gs[0, 0],
+        projection="3d",
+    )
+    ax41.plot_surface(X, Y, L_dd * 1000, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax41.view_init(35, 240, 0)
+    ax41.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="center")
+    ax41.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="top")
+    ax41.zaxis.set_rotate_label(False)
+    ax41.set_zlabel(r"$L_{\mathrm{dd}}\ \mathrm{in \ mH}$", fontsize=selected_fontsize, rotation=90)
+    ax41.zaxis.labelpad = -0.5
+    ax41.set_xticks([-200, -100, 0])
+    ax41.set_yticks([-200, 0, 200])
+    ax41.set_zticks([0.2, 0.3, 0.4, 0.5, 0.6])
+    ax41.set_zlim([0.2, 0.5])
+
+    ax41.xaxis.labelpad = 0
+    ax41.yaxis.labelpad = 0.5
+    ax41.tick_params(axis="both", direction="in")
+
+    ########################################################################
+    ## L_dq
+    ########################################################################
+    ax42 = fig4.add_subplot(gs[0, 1], projection="3d")
+    ax42.plot_surface(X, Y, L_dq * 1000, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax42.view_init(35, 240, 0)
+    ax42.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax42.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax42.zaxis.set_rotate_label(False)
+    ax42.set_zlabel(r"$L_{\mathrm{dq}}\ \mathrm{in \ mH}$", fontsize=selected_fontsize, rotation=90)
+    ax42.set_xticks([-200, -100, 0])
+    ax42.set_yticks([-200, 0, 200])
+    ax42.set_zticks([-0.1, 0, 0.1])
+    ax42.set_zlim([-0.15, 0.15])
+    ax42.zaxis.labelpad = -0.5
+    ax42.xaxis.labelpad = 0
+    ax42.yaxis.labelpad = 0.5
+
+    ax42.set_box_aspect([1, 1, 1])
+    ax42.set_adjustable("box")
+    ax42.tick_params(axis="both", direction="in")
+
+    ########################################################################
+    ## L_qd
+    ########################################################################
+    ax43 = fig4.add_subplot(gs[1, 0], projection="3d")
+    ax43.plot_surface(X, Y, L_qd * 1000, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax43.view_init(35, 240, 0)
+    ax43.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax43.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax43.zaxis.set_rotate_label(False)
+    ax43.set_zlabel(r"$L_{\mathrm{qd}}\ \mathrm{in \ mH}$", fontsize=selected_fontsize, rotation=90)
+    ax43.set_xticks([-200, -100, 0])
+    ax43.set_yticks([-200, 0, 200])
+    ax43.set_zticks([-0.1, 0, 0.1])
+    ax43.set_zlim([-0.15, 0.15])
+    ax43.zaxis.labelpad = -0.5
+    ax43.xaxis.labelpad = 0
+    ax43.yaxis.labelpad = 0.5
+    ax43.tick_params(axis="both", direction="in")
+
+    ax43.set_box_aspect([1, 1, 1])
+    ax43.set_adjustable("box")
+
+    ########################################################################
+    ## L_qq
+    ########################################################################
+    ax44 = fig4.add_subplot(gs[1, 1], projection="3d")
+    ax44.plot_surface(X, Y, L_qq * 1000, rstride=1, cstride=1, cmap=cm.winter, linewidth=0, antialiased=False)
+    ax44.view_init(35, 240, 0)
+    ax44.set_xlabel(r"$i_{\mathrm{d}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax44.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize)
+    ax44.zaxis.set_rotate_label(False)
+    ax44.set_zlabel(r"$L_{\mathrm{qq}}\ \mathrm{in \ mH}$", fontsize=selected_fontsize, rotation=90)
+    ax44.set_xticks([-200, -100, 0])
+    ax44.set_yticks([-200, 0, 200])
+    ax44.set_zticks([0, -0.5, 1])
+    ax44.set_zlim([0, 1.5])
+    ax44.zaxis.labelpad = -0.5
+    ax44.xaxis.labelpad = 0
+    ax44.yaxis.labelpad = 0.5
+
+    ax44.set_box_aspect([1, 1, 1])
+    ax44.set_adjustable("box")
+    ax44.tick_params(axis="both", direction="in")
+
+    ax44.get_xticklabels()
+    # ax44.set_xticks([[-0,-0.1],[-100,0.1],[-1.5,.1]], ['200','100','100'])
+    plt.show()
+
+    return fig4
