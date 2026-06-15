@@ -9,6 +9,71 @@ import jax
 import jax.numpy as jnp
 import equinox as eqx
 
+t32 = jnp.array([[1, 0], [-0.5, 0.5 * jnp.sqrt(3)], [-0.5, -0.5 * jnp.sqrt(3)]])
+t23 = 2 / 3 * jnp.array([[1, 0], [-0.5, 0.5 * jnp.sqrt(3)], [-0.5, -0.5 * jnp.sqrt(3)]]).T  # only for abc -> alpha/beta
+
+ROTATION_MAP = np.ones((2, 2, 2), dtype=np.complex64)
+ROTATION_MAP[1, 0, 1] = 0.5 * (1 + np.sqrt(3) * 1j)
+ROTATION_MAP[1, 1, 0] = 0.5 * (1 - np.sqrt(3) * 1j)
+ROTATION_MAP[0, 1, 0] = 0.5 * (-1 - np.sqrt(3) * 1j)
+ROTATION_MAP[0, 1, 1] = -1
+ROTATION_MAP[0, 0, 1] = 0.5 * (-1 + np.sqrt(3) * 1j)
+ROTATION_MAP = jnp.array(ROTATION_MAP)
+
+
+def t_dq_alpha_beta(eps):
+    """Compute the transformation matrix for converting between DQ and Alpha-Beta reference frames."""
+    cos = jnp.cos(eps)
+    sin = jnp.sin(eps)
+    return jnp.column_stack((cos, sin, -sin, cos)).reshape(2, 2)
+
+
+def dq2abc(u_dq, eps):
+    """Transform voltages from DQ coordinates to ABC (three-phase) coordinates."""
+    u_abc = t32 @ dq2albet(u_dq, eps).T
+    return u_abc.T
+
+
+def dq2albet(u_dq, eps):
+    """Transform voltages from DQ coordinates to Alpha-Beta coordinates."""
+    q = t_dq_alpha_beta(-eps)
+    u_alpha_beta = q @ u_dq.T
+
+    return u_alpha_beta.T
+
+
+def albet2dq(u_albet, eps):
+    """Transform voltages from Alpha-Beta coordinates to DQ coordinates."""
+    q_inv = t_dq_alpha_beta(eps)
+    u_dq = q_inv @ u_albet.T
+
+    return u_dq.T
+
+
+def abc2dq(u_abc, eps):
+    """Transform voltages from ABC (three-phase) coordinates to DQ coordinates."""
+    u_alpha_beta = t23 @ u_abc.T
+    u_dq = albet2dq(u_alpha_beta.T, eps)
+    return u_dq
+
+
+def clip_in_abc_coordinates(u_dq, u_dc, omega_el, eps, tau):
+    eps_advanced = step_eps(eps, omega_el, tau, 0.5)
+    u_abc = dq2abc(u_dq, eps_advanced)
+    # clip in abc coordinates
+    u_abc = jnp.clip(u_abc, -u_dc / 2.0, u_dc / 2.0)
+    u_dq = abc2dq(u_abc, eps)
+    return u_dq
+
+
+def step_eps(eps, omega_el, tau, tau_scale=1.0):
+    eps += omega_el * tau * tau_scale
+    eps %= 2 * jnp.pi
+    boolean = eps > jnp.pi
+    summation_mask = boolean * -2 * jnp.pi
+    eps = eps + summation_mask
+    return eps
+
 
 def aprbs_single_batch(len: int, t_min: float, t_max: float, key: jax.random.PRNGKey) -> jax.Array:
     """Creates an amplitude modulated pseudorandom binary sequence (APRBS) in 1d and for 1 batch,
@@ -150,12 +215,13 @@ def visualize_trajectories(
 ):
     colors = plt.rcParams["axes.prop_cycle"]()
 
-    fig = plt.figure(figsize=(12, 10), constrained_layout=True)
+    fig = plt.figure(figsize=(9, 7), constrained_layout=True)
 
     gs = gridspec.GridSpec(
         4,
-        2,  # 4 rows, 2 columns
-        width_ratios=[1.2, 1],  # left column 3x wider than right
+        2,
+        figure=fig,
+        width_ratios=[1.2, 1],
     )
 
     # plots on the left
@@ -188,15 +254,15 @@ def visualize_trajectories(
             else:
                 t_plot = t
 
-            ax_left[plot_idx].plot(t_plot, data, color=color)
+            ax_left[plot_idx].plot(t_plot, data, color=color, alpha=0.7)
 
         # only shows dynamics if u_dq is constant
         if jnp.unique(u_dq_sequence, axis=0).shape == (1, 2):
             x, y, u, v = estimate_eigendynamics_grid(ode=ode, params=params, omega=omega, u_dq=u_dq_sequence[0])
             ax_right_top.quiver(x, y, u, v, scale=None, color="tab:purple", alpha=0.2)
 
-        ax_right_top.plot(i_dq_sequence[..., 0], i_dq_sequence[..., 1], color=color)
-        ax_right_bot.plot(u_dq_sequence[..., 0], u_dq_sequence[..., 1], color=color)
+        ax_right_top.plot(i_dq_sequence[..., 0], i_dq_sequence[..., 1], color=color, alpha=0.7)
+        ax_right_bot.plot(u_dq_sequence[..., 0], u_dq_sequence[..., 1], color=color, alpha=0.7)
 
     ###
 
@@ -206,9 +272,9 @@ def visualize_trajectories(
             handles=handles[: len(labels)],
             labels=labels,
             loc="lower center",
-            bbox_to_anchor=(0.5, -0.02),  # centered, just below the figure
-            ncol=len(labels),  # all entries in one row
-            frameon=False,  # clean look, no box
+            bbox_to_anchor=(0.5, -0.07),
+            ncol=len(labels),
+            frameon=False,
         )
 
     ax_left[-1].set_xlabel("$t$ in s")
@@ -255,10 +321,7 @@ def visualize_trajectories(
 
 def visualize_flux(lut_raw):
 
-    selected_fontsize = 12
-
-    plt.rcParams["text.usetex"] = True
-    plt.rcParams["font.size"] = selected_fontsize
+    selected_fontsize = 20
 
     psi_d = lut_raw["Psi_d"]
     psi_q = lut_raw["Psi_q"]
@@ -269,10 +332,19 @@ def visualize_flux(lut_raw):
     R = psi_d
     Z = psi_q
 
-    fig20 = plt.figure(figsize=(6, 6))
+    fig20 = plt.figure(figsize=(8, 8))
 
     gs = gridspec.GridSpec(
-        1, 2, figure=fig20, left=0.12, bottom=0.18, right=1.0, top=0.99, wspace=0.3, hspace=0, width_ratios=[2, 2]
+        1,
+        2,
+        figure=fig20,
+        left=0.12,
+        bottom=0.18,
+        right=1.0,
+        top=0.99,
+        wspace=0.05,
+        hspace=0,
+        width_ratios=[2, 2],
     )
 
     ax20 = fig20.add_subplot(
@@ -285,14 +357,17 @@ def visualize_flux(lut_raw):
     ax20.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="top")
     ax20.zaxis.set_rotate_label(False)
     ax20.set_zlabel(r"$\psi_{\mathrm{d}}\ \mathrm{in \ Vs}$", fontsize=selected_fontsize, rotation=90)
-    ax20.zaxis.labelpad = -0.5
+
     ax20.set_xticks([-200, -100, 0])
     ax20.set_yticks([-200, 0, 200])
     ax20.set_zticks([0, 0.03, 0.06])
     ax20.set_zlim([0, 0.065])
 
-    ax20.xaxis.labelpad = 0
-    ax20.yaxis.labelpad = 0.5
+    ax20.zaxis.labelpad = 15.0
+    ax20.xaxis.labelpad = 15.0
+    ax20.yaxis.labelpad = 15.0
+    ax20.set_box_aspect(None, zoom=0.85)
+    # ax20.set_adjustable("box")
     ax20.tick_params(axis="both", direction="in")
 
     ax21 = fig20.add_subplot(gs[0, 1], projection="3d")
@@ -306,25 +381,22 @@ def visualize_flux(lut_raw):
     ax21.set_yticks([-200, 0, 200])
     ax21.set_zticks([-0.1, 0, 0.1])
     ax21.set_zlim([-0.15, 0.15])
-    ax21.zaxis.labelpad = -0.5
-    ax21.xaxis.labelpad = 0
-    ax21.yaxis.labelpad = 0.5
 
-    ax21.set_box_aspect([1, 1, 1])
-    ax21.set_adjustable("box")
+    ax21.zaxis.labelpad = 15.0
+    ax21.xaxis.labelpad = 15.0
+    ax21.yaxis.labelpad = 15.0
+
+    ax21.set_box_aspect(None, zoom=0.85)
+    # ax21.set_adjustable("box")
     ax21.tick_params(axis="both", direction="in")
 
-    plt.show()
-
+    fig20.set_size_inches(fig20.get_size_inches() + [4, 0])
     return fig20
 
 
 def visualize_diff_inductance(lut_raw):
 
-    selected_fontsize = 12
-
-    plt.rcParams["text.usetex"] = True
-    plt.rcParams["font.size"] = selected_fontsize
+    selected_fontsize = 20
 
     i_d = lut_raw["i_d_vec"]
     i_q = lut_raw["i_q_vec"]
@@ -335,10 +407,19 @@ def visualize_diff_inductance(lut_raw):
     L_qd = lut_raw["L_qd"]
     L_qq = lut_raw["L_qq"]
 
-    fig4 = plt.figure(figsize=(6, 6))
+    fig4 = plt.figure(figsize=(8, 8))
 
     gs = gridspec.GridSpec(
-        2, 2, figure=fig4, left=0.11, bottom=0.12, right=1.0, top=0.999, wspace=0.3, hspace=0.5, width_ratios=[2, 2]
+        2,
+        2,
+        figure=fig4,
+        left=0.05,
+        bottom=0.05,
+        right=0.95,
+        top=0.95,
+        wspace=0.15,
+        hspace=0.15,
+        width_ratios=[2, 2],
     )
 
     ########################################################################
@@ -354,14 +435,15 @@ def visualize_diff_inductance(lut_raw):
     ax41.set_ylabel(r"$i_{\mathrm{q}}\ \mathrm{in \ A}$", fontsize=selected_fontsize, loc="top")
     ax41.zaxis.set_rotate_label(False)
     ax41.set_zlabel(r"$L_{\mathrm{dd}}\ \mathrm{in \ mH}$", fontsize=selected_fontsize, rotation=90)
-    ax41.zaxis.labelpad = -0.5
+
     ax41.set_xticks([-200, -100, 0])
     ax41.set_yticks([-200, 0, 200])
     ax41.set_zticks([0.2, 0.3, 0.4, 0.5, 0.6])
     ax41.set_zlim([0.2, 0.5])
 
-    ax41.xaxis.labelpad = 0
-    ax41.yaxis.labelpad = 0.5
+    ax41.zaxis.labelpad = 7.0
+    ax41.xaxis.labelpad = 12.5
+    ax41.yaxis.labelpad = 12.5
     ax41.tick_params(axis="both", direction="in")
 
     ########################################################################
@@ -378,12 +460,12 @@ def visualize_diff_inductance(lut_raw):
     ax42.set_yticks([-200, 0, 200])
     ax42.set_zticks([-0.1, 0, 0.1])
     ax42.set_zlim([-0.15, 0.15])
-    ax42.zaxis.labelpad = -0.5
-    ax42.xaxis.labelpad = 0
-    ax42.yaxis.labelpad = 0.5
+    ax42.zaxis.labelpad = 7.0
+    ax42.xaxis.labelpad = 12.5
+    ax42.yaxis.labelpad = 12.5
 
-    ax42.set_box_aspect([1, 1, 1])
-    ax42.set_adjustable("box")
+    # ax42.set_box_aspect([1, 1, 1])
+    # ax42.set_adjustable("box")
     ax42.tick_params(axis="both", direction="in")
 
     ########################################################################
@@ -400,13 +482,13 @@ def visualize_diff_inductance(lut_raw):
     ax43.set_yticks([-200, 0, 200])
     ax43.set_zticks([-0.1, 0, 0.1])
     ax43.set_zlim([-0.15, 0.15])
-    ax43.zaxis.labelpad = -0.5
-    ax43.xaxis.labelpad = 0
-    ax43.yaxis.labelpad = 0.5
+    ax43.zaxis.labelpad = 7.0
+    ax43.xaxis.labelpad = 12.5
+    ax43.yaxis.labelpad = 12.5
     ax43.tick_params(axis="both", direction="in")
 
-    ax43.set_box_aspect([1, 1, 1])
-    ax43.set_adjustable("box")
+    # ax43.set_box_aspect([1, 1, 1])
+    # ax43.set_adjustable("box")
 
     ########################################################################
     ## L_qq
@@ -422,16 +504,26 @@ def visualize_diff_inductance(lut_raw):
     ax44.set_yticks([-200, 0, 200])
     ax44.set_zticks([0, -0.5, 1])
     ax44.set_zlim([0, 1.5])
-    ax44.zaxis.labelpad = -0.5
-    ax44.xaxis.labelpad = 0
-    ax44.yaxis.labelpad = 0.5
+    ax44.zaxis.labelpad = 7.0
+    ax44.xaxis.labelpad = 12.5
+    ax44.yaxis.labelpad = 12.5
 
-    ax44.set_box_aspect([1, 1, 1])
-    ax44.set_adjustable("box")
+    # ax44.set_box_aspect([1, 1, 1])
+    # ax44.set_adjustable("box")
     ax44.tick_params(axis="both", direction="in")
-
     ax44.get_xticklabels()
+
+    fig4.patches.append(
+        plt.Rectangle(
+            (0, 0),  # x, y in figure coordinates (0-1)
+            1,
+            1,  # width, height
+            transform=fig4.transFigure,
+            facecolor="white",
+            edgecolor="none",
+            zorder=-1,  # behind everything
+        )
+    )
     # ax44.set_xticks([[-0,-0.1],[-100,0.1],[-1.5,.1]], ['200','100','100'])
-    plt.show()
 
     return fig4
