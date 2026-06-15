@@ -62,9 +62,12 @@ def visualize_trajectories(
 
     fig = plt.figure(figsize=(12, 10), constrained_layout=True)
 
+    linewidth = 2
+
     gs = gridspec.GridSpec(
         4,
         2,  # 4 rows, 2 columns
+        figure=fig,
         width_ratios=[1.2, 1],  # left column 3x wider than right
     )
 
@@ -98,12 +101,7 @@ def visualize_trajectories(
             else:
                 t_plot = t
 
-            ax_left[plot_idx].plot(
-                t_plot,
-                data,
-                color=color,
-                zorder=1,
-            )
+            ax_left[plot_idx].plot(t_plot, data, color=color, zorder=1, linewidth=linewidth, alpha=0.8)
 
         if ode is not None and params is not None:
             # only shows dynamics if u_dq is constant
@@ -116,12 +114,14 @@ def visualize_trajectories(
             i_dq_sequence[..., 1],
             color=color,
             zorder=1,
+            linewidth=linewidth,
         )
         ax_right_bot.plot(
             u_dq_sequence[..., 0],
             u_dq_sequence[..., 1],
             color=color,
             zorder=1,
+            linewidth=linewidth,
         )
 
     ###
@@ -132,7 +132,7 @@ def visualize_trajectories(
             handles=handles[: len(labels)],
             labels=labels,
             loc="lower center",
-            bbox_to_anchor=(0.5, -0.02),  # centered, just below the figure
+            bbox_to_anchor=(0.5, -0.07),  # centered, just below the figure
             ncol=len(labels),  # all entries in one row
             frameon=False,  # clean look, no box
         )
@@ -179,8 +179,13 @@ def visualize_trajectories(
     i_lim = params.i_lim
     i_d_plot = jnp.linspace(-i_lim, i_lim, 1000)
     i_q_plot = jnp.sqrt(i_lim**2 - i_d_plot**2)
-    all_axs[4].plot(i_d_plot, i_q_plot, "r")
-    all_axs[4].plot(i_d_plot, -i_q_plot, "r")
+    all_axs[4].plot(i_d_plot, i_q_plot, "r", alpha=0.5)
+    all_axs[4].plot(
+        i_d_plot,
+        -i_q_plot,
+        "r",
+        alpha=0.5,
+    )
 
     return fig, all_axs
 
@@ -205,8 +210,8 @@ def visualize_trajectories_with_reference(
         labels=labels,
     )
 
-    assert len(T_s_list) == len(set(T_s_list))
-    T_s = T_s_list[0]
+    if len(set(T_s_list)) == 1:
+        T_s = T_s_list[0]
 
     N_datapoints = i_dq_ref_sequence.shape[0]
     t = jnp.linspace(0, (T_s * N_datapoints), N_datapoints)
@@ -217,6 +222,7 @@ def visualize_trajectories_with_reference(
         c="k",
         linestyle="dashed",
         zorder=1,
+        alpha=0.7,
     )
     all_axes[1].plot(
         t,
@@ -224,6 +230,7 @@ def visualize_trajectories_with_reference(
         c="k",
         linestyle="dashed",
         zorder=1,
+        alpha=0.7,
     )
 
     all_axes[4].plot(
@@ -233,6 +240,7 @@ def visualize_trajectories_with_reference(
         linestyle="dashed",
         marker="x",
         zorder=1,
+        alpha=0.7,
     )
 
     return fig, all_axes

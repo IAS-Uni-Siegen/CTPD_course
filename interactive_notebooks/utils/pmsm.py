@@ -108,6 +108,30 @@ def clip_in_abc_coordinates(u_dq, u_dc, omega_el, eps, T_s):
     return u_dq
 
 
+def clip_voltage(u_dq, u_dc, eps, omega, T_s):
+    # normalize to u_dc/2 for hexagon constraints
+    u_dq_norm = u_dq * (1 / (u_dc / 2))
+    advanced_angle = step_eps(
+        eps,
+        omega_el=omega,
+        T_s=T_s,
+        T_s_scale=1.5,
+    )
+    u_albet_norm = dq2albet(
+        u_dq_norm,
+        advanced_angle,
+    )
+    u_albet_norm_clip = apply_hex_constraint(u_albet_norm)
+    u_dq_norm_clip = albet2dq(
+        u_albet_norm_clip,
+        advanced_angle,
+    )
+
+    # denormalize from u_dc/2
+    u_dq_clipped = u_dq_norm_clip[0] * (u_dc / 2)
+    return u_dq_clipped
+
+
 def lut_interpolate(grid_x, grid_y, values, i_d, i_q):
     ix = jnp.searchsorted(grid_x, i_d) - 1
     iy = jnp.searchsorted(grid_y, i_q) - 1
@@ -403,28 +427,13 @@ class PMSM(eqx.Module):
 
     def apply_voltage_constraint(self, u_dq, system_state):
         """Denormalizes the u_dq and clips it with respect to the hexagon."""
-        env_properties = self.env_properties
-
-        # normalize to u_dc/2 for hexagon constraints
-        u_dq_norm = u_dq * (1 / (env_properties.static_params.u_dc / 2))
-        advanced_angle = step_eps(
+        return clip_voltage(
+            u_dq,
+            self.env_properties.static_params.u_dc,
             system_state.physical_state.epsilon,
-            omega_el=system_state.physical_state.omega_el,
-            T_s=self.T_s,
-            T_s_scale=1.5,
+            system_state.physical_state.omega_el,
+            self.T_s,
         )
-        u_albet_norm = dq2albet(
-            u_dq_norm,
-            advanced_angle,
-        )
-        u_albet_norm_clip = apply_hex_constraint(u_albet_norm)
-        u_dq_norm_clip = albet2dq(
-            u_albet_norm_clip,
-            advanced_angle,
-        )
-        # denormalize from u_dc/2
-        u_dq = u_dq_norm_clip[0] * (env_properties.static_params.u_dc / 2)
-        return u_dq
 
     @eqx.filter_jit
     def step(self, state, action):
@@ -459,7 +468,6 @@ class PMSM(eqx.Module):
         return np.hstack(
             [
                 np.array(_obs_description),
-                np.array([name + "_ref" for name in self.control_state]),
             ]
         )
 
@@ -518,9 +526,6 @@ class PMSM(eqx.Module):
         )
 
         additions = self.Additions(solver_state=dummy_solver_state, active_solver_state=False)
-
-        for i, name in enumerate(self.control_state):
-            new_ref = eqx.tree_at(lambda r: getattr(r, name), new_ref, obs[8 + i])
         state = self.State(physical_state=phys, prng_key=subkey, additions=additions)
         return state
 
