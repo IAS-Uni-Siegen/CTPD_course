@@ -1,0 +1,216 @@
+% Example operating points, computed from the analytic model equations.
+% -------------------------------------------------------------------------
+% MTPC point.
+\pgfmathsetmacro{\cA}{3.0}
+\pgfmathsetmacro{\yA}{0.52}
+\pgfmathsetmacro{\xA}{xmtpcnorm(\yA)}
+\pgfmathsetmacro{\rA}{sqrt(\xA*\xA+\yA*\yA)}
+\pgfmathsetmacro{\TA}{torque(\Imax*\xA,\Imax*\yA)}
+
+% Feasible FW point: on voltage ellipse, inside current circle, left of MTPC.
+\pgfmathsetmacro{\cB}{1.8}
+\pgfmathsetmacro{\xB}{-0.65}
+\pgfmathsetmacro{\yB}{yvoltnorm(\xB,\cB)}
+\pgfmathsetmacro{\TB}{torque(\Imax*\xB,\Imax*\yB)}
+
+% MC point: analytic intersection of current circle and voltage ellipse.
+\pgfmathsetmacro{\cC}{2.2}
+\pgfmathsetmacro{\Aell}{\Ld*\Imax}
+\pgfmathsetmacro{\Bell}{\Lq*\Imax}
+\pgfmathsetmacro{\qaC}{\Aell*\Aell-\Bell*\Bell}
+\pgfmathsetmacro{\qbC}{2*\psim*\Aell}
+\pgfmathsetmacro{\qcC}{\psim*\psim+\Bell*\Bell-\cC*\cC}
+\pgfmathsetmacro{\discC}{\qbC*\qbC-4*\qaC*\qcC}
+\pgfmathsetmacro{\rootCone}{(-\qbC+sqrt(\discC))/(2*\qaC)}
+\pgfmathsetmacro{\rootCtwo}{(-\qbC-sqrt(\discC))/(2*\qaC)}
+\pgfmathsetmacro{\xC}{(\rootCone<0 && \rootCone>-1) ? \rootCone : \rootCtwo}
+\pgfmathsetmacro{\yC}{ycurrentnorm(\xC)}
+\pgfmathsetmacro{\TC}{torque(\Imax*\xC,\Imax*\yC)}
+
+% Determine intersections for the feasible range and MTPV point.
+\pgfmathsetmacro{\bestErrM}{1000}
+\pgfmathsetmacro{\yM}{0.66}
+\foreach \k in {0,...,1000}{%
+        \pgfmathsetmacro{\ytmp}{\k/1000}%
+        \pgfmathsetmacro{\errtmp}{abs(xcurrentnorm(\ytmp)-xmtpvnorm(\ytmp))}%
+        \pgfmathparse{\errtmp < \bestErrM ? 1 : 0}%
+        \ifnum\pgfmathresult=1
+            \xdef\bestErrM{\errtmp}%
+            \xdef\yM{\ytmp}%
+        \fi
+    }
+\pgfmathsetmacro{\bestErrR}{1000}
+\pgfmathsetmacro{\yR}{0.93}
+\foreach \k in {0,...,1000}{%
+        \pgfmathsetmacro{\ytmp}{\k/1000}%
+        \pgfmathsetmacro{\errtmp}{abs(xcurrentnorm(\ytmp)-xmtpcnorm(\ytmp))}%
+        \pgfmathparse{\errtmp < \bestErrR ? 1 : 0}%
+        \ifnum\pgfmathresult=1
+            \xdef\bestErrR{\errtmp}%
+            \xdef\yR{\ytmp}%
+        \fi
+    }
+
+% MTPV operating point: chosen on the current-circle/MTPV intersection.
+\pgfmathsetmacro{\yD}{0.25}
+\pgfmathsetmacro{\xD}{xmtpvnorm(\yD)}
+\pgfmathsetmacro{\cD}{sqrt((\psim+\Ld*\Imax*\xD)^2+(\Lq*\Imax*\yD)^2)}
+\pgfmathsetmacro{\TD}{torque(\Imax*\xD,\Imax*\yD)}
+
+% plot configuration for the operating range slides
+\pgfplotsset{
+    opsaxis/.style={
+            width=10.5cm,
+            height=7.5cm,
+            xmin=-1.05, xmax=0.05,
+            ymin=0.0, ymax=1.10,
+            axis lines=left,
+            axis equal image,
+            xlabel={$i_{\mathrm{s,d}}/i_{\mathrm{s,max}}$},
+            ylabel={$i_{\mathrm{s,q}}/i_{\mathrm{s,max}}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small}
+        },
+    opsaxisgen/.style={
+            width=10.5cm,
+            height=8.0cm,
+            xmin=-1.05, xmax=0.05,
+            ymin=-1.05, ymax=1.05,
+            axis lines=left,
+            axis equal image,
+            xlabel={$i_{\mathrm{s,d}}/i_{\mathrm{s,max}}$},
+            ylabel={$i_{\mathrm{s,q}}/i_{\mathrm{s,max}}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small}
+        }
+}
+
+
+% For speed-torque map slide
+
+\pgfmathdeclarefunction{opsTSfluxnorm}{2}{%
+    \pgfmathparse{sqrt((\psim+\Ld*\Imax*(#1))^2 + (\Lq*\Imax*(#2))^2)}%
+}
+
+% Nominal point: intersection of MTPC and current limit.
+\pgfmathsetmacro{\opsTSxNom}{xmtpcnorm(\yR)}
+\pgfmathsetmacro{\opsTSTNom}{torque(\Imax*\opsTSxNom,\Imax*\yR)}
+\pgfmathsetmacro{\opsTScNom}{opsTSfluxnorm(\opsTSxNom,\yR)}
+
+% MTPF/MTPV cut-in point: intersection of high-speed locus and current limit.
+\pgfmathsetmacro{\opsTSxMTPFcut}{xcurrentnorm(\yM)}
+\pgfmathsetmacro{\opsTSomegaMTPFcut}{\opsTScNom/opsTSfluxnorm(\opsTSxMTPFcut,\yM)}
+\pgfmathsetmacro{\opsTSTorqueMTPFcut}{torque(\Imax*\opsTSxMTPFcut,\Imax*\yM)/\opsTSTNom}
+
+% Alias names, in case existing slide text uses MTPV nomenclature.
+\pgfmathsetmacro{\opsTSomegaMTPVcut}{\opsTSomegaMTPFcut}
+\pgfmathsetmacro{\opsTSTorqueMTPVcut}{\opsTSTorqueMTPFcut}
+
+% MTPC feasibility speed at zero torque, used to close the shaded regions.
+\pgfmathsetmacro{\opsTSomegaMTPCzero}{\opsTScNom/opsTSfluxnorm(xmtpcnorm(0),0)}
+
+% Select which already defined current-plane example shall be shown in the
+% torque-speed map. Here: point B from the FW-region slide.
+% To show A, C or D instead, replace (\cB,\TB) by (\cA,\TA), (\cC,\TC) or
+% (\cD,\TD), respectively.
+\pgfmathsetmacro{\opsTSomegaOp}{\opsTScNom/\cB}
+\pgfmathsetmacro{\opsTSTorqueOp}{\TB/\opsTSTNom}
+
+% Visible high-speed range and the corresponding endpoint of the MTPF curve.
+\pgfmathsetmacro{\opsTSomegaMaxPlot}{3.08}
+\pgfmathsetmacro{\opsTSbestErrEnd}{1000}
+\pgfmathsetmacro{\opsTSyEnd}{0.20}
+\foreach \k in {400,...,1000}{%
+        \pgfmathsetmacro{\opsTSytmp}{\k*\yM/1000}%
+        \pgfmathsetmacro{\opsTSomegaTmp}{\opsTScNom/opsTSfluxnorm(xmtpvnorm(\opsTSytmp),\opsTSytmp)}%
+        \pgfmathsetmacro{\opsTSerrTmp}{abs(\opsTSomegaTmp-\opsTSomegaMaxPlot)}%
+        \pgfmathparse{\opsTSerrTmp < \opsTSbestErrEnd ? 1 : 0}%
+        \ifnum\pgfmathresult=1
+            \xdef\opsTSbestErrEnd{\opsTSerrTmp}%
+            \xdef\opsTSyEnd{\opsTSytmp}%
+        \fi
+    }
+
+% Precomputed label anchor positions avoid arithmetic inside axis coordinates.
+\pgfmathsetmacro{\opsTSomegaCutLabel}{\opsTSomegaMTPFcut+0.06}
+\pgfmathsetmacro{\opsTSTorqueCutLabel}{\opsTSTorqueMTPFcut+0.04}
+\pgfmathsetmacro{\opsTSomegaOpLabel}{\opsTSomegaOp+0.04}
+\pgfmathsetmacro{\opsTSTorqueOpLabel}{\opsTSTorqueOp+0.02}
+
+% Functions for plotting the contours parametrically by the normalized
+% q-axis current y.
+\pgfmathdeclarefunction{opsTSomeganormxy}{2}{%
+    \pgfmathparse{\opsTScNom/opsTSfluxnorm(#1,#2)}%
+}
+\pgfmathdeclarefunction{opsTStorquenormxy}{2}{%
+    \pgfmathparse{torque(\Imax*(#1),\Imax*(#2))/\opsTSTNom}%
+}
+
+\pgfplotsset{
+    opsspeedaxis/.style={
+            width=13.4cm,
+            height=7.15cm,
+            xmin=0, xmax=3.14,
+            ymin=0, ymax=1.10,
+            axis lines=left,
+            axis line style={-Latex},
+            xlabel={$\omega/\omega_{\mathrm{nom}}$},
+            ylabel={$T^*/T_{\mathrm{max}}$},
+            grid=major,
+            major grid style={gray!35},
+            tick label style={font=\small},
+            label style={font=\small},
+            clip=false,
+            legend style={draw=none,fill=none,font=\small},
+        }
+}
+
+%% For LUT-based impelementation example
+
+\pgfmathsetmacro{\lutBestErrM}{1000}
+\pgfmathsetmacro{\lutyM}{0.37}
+\foreach \k in {0,...,1000}{%
+        \pgfmathsetmacro{\lutyTmp}{\k/1000}%
+        \pgfmathsetmacro{\lutErrTmp}{abs(xcurrentnorm(\lutyTmp)-xmtpvnorm(\lutyTmp))}%
+        \pgfmathparse{\lutErrTmp < \lutBestErrM ? 1 : 0}%
+        \ifnum\pgfmathresult=1
+            \xdef\lutBestErrM{\lutErrTmp}%
+            \xdef\lutyM{\lutyTmp}%
+        \fi
+    }
+\pgfmathsetmacro{\lutxM}{xmtpvnorm(\lutyM)}
+
+\pgfmathsetmacro{\lutBestErrR}{1000}
+\pgfmathsetmacro{\lutyR}{0.81}
+\foreach \k in {0,...,1000}{%
+        \pgfmathsetmacro{\lutyTmp}{\k/1000}%
+        \pgfmathsetmacro{\lutErrTmp}{abs(xcurrentnorm(\lutyTmp)-xmtpcnorm(\lutyTmp))}%
+        \pgfmathparse{\lutErrTmp < \lutBestErrR ? 1 : 0}%
+        \ifnum\pgfmathresult=1
+            \xdef\lutBestErrR{\lutErrTmp}%
+            \xdef\lutyR{\lutyTmp}%
+        \fi
+    }
+\pgfmathsetmacro{\lutxR}{xmtpcnorm(\lutyR)}
+
+\pgfmathsetmacro{\lutPsiN}{sqrt((\psim+\Ld*\Imax*\lutxR)^2+(\Lq*\Imax*\lutyR)^2)}
+\pgfmathsetmacro{\lutTN}{torque(\Imax*\lutxR,\Imax*\lutyR)}
+
+% A non-arbitrary teaching point for the T-psi-to-current map:
+% midpoint between MTPV-current and MTPC-current intersections.
+\pgfmathsetmacro{\lutyF}{0.5*(\lutyM+\lutyR)}
+\pgfmathsetmacro{\lutxF}{xcurrentnorm(\lutyF)}
+\pgfmathsetmacro{\lutPsiF}{sqrt((\psim+\Ld*\Imax*\lutxF)^2+(\Lq*\Imax*\lutyF)^2)}
+\pgfmathsetmacro{\lutTF}{torque(\Imax*\lutxF,\Imax*\lutyF)}
+
+\pgfmathdeclarefunction{lutfluxnorm}{2}{%
+    \pgfmathparse{sqrt((\psim+\Ld*\Imax*(#1))^2+(\Lq*\Imax*(#2))^2)/\lutPsiN}%
+}
+\pgfmathdeclarefunction{luttorquenorm}{2}{%
+    \pgfmathparse{torque(\Imax*(#1),\Imax*(#2))/\lutTN}%
+}
+\pgfmathdeclarefunction{lutfluxraw}{2}{%
+    \pgfmathparse{sqrt((\psim+\Ld*\Imax*(#1))^2+(\Lq*\Imax*(#2))^2)}%
+}

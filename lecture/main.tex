@@ -6,8 +6,10 @@
 \date{}
 
 \makeglossaries
+\input{config} % Course-specific configuration (deviating from general course template settings)
 
-%\includeonly{tex/Lecture03.tex} % build only selected section
+%\includeonly{tex/Lecture04} % build only selected section
+
 
 \begin{document}
 
@@ -32,6 +34,7 @@
 
 \include{tex/Lecture01} % Initial overview
 \include{tex/Lecture02} % Inverter hardware and modulation techniques
+\include{tex/Lecture03} % Basic control of synchronous machines
 
 
 
@@ -39,5 +42,6 @@
 \section{Appendix} % Appendix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{tex/dict} % English-German dictionary (subsection)
+\include{tex/Appendix01} % Time discretization of dynamical systems
 \include{tex/nomen} % Nomenclature (subsection)
 \end{document}
