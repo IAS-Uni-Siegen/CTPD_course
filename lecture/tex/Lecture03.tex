@@ -4791,78 +4791,80 @@
     \begin{columns}[T,onlytextwidth]
         \begin{column}{0.52\textwidth}
             Historically the DTC scheme was applied to SPMSM drives without magnetic saturation. Hence, the simplified flux model $$
-                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{PM}$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=0$ was used. In this case, the torque simplifies to
+                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{PM}$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=L_\mathrm{qd}=0$ was used. \onslide<2->{In this case, the torque simplifies to}
             \begin{align*}
-                T & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)              \\
-                  & = \nicefrac{3}{2} p (\bm{\psi}_\mathrm{PM})\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)                \\
-                  & = \nicefrac{3}{2} p \|\bm{\psi}_\mathrm{PM}\| \|\bm{\psi}_\mathrm{s,dq}(t)\| \sin(\delta(t))
+                \onslide<2->{\bm{T} & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)              \\}
+                \onslide<3->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} (\bm{\psi}_\mathrm{PM})\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)                \\}
+                \onslide<4->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} \|\bm{\psi}_\mathrm{PM}\| \|\bm{\psi}_\mathrm{s,dq}(t)\| \sin(\delta(t))}
             \end{align*}
-            where $\delta(t)$ is the angle between the stator flux and the PM flux.
+            \onslide<4->{where $\delta(t)$ is the angle between the stator flux and the PM flux.}
         \end{column}
         \begin{column}{0.47\textwidth}
             \centering
             \vspace{-0.275cm}
-            \begin{figure}
-                \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=Latex]
-                    \pgfmathsetmacro{\outerRadius}{1}
-                    \pgfmathsetmacro{\betaRadius}{\outerRadius*sin(60)}
-                    \pgfmathsetmacro{\alphaAxisNegativeFactor}{1.25}
-                    \pgfmathsetmacro{\alphaAxisPositiveFactor}{1.35}
-                    \pgfmathsetmacro{\betaAxisFactor}{1.1}
-                    \pgfmathsetmacro{\tickHalf}{0.08}
-                    \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
-                    \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
-                    \pgfmathsetmacro{\alphaLeaderDx}{0.10}
-                    \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
-                    \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
-                    \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
-                    \pgfmathsetmacro{\betaLeaderDx}{0.35}
-                    \pgfmathsetmacro{\betaLeaderDy}{0.20}
-                    \pgfmathsetmacro{\psiPMr}{2.5}
-                    \pgfmathsetmacro{\psiPMNullgrad}{15}
-                    \pgfmathsetmacro{\psiPsgrad}{67.6}
-                    \pgfmathsetmacro{\psiPsr}{2.76}
+            \onslide<5->{
+                    \begin{figure}
+                        \begin{tikzpicture}[x=1.25cm,y=1.25cm,>=Latex]
+                            \pgfmathsetmacro{\outerRadius}{1}
+                            \pgfmathsetmacro{\betaRadius}{\outerRadius*sin(60)}
+                            \pgfmathsetmacro{\alphaAxisNegativeFactor}{1.25}
+                            \pgfmathsetmacro{\alphaAxisPositiveFactor}{1.35}
+                            \pgfmathsetmacro{\betaAxisFactor}{1.1}
+                            \pgfmathsetmacro{\tickHalf}{0.08}
+                            \pgfmathsetmacro{\alphaLeaderShiftX}{0.03}
+                            \pgfmathsetmacro{\alphaLeaderShiftY}{-0.15}
+                            \pgfmathsetmacro{\alphaLeaderDx}{0.10}
+                            \pgfmathsetmacro{\alphaLeaderDy}{-0.28}
+                            \pgfmathsetmacro{\betaLeaderShiftX}{0.08}
+                            \pgfmathsetmacro{\betaLeaderShiftY}{0.08}
+                            \pgfmathsetmacro{\betaLeaderDx}{0.35}
+                            \pgfmathsetmacro{\betaLeaderDy}{0.20}
+                            \pgfmathsetmacro{\psiPMr}{2.5}
+                            \pgfmathsetmacro{\psiPMNullgrad}{15}
+                            \pgfmathsetmacro{\psiPsgrad}{67.6}
+                            \pgfmathsetmacro{\psiPsr}{2.76}
 
 
-                    \coordinate (psi0) at (\psiPsgrad:\psiPsr);
-                    \coordinate (psiPM) at (\psiPMNullgrad:\psiPMr);
-                    \fill[fill=gray!50] (0,0) -- (psi0) -- ($(psiPM) + (psi0)$) -- (psiPM) -- cycle;
+                            \coordinate (psi0) at (\psiPsgrad:\psiPsr);
+                            \coordinate (psiPM) at (\psiPMNullgrad:\psiPMr);
+                            \fill[fill=gray!50] (0,0) -- (psi0) -- ($(psiPM) + (psi0)$) -- (psiPM) -- cycle;
 
-                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
-                            \coordinate (\name) at ($(\angle:\outerRadius) + (psi0)$);
-                        }
-                    \coordinate (betaMax) at (90:\betaRadius);
-                    \coordinate (alphaAxisStart) at (-0.75,0);
-                    \coordinate (alphaAxisEnd) at (4,0);
-                    \coordinate (betaAxisStart) at (0,-0.75);
-                    \coordinate (betaAxisEnd) at (0,4);
+                            \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                                    \coordinate (\name) at ($(\angle:\outerRadius) + (psi0)$);
+                                }
+                            \coordinate (betaMax) at (90:\betaRadius);
+                            \coordinate (alphaAxisStart) at (-0.75,0);
+                            \coordinate (alphaAxisEnd) at (4,0);
+                            \coordinate (betaAxisStart) at (0,-0.75);
+                            \coordinate (betaAxisEnd) at (0,4);
 
-                    \draw[->] (alphaAxisStart) -- (alphaAxisEnd) node[below] {$\upalpha$};
-                    \draw[->] (betaAxisStart) -- (betaAxisEnd) node[left] {$\upbeta$};
+                            \draw[->] (alphaAxisStart) -- (alphaAxisEnd) node[below] {$\upalpha$};
+                            \draw[->] (betaAxisStart) -- (betaAxisEnd) node[left] {$\upbeta$};
 
 
-                    \foreach \vertex in {u1,u2,u3,u4,u5,u6} {
-                            \draw[signalalpha,->,thick, dashed] (psi0) -- (\vertex);
-                        }
+                            \foreach \vertex in {u1,u2,u3,u4,u5,u6} {
+                                    \draw[signalalpha,->,thick, dashed] (psi0) -- (\vertex);
+                                }
 
-                    \node[right] at (u1) {$T_\mathrm{s}\bm{u}_{\mathrm{i}1}$};
-                    \node[above] at (u2) {$T_\mathrm{s}\bm{u}_{\mathrm{i}2}$};
-                    \node[above] at (u3) {$T_\mathrm{s}\bm{u}_{\mathrm{i}3}$};
-                    \node[left] at (u4) {$T_\mathrm{s}\bm{u}_{\mathrm{i}4}$};
-                    %\node[below] at (u5) {$T_\mathrm{s}\bm{u}_{\mathrm{i}5}$};
-                    \node[below] at (u6) {$T_\mathrm{s}\bm{u}_{\mathrm{i}6}$};
+                            \node[right] at (u1) {$T_\mathrm{s}\bm{u}_{\mathrm{i}1}$};
+                            \node[above] at (u2) {$T_\mathrm{s}\bm{u}_{\mathrm{i}2}$};
+                            \node[above] at (u3) {$T_\mathrm{s}\bm{u}_{\mathrm{i}3}$};
+                            \node[left] at (u4) {$T_\mathrm{s}\bm{u}_{\mathrm{i}4}$};
+                            %\node[below] at (u5) {$T_\mathrm{s}\bm{u}_{\mathrm{i}5}$};
+                            \node[below] at (u6) {$T_\mathrm{s}\bm{u}_{\mathrm{i}6}$};
 
-                    \fill[signalalpha] (psi0) circle (2pt);
-                    \draw[thick, signalalpha, ->] (0,0) -- node[left, pos=0.5]{$\bm{\psi}_\mathrm{s}$} (psi0);
-                    \draw[thick, signaldelta, ->] (0,0) -- (psiPM) node[below, pos=0.75]{$\bm{\psi}_\mathrm{PM}$};
-                    \draw[dashed] (psiPM) -- ($(psiPM) + (psi0)$);
-                    \draw[dashed] (psi0) -- ($(psiPM) + (psi0)$);
-                    \draw[thin] ($(psi0)!0.5!(psiPM) + (0.5,0)$) -- ++(0.8,-0.3) node[right] {$\sim T$};
-                    \draw[->] (0,0) ++(\psiPMNullgrad:\psiPMr*0.4) arc (\psiPMNullgrad:\psiPsgrad:\psiPMr*0.4) node[pos=0.5, below left] {$\delta$};
-                \end{tikzpicture}
-                \caption{DTC control idea}
-                \label{fig:elementary_voltage_vectors_DTC_torque}
-            \end{figure}
+                            \fill[signalalpha] (psi0) circle (2pt);
+                            \draw[thick, signalalpha, ->] (0,0) -- node[left, pos=0.5]{$\bm{\psi}_\mathrm{s}$} (psi0);
+                            \draw[thick, signaldelta, ->] (0,0) -- (psiPM) node[below, pos=0.75]{$\bm{\psi}_\mathrm{PM}$};
+                            \draw[dashed] (psiPM) -- ($(psiPM) + (psi0)$);
+                            \draw[dashed] (psi0) -- ($(psiPM) + (psi0)$);
+                            \draw[thin] ($(psi0)!0.5!(psiPM) + (0.5,0)$) -- ++(0.8,-0.3) node[right] {$\sim T$};
+                            \draw[->] (0,0) ++(\psiPMNullgrad:\psiPMr*0.4) arc (\psiPMNullgrad:\psiPsgrad:\psiPMr*0.4) node[pos=0.5, below left] {$\delta$};
+                        \end{tikzpicture}
+                        \caption{DTC control idea}
+                        \label{fig:elementary_voltage_vectors_DTC_torque}
+                    \end{figure}
+                }
         \end{column}
     \end{columns}
 \end{frame}
@@ -4880,10 +4882,10 @@
                 \bm{\psi}_\mathrm{s}[k+1] & \approx \bm{\psi}_\mathrm{s}[k] + T_\mathrm{s} \left( \bm{u}_\mathrm{s}[k] - R_\mathrm{s}\bm{i}_\mathrm{s}[k] \right) \\
                                           & \approx \bm{\psi}_\mathrm{s}[k] + T_\mathrm{s} \bm{u}_\mathrm{s}[k].
             \end{align*}
-            The latter neglects ohmic voltage drop allowing a direct mapping from applied voltage vector to the next stator flux vector.
+            \onslide<2->{The latter neglects ohmic voltage drop allowing a direct mapping from applied voltage vector to the next stator flux vector.}
             \begin{itemize}
-                \item Given some sampling time $T_\mathrm{s}$, only discrete flux vector changes are possible.
-                \item Hence, $T_\mathrm{s}$ needs to be chosen sufficiently small to allow for a good control performance.
+                \item<3-> Given some sampling time $T_\mathrm{s}$, only discrete flux vector changes are possible.
+                \item<4-> Hence, $T_\mathrm{s}$ needs to be chosen sufficiently small to allow for a good control performance.
             \end{itemize}
         \end{column}
         \begin{column}{0.47\textwidth}
@@ -4944,7 +4946,7 @@
                     \draw[->] (0,0) ++(\psiPMNullgrad:\psiPMr*0.8) arc (\psiPMNullgrad:\psiPMEinsgrad:\psiPMr*0.8);
                     \draw[thin] (\psiPMNullgrad/2+\psiPMEinsgrad/2:\psiPMr*0.75) -- ++(-0.2,-.35) node[below] {$\omega[k] T_\mathrm{s}$};
                 \end{tikzpicture}
-                \caption{DTC control idea}
+                \caption{Discrete time flux linkage change}
                 \label{fig:elementary_voltage_vectors_DTC_discrete_time}
             \end{figure}
         \end{column}
@@ -5352,38 +5354,39 @@
 \begin{frame}
     \frametitle{DTC switching frequency}
     \begin{itemize}
-        \item The switching frequency of the DTC scheme is not fixed but depends on the operating point and the chosen hysteresis band widths.
-        \item This is a major difference compared to modulation-based control schemes where the switching frequency can be pre-defined.
-        \item To achieve an average reference switching frequency of $f^*_\mathrm{s}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = s_i[k] - s_i[k-1]$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
+        \item<1-> The switching frequency of the DTC scheme is not fixed but depends on the operating point and the chosen hysteresis band widths.
+        \item<2-> This is a major difference compared to modulation-based control schemes where the switching frequency can be pre-defined.
+        \item<3-> To achieve an average reference switching frequency of $f^*_\mathrm{s}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = s_i[k] - s_i[k-1]$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
     \end{itemize}
-    \begin{figure}
-        \begin{circuitikz}[x=1cm, y=1cm, scale=0.94, transform shape, >=Latex]
-            \def\stdgap{1.0cm}
-            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$+$}, tripoles/signedmixer/north={$+$}] (sumS) {};
-            \coordinate[left=\stdgap of sumS] (sumSInb);
-            \coordinate[above=\stdgap of sumSInb] (sumSIna);
-            \coordinate[below=\stdgap of sumSInb] (sumSInc);
-            \draw[thick, ->] (sumSInb)  node[above right]{$\Delta s_\mathrm{b}$} --  (sumS.west);
-            \draw[thick, ->] (sumSIna)  node[above right]{$\Delta s_\mathrm{a}$} -|  (sumS.north);
-            \draw[thick, ->] (sumSInc)  node[above right]{$\Delta s_\mathrm{c}$}-|  (sumS.south);
-            \node[signedmixer, right =1.5*\stdgap of sumS, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumF) {};
-            \coordinate[left=\stdgap of sumF] (sumFInAux);
-            \coordinate[below=\stdgap of sumFInAux] (sumFIn);
-            \draw[thick, ->] (sumFIn)  node[above right]{$3 f^*_\mathrm{s}$} -|  (sumF.south);
-            \draw[thick, ->] (sumS.east) -- (sumF.west);
-            \node[twoportshape, right=1.5*\stdgap of sumF, t=$\sum$] (int) {};
-            \draw[thick, ->] (sumF.east) -- (int.west);
-            \draw[thick] (int.east) to [short,-*] ++(\stdgap,0) coordinate (intOut);
-            \node[ctrlblock, right=2.5*\stdgap of int.north east, anchor=south] (Kt) {$K_T$};
-            \node[ctrlblock, right=2.5*\stdgap of int.south east, anchor=north] (Kpsi) {$K_\psi$};
-            \draw[thick, ->] (intOut) |- (Kt.west);
-            \draw[thick, ->] (intOut) |- (Kpsi.west);
-            \draw[thick, ->] (Kt.east)  -- node[above]{$\varepsilon_T$} ++(\stdgap,0);
-            \draw[thick, ->] (Kpsi.east)  -- node[above]{$\varepsilon_\psi$} ++(\stdgap,0);
-        \end{circuitikz}
-        \caption{Simplified (average) DTC switching frequency integral feedback control scheme}
-        \label{fig:DTC_switching_frequency_control}
-    \end{figure}
+    \onslide<4->{
+            \begin{figure}
+                \begin{circuitikz}[x=1cm, y=1cm, scale=0.94, transform shape, >=Latex]
+                    \def\stdgap{1.0cm}
+                    \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$+$}, tripoles/signedmixer/north={$+$}] (sumS) {};
+                    \coordinate[left=\stdgap of sumS] (sumSInb);
+                    \coordinate[above=\stdgap of sumSInb] (sumSIna);
+                    \coordinate[below=\stdgap of sumSInb] (sumSInc);
+                    \draw[thick, ->] (sumSInb)  node[above right]{$\Delta s_\mathrm{b}$} --  (sumS.west);
+                    \draw[thick, ->] (sumSIna)  node[above right]{$\Delta s_\mathrm{a}$} -|  (sumS.north);
+                    \draw[thick, ->] (sumSInc)  node[above right]{$\Delta s_\mathrm{c}$}-|  (sumS.south);
+                    \node[signedmixer, right =1.5*\stdgap of sumS, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumF) {};
+                    \coordinate[left=\stdgap of sumF] (sumFInAux);
+                    \coordinate[below=\stdgap of sumFInAux] (sumFIn);
+                    \draw[thick, ->] (sumFIn)  node[above right]{$3 f^*_\mathrm{s}$} -|  (sumF.south);
+                    \draw[thick, ->] (sumS.east) -- (sumF.west);
+                    \node[twoportshape, right=1.5*\stdgap of sumF, t=$\sum$] (int) {};
+                    \draw[thick, ->] (sumF.east) -- (int.west);
+                    \draw[thick] (int.east) to [short,-*] ++(\stdgap,0) coordinate (intOut);
+                    \node[ctrlblock, right=2.5*\stdgap of int.north east, anchor=south] (Kt) {$K_T$};
+                    \node[ctrlblock, right=2.5*\stdgap of int.south east, anchor=north] (Kpsi) {$K_\psi$};
+                    \draw[thick, ->] (intOut) |- (Kt.west);
+                    \draw[thick, ->] (intOut) |- (Kpsi.west);
+                    \draw[thick, ->] (Kt.east)  -- node[above]{$\varepsilon_T$} ++(\stdgap,0);
+                    \draw[thick, ->] (Kpsi.east)  -- node[above]{$\varepsilon_\psi$} ++(\stdgap,0);
+                \end{circuitikz}
+                \caption{Simplified (average) DTC switching frequency integral feedback control scheme}
+                \label{fig:DTC_switching_frequency_control}
+            \end{figure}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5398,46 +5401,21 @@
     As discussed above, the DTC scheme relies on an accurate estimation of
     $$
         \hat{\bm{\psi}}_\mathrm{s,\upalpha\upbeta} \approx \bm{\psi}_\mathrm{s,\upalpha\upbeta}.
-    $$
+    $$\pause%
     For this task we will review three \hl{open-loop flux estimation} methods:
     \begin{itemize}
-        \item Current moodel
-        \item Voltage model
-        \item Gopinath estimator (combined current and voltage model)
+        \item Current moodel \pause%
+        \item Voltage model \pause%
+        \item Gopinath estimator (combined current and voltage model)\pause%
     \end{itemize}
-    While not explicitly covered in this lecture, classical \hl{closed-loop observers} such as the \href{https://en.wikipedia.org/wiki/State_observer}{Luenberger observer} and the \href{https://en.wikipedia.org/wiki/Kalman_filter}{Kalman filter} can also be applied, e.g., based on the standard model \eqref{eq:basic_PMSM_model_set_RK1}. \hl {Adverse effects} to be considered in this context include:
+    While not explicitly covered in this lecture, classical \hl{closed-loop observers} such as the \href{https://en.wikipedia.org/wiki/State_observer}{Luenberger observer} and the \href{https://en.wikipedia.org/wiki/Kalman_filter}{Kalman filter} can also be applied, e.g., based on the standard model \eqref{eq:basic_PMSM_model_set_RK1}. \pause \hl {Adverse effects} to be considered in this context include:
     \begin{itemize}
-        \item Parameter uncertainties (e.g., stator resistance) and model mismatches (e.g., due to magnetic saturation in a linear model approach),
+        \item Parameter uncertainties (e.g., stator resistance) and model mismatches (e.g., due to magnetic saturation in a linear model approach), \pause%
         \item Measurement noise, offset and linearity errors.
     \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Small comparison: FOC vs. DTC %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-    \frametitle{Small comparison: FOC vs. DTC}
-    \begin{table}
-        \centering
-        \small
-        \renewcommand{\arraystretch}{1.3}
-        \begin{tabular}{@{}p{3.75cm} P{5cm} P{5cm}}
-            \toprule
-                                                                                                                                                                                                                                                                    & \textbf{FOC}                                                             & \textbf{DTC}                                                           \\
-            \midrule
-            Controlled variables                                                                                                                                                                                                                                    & $\bm{i}_\mathrm{s,dq}$                                                   & $\bm{\psi}_\mathrm{s,\upalpha\upbeta}$ and $T$                         \\
-            Control actions                                                                                                                                                                                                                                         & $\bm{u}_\mathrm{s,dq}$ (per sample period average voltage for modulator) & $\bm{u}_\mathrm{s,\upalpha\upbeta}$ (direct inverter switching vector) \\
-            Relevant measurements\footnote{The stator voltage is typically estimated based on the nonlinear inverter model but could be also measured, which however, would require a very fast voltage measurement due to the inverter switching characteristics.} & $\bm{u}_\mathrm{s}, \bm{i}_\mathrm{s}, \varepsilon$                      & $\bm{u}_\mathrm{s}, \bm{i}_\mathrm{s}$                                 \\
-            Switching frequency                                                                                                                                                                                                                                     & Constant for any control period / inherently controllable                & Variable / only controllable in average over multiple periods          \\
-            Control rate                                                                                                                                                                                                                                            & Moderate due to regular sampling / modulator                             & Fast due to direct  inverter actuation                                 \\
-            Numerical effort                                                                                                                                                                                                                                        & Moderate (complex controllers, coordinate transf.)                       & Low (mostly simple hysteresis comparators)                             \\
-            \bottomrule
-        \end{tabular}
-        \caption{Qualitative comparison of FOC vs. DTC}
-        \label{tab:DTC_FOC_comparison}
-    \end{table}
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Current model-based flux estimation %%
@@ -5448,14 +5426,14 @@
     $$
         \hat{\bm{\psi}}_\mathrm{s,dq}[k]  = \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{PM}),
     $$
-    e.g., due to a prior machine characterization. Using inverse Park transformation, the stator flux in $\upalpha\upbeta$-coordinates can be estimated as
+    e.g., due to a prior machine characterization. \pause Using inverse Park transformation, the stator flux in $\upalpha\upbeta$-coordinates can be estimated as
     $$
         \hat{\bm{\psi}}_\mathrm{s,\upalpha\upbeta}[k]  = \bm{T}_\mathrm{p}(\varepsilon[k]) \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{PM}).
-    $$
+    $$\pause%
     Hence, this method relies on:
     \begin{itemize}
-        \item Rotor angle information (i.e., requires a rotor position sensor or an additional observer for angle estimation),
-        \item An accurate machine model (e.g., including saturation effects), and
+        \item Rotor angle information (i.e., requires a rotor position sensor or an additional observer for angle estimation), \pause%
+        \item An accurate machine model (e.g., including saturation effects), and \pause%
         \item An accurate current measurements.
     \end{itemize}
 \end{frame}
@@ -5467,16 +5445,16 @@
     \frametitle{Voltage model-based flux estimation}
     The voltage model is based upon the stator flux dynamics in $\upalpha\upbeta$-coordinates
     \begin{equation}
-        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau + \hat{\bm{\psi}}_{\upalpha\upbeta}(t_0).
-    \end{equation}
+        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau + \hat{\bm{\psi}}_{\upalpha\upbeta}(t_0)
+    \end{equation}\pause%
     or directly in discrete time using explicit Euler method
     \begin{equation}
         \hat{\bm{\psi}}_{\upalpha\upbeta}[k+1] = \hat{\bm{\psi}}_{\upalpha\upbeta}[k] + T_\mathrm{s}\left(\bm{u}_{\upalpha\upbeta}[k] - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}[k]\right).
-    \end{equation}
+    \end{equation}\pause%
     While the rotor angle information and a fully fledged machine characterization are not required, this method relies on:
     \begin{itemize}
-        \item Accurate voltage information (e.g., based on precise inverter model or measurements),
-        \item Knowledge of the stator resistance, and
+        \item Accurate voltage information (e.g., based on precise inverter model or measurements), \pause
+        \item Knowledge of the stator resistance, and \pause
         \item An accurate current measurement.
     \end{itemize}
 \end{frame}
@@ -5486,15 +5464,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Voltage model-based flux estimation (cont.)}
-    Consider any \hl{constant voltage offset} $\Delta \bm{u}_{\upalpha\upbeta}\neq 0$, e.g., due to an inverter non-linearity or a measurement error. This will lead to a linearly increasing flux estimation error over time
+    Consider any \hl{constant voltage offset} $\Delta \bm{u}_{\upalpha\upbeta}\neq 0$, e.g., due to an inverter non-linearity or a measurement error. \pause This will lead to a linearly increasing flux estimation error over time
     \begin{equation}
         \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau + \hat{\bm{\psi}}_{\upalpha\upbeta}(t_0) = \bm{\psi}_{\upalpha\upbeta}(t) + t\,\Delta \bm{u}_{\upalpha\upbeta}.
-    \end{equation}
+    \end{equation}\pause%
     Hence, over time the flux estimation will diverge and the closed-loop control will fail. A common solution to this problem is to apply a \hl{low-pass filtered integrator}
     \begin{equation}
         \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) - \frac{1}{\tau}\hat{\bm{\psi}}_{\upalpha\upbeta}(t) \, \mathrm{d}\tau
     \end{equation}
-    with the time constant $\tau$. Interpreting $\hat{\bm{\psi}}_{\upalpha\upbeta}$ as output, $\bm{u}'_{\upalpha\upbeta}= \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}$ as input and $\Delta \bm{u}_{\upalpha\upbeta}$ as a disturbance, the estimated flux can be expressed in the Laplace domain\footnote{A digital implementation of the estimator would of course require a discrete-time representation. However, a simplified Laplace analysis is used for the following high-level discussion for sake of brevity.} as
+    with the time constant $\tau$. \pause Interpreting $\hat{\bm{\psi}}_{\upalpha\upbeta}$ as output, $\bm{u}'_{\upalpha\upbeta}= \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}$ as input and $\Delta \bm{u}_{\upalpha\upbeta}$ as a disturbance, the estimated flux can be expressed in the Laplace domain\footnote{A digital implementation of the estimator would of course require a discrete-time representation. However, a simplified Laplace analysis is used for the following high-level discussion for sake of brevity.} as
     \begin{equation}
         \hat{\bm{\psi}}_{\upalpha\upbeta}(s) = \frac{1}{s + \frac{1}{\tau}}\bm{u}'_{\upalpha\upbeta}(s) + \frac{1}{s + \frac{1}{\tau}}\Delta \bm{u}_{\upalpha\upbeta}(s).
     \end{equation}
@@ -5508,16 +5486,16 @@
     The true flux can be expressed in the Laplace domain as
     \begin{equation}
         \bm{\psi}_{\upalpha\upbeta}(s) = \frac{1}{s}\bm{u}'_{\upalpha\upbeta}(s).
-    \end{equation}
-    Hence, the flux estimation error results in
+    \end{equation} \pause%
+    Hence, the low-pass integrated voltage model's \hl{flux estimation error} results in
     \begin{equation}
         \begin{split}
             \Delta \hat{\bm{\psi}}_{\upalpha\upbeta}(s) = \hat{\bm{\psi}}_{\upalpha\upbeta}(s) - \bm{\psi}_{\upalpha\upbeta}(s) & = -\frac{\frac{1}{\tau}}{s+\frac{1}{\tau}}\frac{1}{s}\bm{u}'_{\upalpha\upbeta}(s) + \frac{1}{s + \frac{1}{\tau}}\Delta \bm{u}_{\upalpha\upbeta}(s) \\                                                                                                        & =\frac{-1}{s\tau+1}\bm{\psi}_{\upalpha\upbeta}(s) + \frac{\tau}{s\tau + 1}\Delta \bm{u}_{\upalpha\upbeta}(s).
         \end{split}
-    \end{equation}
+    \end{equation}\pause%
     From these transfer elements we can observe two conflicting design aspects:
     \begin{itemize}
-        \item The voltage offset error is now bounded by $\tau \Delta \bm{u}_{\upalpha\upbeta}$, i.e., the smaller $\tau$ the smaller the error.
+        \item The voltage offset error is now bounded by $\tau \Delta \bm{u}_{\upalpha\upbeta}$, i.e., the smaller $\tau$ the smaller the error. \pause%
         \item The estimation error is depending on the true flux in a low-pass filtered manner, i.e., for $\omega \gg \nicefrac{1}{\tau}$ the estimation error is small. Hence, the larger $\tau$ the higher the suitable speed range of the estimator.
     \end{itemize}
 \end{frame}
@@ -5655,7 +5633,7 @@
     \begin{equation}
         G_{\mathrm{o,g}}(\mathrm{z})
         =G_{\mathrm{VM}}(\mathrm{z})G_{\mathrm{c,g}}(\mathrm{z}).
-    \end{equation}
+    \end{equation}\pause%
     The closed-loop transfer function is then
     \begin{equation}
         G_{\psi,\mathrm{g}}(\mathrm{z})
@@ -5720,7 +5698,7 @@
         S_\lambda=\lambda_1+\lambda_2,
         \qquad
         P_\lambda=\lambda_1\lambda_2,
-    \end{equation}
+    \end{equation}\pause%
     coefficient matching gives
     \begin{equation}
         a=\frac{S_\lambda}{P_\lambda}-2,
@@ -5749,7 +5727,7 @@
         s_{1,2}=-\zeta\omega_\mathrm{g}
         \pm\iu\omega_\mathrm{g}\sqrt{1-\zeta^2}
         \quad (0<\zeta<1),
-    \end{equation}
+    \end{equation}\pause%
     and the corresponding real-pole expression for $\zeta\geq 1$:
     \begin{equation}
         s_{1,2}=\omega_\mathrm{g}\left(-\zeta\pm\sqrt{\zeta^2-1}\right)
@@ -5921,6 +5899,33 @@
             \label{fig:Gopinath_Bode}
         \end{figure}
     \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Small comparison: FOC vs. DTC %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Small comparison: FOC vs. DTC}
+    \begin{table}
+        \centering
+        \small
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}p{3.75cm} P{5cm} P{5cm}}
+            \toprule%
+                                                                                                                                                                                                                                                                    & \textbf{FOC}                                                             & \textbf{DTC}                                                           \\%
+            \midrule%
+            Controlled variables                                                                                                                                                                                                                                    & $\bm{i}_\mathrm{s,dq}$                                                   & $\bm{\psi}_\mathrm{s,\upalpha\upbeta}$ and $T$                         \\%
+            Control actions                                                                                                                                                                                                                                         & $\bm{u}_\mathrm{s,dq}$ (per sample period average voltage for modulator) & $\bm{u}_\mathrm{s,\upalpha\upbeta}$ (direct inverter switching vector) \\%
+            Relevant measurements\footnote{The stator voltage is typically estimated based on the nonlinear inverter model but could be also measured, which however, would require a very fast voltage measurement due to the inverter switching characteristics.} & $\bm{u}_\mathrm{s}, \bm{i}_\mathrm{s}, \varepsilon$                      & $\bm{u}_\mathrm{s}, \bm{i}_\mathrm{s}$                                 \\%
+            Switching frequency                                                                                                                                                                                                                                     & Constant for any control period / inherently controllable                & Variable / only controllable in average over multiple periods          \\%
+            Control rate                                                                                                                                                                                                                                            & Moderate due to regular sampling / modulator                             & Fast due to direct  inverter actuation                                 \\%
+            Numerical effort                                                                                                                                                                                                                                        & Moderate (complex controllers, coordinate transf.)                       & Low (mostly simple hysteresis comparators)                             \\%
+            \bottomrule%
+        \end{tabular}
+        \caption{Qualitative comparison of FOC vs. DTC}
+        \label{tab:DTC_FOC_comparison}
+    \end{table}
 \end{frame}
 
 

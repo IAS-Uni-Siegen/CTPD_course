@@ -1,0 +1,839 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Induction machine drives -- basic models and control concepts}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Induction machine model}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Basic induction machine (IM) representation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[b]
+    \frametitle{Basic induction machine (IM) representation}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}
+                \item Three-phase stator + three-phase rotor
+                \item Rotor electrical angular speed: $\omega$
+                \item Rotor electrical angular displacement: $\varepsilon$
+                \item Index \enquote{s} for stator, \enquote{r} for rotor quantities
+            \end{itemize}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.525\textwidth]{fig/lec04/Induction_motor_stator_rotor.JPG}
+                \caption{Induction machine with squirrel cage rotor (source: \href{https://commons.wikimedia.org/wiki/File:Stator_and_rotor_by_Zureks.JPG}{Wikimedia Commons}, Zureks, \href{https://creativecommons.org/licenses/by-sa/4.0/deed.en}{CC BY-SA 4.0})}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.85\textwidth]{fig/lec04/Simple_three_phase_induction_machine_lumped_coils.pdf}
+                \caption{Elementary three-phase induction machine (IM)  with $p=1$ pole pair}
+                \label{fig:Simple_three_phase_induction_machine_lumped_coils}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Summary: PMSM model in dq coordinates   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{IM model in dq coordinates}
+    The most important equations of the squirrel cage IM model in the  dq coordinates with arbitrary orientation axis $\mathrm{k}$ (indicated as an upper index) are\footnote{A detailed derivation can be found in \href{https://github.com/IAS-Uni-Siegen/EMD_course}{Fundamentals of electrical machines and drives (EMD) course}. All quantities are already assumed to be transformed to the stator side (without further nomenclature hints).}:
+    \begin{equation}
+        \begin{alignedat}{4}
+            \uncover<+->{ &  & \mbox{Stator voltage:}      &  & \quad\bm{u}^\mathrm{k}_\mathrm{s,dq}(     & t) &  & = R_\mathrm{s} \bm{i}^\mathrm{k}_\mathrm{s,dq}(t)+ \omega_\mathrm{k}(t)\bm{J}\bm{\psi}^\mathrm{k}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^\mathrm{k}_\mathrm{s,dq}(t),\\}
+            \uncover<+->{ &  & \mbox{Rotor voltage:}       &  & & 0 &  & = R_\mathrm{r} \bm{i}^\mathrm{k}_\mathrm{r,dq}(t)+\left(\omega_\mathrm{k}(t)-\omega(t)\right)\bm{J}\bm{\psi}^\mathrm{k}_\mathrm{r,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^\mathrm{k}_\mathrm{r,dq}(t),\\}
+            \uncover<+->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}^\mathrm{k}_\mathrm{s,dq}( & t) &  & = \bm{f}^\mathrm{k}_{\psi_\mathrm{s}}(\bm{i}^\mathrm{k}_\mathrm{s,dq}(t), \bm{i}^\mathrm{k}_\mathrm{r,dq}(t)),} \\
+            \uncover<+->{&  & \mbox{Rotor flux linkage:} &  & \quad \bm{\psi}^\mathrm{k}_\mathrm{r,dq}( & t) &  & = \bm{f}^\mathrm{k}_{\psi_\mathrm{r}}(\bm{i}^\mathrm{k}_\mathrm{s,dq}(t), \bm{i}^\mathrm{k}_\mathrm{r,dq}(t)),}  \\\uncover<+->{
+                                                                                                                                                                                                                                                        &  & \mbox{Torque:}              &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}^\mathrm{k}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}^\mathrm{k}_\mathrm{s,dq}(t) = -\nicefrac{3}{2} p (\bm{i}^\mathrm{k}_\mathrm{r,dq}(t))\T\bm{J}\bm{\psi}^\mathrm{k}_\mathrm{r,dq}(t).}
+        \end{alignedat}
+        \label{eq:basic_IM_model_set}
+    \end{equation}
+    \onslide<6->{with the further new signals and parameters:
+            \begin{equation*}
+                \begin{aligned}
+                     & \omega_\mathrm{k}: \text{(electrical) angular frequency of ref. axis $\mathrm{k}$},                      &  &
+                    \qquad \bm{\psi}^\mathrm{k}_\mathrm{s,dq}, \bm{\psi}^\mathrm{k}_\mathrm{r,dq}  : \text{nonlinear flux linkages}, \\
+                     & R_\mathrm{r}:                                                          \text{rotor winding resistances}. &  & \\
+                \end{aligned}
+            \end{equation*}}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux orientation in the k coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Stator flux linkage orientation}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            Per definition we can assign the stator flux linkage to the $\mathrm{d}$-axis of the $\mathrm{k}$ coordinate system:
+            \begin{equation}
+                \renewcommand{\arraystretch}{1.4}
+                \begin{split}
+                    \bm{\psi}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t) & = \begin{bmatrix} \psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) \\ \psi_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) \end{bmatrix} = \begin{bmatrix} \psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) \\ 0 \end{bmatrix} \\
+                                                                   & = \begin{bmatrix}|\bm{\psi}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t)| \\ 0 \end{bmatrix}.
+                \end{split}
+                \label{eq:IM_model_k_stator_flux_orientation_def}
+            \end{equation}
+            \onslide<2->{
+                    In this case, the torque expression simplifies to
+                    \begin{equation}
+                        T(t)  = \frac{3}{2} p i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) .
+                        \label{eq:IM_model_k_torque_stator_flux_orientation}
+                    \end{equation}
+                }
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \begin{tikzpicture}[>=Latex]
+
+                    % origin
+                    \coordinate (O) at (0,0);
+
+                    % stationary alpha-beta axes
+                    \draw[->] (-3.3,0) -- (3.35,0) node[right] {$\upalpha$};
+                    \draw[->] (0,-1.65) -- (0,3.95) node[right] {$\upbeta$};
+
+                    % rotating d-q axes
+                    \draw[thick] (O) -- ++(-35:1.7);
+                    \draw[thick, ->] (O) -- ++(145:3.05) node[below] {$\mathrm{q}$};
+
+                    \draw[thick] (O) -- ++(235:1.7);
+                    \draw[thick, ->] (O) -- ++(55:3.35) node[below right] {$\mathrm{d}$};
+
+                    % vectors
+                    \draw[signaldelta, ->, thick] (O) -- ++(105:2.88)
+                    node[pos=0.72, left=1mm] {$\bm{i}_{\mathrm{s,dq}}$};
+
+                    \draw[signalalpha,->, thick] (O) -- ++(55:2.75)
+                    node[pos=0.72, right=1mm] {$\bm{\psi}_{\mathrm{s,dq}}$};
+
+                    \draw[signalalpha,->, thick] (O) -- ++(23:2.45)
+                    node[pos=0.90, below right] {$\bm{\psi}_{\mathrm{r,dq}}$};
+
+                    % electrical angular velocity indication
+                    \draw[->, thin] (0,0) ++(45:3.6) arc (45:65:3.6) node[pos=0.5, above right] {$\omega_{\mathrm{k}}$};
+
+                \end{tikzpicture}
+                \caption{Stator flux-oriented coordinate system}
+                \label{fig:K_coordinates_stator_flux_orientation}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux orientation in the k coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Stator flux linkage orientation (cont.)}
+    Rearranging the stator voltage equation towards a stator flux linkage differential equation yields
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t)                                                               & = \bm{u}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t) - R_\mathrm{s} \bm{i}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t) - \omega_{\psi_{\mathrm{s}}}(t)\bm{J}\bm{\psi}^{\psi_{\mathrm{s}}}_\mathrm{s,dq}(t)                                                                                                                                                                                          \\ \Leftrightarrow \quad
+            \frac{\mathrm{d}}{\mathrm{d}t}\begin{bmatrix} \psi^{\psi_{\mathrm{s}}}_\mathrm{s,d} \\ \psi^{\psi_{\mathrm{s}}}_\mathrm{s,q} \end{bmatrix} & = \begin{bmatrix} u_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) + \omega_{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) \\ u_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - \omega_{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) \end{bmatrix}.
+        \end{split}
+        \label{eq:IM_model_k_stator_flux_orientation_differential_equation}
+    \end{equation}\pause%
+    Based on the orientation definition \eqref{eq:IM_model_k_stator_flux_orientation_def}, the $\mathrm{q}$-axis stator flux linkage differential component must be always zero, which implies
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\psi_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) = 0 = u_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - \omega_{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t).
+    \end{equation}\pause%
+    Hence, the required angular velocity of the reference frame for stator flux orientation is
+    \begin{equation}
+        \omega_{\psi_{\mathrm{s}}}(t) = \frac{1}{\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t)}\left(u_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t)\right) \quad \rightarrow \quad \varepsilon_{\psi_{\mathrm{s}}}(t) = \int_0^t \omega_{\psi_{\mathrm{s}}}(\tau) \mathrm{d}\tau.
+        \label{eq:IM_model_k_stator_flux_orientation_angular_velocity}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux orientation in the k coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux linkage orientation}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            Alternatively, we can assign the rotor flux linkage to the $\mathrm{d}$-axis of the $\mathrm{k}$ coordinate system:
+            \begin{equation}
+                \renewcommand{\arraystretch}{1.4}
+                \begin{split}
+                    \bm{\psi}^{\psi_{\mathrm{r}}}_\mathrm{r,dq}(t) & = \begin{bmatrix} \psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) \\ \psi_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) \end{bmatrix} = \begin{bmatrix} \psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) \\ 0 \end{bmatrix} \\
+                                                                   & = \begin{bmatrix}|\bm{\psi}^{\psi_{\mathrm{r}}}_\mathrm{r,dq}(t)| \\ 0 \end{bmatrix}.
+                \end{split}
+                \label{eq:IM_model_k_rotor_flux_orientation_def}
+            \end{equation}
+            \onslide<2->{
+                    In this case, the torque expression simplifies to
+                    \begin{equation}
+                        T(t)  = -\frac{3}{2} p i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) .
+                        \label{eq:IM_model_k_torque_rotor_flux_orientation}
+                    \end{equation}
+                }
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \begin{tikzpicture}[>=Latex]
+
+                    % origin
+                    \coordinate (O) at (0,0);
+
+                    % stationary alpha-beta axes
+                    \draw[->] (-3.3,0) -- (3.35,0) node[right] {$\upalpha$};
+                    \draw[->] (0,-1.65) -- (0,3.95) node[right] {$\upbeta$};
+
+                    % rotating d-q axes
+                    \draw[thick] (O) -- ++(293:1.7);
+                    \draw[thick, ->] (O) -- ++(113:3.05) node[left] {$\mathrm{q}$};
+
+                    \draw[thick] (O) -- ++(203:1.7);
+                    \draw[thick, ->] (O) -- ++(23:3.35) node[below] {$\mathrm{d}$};
+
+                    % vectors
+                    \draw[signaldelta, ->, thick] (O) -- ++(105:2.88)
+                    node[above] {$\bm{i}_{\mathrm{s,dq}}$};
+
+                    \draw[signalalpha,->, thick] (O) -- ++(55:2.75)
+                    node[pos=0.72, right=1mm] {$\bm{\psi}_{\mathrm{s,dq}}$};
+
+                    \draw[signalalpha,->, thick] (O) -- ++(23:2.45)
+                    node[pos=0.90, below right] {$\bm{\psi}_{\mathrm{r,dq}}$};
+
+                    % electrical angular velocity indication
+                    \draw[->, thin] (0,0) ++(13:3.6) arc (13:33:3.6) node[pos=0.5, above right] {$\omega_{\mathrm{k}}$};
+
+                \end{tikzpicture}
+                \caption{Rotor flux-oriented coordinate system}
+                \label{fig:K_coordinates_rotor_flux_orientation}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux orientation in the k coordinate system %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux linkage orientation (cont.)}
+    Rearranging the rotor voltage equation towards a rotor flux linkage differential equation yields
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\psi_{\mathrm{r}}}_\mathrm{r,dq}(t)                                                                                    & = - R_\mathrm{r} \bm{i}^{\psi_{\mathrm{r}}}_\mathrm{r,dq}(t) - \left(\omega_{\psi_{\mathrm{r}}}(t)-\omega(t)\right)\bm{J}\bm{\psi}^{\psi_{\mathrm{r}}}_\mathrm{r,dq}(t)                                                                                                                                                                             \\
+            \Leftrightarrow \quad\frac{\mathrm{d}}{\mathrm{d}t}\begin{bmatrix} \psi^{\psi_{\mathrm{r}}}_\mathrm{r,d} \\ \psi^{\psi_{\mathrm{r}}}_\mathrm{r,q} \end{bmatrix} & = \begin{bmatrix} - R_\mathrm{r} i_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) + \left(\omega_{\psi_{\mathrm{r}}}(t)-\omega(t)\right)\psi_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) \\ - R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) - \left(\omega_{\psi_{\mathrm{r}}}(t)-\omega(t)\right)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) \end{bmatrix}.
+        \end{split}
+        \label{eq:IM_model_k_rotor_flux_orientation_differential_equation}
+    \end{equation}\pause%
+    Based on the orientation definition \eqref{eq:IM_model_k_rotor_flux_orientation_def}, the $\mathrm{q}$-axis rotor flux linkage differential component must be always zero, which implies
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\psi_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) = 0 = - R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) - \left(\omega_{\psi_{\mathrm{r}}}(t)-\omega(t)\right)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t).
+    \end{equation}\pause%
+    Hence, the required angular velocity of the reference frame for rotor flux orientation is
+    \begin{equation}
+        \omega_{\psi_{\mathrm{r}}}(t) = \omega_\mathrm{r}(t) - \frac{1}{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t)} R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) \quad \rightarrow \quad \varepsilon_{\psi_{\mathrm{r}}}(t) = \int_0^t \omega_{\psi_{\mathrm{r}}}(\tau) \mathrm{d}\tau.
+        \label{eq:IM_model_k_rotor_flux_orientation_angular_velocity}
+    \end{equation}\pause%
+    Here, the term $\omega_\mathrm{slip} = \nicefrac{R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}}{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}} $ is the \hl{slip angular frequency}, i.e., the difference between the rotor flux angular velocity and the rotor speed (impacting the rotor's induced voltage).
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Nonlinear parameter submodels}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Slip frequency-dependent rotor skin effect%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Slip frequency-dependent rotor skin effect}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}
+                \item<1-> If $\omega_\mathrm{slip} \neq 0$, the rotor bars are exposed to a time-varying magnetic field.
+                \item<2-> This induces eddy currents leading to an uneven current distribution within the bars.
+                \item<3-> As a result, the effective rotor resistance increases with the slip frequency: \begin{equation}
+                          \frac{R_\mathrm{r}(\omega_\mathrm{slip})}{R_\mathrm{r,DC}} =  \delta \frac{\sinh(2 \delta) + \sin(2 \delta)}{\cosh(2\delta)-\cos(2 \delta)}
+                      \end{equation}
+                      with $$\delta = h_\mathrm{bar}\sqrt{\omega_\mathrm{slip} \frac{\mu_0 \kappa}{2}\frac{w_\mathrm{bar}}{w_\mathrm{slot}}}$$ being the skin depth. Here, $\mu_0$ is the vacuum permeability and $\kappa$ is the bar's conductivity.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \onslide<1->
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.85\textwidth]{fig/lec04/Eddy_currents_rotor_bar.pdf}
+                \caption{Rotor bar with eddy currents induced by the rotating magnetic field (inspired from A. Binder, \textit{Elektrische Maschinen und Antriebe}, Vol. 2, Springer, 2017)}
+                \label{fig:Eddy_currents_rotor_bar}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Slip frequency-dependent rotor skin effect (cont.)%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ------------------------------------------------------------
+% Rotor skin-effect resistance ratio
+% ------------------------------------------------------------
+% Parameters:
+% kappa  = 3.7e7 S/m
+% hbar   = 50 mm
+% wbar   = 10 mm
+% wslot  = 15 mm
+% mu0    = 4*pi*1e-7 H/m
+%
+% omega_slip = 2*pi*f_slip
+% ------------------------------------------------------------
+
+\pgfkeys{/pgf/fpu=true}
+\pgfmathsetmacro{\SkinCoeff}{%
+    50e-3*sqrt(2*pi*4*pi*1e-7*3.7e7/2*10e-3/15e-3)%
+}
+\pgfkeys{/pgf/fpu=false}
+
+\pgfmathdeclarefunction{skinDelta}{1}{%
+    \pgfmathparse{\SkinCoeff*sqrt(max(#1,1e-9))}%
+}
+
+\pgfmathdeclarefunction{skinRratio}{1}{%
+    \pgfmathparse{%
+        skinDelta(#1)
+        *(sinh(2*skinDelta(#1)) + sin(deg(2*skinDelta(#1))))
+        /(cosh(2*skinDelta(#1)) - cos(deg(2*skinDelta(#1))))%
+    }%
+}
+\begin{frame}
+    \frametitle{Slip frequency-dependent rotor skin effect (cont.)}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=0.85\textwidth,
+                    height=0.65\textheight,
+                    xmin=0,
+                    xmax=50,
+                    ymin=1,
+                    ymax=3.5,
+                    xlabel={$f_{\mathrm{slip}}=\nicefrac{\omega_{\mathrm{slip}}}{2\pi}\ \mathrm{in\ Hz}$},
+                    ylabel={$\dfrac{R_{\mathrm r}(\omega_{\mathrm{slip}})}{R_{\mathrm{r,DC}}}$},
+                    xtick={0,10,20,30,40,50},
+                    ytick={1,1.5,2,2.5,3},
+                    grid=major,
+                ]
+                \addplot[
+                    signalblue,
+                    thick,
+                    domain=0:50,
+                    samples=501,
+                    smooth
+                ] {skinRratio(x)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Rotor resistance of a squirrel cage IM as a function of the slip frequency (example based on the following values: $\kappa = \SI[per-mode=repeated-symbol, fraction-function=\nicefrac]{3.7\cdot10^7}{\siemens\per\metre}$, $h_\mathrm{bar} = \SI{50}{\milli\metre}$, $w_\mathrm{bar} = \SI{10}{\milli\metre}$, $w_\mathrm{slot} = \SI{15}{\milli\metre}$)}
+        \label{fig:AC_rotor_resistance}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Motivation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Why an explicit IM flux linkage model?}
+    The nonlinear squirrel cage IM model from \eqref{eq:IM_general_flux_functions} requires an explicit flux linkage model
+    \begin{equation}
+        \bm{\psi}^\mathrm{k}_\mathrm{s,dq}(t)=\bm{f}^\mathrm{k}_{\psi_\mathrm{s}}\big(\bm{i}^\mathrm{k}_\mathrm{s,dq}(t),\bm{i}^\mathrm{k}_\mathrm{r,dq}(t)\big), \quad
+        \bm{\psi}^\mathrm{k}_\mathrm{r,dq}(t)=\bm{f}^\mathrm{k}_{\psi_\mathrm{r}}\big(\bm{i}^\mathrm{k}_\mathrm{s,dq}(t),\bm{i}^\mathrm{k}_\mathrm{r,dq}(t)\big).
+        \label{eq:IM_general_flux_functions}
+    \end{equation}
+    \begin{itemize}
+        \item<2-> For PMSMs, current-to-flux maps can be tabulated over the measurable stator currents.
+        \item<3-> For squirrel cage IMs, the rotor currents are latent quantities and cannot be directly excited independently nor measured.
+        \item<4-> Hence, a LUT in $(\bm{i}_\mathrm{s,dq},\bm{i}_\mathrm{r,dq})$ is not directly identifiable from steady-state stator voltage/current data.
+        \item<5-> Instead, an explicit flux linkage model will be used as part of the overall IM model, which can be parameterized based on experimental data (covering both steady-state and transient conditions plus eventually further measurements such as torque).
+    \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Branch currents %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current coordinates and branch currents}
+    In the following, the upper index $\mathrm{k}$ is omitted for readability. \onslide<2->{We make use of the classical separation into main and stray flux paths, which can be represented by the \hl{T-type equivalent circuit} shown in \figref{fig:T_type_magnetic_IM_circuit}.}%
+    \onslide<3->{The main, stator stray and rotor stray branch currents are defined as
+            \begin{equation}
+                \bm{i}_\mathrm{m,dq}=\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}, \qquad
+                \bm{i}_{\sigma\mathrm{s},\mathrm{dq}}=\bm{i}_\mathrm{s,dq}, \qquad
+                \bm{i}_{\sigma\mathrm{r},\mathrm{dq}}=\bm{i}_\mathrm{r,dq}.
+                \label{eq:IM_branch_currents}
+            \end{equation}}
+    \onslide<4->{The corresponding flux linkage contributions are
+            \begin{equation}
+                \bm{\psi}_\mathrm{s,dq}=\bm{\psi}_\mathrm{m,dq}+\bm{\psi}_{\sigma\mathrm{s},\mathrm{dq}}, \qquad
+                \bm{\psi}_\mathrm{r,dq}=\bm{\psi}_\mathrm{m,dq}+\bm{\psi}_{\sigma\mathrm{r},\mathrm{dq}}.
+                \label{eq:IM_flux_branch_decomposition}
+            \end{equation}}
+    \onslide<2->{%
+            \begin{figure}
+                \begin{circuitikz}
+                    \draw (0,0) to [inductor, l=$L_{\sigma\mathrm{s}}$, i>^=$\bm{i}_{\mathrm{s}}$, o-*] (2.25,0) coordinate (s) to [inductor, l=$L_{\sigma\mathrm{r}}$, i^<=$\bm{i}_{\mathrm{r}}$, *-o] (4.5,0);
+                    \draw (s) to [inductor, l=$L_\mathrm{m}$, i>^=$\bm{i}_\mathrm{m}$, *-*] ++(0,-2.25) coordinate (m);
+                    \draw (m) to [short, -o] ++(2.25,0);
+                    \draw (m) to [short, -o] ++(-2.25,0);
+                \end{circuitikz}
+                \caption{T-type IM magnetic circuit (with scalar and constant inductances for simplicity)}
+                \label{fig:T_type_magnetic_IM_circuit}
+            \end{figure}}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Prototype functions %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Selected apparent inductance prototypes for one branch}
+    Consider one branch $b\in\{\mathrm{m},\sigma\mathrm{s},\sigma\mathrm{r}\}$ of the magnetic circuit \figref{fig:T_type_magnetic_IM_circuit}. The scalar function
+    $L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)$ denotes the \hl{apparent inductance}\footnote{The usage of an apparent inductance as a model approach is rather arbitrary, but common in the IM context. A direct functional mapping of $\bm{i}_{b,\mathrm{dq}}\rightarrow\bm{\psi}_{b,\mathrm{dq}}$ (without the apparent inductance) is a valid alternative.}  representing the flux linkage of this branch:
+    \begin{equation}
+        \bm{\psi}_{b,\mathrm{dq}}
+        =L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)\bm{i}_{b,\mathrm{dq}}.
+        \label{eq:branch_flux_function_general}
+    \end{equation}
+    \onslide<2->{Two simple saturation-like \hl{examples} are}
+    \begin{align}
+        \onslide<2->{\text{fractional:}\quad
+                           L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)
+                           &=L_{b,\infty}+\frac{\Delta L_b}{1+\left(\nicefrac{\|\bm{i}_{b,\mathrm{dq}}\|}{i_{b,\mathrm{max}}}\right)^2},} \\[-0.2ex]
+        \onslide<3->{\text{exponential:}\quad
+                           L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)
+                           &=L_{b,\infty}+\Delta L_b
+                           \exp\!\left[-\left(\nicefrac{\|\bm{i}_{b,\mathrm{dq}}\|}{i_{b,\mathrm{max}}}\right)^2\right].}
+        \label{eq:branch_app_inductance_examples}
+    \end{align}
+    \onslide<4->{Both describe a decrease from $L_{b,\infty}+\Delta L_b$ at small currents towards the saturated value $L_{b,\infty}$ for large currents. Here, $L_{b,\infty}>0$ and $\Delta L_b\geq0$ are to be identified model parameters and $i_{b,\mathrm{max}}>0$ is the maximum current for the branch (for normalization purposes).}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Total flux model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Total IM flux linkage model with saturated stray paths}
+    Applying \eqref{eq:branch_flux_function_general} to \eqref{eq:IM_branch_currents} gives
+    \begin{equation}
+        \begin{split}
+            \bm{\psi}_\mathrm{m,dq}
+             & =L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)
+            (\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}),                                         \\
+            \bm{\psi}_{\sigma\mathrm{s},\mathrm{dq}}
+             & =L_{\sigma\mathrm{s},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}\|)\bm{i}_\mathrm{s,dq}, \\
+            \bm{\psi}_{\sigma\mathrm{r},\mathrm{dq}}
+             & =L_{\sigma\mathrm{r},\mathrm{app}}(\|\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{r,dq}.
+            \label{eq:branch_fluxes_explicit}
+        \end{split}
+    \end{equation}
+    \onslide<2->{Together with \eqref{eq:IM_flux_branch_decomposition}, this results in}
+    \begin{equation}
+        \begin{split}
+            \onslide<2->{\bm{\psi}_\mathrm{s,dq}
+                               &=L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)
+                               (\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq})
+                               +L_{\sigma\mathrm{s},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}\|)\bm{i}_\mathrm{s,dq},} \\
+            \onslide<3->{\bm{\psi}_\mathrm{r,dq}
+                               &=L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)
+                               (\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq})
+                               +L_{\sigma\mathrm{r},\mathrm{app}}(\|\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{r,dq}.}
+            \label{eq:total_flux_model_explicit}
+        \end{split}
+    \end{equation}
+    \onslide<4->{Each flux contribution is therefore a scalar multiplication of an apparent branch inductance and the respective branch current.}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Branch differential inductance definition %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Branch differential inductance matrix definition}
+    For the branch map
+    \begin{equation}
+        \bm{\psi}_{b,\mathrm{dq}}
+        =L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)\bm{i}_{b,\mathrm{dq}}, \qquad
+        \bm{i}_{b,\mathrm{dq}}=\begin{bmatrix}i_{b,\mathrm{d}}\\i_{b,\mathrm{q}}\end{bmatrix},
+        \quad
+        \bm{\psi}_{b,\mathrm{dq}}=\begin{bmatrix}\psi_{b,\mathrm{d}}\\\psi_{b,\mathrm{q}}\end{bmatrix},
+    \end{equation}
+    \onslide<2->{the branch \hl{differential inductance matrix}\footnote{Remember that the differential inductance matrix is describing the incremental / tangential flux linkage change per current and, therefore, determines the dynamic current behavior. In contrast, the apparent inductance describes the absolute flux linkage for some given current (secant) -- compare \figref{fig:flux_saturation}.} is
+            \begin{equation}
+                \bm{L}_b(\bm{i}_{b,\mathrm{dq}})
+                =\frac{\partial\bm{\psi}_{b,\mathrm{dq}}}{\partial\bm{i}_{b,\mathrm{dq}}}
+                =\begin{bmatrix}
+                    L_{b,\mathrm{dd}} & L_{b,\mathrm{dq}} \\
+                    L_{b,\mathrm{qd}} & L_{b,\mathrm{qq}}
+                \end{bmatrix}
+                =\begin{bmatrix}
+                    \frac{\partial\psi_{b,\mathrm{d}}}{\partial i_{b,\mathrm{d}}} &
+                    \frac{\partial\psi_{b,\mathrm{d}}}{\partial i_{b,\mathrm{q}}}   \\[0.6ex]
+                    \frac{\partial\psi_{b,\mathrm{q}}}{\partial i_{b,\mathrm{d}}} &
+                    \frac{\partial\psi_{b,\mathrm{q}}}{\partial i_{b,\mathrm{q}}}
+                \end{bmatrix}.
+                \label{eq:branch_diff_inductance_jacobian}
+            \end{equation}}%
+    \onslide<3->{For any differentiable apparent inductance function, this Jacobian can be written compactly as}
+    \begin{equation}
+        \onslide<2->{\bm{L}_b
+                =L_{b,\mathrm{app}}\bm{I}_2
+                +\frac{1}{\|\bm{i}_{b,\mathrm{dq}}\|}
+                \frac{\partial L_{b,\mathrm{app}}}{\partial\|\bm{i}_{b,\mathrm{dq}}\|}
+                \bm{i}_{b,\mathrm{dq}}\bm{i}_{b,\mathrm{dq}}\T.}
+        \label{eq:branch_diff_inductance_general}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Branch differential inductance prototypes %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Branch differential inductance matrix examples}
+    For the fractional prototype from \eqref{eq:branch_app_inductance_examples}, \eqref{eq:branch_diff_inductance_general} gives
+    \begin{equation}
+        \bm{L}_{b,\mathrm{frac}}
+        =L_{b,\mathrm{app}}\bm{I}_2
+        -\frac{2\Delta L_b}{I_b^2}
+        \frac{\bm{i}_{b,\mathrm{dq}}\bm{i}_{b,\mathrm{dq}}\T}
+        {\left[1+\left(\nicefrac{\|\bm{i}_{b,\mathrm{dq}}\|}{I_b}\right)^2\right]^2}.
+        \label{eq:branch_frac_diff_inductance_matrix}
+    \end{equation}
+    \onslide<2->{For the exponential prototype from \eqref{eq:branch_app_inductance_examples}, one obtains}
+    \begin{equation}
+        \onslide<2->{\bm{L}_{b,\mathrm{exp}}
+                =L_{b,\mathrm{app}}\bm{I}_2
+                -\frac{2\Delta L_b}{I_b^2}
+                \exp\!\left[-\left(\nicefrac{\|\bm{i}_{b,\mathrm{dq}}\|}{I_b}\right)^2\right]
+                \bm{i}_{b,\mathrm{dq}}\bm{i}_{b,\mathrm{dq}}\T.}
+        \label{eq:branch_exp_diff_inductance_matrix}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Prototype visualization %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Normalized apparent and differential inductance examples}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=0.82\textwidth,
+                    height=0.7\textheight,
+                    xlabel={$x=\|\bm{i}_{b,\mathrm{dq}}\|/i_{b,\mathrm{max}}$},
+                    ylabel={$L/L_{\mathrm{max}}$},
+                    xmin=0, xmax=1,
+                    ymin=0.1, ymax=1.05,
+                    axis lines=left,
+                    grid=major,
+                    legend style={at={(0.02,0.02)}, anchor=south west, draw=black, fill=white, font=\small, legend cell align=left},
+                ]
+                % Example parameters: gamma = L_{b,\infty}/L_max = 0.4.
+                % The factors 3 and sqrt(ln(10)) are chosen such that
+                % L_{\mathrm{app},1}(1)=L_{\mathrm{app},2}(1)=0.46 L_max,
+                % while the corresponding differential inductances remain positive.
+
+                \addplot[signalalpha, thick, domain=0:1, samples=200]
+                {0.4 + 0.6/(1 + 9*x^2)};
+                \addlegendentry{$L_{b,\mathrm{app, frac}}/L_{\max}$}
+
+                \addplot[signalalpha, dashed, thick, domain=0:1, samples=200]
+                {0.4 + 0.6/(1 + 9*x^2) - 10.8*x^2/((1 + 9*x^2)^2)};
+                \addlegendentry{$L_{b,\mathrm{dd, frac}}/L_{\max}$}
+
+                \addplot[signaldelta, thick, domain=0:1, samples=200]
+                {0.4 + 0.6*exp(-ln(10)*x^2)};
+                \addlegendentry{$L_{b,\mathrm{app, exp}}/L_{\max}$}
+
+                \addplot[signaldelta, dashed, thick, domain=0:1, samples=200]
+                {0.4 + 0.6*exp(-ln(10)*x^2)*(1 - 2*ln(10)*x^2)};
+                \addlegendentry{$L_{b,\mathrm{dd, exp}}/L_{\max}$}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Exemplary normalized apparent inductance prototypes and selected branch differential inductance entries.}
+        \label{fig:normalized_IM_inductance_examples}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Full differential matrix %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Combined stator and rotor differential inductance matrix}
+    Define the branch differential inductance matrices
+    \begin{equation}
+        \bm{L}_\mathrm{m}=\bm{L}_\mathrm{m}(\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}), \qquad
+        \bm{L}_{\sigma\mathrm{s}}=\bm{L}_{\sigma\mathrm{s}}(\bm{i}_\mathrm{s,dq}), \qquad
+        \bm{L}_{\sigma\mathrm{r}}=\bm{L}_{\sigma\mathrm{r}}(\bm{i}_\mathrm{r,dq}).
+        \label{eq:branch_inductance_matrices}
+    \end{equation}
+    \onslide<2->{The Jacobian of the flux maps \eqref{eq:total_flux_model_explicit} is}
+    \begin{equation}
+        \onslide<2->{\bm{L}(\bm{i}_\mathrm{s,dq},\bm{i}_\mathrm{r,dq})
+                =\frac{\partial}{\partial[\bm{i}_\mathrm{s,dq}\T,\bm{i}_\mathrm{r,dq}\T]\T}
+                \begin{bmatrix}\bm{\psi}_\mathrm{s,dq}\\\bm{\psi}_\mathrm{r,dq}\end{bmatrix}
+                =
+                \begin{bmatrix}
+                    \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{s}} & \bm{L}_\mathrm{m}                           \\
+                    \bm{L}_\mathrm{m}                           & \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{r}}
+                \end{bmatrix}.}
+        \label{eq:full_differential_inductance_matrix}
+    \end{equation}
+    \begin{itemize}
+        \item<3-> The matrix is symmetric and has the same block structure as the linear IM model.
+        \item<4-> Stator and rotor stray saturation enter through $\bm{L}_{\sigma\mathrm{s}}$ and $\bm{L}_{\sigma\mathrm{r}}$.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current differential equations %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current differential equations of the nonlinear IM model}
+    Stacking stator and rotor quantities as
+    \begin{equation}
+        \bm{i}_\mathrm{dq}(t)=\begin{bmatrix}\bm{i}_\mathrm{s,dq}(t)\\\bm{i}_\mathrm{r,dq}(t)\end{bmatrix}, \qquad
+        \bm{\psi}_\mathrm{dq}(t)=\begin{bmatrix}\bm{\psi}_\mathrm{s,dq}(t)\\\bm{\psi}_\mathrm{r,dq}(t)\end{bmatrix},
+    \end{equation}
+    \onslide<2->{yields
+            \begin{equation}
+                \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{dq}(t)=\bm{L}(\bm{i}_\mathrm{dq}(t))\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{dq}(t).
+            \end{equation}}
+    \onslide<3->{Applying this to the nonlinear IM model from \eqref{eq:basic_IM_model_set} reveals the \hl{current differential equations},}
+    \begin{equation}
+        \onslide<3->{\bm{L}(\bm{i}_\mathrm{dq}(t))\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{dq}(t)=
+                \begin{bmatrix}
+                    \bm{u}_\mathrm{s,dq}(t)-R_\mathrm{s}\bm{i}_\mathrm{s,dq}(t)-\omega_\mathrm{k}(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) \\
+                    -R_\mathrm{r}\bm{i}_\mathrm{r,dq}(t)-\left(\omega_\mathrm{k}(t)-\omega(t)\right)\bm{J}\bm{\psi}_\mathrm{r,dq}(t)
+                \end{bmatrix}.}
+        \label{eq:current_state_nonlinear_IM_model}
+    \end{equation}
+    \onslide<4->{Assuming a regular matrix $\bm{L}(\bm{i}_\mathrm{dq}(t))$ (e.g., by using the example apparent inductance models plus reasonable parameters), this can be rewritten as
+            \begin{equation}
+                \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{dq}(t)=
+                \bm{L}(\bm{i}_\mathrm{dq}(t))^{-1}
+                \begin{bmatrix}
+                    \bm{u}_\mathrm{s,dq}(t)-R_\mathrm{s}\bm{i}_\mathrm{s,dq}(t)-\omega_\mathrm{k}(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) \\
+                    -R_\mathrm{r}\bm{i}_\mathrm{r,dq}(t)-\left(\omega_\mathrm{k}(t)-\omega(t)\right)\bm{J}\bm{\psi}_\mathrm{r,dq}(t)
+                \end{bmatrix}.
+                \label{eq:current_state_nonlinear_IM_model_explicit}
+            \end{equation}}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Parameter identification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Nonlinear parameter identification: constrained model fitting}
+    \begin{varblock}{Motivation for parameter identification}
+        Due to the lack of  rotor side measurements, the nonlinear IM model cannot be fully identified from steady-state stator voltage/current data. Instead, a mix of steady-state and transient experiments delivers data for the below parameter identification.
+    \end{varblock}
+    With the state and the parameter vector
+    \begin{equation}
+        \bm{x}=\begin{bmatrix}\bm{i}_\mathrm{s,dq}\T&\bm{i}_\mathrm{r,dq}\T\end{bmatrix}\T,
+        \quad
+        \bm{\theta}=\begin{bmatrix}R_\mathrm{s}&R_\mathrm{r}&\cdots\end{bmatrix}\T,
+    \end{equation}
+    an output-error identification problem is
+    \begin{equation}
+        \begin{gathered}
+            \min_{\bm{\theta}, \,\bm{x}_{0}}\quad
+            \sum_k
+            \left\|\bm{W}\left(\bm{y}[k]-\hat{\bm{y}}[k]\right)\right\|_2^2
+            +\rho(\bm{\theta}) \\
+            \mathrm{s.t.}\quad
+            \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{x}}(t)=\bm{f}(\hat{\bm{x}}(t),\bm{u}(t),\bm{\theta}), \quad \hat{\bm{y}}=\bm{g}(\hat{\bm{x}}(t),\bm{u}(t),\bm{\theta}),\quad \bm{\theta}\in\Theta.
+            \label{eq:IM_parameter_identification_general}
+        \end{gathered}
+    \end{equation}
+    Here, $\bm{W}$ is a weighting matrix, $\rho(\bm{\theta})$ is a regularization term, and $\Theta$ is a set of admissible parameters, and the ODE is numerically integrated to get the predicted output $\hat{\bm{y}}[k]$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Nonlinear parameter identification example %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Nonlinear parameter identification: exemplary cost function}
+    A potential cost function may combine measured outputs and voltage equation residuals:
+    \begin{equation}
+        \begin{aligned}
+            J(\bm{\theta})=\sum_k \bigg( &
+            w_i\left\|\bm{i}_{\mathrm{s}}[k]-\hat{\bm{i}}_{\mathrm{s}}[k]\right\|_2^2
+            +w_T\left(T[k]-\nicefrac{3}{2}p(\hat{\bm{i}}_{\mathrm{s}}[k])\T\bm{J}\hat{\bm{\psi}}_{\mathrm{s}}[k]\right)^2                                                                                                                                                          \\
+                                         & +w_{u_\mathrm{s}}\left\|\bm{u}_{\mathrm{s}}[k]-R_\mathrm{s}\hat{\bm{i}}_{\mathrm{s}}[k]-\hat{\omega}_{\mathrm{k}}[k]\bm{J}\hat{\bm{\psi}}_{\mathrm{s}}[k]-\nicefrac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}_{\mathrm{s}}[k]\right\|_2^2 \\
+                                         & +w_{u_\mathrm{r}}\left\|R_\mathrm{r}\hat{\bm{i}}_{\mathrm{r}}[k]+(\hat{\omega}_{\mathrm{k}}[k]-\omega[k])\bm{J}\hat{\bm{\psi}}_{\mathrm{r}}[k]+\nicefrac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}_{\mathrm{r}}[k]\right\|_2^2\bigg).
+        \end{aligned}
+        \label{eq:IM_parameter_identification_example}
+    \end{equation}
+    \begin{itemize}
+        \item Considers current, voltage and torque data.
+        \item If a torque sensor is not available, $w_T$ can be set to zero.
+        \item Besides the cost function, initial parameter guesses and informative data are crucial for successful identification.
+        \item Further details on nonlinear parameter identification methods can be found in our lecture \href{https://github.com/DS-4-DS/DS4DS_Course}{Data Science for Dynamical Systems Course (DS4DS)}.
+    \end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Linear model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear flux linkage model as special case}
+    If no saturation is considered, all apparent branch inductances are constant:
+    \begin{equation}
+        L_{\mathrm{m},\mathrm{app}}=L_\mathrm{m}, \qquad
+        L_{\sigma\mathrm{s},\mathrm{app}}=L_{\sigma\mathrm{s}}, \qquad
+        L_{\sigma\mathrm{r},\mathrm{app}}=L_{\sigma\mathrm{r}}.
+    \end{equation}
+    \onslide<2->{Hence, apparent and differential inductances are identical, i.e., $\bm{L}_b=L_b\bm{I}_2$. The standard linear IM flux model becomes}
+    \begin{align}
+        \onslide<2->{\bm{\psi}_\mathrm{s,dq}
+                           &=(L_\mathrm{m}+L_{\sigma\mathrm{s}})\bm{i}_\mathrm{s,dq}
+                           +L_\mathrm{m}\bm{i}_\mathrm{r,dq},} \\
+        \onslide<3->{\bm{\psi}_\mathrm{r,dq}
+                           &=L_\mathrm{m}\bm{i}_\mathrm{s,dq}
+                           +(L_\mathrm{m}+L_{\sigma\mathrm{r}})\bm{i}_\mathrm{r,dq}.}
+        \label{eq:linear_IM_flux_linkage_model}
+    \end{align}
+    \onslide<4->{The corresponding constant differential inductance matrix is}
+    \begin{equation}
+        \onslide<4->{\bm{L}_\mathrm{lin}
+                =\begin{bmatrix}
+                    (L_\mathrm{m}+L_{\sigma\mathrm{s}})\bm{I}_2 & L_\mathrm{m}\bm{I}_2                        \\
+                    L_\mathrm{m}\bm{I}_2                        & (L_\mathrm{m}+L_{\sigma\mathrm{r}})\bm{I}_2
+                \end{bmatrix}.}
+        \label{eq:linear_IM_diff_inductance_matrix}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% T-type equivalent circuit model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{T-type equivalent circuit model}
+
+    \begin{figure}
+        \centering
+        \begin{circuitikz}[straight voltages]
+
+            % coordinates
+            \coordinate (LT) at (0,2.5);
+            \coordinate (LB) at (0,0);
+            \coordinate (A)  at (1.0,2.5);
+            \coordinate (B)  at (3.0,2.5);
+            \coordinate (C)  at (5.0,2.5);
+            \coordinate (N)  at (5.0,2.5);
+            \coordinate (D)  at (7.0,2.5);
+            \coordinate (E)  at (9.0,2.5);
+            \coordinate (RT) at (10,2.5);
+            \coordinate (RB) at (10.0,0);
+
+            % main upper electrical path
+            \draw
+            (LT) to[short, i>^=$\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}$] (A)
+            to[R, l=$R_{s}$] (B)
+            to[L, l=$L_{\sigma \mathrm{s}}$] (C)
+            to[short] (N)
+            to[L, l=$L_{\sigma \mathrm{r}}$] (D)
+            to[R, l=$R_{r}$] (E)
+            to[short, i<^=$\underline{i}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RT);
+
+            % lower return path with rotational voltage sources
+            \draw (LB) to [V, v_<=$\omega_{k}\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (N |- LB)
+            to [V, v_=$(\omega_{\mathrm{k}}-\omega)\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RB |- LB);
+
+            % side connections
+            \draw (LT) to[open, v=$\bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}$, o-o] (LB);
+            \draw (RT) to[short] (RB);
+
+            % magnetizing branch
+            \draw
+            (N) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{k}}_{\mathrm{m,dq}}$] (N |- LB);
+
+            % connection dots
+            \fill (N) circle[radius=1.6pt];
+            \fill (N |- LB) circle[radius=1.6pt];
+
+            % flux linkage voltage references
+            \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (3.2,0);
+            \draw (6.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (6.8,0);
+        \end{circuitikz}
+        \caption{T-type equivalent model of the IM motor with constant and scalar parameters for a simplified representation (time dependency is not shown for brevity)}
+        \label{fig:T_ECD_IM_dq}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% T-type equivalent circuit model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{T-type equivalent circuit model with iron loss resistance}
+
+    \begin{figure}
+        \centering
+        \begin{circuitikz}[straight voltages]
+
+            % coordinates
+            \coordinate (LT) at (0,2.5);
+            \coordinate (LB) at (0,0);
+            \coordinate (A)  at (1.0,2.5);
+            \coordinate (B)  at (3.0,2.5);
+            \coordinate (C)  at (5.0,2.5);
+            \coordinate (N)  at (6.0,2.5);
+            \coordinate (D)  at (8.0,2.5);
+            \coordinate (E)  at (10.0,2.5);
+            \coordinate (RT) at (11,2.5);
+            \coordinate (RB) at (11.0,0);
+
+            % main upper electrical path
+            \draw
+            (LT) to[short, i>^=$\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}$] (A)
+            to[R, l=$R_{s}$] (B)
+            to[L, l=$L_{\sigma \mathrm{s}}$] (C)
+            to[short] (N)
+            to[L, l=$L_{\sigma \mathrm{r}}$] (D)
+            to[R, l=$R_{r}$] (E)
+            to[short, i<^=$\underline{i}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RT);
+
+            % lower return path with rotational voltage sources
+            \draw (LB) to [V, v_<=$\omega_{k}\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (C |- LB);
+            \draw (N |- LB)  to [V, v_=$(\omega_{\mathrm{k}}-\omega)\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RB |- LB);
+            \draw (N |- LB) to (C |- LB);
+
+            % side connections
+            \draw (LT) to[open, v=$\bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}$, o-o] (LB);
+            \draw (RT) to[short] (RB);
+
+            % magnetizing branch
+            \draw
+            (C) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{k}}_{\mathrm{m,dq}}$, *-*] (C |- LB);
+            \draw
+            (N) to[R, l=$R_{\mathrm{c}}$, i>^=$\bm{i}^{\mathrm{k}}_{\mathrm{c,dq}}$] (N |- LB);
+
+            % connection dots
+            \fill (N) circle[radius=1.6pt];
+            \fill (N |- LB) circle[radius=1.6pt];
+
+            % flux linkage voltage references
+            \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (3.2,0);
+            \draw (7.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (7.8,0);
+        \end{circuitikz}
+        \caption{Extended T-type equivalent model with additional iron loss resistance $R_\mathrm{c}$ in the magnetizing branch}
+        \label{fig:T_ECD_IM_dq_iron_loss}
+    \end{figure}
+\end{frame}
