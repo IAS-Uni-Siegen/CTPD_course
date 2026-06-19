@@ -783,6 +783,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{T-type equivalent circuit model with iron loss resistance}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.95\textwidth]{fig/lec04/Eddy_currents_single_sheet.pdf}
+                \includegraphics[width=0.95\textwidth]{fig/lec04/Hyteresis_curve_full.pdf}
+
+            \end{figure}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            Iron losses in electrical machine cover (cf. right):
+            \begin{itemize}
+                \item Eddy current losses: Due to time-varying magnetic fields, currents are induced in the iron core, leading to resistive losses.
+                \item Hysteresis losses: Due to magnetic friction of changing orientation of Weiss domains.
+            \end{itemize}
+            Empirical measurements how that the IM's iron losses can be approximated by
+            \begin{equation}
+                P_\mathrm{Fe}\approx \frac{1}{R_\mathrm{c}}\left\|\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{m},\upalpha\upbeta}\right\|^2=R_\mathrm{c}\left\|\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}\right\|^2
+            \end{equation}
+            in the stator-oriented $\upalpha\upbeta$-frame, where $R_\mathrm{c}$ is an iron loss resistance and $\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}$ is the iron loss current.
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% T-type equivalent circuit model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{T-type equivalent circuit model with iron loss resistance}
 
     \begin{figure}
         \centering
@@ -802,38 +832,182 @@
 
             % main upper electrical path
             \draw
-            (LT) to[short, i>^=$\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}$] (A)
+            (LT) to[short, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (A)
             to[R, l=$R_{s}$] (B)
             to[L, l=$L_{\sigma \mathrm{s}}$] (C)
             to[short] (N)
             to[L, l=$L_{\sigma \mathrm{r}}$] (D)
             to[R, l=$R_{r}$] (E)
-            to[short, i<^=$\underline{i}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RT);
+            to[short, i<^=$\underline{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RT);
 
             % lower return path with rotational voltage sources
-            \draw (LB) to [V, v_<=$\omega_{k}\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (C |- LB);
-            \draw (N |- LB)  to [V, v_=$(\omega_{\mathrm{k}}-\omega)\bm{J}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (RB |- LB);
+            \draw (LB) to [short] (C |- LB);
+            \draw (N |- LB)  to [V, v_<=$\omega\bm{J}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RB |- LB);
             \draw (N |- LB) to (C |- LB);
 
             % side connections
-            \draw (LT) to[open, v=$\bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}$, o-o] (LB);
+            \draw (LT) to[open, v=$\bm{u}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$, o-o] (LB);
             \draw (RT) to[short] (RB);
 
             % magnetizing branch
             \draw
-            (C) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{k}}_{\mathrm{m,dq}}$, *-*] (C |- LB);
+            (C) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{s}}_{\mathrm{m,\upalpha\upbeta}}$, *-*] (C |- LB);
             \draw
-            (N) to[R, l=$R_{\mathrm{c}}$, i>^=$\bm{i}^{\mathrm{k}}_{\mathrm{c,dq}}$] (N |- LB);
+            (N) to[R, l=$R_{\mathrm{c}}$, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{c,\upalpha\upbeta}}$] (N |- LB);
 
             % connection dots
             \fill (N) circle[radius=1.6pt];
             \fill (N |- LB) circle[radius=1.6pt];
 
             % flux linkage voltage references
-            \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}$] (3.2,0);
-            \draw (7.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}$] (7.8,0);
+            \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (3.2,0);
+            \draw (7.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (7.8,0);
         \end{circuitikz}
-        \caption{Extended T-type equivalent model with additional iron loss resistance $R_\mathrm{c}$ in the magnetizing branch}
-        \label{fig:T_ECD_IM_dq_iron_loss}
+        \caption{Extended T-type equivalent model with additional iron loss resistance $R_\mathrm{c}$ in the magnetizing branch depicted in the stator-oriented $\upalpha\upbeta$-frame}
+        \label{fig:T_ECD_IM_iron_loss}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% No-load test for parameter identification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{No-load test for parameter identification}
+    Assuming $R_\mathrm{s} << R_\mathrm{c}$ and $L_{\sigma\mathrm{s}}<<L_\mathrm{m}$, the mutual inductance and iron resistance can be identified from no-load active and reactive power measurements:
+    \begin{equation}
+        L_\mathrm{m}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
+        R_\mathrm{c}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}},
+    \end{equation}
+    where $U_\mathrm{s}$ is the stator voltage RMS value at the applied angular frequency $\omega$ while $P_\mathrm{s}$ and $Q_\mathrm{s}$ are the active and reactive power measured at the stator, respectively.
+    \begin{figure}
+        \begin{columns}
+            \begin{column}{0.64\textwidth}
+                \centering
+                \begin{circuitikz}[straight voltages, scale=0.8, every node/.append style={scale=0.8}]
+
+                    % coordinates
+                    \coordinate (LT) at (0,2.5);
+                    \coordinate (LB) at (0,0);
+                    \coordinate (A)  at (1.0,2.5);
+                    \coordinate (B)  at (3.0,2.5);
+                    \coordinate (C)  at (5.0,2.5);
+                    \coordinate (N)  at (6.0,2.5);
+                    \coordinate (D)  at (8.0,2.5);
+                    \coordinate (E)  at (10.0,2.5);
+                    \coordinate (RT) at (11,2.5);
+                    \coordinate (RB) at (11.0,0);
+
+                    % main upper electrical path
+                    \draw
+                    (LT) to[short, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (A)
+                    to[R, l=$R_{s}$] (B)
+                    to[L, l=$L_{\sigma \mathrm{s}}$] (C)
+                    to[short] (N);
+                    \draw[dashed] (N)
+                    to[L, l=$L_{\sigma \mathrm{r}}$] (D)
+                    to[R, l=$R_{r}$] (E)
+                    to[short, i<^=$\underline{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}} \approx 0$] (RT);
+
+                    % lower return path with rotational voltage sources
+                    \draw (LB) to [short] (C |- LB);
+                    \draw[dashed] (N |- LB)  to [V, v_<=$\omega\bm{J}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RB |- LB);
+                    \draw (N |- LB) to (C |- LB);
+
+                    % side connections
+                    \draw (LT) to[open, v=$\bm{u}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$, o-o] (LB);
+                    \draw[dashed] (RT) to[short] (RB);
+
+                    % magnetizing branch
+                    \draw
+                    (C) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{s}}_{\mathrm{m,\upalpha\upbeta}}$, *-*] (C |- LB);
+                    \draw
+                    (N) to[R, l=$R_{\mathrm{c}}$, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{c,\upalpha\upbeta}}$] (N |- LB);
+
+                    % connection dots
+                    \fill (N) circle[radius=1.6pt];
+                    \fill (N |- LB) circle[radius=1.6pt];
+
+                    % flux linkage voltage references
+                    \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (3.2,0);
+                    \draw (7.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (7.8,0);
+                \end{circuitikz}
+            \end{column}
+            \begin{column}{0.35\textwidth}
+                \caption{\raggedright  No-load test (without a load the rotor runs synchronously to the stator field and thus the rotor current is approximately zero due to the lack of any rotor induced voltage)}
+                \label{fig:T_ECD_IM_no_load_test}
+            \end{column}
+        \end{columns}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Blocked rotor test for parameter identification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Blocked rotor test for parameter identification}
+    From a blocked rotor test with active and reactive power measurements we can approximate:
+    \begin{equation}
+        L_{\sigma\mathrm{s}}+L_{\sigma\mathrm{r}}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
+        R_\mathrm{s} + R_\mathrm{r}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}}.
+    \end{equation}
+    With a separate ohmmeter  measurement of $R_\mathrm{s}$, the rotor resistance directly follows. However, for the stray inductances, further assumptions are required to split the sum into stator and rotor contributions (typically, $L_{\sigma\mathrm{s}}=L_{\sigma\mathrm{r}}$).
+    \begin{figure}
+        \begin{columns}
+            \begin{column}{0.64\textwidth}
+                \centering
+                \begin{circuitikz}[straight voltages, scale=0.8, every node/.append style={scale=0.8}]
+
+                    % coordinates
+                    \coordinate (LT) at (0,2.5);
+                    \coordinate (LB) at (0,0);
+                    \coordinate (A)  at (1.0,2.5);
+                    \coordinate (B)  at (3.0,2.5);
+                    \coordinate (C)  at (5.0,2.5);
+                    \coordinate (N)  at (6.0,2.5);
+                    \coordinate (D)  at (8.0,2.5);
+                    \coordinate (E)  at (10.0,2.5);
+                    \coordinate (RT) at (11,2.5);
+                    \coordinate (RB) at (11.0,0);
+
+                    % main upper electrical path
+                    \draw
+                    (LT) to[short, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (A)
+                    to[R, l=$R_{s}$] (B)
+                    to[L, l=$L_{\sigma \mathrm{s}}$] (C)
+                    to[short] (N);
+                    \draw (N)
+                    to[L, l=$L_{\sigma \mathrm{r}}$] (D)
+                    to[R, l=$R_{r}$] (E)
+                    to[short, i<^=$\underline{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RT);
+
+                    % lower return path with rotational voltage sources
+                    \draw (LB) to [short] (C |- LB);
+                    \draw (N |- LB)  to [V, v_<=$\omega\bm{J}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RB |- LB);
+                    \draw (N |- LB) to (C |- LB);
+
+                    % side connections
+                    \draw (LT) to[open, v=$\bm{u}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$, o-o] (LB);
+                    \draw (RT) to[short] (RB);
+
+                    % magnetizing branch
+                    \draw[dashed]
+                    (C) to[L, l_=$L_{\mathrm{m}}$, i>_=$\bm{i}^{\mathrm{s}}_{\mathrm{m,\upalpha\upbeta}}\approx 0$, *-*] (C |- LB);
+                    \draw[dashed]
+                    (N) to[R, l=$R_{\mathrm{c}}$, i>^=$\bm{i}^{\mathrm{s}}_{\mathrm{c,\upalpha\upbeta}}\approx 0$] (N |- LB);
+
+                    % connection dots
+                    \fill (N) circle[radius=1.6pt];
+                    \fill (N |- LB) circle[radius=1.6pt];
+
+                    % flux linkage voltage references
+                    \draw (3.2,2.5) to[open, v=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{s,\upalpha\upbeta}}$] (3.2,0);
+                    \draw (7.8,2.5) to[open, v^>=$\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (7.8,0);
+                \end{circuitikz}
+            \end{column}
+            \begin{column}{0.35\textwidth}
+                \caption{\raggedright  Blocked rotor test (analogous to a transformer's short-circuit test where high induced rotor currents dominate compared to the magnetizing branch)}
+                \label{fig:T_ECD_IM_blocked_rotor_test}
+            \end{column}
+        \end{columns}
     \end{figure}
 \end{frame}
