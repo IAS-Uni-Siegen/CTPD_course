@@ -56,9 +56,9 @@
     \onslide<6->{with the further new signals and parameters:
             \begin{equation*}
                 \begin{aligned}
-                     & \omega_\mathrm{k}: \text{(electrical) angular frequency of ref. axis $\mathrm{k}$},                      &  &
-                    \qquad \bm{\psi}^\mathrm{k}_\mathrm{s,dq}, \bm{\psi}^\mathrm{k}_\mathrm{r,dq}  : \text{nonlinear flux linkages}, \\
-                     & R_\mathrm{r}:                                                          \text{rotor winding resistances}. &  & \\
+                     & \omega_\mathrm{k}: \text{(electrical) angular frequency of ref. axis $\mathrm{k}$},                                                        &  &
+                    \qquad \bm{\psi}^\mathrm{k}_\mathrm{s,dq}, \bm{\psi}^\mathrm{k}_\mathrm{r,dq}  : \text{nonlinear flux linkages},                                                                                                                                                   \\
+                     & \omega_\mathrm{slip} =\omega_\mathrm{k} - \omega:                                                          \text{ slip angular frequency}. &  & \qquad R_\mathrm{r}:                                                          \text{rotor winding resistances}. \\
                 \end{aligned}
             \end{equation*}}
 \end{frame}
@@ -82,7 +82,7 @@
             \onslide<2->{
                     In this case, the torque expression simplifies to
                     \begin{equation}
-                        T(t)  = \frac{3}{2} p i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) .
+                        T^{\psi_{\mathrm{s}}}(t)  = \frac{3}{2} p i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t) .
                         \label{eq:IM_model_k_torque_stator_flux_orientation}
                     \end{equation}
                 }
@@ -144,7 +144,7 @@
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\psi_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) = 0 = u_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - \omega_{\psi_{\mathrm{s}}}(t)\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t).
     \end{equation}\pause%
-    Hence, the required angular velocity of the reference frame for stator flux orientation is
+    Hence, the \hl{stator flux angle} required for the reference frame of stator flux orientation is
     \begin{equation}
         \omega_{\psi_{\mathrm{s}}}(t) = \frac{1}{\psi_{\mathrm{s,d}}^{\psi_{\mathrm{s}}}(t)}\left(u_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t) - R_\mathrm{s} i_{\mathrm{s,q}}^{\psi_{\mathrm{s}}}(t)\right) \quad \rightarrow \quad \varepsilon_{\psi_{\mathrm{s}}}(t) = \int_0^t \omega_{\psi_{\mathrm{s}}}(\tau) \mathrm{d}\tau.
         \label{eq:IM_model_k_stator_flux_orientation_angular_velocity}
@@ -170,7 +170,7 @@
             \onslide<2->{
                     In this case, the torque expression simplifies to
                     \begin{equation}
-                        T(t)  = -\frac{3}{2} p i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) .
+                        T^{\psi_{\mathrm{r}}}(t)  = -\frac{3}{2} p i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t) .
                         \label{eq:IM_model_k_torque_rotor_flux_orientation}
                     \end{equation}
                 }
@@ -232,9 +232,9 @@
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\psi_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) = 0 = - R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) - \left(\omega_{\psi_{\mathrm{r}}}(t)-\omega(t)\right)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t).
     \end{equation}\pause%
-    Hence, the required angular velocity of the reference frame for rotor flux orientation is
+    Hence, the \hl{rotor flux angle} required for the reference frame of rotor flux orientation is
     \begin{equation}
-        \omega_{\psi_{\mathrm{r}}}(t) = \omega_\mathrm{r}(t) - \frac{1}{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t)} R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) \quad \rightarrow \quad \varepsilon_{\psi_{\mathrm{r}}}(t) = \int_0^t \omega_{\psi_{\mathrm{r}}}(\tau) \mathrm{d}\tau.
+        \omega_{\psi_{\mathrm{r}}}(t) = \omega(t) - \frac{1}{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t)} R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) \quad \rightarrow \quad \varepsilon_{\psi_{\mathrm{r}}}(t) = \int_0^t \omega_{\psi_{\mathrm{r}}}(\tau) \mathrm{d}\tau.
         \label{eq:IM_model_k_rotor_flux_orientation_angular_velocity}
     \end{equation}\pause%
     Here, the term $\omega_\mathrm{slip} = \nicefrac{R_\mathrm{r} i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}}{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}} $ is the \hl{slip angular frequency}, i.e., the difference between the rotor flux angular velocity and the rotor speed (impacting the rotor's induced voltage).
@@ -397,7 +397,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Selected apparent inductance prototypes for one branch}
-    Consider one branch $b\in\{\mathrm{m},\sigma\mathrm{s},\sigma\mathrm{r}\}$ of the magnetic circuit \figref{fig:T_type_magnetic_IM_circuit}. The scalar function
+    Consider one branch $b\in\{\mathrm{m},\sigma\mathrm{s},\sigma\mathrm{r}\}$ of the magnetic circuit of \figref{fig:T_type_magnetic_IM_circuit}. The scalar function
     $L_{b,\mathrm{app}}(\|\bm{i}_{b,\mathrm{dq}}\|)$ denotes the \hl{apparent inductance}\footnote{The usage of an apparent inductance as a model approach is rather arbitrary, but common in the IM context. A direct functional mapping of $\bm{i}_{b,\mathrm{dq}}\rightarrow\bm{\psi}_{b,\mathrm{dq}}$ (without the apparent inductance) is a valid alternative.}  representing the flux linkage of this branch:
     \begin{equation}
         \bm{\psi}_{b,\mathrm{dq}}
@@ -436,24 +436,73 @@
             \label{eq:branch_fluxes_explicit}
         \end{split}
     \end{equation}
-    \onslide<2->{Together with \eqref{eq:IM_flux_branch_decomposition}, this results in}
+    Here, $L_{\mathrm{m},\mathrm{app}}, L_{\sigma\mathrm{s},\mathrm{app}}, L_{\sigma\mathrm{r},\mathrm{app}}$ are the apparent \hl{magnetizing and stray  inductances}. \onslide<2->{Together with \eqref{eq:IM_flux_branch_decomposition}, this results in}
     \begin{equation}
         \begin{split}
             \onslide<2->{\bm{\psi}_\mathrm{s,dq}
                                &=L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)
                                (\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq})
-                               +L_{\sigma\mathrm{s},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}\|)\bm{i}_\mathrm{s,dq},} \\
-            \onslide<3->{\bm{\psi}_\mathrm{r,dq}
+                               +L_{\sigma\mathrm{s},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}\|)\bm{i}_\mathrm{s,dq},}                                                                                                                                          \\
+            \onslide<3->{&=L_{\mathrm{s},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{s,dq} + L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)                               \bm{i}_\mathrm{r,dq}} \\
+            \onslide<4->{\bm{\psi}_\mathrm{r,dq}
                                &=L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)
                                (\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq})
-                               +L_{\sigma\mathrm{r},\mathrm{app}}(\|\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{r,dq}.}
+                               +L_{\sigma\mathrm{r},\mathrm{app}}(\|\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{r,dq}.}                                                                                                                                          \\
+            \onslide<5->{&=L_{\mathrm{m},\mathrm{app}}(\|\bm{i}_\mathrm{s,dq}+\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{s,dq} + L_{\mathrm{r},\mathrm{app}}(\|\bm{i}_\mathrm{r,dq}\|)\bm{i}_\mathrm{r,dq}}
             \label{eq:total_flux_model_explicit}
         \end{split}
     \end{equation}
-    \onslide<4->{Each flux contribution is therefore a scalar multiplication of an apparent branch inductance and the respective branch current.}
+    \onslide<6->{Here, $L_{\mathrm{s},\mathrm{app}}$ and $L_{\mathrm{r},\mathrm{app}}$ are the apparent \hl{stator and rotor  inductances}.}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stray constant} %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Stray constant}
+    The \hl{stray constant} is defined as the ratio of the main flux to the total flux for some given current excitation (dropping the argument regarding the current dependency for better readability):
+    \begin{equation}
+        \sigma = 1-\frac{L^2_{\mathrm{m},\mathrm{app}}}{L_{\mathrm{s},\mathrm{app}} L_{\mathrm{r},\mathrm{app}}} = \frac{L_{\mathrm{s},\mathrm{app}} L_{\mathrm{r},\mathrm{app}} - L^2_{\mathrm{m},\mathrm{app}}}{L_{\mathrm{s},\mathrm{app}} L_{\mathrm{r},\mathrm{app}}}.
+        \label{eq:stray_constant_def}
+    \end{equation}\pause
+    Hence, the stray constant reflects the \hl{magnetic coupling} between stator and rotor in a normalized way:
+    \begin{itemize}
+        \item For $\sigma=0$, the main branch is dominating and there is no flux leakage. \pause
+        \item For $\sigma=1$, the main branch is negligible and all flux is leaking.\pause
+    \end{itemize}
+    With the stray constant the machine currents can be easily expressed as a function of the flux linkages:
+    \begin{equation}
+        \begin{split}
+            \bm{i}_\mathrm{s,dq}  = \frac{1}{\sigma L_{\mathrm{s},\mathrm{app}}}\left(\bm{\psi}_\mathrm{s,dq} - \frac{L_{\mathrm{m},\mathrm{app}}}{L_{\mathrm{r},\mathrm{app}}}\bm{\psi}_\mathrm{r,dq}\right), \quad
+            \bm{i}_\mathrm{r,dq}  = \frac{1}{\sigma L_{\mathrm{r},\mathrm{app}}}\left(\bm{\psi}_\mathrm{r,dq} - \frac{L_{\mathrm{m},\mathrm{app}}}{L_{\mathrm{s},\mathrm{app}}}\bm{\psi}_\mathrm{s,dq}\right).
+        \end{split}
+        \label{eq:IM_currents_stray_constant_def}
+    \end{equation}
+\end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Torque model with apparent inductances %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Torque model for rotor flux-oriented control with apparent inductances}
+    The rotor flux-oriented torque equation from \eqref{eq:IM_model_k_torque_rotor_flux_orientation} was
+    \begin{equation*}
+        T^{\psi_{\mathrm{r}}}(t)  = -\frac{3}{2} p i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t)
+    \end{equation*}\pause%
+    From the apparent flux linkage model \eqref{eq:total_flux_model_explicit}, the rotor current can be expressed as\footnote{Dropping the inductances' argument regarding the current dependency for better readability.}
+    \begin{equation}
+        \bm{i}_{\mathrm{r,dq}}^{\psi_{\mathrm{r}}}(t)
+        = \frac{\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}}{L_\mathrm{r,app}} - \frac{L_\mathrm{m,app}}{L_\mathrm{r,app}} \bm{i}^{\psi_{\mathrm{r}}}_{\mathrm{s,dq}}(t).
+    \end{equation}\pause%
+    Hence, the $\mathrm{q}$-axis rotor current component can be written as
+    $$
+        i_{\mathrm{r,q}}^{\psi_{\mathrm{r}}}(t) = - \frac{L_\mathrm{m,app}}{L_\mathrm{r,app}} i^{\psi_{\mathrm{r}}}_{\mathrm{s,q}}(t)
+    $$\pause%
+    and the torque can be expressed as
+    \begin{equation}
+        T^{\psi_{\mathrm{r}}}(t)=\frac{3}{2} p \frac{L_\mathrm{m,app}}{L_\mathrm{r,app}} i_{\mathrm{s,q}}(t)\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}(t).
+    \end{equation}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Branch differential inductance definition %%
@@ -486,7 +535,7 @@
             \end{equation}}%
     \onslide<3->{For any differentiable apparent inductance function, this Jacobian can be written compactly as}
     \begin{equation}
-        \onslide<2->{\bm{L}_b
+        \onslide<3->{\bm{L}_b
                 =L_{b,\mathrm{app}}\bm{I}_2
                 +\frac{1}{\|\bm{i}_{b,\mathrm{dq}}\|}
                 \frac{\partial L_{b,\mathrm{app}}}{\partial\|\bm{i}_{b,\mathrm{dq}}\|}
@@ -581,20 +630,60 @@
     \end{equation}
     \onslide<2->{The Jacobian of the flux maps \eqref{eq:total_flux_model_explicit} is}
     \begin{equation}
-        \onslide<2->{\bm{L}(\bm{i}_\mathrm{s,dq},\bm{i}_\mathrm{r,dq})
-                =\frac{\partial}{\partial[\bm{i}_\mathrm{s,dq}\T,\bm{i}_\mathrm{r,dq}\T]\T}
-                \begin{bmatrix}\bm{\psi}_\mathrm{s,dq}\\\bm{\psi}_\mathrm{r,dq}\end{bmatrix}
-                =
-                \begin{bmatrix}
-                    \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{s}} & \bm{L}_\mathrm{m}                           \\
-                    \bm{L}_\mathrm{m}                           & \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{r}}
-                \end{bmatrix}.}
+        \begin{split}
+            \onslide<2->{\bm{L}(\bm{i}_\mathrm{s,dq},\bm{i}_\mathrm{r,dq})
+                               =\frac{\partial}{\partial[\bm{i}_\mathrm{s,dq}\T,\bm{i}_\mathrm{r,dq}\T]\T}
+                               \begin{bmatrix}\bm{\psi}_\mathrm{s,dq}\\\bm{\psi}_\mathrm{r,dq}\end{bmatrix}
+                               &=
+                               \begin{bmatrix}
+                                   \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{s}} & \bm{L}_\mathrm{m}                           \\
+                                   \bm{L}_\mathrm{m}                           & \bm{L}_\mathrm{m}+\bm{L}_{\sigma\mathrm{r}}
+                               \end{bmatrix}} \\[0.6ex]
+            \onslide<3->{&=\begin{bmatrix}
+                                   \bm{L}_{\mathrm{s}} & \bm{L}_\mathrm{m}   \\
+                                   \bm{L}_\mathrm{m}   & \bm{L}_{\mathrm{r}}
+                               \end{bmatrix}.}
+        \end{split}
         \label{eq:full_differential_inductance_matrix}
     \end{equation}
     \begin{itemize}
-        \item<3-> The matrix is symmetric and has the same block structure as the linear IM model.
-        \item<4-> Stator and rotor stray saturation enter through $\bm{L}_{\sigma\mathrm{s}}$ and $\bm{L}_{\sigma\mathrm{r}}$.
+        \item<4-> The matrix is symmetric and has the same block structure as the linear IM model.
+        \item<5-> Stator and rotor stray saturation enter through $\bm{L}_{\sigma\mathrm{s}}$ and $\bm{L}_{\sigma\mathrm{r}}$.
     \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Coordinate indication for apparent and differential inductances %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Coordinate indication for apparent and differential inductances}
+    For the utilized saturation model, the \hl{apparent branch inductances} depend only on current magnitudes,
+    \begin{equation*}
+        L_{\mathrm{b},\mathrm{app}}=L_{\mathrm{b},\mathrm{app}}(\|\bm{i}_{\mathrm{b},\mathrm{dq}}\|),
+        \qquad
+        \bm{\psi}_{\mathrm{b},\mathrm{dq}}=L_{\mathrm{b},\mathrm{app}}(\|\bm{i}_{\mathrm{b},\mathrm{dq}}\|)\bm{i}_{\mathrm{b},\mathrm{dq}}.
+    \end{equation*}
+    Hence, under \hl{rotationally symmetric saturation} and an orthogonal coordinate transformation,
+    \begin{equation*}
+        \|\bm{i}^{\alpha\beta}_{\mathrm{b}}\|=\|\bm{i}^{\mathrm{k}}_{\mathrm{b}}\|
+        \quad\Rightarrow\quad
+        L^{\alpha\beta}_{\mathrm{b},\mathrm{app}}=L^{\mathrm{k}}_{\mathrm{b},\mathrm{app}}.
+    \end{equation*}
+    Therefore, a coordinate superscript is usually \hl{not required} for the apparent inductances.
+    \vspace{0.4em}
+    This does \hl{not} carry over to the \hl{differential inductances}. Their Jacobian representation is
+    \begin{equation*}
+        \bm{L}_{\mathrm{b}}=L_{\mathrm{b},\mathrm{app}}\bm{I}_2+
+        \frac{1}{\|\bm{i}_{\mathrm{b},\mathrm{dq}}\|}
+        \frac{\partial L_{\mathrm{b},\mathrm{app}}}{\partial \|\bm{i}_{\mathrm{b},\mathrm{dq}}\|}
+        \bm{i}_{\mathrm{b},\mathrm{dq}}\bm{i}_{\mathrm{b},\mathrm{dq}}^{\top},
+    \end{equation*}
+    such that the \hl{matrix entries} depend on the chosen frame.
+    With a rotation $\bm{T}_{\mathrm{p}}(\vartheta)$,
+    \begin{equation*}
+        \bm{L}^{\mathrm{k}}_{\mathrm{b}}=\bm{T}_{\mathrm{p}}(\vartheta)\bm{L}^{\alpha\beta}_{\mathrm{b}}\bm{T}_{\mathrm{p}}(\vartheta)^{\top}.
+    \end{equation*}
+    Hence, a coordinate indication is \hl{useful or necessary} for differential inductance matrices.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -641,13 +730,13 @@
     \frametitle{Nonlinear parameter identification: constrained model fitting}
     \begin{varblock}{Motivation for parameter identification}
         Due to the lack of  rotor side measurements, the nonlinear IM model cannot be fully identified from steady-state stator voltage/current data. Instead, a mix of steady-state and transient experiments delivers data for the below parameter identification.
-    \end{varblock}
+    \end{varblock}\pause%
     With the state and the parameter vector
     \begin{equation}
         \bm{x}=\begin{bmatrix}\bm{i}_\mathrm{s,dq}\T&\bm{i}_\mathrm{r,dq}\T\end{bmatrix}\T,
         \quad
         \bm{\theta}=\begin{bmatrix}R_\mathrm{s}&R_\mathrm{r}&\cdots\end{bmatrix}\T,
-    \end{equation}
+    \end{equation}\pause%
     an output-error identification problem is
     \begin{equation}
         \begin{gathered}
@@ -659,9 +748,11 @@
             \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{x}}(t)=\bm{f}(\hat{\bm{x}}(t),\bm{u}(t),\bm{\theta}), \quad \hat{\bm{y}}=\bm{g}(\hat{\bm{x}}(t),\bm{u}(t),\bm{\theta}),\quad \bm{\theta}\in\Theta.
             \label{eq:IM_parameter_identification_general}
         \end{gathered}
-    \end{equation}
+    \end{equation}\pause%
     Here, $\bm{W}$ is a weighting matrix, $\rho(\bm{\theta})$ is a regularization term, and $\Theta$ is a set of admissible parameters, and the ODE is numerically integrated to get the predicted output $\hat{\bm{y}}[k]$.
 \end{frame}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Nonlinear parameter identification example %%
@@ -678,11 +769,11 @@
                                          & +w_{u_\mathrm{r}}\left\|R_\mathrm{r}\hat{\bm{i}}_{\mathrm{r}}[k]+(\hat{\omega}_{\mathrm{k}}[k]-\omega[k])\bm{J}\hat{\bm{\psi}}_{\mathrm{r}}[k]+\nicefrac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}_{\mathrm{r}}[k]\right\|_2^2\bigg).
         \end{aligned}
         \label{eq:IM_parameter_identification_example}
-    \end{equation}
+    \end{equation}\pause%
     \begin{itemize}
-        \item Considers current, voltage and torque data.
-        \item If a torque sensor is not available, $w_T$ can be set to zero.
-        \item Besides the cost function, initial parameter guesses and informative data are crucial for successful identification.
+        \item Considers current, voltage and torque data.\pause%
+        \item If a torque sensor is not available, $w_T$ can be set to zero.\pause%
+        \item Besides the cost function, initial parameter guesses and informative data are crucial for successful identification.\pause%
         \item Further details on nonlinear parameter identification methods can be found in our lecture \href{https://github.com/DS-4-DS/DS4DS_Course}{Data Science for Dynamical Systems Course (DS4DS)}.
     \end{itemize}
 \end{frame}
@@ -1011,3 +1102,697 @@
         \end{columns}
     \end{figure}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Discrete-time machine models}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Explicit Euler model in stator-oriented alpha-beta coordinates %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Nonlinear IM model in stator-oriented $\upalpha\upbeta$ coordinates}
+    For deriving a discrete-time IM model, we follow the same route as in the previous PMSM case and start in the \hl{stator-oriented} $\upalpha\upbeta$ coordinates for the stator flux while using the \hl{rotor-oriented} $\upalpha\upbeta$ coordinates for the rotor flux. The flux linkage ODEs in these coordinates are (based on Faradys's law):
+    \begin{equation}
+        \begin{split}
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}(t)
+             & = \bm{u}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}(t)-R_\mathrm{s}\bm{i}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}(t), \\
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{r}}_\mathrm{r,\upalpha\upbeta}(t)
+             & = -R_\mathrm{r}\bm{i}^{\mathrm{r}}_\mathrm{r,\upalpha\upbeta}(t).
+        \end{split}
+        \label{eq:IM_alpha_beta_flux_ODE}
+    \end{equation}\pause%
+    Applying the \hl{explicit Euler method (RK1)} to \eqref{eq:IM_alpha_beta_flux_ODE} yields
+    \begin{equation}
+        \begin{split}
+            \bm{\psi}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}[k+1]
+             & =\bm{\psi}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}[k]
+            +T_\mathrm{s}\left(\bm{u}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}[k]-R_\mathrm{s}\bm{i}^{\mathrm{s}}_\mathrm{s,\upalpha\upbeta}[k]\right), \\
+            \bm{\psi}^{\mathrm{r}}_\mathrm{r,\upalpha\upbeta}[k+1]
+             & =\bm{\psi}^{\mathrm{r}}_\mathrm{r,\upalpha\upbeta}[k]
+            +T_\mathrm{s}\left(-R_\mathrm{r}\bm{i}^{\mathrm{r}}_\mathrm{r,\upalpha\upbeta}[k]
+            \right).
+        \end{split}
+        \label{eq:RK1_alpha_beta_flux_linkage_IM}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux-based discrete-time IM model in general $\mathrm{k}$ coordinates %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Flux-based discrete-time IM model in general $\mathrm{k}$ coordinates}
+    To obtain the model in a general $\mathrm{k}$ coordinate system, the RK1 update from \eqref{eq:RK1_alpha_beta_flux_linkage_IM} is transformed into a common frame via \hl{separate Park transformations}. Assuming approximately constant angular frequencies over one sampling interval gives
+    \begin{equation}
+        \begin{split}
+            \bm{\psi}^{\mathrm{k}}_\mathrm{s,dq}[k+1]
+             & =\bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s})
+            \left(\bm{\psi}^{\mathrm{k}}_\mathrm{s,dq}[k]
+            +T_\mathrm{s}\left(\bm{u}^{\mathrm{k}}_\mathrm{s,dq}[k]-R_\mathrm{s}\bm{i}^{\mathrm{k}}_\mathrm{s,dq}[k]\right)\right), \\[0.5ex]
+            \bm{\psi}^{\mathrm{k}}_\mathrm{r,dq}[k+1]
+             & =\bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+            \left(\bm{\psi}^{\mathrm{k}}_\mathrm{r,dq}[k]
+            -T_\mathrm{s}R_\mathrm{r}\bm{i}^{\mathrm{k}}_\mathrm{r,dq}[k]
+            \right).
+        \end{split}
+        \label{eq:RK1_k_flux_linkage_IM}
+    \end{equation}\pause%
+    The rotation matrix $\bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s})$ represents the change of the reference frame between $k$ and $k+1$ from the stator point of view, while $\bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})$ represents the change of the reference frame between $k$ and $k+1$ from the rotor point of view, i.e., the slip frequency. The \hl{electromagnetic torque} remains
+    \begin{equation}
+        T[k]=\frac{3}{2}p\left(\bm{i}^{\mathrm{k}}_\mathrm{s,dq}[k]\right)\T\bm{J}\bm{\psi}^{\mathrm{k}}_\mathrm{s,dq}[k]
+        =-\frac{3}{2}p\left(\bm{i}^{\mathrm{k}}_\mathrm{r,dq}[k]\right)\T\bm{J}\bm{\psi}^{\mathrm{k}}_\mathrm{r,dq}[k].
+        \label{eq:discrete_time_IM_torque}    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Condensed flux-based model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Condensed flux-based discrete-time IM model}
+    With condensed notation for the flux linkages, currents, voltages, resistances and discrete rotations as
+    \begin{equation}
+        \begin{gathered}
+            \bm{\psi}^{\mathrm{k}}_\mathrm{dq}=\begin{bmatrix}
+                \bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}} \\
+                \bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}
+            \end{bmatrix},\qquad
+            \bm{i}^{\mathrm{k}}_\mathrm{dq}=\begin{bmatrix}
+                \bm{i}^{\mathrm{k}}_{\mathrm{s,dq}} \\
+                \bm{i}^{\mathrm{k}}_{\mathrm{r,dq}}
+            \end{bmatrix},\qquad
+            \bm{u}^{\mathrm{k}}_\mathrm{dq}=\begin{bmatrix}
+                \bm{u}^{\mathrm{k}}_{\mathrm{s,dq}} \\
+                \bm{0}_{2\times 1}
+            \end{bmatrix},\\[1ex]
+            \bm{R}_\mathrm{dq}=\begin{bmatrix}
+                R_\mathrm{s}\bm{I}_2 & \bm{0}_{2\times 2}   \\
+                \bm{0}_{2\times 2}   & R_\mathrm{r}\bm{I}_2
+            \end{bmatrix},\qquad
+            \bm{T}_\mathrm{dq}[k]=\begin{bmatrix}
+                \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s}) & \bm{0}_{2\times 2}                                              \\
+                \bm{0}_{2\times 2}                                   & \bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+            \end{bmatrix},
+        \end{gathered}
+        \label{eq:IM_dt_condensed_notation}
+    \end{equation}
+    the flux-based difference equation is
+    \begin{equation}
+        \bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k+1]
+        =\bm{T}_\mathrm{dq}[k]\Big(\bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k]
+        +T_\mathrm{s}(\bm{u}^{\mathrm{k}}_\mathrm{dq}[k]-\bm{R}_\mathrm{dq}\bm{i}^{\mathrm{k}}_\mathrm{dq}[k])\Big).
+        \label{eq:IM_dt_flux_based_condensed}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-based nonlinear model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current-based discrete-time IM model}
+    For a current-based representation, the local nonlinear flux increment is approximated by the combined differential inductance matrix from (4.26):
+    \begin{equation}
+        \bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k+1]-\bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k]
+        \approx\bm{L}\!\left(\bm{i}^{\mathrm{k}}_\mathrm{dq}[k]\right)
+        \left(\bm{i}^{\mathrm{k}}_\mathrm{dq}[k+1]-\bm{i}^{\mathrm{k}}_\mathrm{dq}[k]\right).
+        \label{eq:IM_dt_current_increment}
+    \end{equation}\pause%
+    Applying this to \eqref{eq:IM_dt_flux_based_condensed} and solving for $\bm{i}^{\mathrm{k}}_\mathrm{dq}[k+1]$ yields
+    \begin{equation}
+        \begin{split}
+            \bm{i}^{\mathrm{k}}_\mathrm{dq}[k+1]
+             & =\bm{i}^{\mathrm{k}}_\mathrm{dq}[k]
+            +\bm{L}^{-1}[k]\Bigg(\!\left[
+                                       \begin{array}{cc}
+                                           \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s}) & \bm{0}                                                          \\
+                                           \bm{0}                                               & \bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+                                       \end{array}\right]-\bm{I}_4\!\Bigg)\bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k] \\
+             & \quad+\bm{L}^{-1}[k]\left[
+                                       \begin{array}{cc}
+                                           \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s}) & \bm{0}                                                          \\
+                                           \bm{0}                                               & \bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+                                       \end{array}\right]T_\mathrm{s}
+            \begin{bmatrix}
+                \bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}[k]-R_\mathrm{s}\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}[k] \\
+                -R_\mathrm{r}\bm{i}^{\mathrm{k}}_{\mathrm{r,dq}}[k]
+            \end{bmatrix} .
+        \end{split}
+        \label{eq:IM_dt_current_based_detailed}
+    \end{equation}\pause%
+    Here, $\bm{L}[k]=\bm{L}(\bm{i}^{\mathrm{k}}_\mathrm{dq}[k])$ is the differential inductance matrix.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Detailed current difference equation interpretation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current difference equation of the nonlinear IM model (cont.)}
+    Equation \eqref{eq:IM_dt_current_based_detailed} can be interpreted as the sum of three contributions:
+    \begin{equation}
+        \begin{split}
+            \bm{i}^{\mathrm{k}}_\mathrm{dq}[k+1]
+             & =
+            \underbrace{\bm{i}^{\mathrm{k}}_\mathrm{dq}[k]-\bm{L}^{-1}[k]T_\mathrm{s}
+                \begin{bmatrix}
+                    \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s})R_\mathrm{s}\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}[k] \\
+                    \bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})R_\mathrm{r}\bm{i}^{\mathrm{k}}_{\mathrm{r,dq}}[k]
+                \end{bmatrix}}_{\text{first-order delay / PT1 eigendynamics}}                    \\
+             & \quad+\underbrace{\bm{L}^{-1}[k]\Bigg(\!\left[
+                             \begin{array}{cc}
+                                 \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s}) & \bm{0}                                                          \\
+                                 \bm{0}                                               & \bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+                             \end{array}\right]-\bm{I}_4\!\Bigg)\bm{\psi}^{\mathrm{k}}_\mathrm{dq}[k]}_{\text{equiv. induced voltage contribution}} \\
+             & \quad+\underbrace{\bm{L}^{-1}[k]T_\mathrm{s}
+                         \begin{bmatrix}
+                             \bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s})\bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}[k] \\
+                             \bm{0}
+                         \end{bmatrix}}_{\text{input voltage contribution}} .
+        \end{split}
+        \label{eq:IM_dt_current_based_interpretation}
+    \end{equation}\pause%
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Starting point %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor-flux-oriented discrete-time IM model: starting point}
+    \begin{varblock}{Objective}
+        In the following, we derive a rotor-flux-oriented discrete-time IM model ($\mathrm{k}=\psi_\mathrm{r}$) for field-oriented control purpose. As a goal we aim for a model with the states $\bm{x}^\top=[\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}},\, i^{\psi_\mathrm{r}}_{\mathrm{s,d}},\, i^{\psi_\mathrm{r}}_{\mathrm{s,q}}]$ assuming an accurate stator current measurement and an accurate rotor flux estimation.
+    \end{varblock}
+    The derivation starts from the common $\mathrm{k}$-coordinate flux difference equations:
+    \begin{equation*}
+        \bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}[k+1]
+        =\bm{T}_\mathrm{p}(-\omega_\mathrm{k}[k]T_\mathrm{s})
+        \left(\bm{\psi}^{\mathrm{k}}_{\mathrm{s,dq}}[k]
+        +T_\mathrm{s}\left(\bm{u}^{\mathrm{k}}_{\mathrm{s,dq}}[k]
+        -R_\mathrm{s}\bm{i}^{\mathrm{k}}_{\mathrm{s,dq}}[k]\right)\right),
+    \end{equation*}
+    \begin{equation*}
+        \bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}[k+1]
+        =\bm{T}_\mathrm{p}((\omega[k]-\omega_\mathrm{k}[k])T_\mathrm{s})
+        \left(\bm{\psi}^{\mathrm{k}}_{\mathrm{r,dq}}[k]
+        -T_\mathrm{s}R_\mathrm{r}\bm{i}^{\mathrm{k}}_{\mathrm{r,dq}}[k]\right).
+    \end{equation*}\pause%
+    From the rotor flux orientation condition, the rotor flux is aligned with the $d$-axis at each sampling instant:
+    \begin{equation}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,dq}}[k]
+        =\begin{bmatrix}\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\\0\end{bmatrix}.
+        \label{eq:IM_RFO_v5_orientation}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor current elimination %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux orientation: rotor current elimination}
+    The apparent-inductance rotor flux relation from the nonlinear IM model is\footnote{We drop the explicit current dependence of the apparent inductances for readability and just use the time index $k$ to indicate the non-constant nature of the inductances: $L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]=L^{\psi_\mathrm{r}}_{\mathrm{m,app}}(\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s,dq}}[k],\bm{i}^{\psi_\mathrm{r}}_{\mathrm{r,dq}}[k]), \ldots$ }:
+    \begin{equation}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,dq}}[k]
+        =L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s,dq}}[k]
+        +\left(L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]\right)
+        \bm{i}^{\psi_\mathrm{r}}_{\mathrm{r,dq}}[k].
+        \label{eq:IM_RFO_v5_apparent_rotor_flux}
+    \end{equation}\pause%
+    Using \eqref{eq:IM_RFO_v5_orientation} gives
+    \begin{equation}
+        \begin{split}
+            i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+             & =\frac{\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+                    -L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k]}
+                {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}, \\[0.6ex]
+            i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]
+             & =-\frac{L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]}
+                 {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+            i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k].
+        \end{split}
+        \label{eq:IM_RFO_v5_rotor_current_elimination}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor flux rotation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux orientation: transformed rotor flux step}
+    Applying \eqref{eq:IM_RFO_v5_orientation} to the rotor flux difference equation yields
+    \begin{equation}
+        \begin{bmatrix}\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]\\0\end{bmatrix}
+        =\bm{T}_\mathrm{p}(\omega_\mathrm{slip}[k]T_\mathrm{s})
+        \left(
+        \begin{bmatrix}\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\\0\end{bmatrix}
+        -T_\mathrm{s}R_\mathrm{r}
+        \begin{bmatrix}i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\\i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]\end{bmatrix}
+        \right),
+        \label{eq:IM_RFO_v5_rotor_flux_rotated}
+    \end{equation}
+    with $\omega_\mathrm{slip}[k]=\omega[k]-\omega_{\psi_\mathrm{r}}[k]$.\pause%
+    Hence, both components after the Euler step are affected by the rotation:
+    \begin{equation}
+        \begin{split}
+            \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]
+              & =\cos(\omega_\mathrm{slip}[k]T_\mathrm{s})
+            \left(\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]-T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\right) \\
+              & \quad+\sin(\omega_\mathrm{slip}[k]T_\mathrm{s})T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k],   \\
+            0 & =\sin(\omega_\mathrm{slip}[k]T_\mathrm{s})
+            \left(\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]-T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\right) \\
+              & \quad-\cos(\omega_\mathrm{slip}[k]T_\mathrm{s})T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k].
+        \end{split}
+        \label{eq:IM_RFO_v5_rotor_flux_components}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Slip frequency %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux orientation: slip angular frequency}
+    From the $\mathrm{q}$-axis condition in \eqref{eq:IM_RFO_v5_rotor_flux_components},
+    \begin{equation}
+        \tan(\omega_\mathrm{slip}[k]T_\mathrm{s})
+        =\frac{T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]}
+        {\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]-T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]}.
+        \label{eq:IM_RFO_v5_slip_before_elimination}
+    \end{equation}\pause%
+    Inserting \eqref{eq:IM_RFO_v5_rotor_current_elimination} yields the explicit state-dependent expression
+    \begin{equation}
+        \begin{split}
+            \omega_\mathrm{slip}[k]
+            =-\frac{1}{T_\mathrm{s}}\operatorname{atan2}\left(
+            T_\mathrm{s}R_\mathrm{r}\frac{L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]}
+                                    {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+            i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k], \right. \\
+            \left.
+            \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+            -T_\mathrm{s}R_\mathrm{r}\frac{\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+                                         -L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k]}
+                                     {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+            \right).
+            \label{eq:IM_RFO_v5_slip_after_elimination}
+        \end{split}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Continuous-time limit of slip frequency %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux orientation: continuous-time limit}
+    For fixed \(\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]>0\), \(i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]\) and \(i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]\), the \(\operatorname{atan2}\) expression locally equals
+    \begin{equation}
+        \omega_\mathrm{slip}(T_\mathrm{s})=-\frac{1}{T_\mathrm{s}}
+        \arctan\!\left(
+        \frac{-T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]}
+        {\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]-T_\mathrm{s}R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]}
+        \right).
+        \label{eq:IM_dt_RFO_slip_limit_start}
+    \end{equation}\pause%
+    With \(f(T_\mathrm{s})=\arctan(\cdot)\), L'Hospital's rule gives
+    \begin{equation}
+        \lim_{T_\mathrm{s}\rightarrow 0}\omega_\mathrm{slip}(T_\mathrm{s})
+        =-\lim_{T_\mathrm{s}\rightarrow 0}\frac{f(T_\mathrm{s})}{T_\mathrm{s}}
+        =-f'(0)=\frac{R_\mathrm{r}i^{\psi_\mathrm{r}}_{\mathrm{r,q}}[k]}
+        {\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]}.
+        \label{eq:IM_dt_RFO_slip_limit_rotor_current}
+    \end{equation}\pause%
+    This is identitical to the continuous-time slip frequency from \eqref{eq:IM_model_k_rotor_flux_orientation_angular_velocity}, showing that the discrete-time rotor flux model consistently approximates the continuous-time model for small sampling times.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor flux state difference equation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux difference equation in rotor flux coordinates}
+    Substitution of \eqref{eq:IM_RFO_v5_rotor_current_elimination} into the $\mathrm{d}$-axis component of \eqref{eq:IM_RFO_v5_rotor_flux_components} gives
+    \begin{equation}
+        \begin{split}
+            \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]
+             & =\cos(\omega_\mathrm{slip}[k]T_\mathrm{s})
+            \left(\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+            -T_\mathrm{s}R_\mathrm{r}
+            \frac{\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+                -L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k]}
+            {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}\right) \\
+             & \quad-\sin(\omega_\mathrm{slip}[k]T_\mathrm{s})T_\mathrm{s}R_\mathrm{r}
+            \frac{L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]}
+            {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+            i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k].
+        \end{split}\
+        \label{eq:IM_RFO_v5_rotor_flux_exact}
+    \end{equation}\pause%
+    However, the slip frequency $\omega_\mathrm{slip}[k]$ is typical quite small (e.g., in the order of a few tens of rad/s) and the sampling time $T_\mathrm{s}$ is typically in the order of a few hundred microseconds, so that $\omega_\mathrm{slip}[k]T_\mathrm{s}\ll 1$ holds. Applying the \hl{small-angle approximation} $\cos(\omega_\mathrm{slip}[k]T_\mathrm{s})\approx1$ and $\sin(\omega_\mathrm{slip}[k]T_\mathrm{s})\approx0$ is therefore well justified and leads to the \hl{rotor flux difference equation}:
+    \begin{equation}
+        \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]
+        =\left(1-\frac{T_\mathrm{s}R_\mathrm{r}}
+        {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}\right)
+        \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+        \quad+\frac{T_\mathrm{s}R_\mathrm{r}L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]}
+        {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+        i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k].
+        \label{eq:IM_RFO_v5_rotor_flux_first_order}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Starting point for the current difference equation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Starting point for the current difference equation}
+    In rotor-flux-oriented coordinates, the stator part of the common $\mathrm{k}$-frame flux difference equation reads
+    \begin{equation*}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k+1]
+        =\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})\left(\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        +T_\mathrm{s}\left(\bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        -R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]\right)\right).
+    \end{equation*}\pause%
+    Hence, with $\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]=\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k+1]-\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]$,
+    \begin{equation}
+        \begin{split}
+            \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+             & =\left(\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})-\bm{I}_2\right)\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k] \\
+             & \quad+T_\mathrm{s}\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})
+            \left(\bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            -R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]\right).
+        \end{split}
+        \label{eq:IM_RFO_v7_stator_flux_increment}
+    \end{equation}\pause%
+    The goal is to transform \eqref{eq:IM_RFO_v7_stator_flux_increment} into a current difference equation without an independent stator flux state.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor current elimination %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux orientation: eliminating rotor currents}
+    Rotor flux orientation imposes
+    \begin{equation}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k]=
+        \begin{bmatrix}\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]\\0\end{bmatrix}.
+        \label{eq:IM_RFO_v7_rfo_condition}
+    \end{equation}
+    The apparent rotor flux relation is
+    \begin{equation}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k]
+        =L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        +\left(L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]\right)
+        \bm{i}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k].
+        \label{eq:IM_RFO_v7_rotor_app_relation}
+    \end{equation}\pause%
+    Therefore,
+    \begin{equation}
+        \begin{split}
+            i^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]
+             & =\frac{\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]-L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{d}}[k]}
+                {L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}, \\[0.6ex]
+            i^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{q}}[k]
+             & =-\frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]}
+                 {L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}
+            i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{q}}[k].
+        \end{split}
+        \label{eq:IM_RFO_v7_rotor_current_elim}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux as algebraic function of the states %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Stator flux as algebraic function of the states}
+    The apparent stator flux relation is
+    \begin{equation*}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        =L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]
+        \left(\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]+\bm{i}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k]\right)
+        +L^{\psi_\mathrm{r}}_{\sigma\mathrm{s},\mathrm{app}}[k]\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k].
+        \label{eq:IM_RFO_v7_stator_app_relation}
+    \end{equation*}\pause%
+    Inserting \eqref{eq:total_flux_model_explicit} and \eqref{eq:IM_RFO_v5_rotor_current_elimination} gives
+    \begin{equation}
+        \begin{split}
+            \psi^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{d}}[k]
+             & =\frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]}
+                {L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r},\mathrm{app}}[k]}
+            \psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}} +\left(L^{\psi_\mathrm{r}}_{\sigma\mathrm{s},\mathrm{app}}[k]
+            +\frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]L^{\psi_\mathrm{r}}_{\sigma\mathrm{r},\mathrm{app}}[k]}
+             {L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r},\mathrm{app}}[k]}\right)i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{d}}[k], \\[0.5ex]
+            \psi^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{q}}[k]
+             & =\left(L^{\psi_\mathrm{r}}_{\sigma\mathrm{s},\mathrm{app}}[k]
+            +\frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]L^{\psi_\mathrm{r}}_{\sigma\mathrm{r},\mathrm{app}}[k]}
+             {L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r},\mathrm{app}}[k]}\right)i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{q}}[k].
+        \end{split}
+        \label{eq:IM_RFO_v7_stator_flux_state_expr}
+    \end{equation}
+    With the stray constant $\sigma$ from \eqref{eq:stray_constant_def}  and \eqref{eq:IM_currents_stray_constant_def}, the stator flux can be expressed as
+    \begin{equation}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k] = \sigma[k] L^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{app}}[k]\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k] + \frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]}{L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k].
+        \label{eq:stator_flux_IM_stray_constant}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Differential magnetic model for current increments %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Differential magnetic model for current increments}
+    The nonlinear flux map is locally linearized by the branch differential inductances:
+    \begin{equation}
+        \begin{bmatrix}
+            \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}} \\
+            \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            \bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{s}} & \bm{L}^{\psi_\mathrm{r}}_\mathrm{m}                                             \\
+            \bm{L}^{\psi_\mathrm{r}}_\mathrm{m}                                             & \bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}
+        \end{bmatrix}
+        \begin{bmatrix}
+            \Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}} \\
+            \Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}
+        \end{bmatrix}.
+        \label{eq:IM_RFO_v7_diff_model}
+    \end{equation}\pause%
+    The rotor part is
+    \begin{equation}
+        \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}
+        =\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}
+        +\left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}\right)\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}.
+        \label{eq:IM_RFO_v7_diff_rotor_part}
+    \end{equation}
+    Hence,
+    \begin{equation}
+        \Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}
+        =\left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}\right)^{-1}
+        \left(\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}-\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}\right).
+        \label{eq:IM_RFO_v7_delta_ir_elim}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Eliminating the rotor current increment %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Eliminating the rotor current increment}
+    Insert \eqref{eq:IM_RFO_v7_delta_ir_elim} into the stator part of \eqref{eq:IM_RFO_v7_diff_model}:
+    \begin{equation}
+        \begin{split}
+            \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}
+             & =\left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{s}}\right)
+            \Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}                                          \\
+             & \quad+\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}
+            \left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}\right)^{-1}
+            \left(\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}-\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}\right).
+        \end{split}
+        \label{eq:IM_RFO_v7_insert_delta_ir}
+    \end{equation}\pause%
+    Collecting the stator current increment gives
+    \begin{equation}
+        \begin{split}
+            \Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}
+             & =\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}
+            +\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}},
+        \end{split}
+        \label{eq:IM_RFO_v7_reduced_diff_relation}
+    \end{equation}
+    with
+    \begin{equation}
+        \begin{split}
+            \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}
+             & =\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{s}}
+            -\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}\left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}\right)^{-1}\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}, \\
+            \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}
+             & =\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}\left(\bm{L}^{\psi_\mathrm{r}}_\mathrm{m}+\bm{L}^{\psi_\mathrm{r}}_{\sigma\mathrm{r}}\right)^{-1}.
+        \end{split}
+        \label{eq:IM_RFO_v7_Ls_and_Lsr}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Solving for the stator current increment %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Solving for the stator current increment}
+    From \eqref{eq:IM_RFO_v7_reduced_diff_relation} directly follows
+    \begin{equation}
+        \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k]\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        =\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        -\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k].
+        \label{eq:IM_RFO_v7_current_increment_before_solve}
+    \end{equation}\pause%
+    Assuming regularity of the effective stator inductance matrix delivers
+    \begin{equation}
+        \Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        =\left(\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k]\right)^{-1}
+        \left(\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        -\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]\Delta\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{dq}}[k]\right).
+        \label{eq:IM_RFO_v7_current_increment_solved}
+    \end{equation}\pause%
+    Finally, inserting \eqref{eq:IM_RFO_v7_stator_flux_increment} and \eqref{eq:IM_RFO_v5_rotor_flux_first_order} into \eqref{eq:IM_RFO_v7_current_increment_solved} gives
+    \begin{equation}
+        \begin{split}
+            \bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k+1]
+             & =\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]+\Delta\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k] \\
+             & =\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +\left(\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k]\right)^{-1}\Bigg[
+                                                                                           \left(\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})-\bm{I}_2\right)\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]\\
+                                                                                           &\quad+T_\mathrm{s}\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})
+                                                                                           \left(\bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]-R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]\right)
+                                                                                           -\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]
+                                                                                           \begin{bmatrix}\Delta\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]\\0\end{bmatrix}\Bigg].
+        \end{split}
+        \label{eq:IM_RFO_v7_current_inserted}
+    \end{equation}\pause%
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Rotation identity for compact voltage form %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotation identity for compact voltage form}
+    The rotation term in \eqref{eq:IM_RFO_v7_current_inserted} can be wrapped as an equivalent voltage contribution. Since
+    \begin{equation}
+        \left(\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})-\bm{I}_2\right)\bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        =T_\mathrm{s}\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})
+        \frac{\bm{I}_2-\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})^{\mathrm{T}}}{T_\mathrm{s}}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k],
+        \label{eq:IM_RFO_v7_rotation_identity}
+    \end{equation}
+    define
+    \begin{equation}
+        \bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+        =\frac{\bm{I}_2-\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})^{\mathrm{T}}}{T_\mathrm{s}}
+        \bm{\psi}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k].
+        \label{eq:IM_RFO_v7_urot_def}
+    \end{equation}\pause%
+    With \eqref{eq:stator_flux_IM_stray_constant} the rotation-induced voltage can be expressed as
+    \begin{equation}
+        \bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+        =\frac{\bm{I}_2-\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})^\top}{T_\mathrm{s}}
+        \left(\sigma[k] L^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{app}}[k]\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k] + \frac{L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]}{L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]\right).
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Rotor-flux increment as compact voltage term %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor-flux increment as compact voltage term}
+    The coupling term in \eqref{eq:IM_RFO_v7_current_inserted} is
+    \begin{equation}
+        -\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]
+        \begin{bmatrix}\Delta\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]\\0\end{bmatrix}.
+        \label{eq:IM_RFO_v7_psir_coupling_before_wrap}
+    \end{equation}
+    With \eqref{eq:IM_RFO_v5_rotor_flux_first_order}, this becomes
+    \begin{equation}
+        \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]
+        \begin{bmatrix}1\\0\end{bmatrix}
+        \frac{T_\mathrm{s}R_\mathrm{r}
+            \left(\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]-L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{d}}[k]\right)}
+        {L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}.
+        \label{eq:IM_RFO_v7_psir_coupling_explicit}
+    \end{equation}\pause%
+    To obtain the same input structure as a stator voltage term, define
+    \begin{equation}
+        \bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]
+        =\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s})^{\mathrm{T}}\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}[k]
+        \begin{bmatrix}1\\0\end{bmatrix}
+        \frac{R_\mathrm{r}
+            \left(\psi^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{d}}[k]-L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}[k]i^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{d}}[k]\right)}
+        {L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}[k]}.
+        \label{eq:IM_RFO_v7_upsi_def}
+    \end{equation}
+    We can interpret $\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]$ as a rotor-flux-induced voltage contribution during transient rotor flux changes.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Compact stator current difference equation %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Compact stator current difference equation}
+    Using \eqref{eq:IM_RFO_v7_urot_def} and \eqref{eq:IM_RFO_v7_upsi_def} in \eqref{eq:IM_RFO_v7_current_inserted} we receive the final \hl{stator current difference equation in rotor-flux-oriented coordinates}:
+    \begin{equation}
+        \begin{aligned}
+            \bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k+1]
+             & =\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +T_\mathrm{s}\left(\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k]\right)^{-1}
+            \bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s}) \\
+             & \quad\cdot\left(
+            \bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            -R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +\bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+            +\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]
+            \right).
+        \end{aligned}
+        \label{eq:IM_RFO_v7_compact_current_model}
+    \end{equation}\pause%
+    This is structurally similar to the PMSM current model from \eqref{eq:current_diff_eq_RK1_alpha_beta} as the resulting model covers:
+    \begin{itemize}
+        \item a first-order stator PT1 current eigendynamics,
+        \item a stator voltage input,
+        \item a rotation-induced voltage input (due to stator flux rotation),
+        \item a rotor-flux-induced voltage input (due to rotor flux magnitude changes).
+    \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Summary: rotor-flux-oriented IM model with states %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Summary: rotor-flux-oriented IM model with states $\bm{x}^\top=[\psi^{\psi_\mathrm{r}}_{\mathrm{r,d}},\, i^{\psi_\mathrm{r}}_{\mathrm{s,d}},\, i^{\psi_\mathrm{r}}_{\mathrm{s,q}}]$}
+    Rotor flux dynamics:
+    \begin{equation*}
+        \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]
+        =\left(1-\frac{T_\mathrm{s}R_\mathrm{r}}
+        {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}\right)
+        \psi^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+        \quad+\frac{T_\mathrm{s}R_\mathrm{r}L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]}
+        {L^{\psi_\mathrm{r}}_{\mathrm{m,app}}[k]+L^{\psi_\mathrm{r}}_{\sigma\mathrm{r,app}}[k]}
+        i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k].
+    \end{equation*}
+    Stator current dynamics:
+    \begin{equation*}
+        \begin{aligned}
+            \bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k+1]
+             & =\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +T_\mathrm{s}\left(\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k]\right)^{-1}
+            \bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s}) \\
+             & \quad\cdot\left(
+            \bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            -R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +\bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+            +\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]
+            \right).
+        \end{aligned}
+    \end{equation*}
+    Torque equation:
+    \begin{equation*}
+        T^{\psi_{\mathrm{r}}}[k]=\frac{3}{2} p \frac{L_\mathrm{m,app}[k]}{L_\mathrm{r,app}[k]} i_{\mathrm{s,q}}[k]\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}[k].
+    \end{equation*}
+\end{frame}
+
+
