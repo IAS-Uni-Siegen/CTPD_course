@@ -32,7 +32,7 @@ class MotorParams(eqx.Module):
     lut_values: dict
 
 
-def generate_luts(pmsm_lut, target_shape=COMMON_GRID_SIZE):
+def generate_luts(pmsm_lut, target_shape=None):
     saturated_quants = ["L_dd", "L_dq", "L_qd", "L_qq", "Psi_d", "Psi_q"]
 
     i_d_max = np.max(pmsm_lut["i_d_vec"])
