@@ -2,10 +2,13 @@ from typing import Callable
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.lines as mlines
 
 import jax
 import jax.numpy as jnp
 import equinox as eqx
+
+from .pmsm import lut_interpolate
 
 
 def build_grid(dim: int, low: float | list, high: float, points_per_dim: int) -> jax.Array:
@@ -244,3 +247,33 @@ def visualize_trajectories_with_reference(
     )
 
     return fig, all_axes
+
+
+def add_voltage_constraint_to_ax(ax, n, color, pmsm):
+
+    @eqx.filter_jit
+    def interpolate_flux(i_dq, pmsm):
+        p = {q: lut_interpolate(*pmsm.LUT_grids[q], pmsm.LUT_values[q], *i_dq) for q in ["Psi_d", "Psi_q"]}
+        return tuple([p[q] for q in ["Psi_d", "Psi_q"]])
+
+    i_d, i_q = pmsm.LUT_grids["L_dd"]
+    i_d = jnp.linspace(i_d[0], i_d[-1], i_d.shape[0] * 10)
+    i_q = jnp.linspace(i_q[0], i_q[-1], i_q.shape[0] * 10)
+
+    i_d, i_q = jnp.meshgrid(i_d, i_q, indexing="ij")
+    i_dq = jnp.stack([i_d, i_q], axis=-1)
+
+    psi_d, psi_q = eqx.filter_vmap(eqx.filter_vmap(interpolate_flux, in_axes=(0, None)), in_axes=(0, None))(i_dq, pmsm)
+
+    r_s = pmsm.env_properties.static_params.r_s
+    p = pmsm.env_properties.static_params.p
+    u_dc = pmsm.env_properties.static_params.u_dc
+
+    omega = jnp.array([p * n * 2 * jnp.pi / 60])
+
+    u_d = r_s * i_d - omega * psi_q
+    u_q = r_s * i_q + omega * psi_d
+
+    U = jnp.sqrt(u_d**2 + u_q**2)
+
+    ax.contour(i_d, i_q, U, levels=[u_dc / jnp.sqrt(3)], colors=color, linewidths=1.5)

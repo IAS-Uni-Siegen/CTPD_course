@@ -10,6 +10,6 @@
     - e.g. ```C:\Users\hvater\AppData\Local\Programs\Python\Python314\python -m venv C:\Users\hvater\work\venvs\ctpd-venv```
 - activate the venv with ```.{path/to/venv/scripts}```
     - e.g. ```.\work\venvs\ctpd-venv\Scripts\activate```
-- use ```pip install requirements.txt``` in the ```interactive_notebooks```-directory to install all required python packages
+- use ```pip install -r requirements.txt``` in the ```interactive_notebooks```-directory to install all required python packages
 - run ```jupyter-lab``` within the activated venv
     - alternatively, you may use ```jupyter-notebook``` or the notebook functionalities from within, e.g., [VSCode](https://code.visualstudio.com/)
