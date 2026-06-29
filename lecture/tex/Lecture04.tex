@@ -807,6 +807,9 @@
                 =\begin{bmatrix}
                     (L_\mathrm{m}+L_{\sigma\mathrm{s}})\bm{I}_2 & L_\mathrm{m}\bm{I}_2                        \\
                     L_\mathrm{m}\bm{I}_2                        & (L_\mathrm{m}+L_{\sigma\mathrm{r}})\bm{I}_2
+                \end{bmatrix}=\begin{bmatrix}
+                    L_{\mathrm{s}}\bm{I}_2 & L_\mathrm{m}\bm{I}_2   \\
+                    L_\mathrm{m}\bm{I}_2   & L_{\mathrm{r}}\bm{I}_2
                 \end{bmatrix}.}
         \label{eq:linear_IM_diff_inductance_matrix}
     \end{equation}
@@ -878,25 +881,24 @@
         \begin{column}{0.4\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=0.95\textwidth]{fig/lec04/Eddy_currents_single_sheet.pdf}
-                \includegraphics[width=0.95\textwidth]{fig/lec04/Hyteresis_curve_full.pdf}
+                \onslide<1->{\includegraphics[width=0.95\textwidth]{fig/lec04/Eddy_currents_single_sheet.pdf}}
+                \onslide<2->{\includegraphics[width=0.95\textwidth]{fig/lec04/Hyteresis_curve_full.pdf}}
 
             \end{figure}
         \end{column}
         \begin{column}{0.6\textwidth}
-            Iron losses in electrical machine cover (cf. right):
+            \onslide<1->{Iron losses in electrical machine cover (cf. right):}
             \begin{itemize}
-                \item Eddy current losses: Due to time-varying magnetic fields, currents are induced in the iron core, leading to resistive losses.
-                \item Hysteresis losses: Due to magnetic friction of changing orientation of Weiss domains.
-            \end{itemize}
-            Empirical measurements how that the IM's iron losses can be approximated by
-            \begin{equation}
-                P_\mathrm{Fe}\approx \frac{1}{R_\mathrm{c}}\left\|\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{m},\upalpha\upbeta}\right\|^2=R_\mathrm{c}\left\|\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}\right\|^2
-            \end{equation}
-            in the stator-oriented $\upalpha\upbeta$-frame, where $R_\mathrm{c}$ is an iron loss resistance and $\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}$ is the iron loss current.
+                \item<1-> Eddy current losses: Due to time-varying magnetic fields, currents are induced in the iron core, leading to resistive losses.
+                \item<2-> Hysteresis losses: Due to magnetic friction of changing orientation of Weiss domains.
+            \end{itemize}\onslide<3->{%
+                    Empirical measurements how that the IM's iron losses can be approximated by
+                    \begin{equation}
+                        P_\mathrm{Fe}\approx \frac{1}{R_\mathrm{c}}\left\|\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}^{\mathrm{s}}_{\mathrm{m},\upalpha\upbeta}\right\|^2=R_\mathrm{c}\left\|\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}\right\|^2
+                    \end{equation}
+                    in the stator-oriented $\upalpha\upbeta$-frame, where $R_\mathrm{c}$ is an iron loss resistance and $\bm{i}^{\mathrm{s}}_{\mathrm{c},\upalpha\upbeta}$ is the iron loss current.}
         \end{column}
     \end{columns}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -964,12 +966,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{No-load test for parameter identification}
-    Assuming $R_\mathrm{s} << R_\mathrm{c}$ and $L_{\sigma\mathrm{s}}<<L_\mathrm{m}$, the mutual inductance and iron resistance can be identified from no-load active and reactive power measurements:
-    \begin{equation}
-        L_\mathrm{m}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
-        R_\mathrm{c}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}},
-    \end{equation}
-    where $U_\mathrm{s}$ is the stator voltage RMS value at the applied angular frequency $\omega$ while $P_\mathrm{s}$ and $Q_\mathrm{s}$ are the active and reactive power measured at the stator, respectively.
+    \onslide<2->{
+            Assuming $R_\mathrm{s} << R_\mathrm{c}$ and $L_{\sigma\mathrm{s}}<<L_\mathrm{m}$, the mutual inductance and iron resistance can be identified from no-load active and reactive power measurements:
+            \begin{equation}
+                L_\mathrm{m}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
+                R_\mathrm{c}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}},
+            \end{equation}
+            where $U_\mathrm{s}$ is the stator voltage RMS value at the applied angular frequency $\omega$ while $P_\mathrm{s}$ and $Q_\mathrm{s}$ are the active and reactive power measured at the stator, respectively.}
     \begin{figure}
         \begin{columns}
             \begin{column}{0.64\textwidth}
@@ -997,7 +1000,7 @@
                     \draw[dashed] (N)
                     to[L, l=$L_{\sigma \mathrm{r}}$] (D)
                     to[R, l=$R_{r}$] (E)
-                    to[short, i<^=$\underline{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}} \approx 0$] (RT);
+                    to[short, i<^=$\bm{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}} \approx 0$] (RT);
 
                     % lower return path with rotational voltage sources
                     \draw (LB) to [short] (C |- LB);
@@ -1036,12 +1039,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Blocked rotor test for parameter identification}
-    From a blocked rotor test with active and reactive power measurements we can approximate:
-    \begin{equation}
-        L_{\sigma\mathrm{s}}+L_{\sigma\mathrm{r}}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
-        R_\mathrm{s} + R_\mathrm{r}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}}.
-    \end{equation}
-    With a separate ohmmeter  measurement of $R_\mathrm{s}$, the rotor resistance directly follows. However, for the stray inductances, further assumptions are required to split the sum into stator and rotor contributions (typically, $L_{\sigma\mathrm{s}}=L_{\sigma\mathrm{r}}$).
+    \onslide<2->{From a blocked rotor test with active and reactive power measurements we can approximate:
+            \begin{equation}
+                L_{\sigma\mathrm{s}}+L_{\sigma\mathrm{r}}\approx \frac{3}{2}\frac{U_\mathrm{s}^2}{Q_\mathrm{s}\omega }, \qquad
+                R_\mathrm{s} + R_\mathrm{r}\approx \frac{3}{2} \frac{U_\mathrm{s}^2}{P_\mathrm{s}}.
+            \end{equation}}
+    \onslide<3->{With a separate ohmmeter  measurement of $R_\mathrm{s}$, the rotor resistance directly follows. However, for the stray inductances, further assumptions are required to split the sum into stator and rotor contributions (typically, $L_{\sigma\mathrm{s}}=L_{\sigma\mathrm{r}}$).}
     \begin{figure}
         \begin{columns}
             \begin{column}{0.64\textwidth}
@@ -1069,7 +1072,7 @@
                     \draw (N)
                     to[L, l=$L_{\sigma \mathrm{r}}$] (D)
                     to[R, l=$R_{r}$] (E)
-                    to[short, i<^=$\underline{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RT);
+                    to[short, i<^=$\bm{i}^{\mathrm{s}}_{\mathrm{r,\upalpha\upbeta}}$] (RT);
 
                     % lower return path with rotational voltage sources
                     \draw (LB) to [short] (C |- LB);
@@ -1793,6 +1796,891 @@
     \begin{equation*}
         T^{\psi_{\mathrm{r}}}[k]=\frac{3}{2} p \frac{L_\mathrm{m,app}[k]}{L_\mathrm{r,app}[k]} i_{\mathrm{s,q}}[k]\psi_{\mathrm{r,d}}^{\psi_{\mathrm{r}}}[k].
     \end{equation*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Field-oriented control}
+\label{subsec:FOC_IM}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Field-oriented control: high-level overview %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Field-oriented control (FOC): high-level overview}
+    \centering
+    \vspace{-0.3cm}
+    \begin{figure}
+        \begin{circuitikz}[x=1cm, y=1cm, scale=0.92, transform shape, >=Latex]
+            \def\focblockheight{1.5cm}
+            \def\focblockgaplarge{1.0cm}
+            \def\focrowgap{2cm}
+            \def\focinputgap{0.5cm}
+            \def\focframeleftsep{0.4cm}
+            \def\focframebottomsep{0.4cm}
+            \def\focframerightsep{0.3cm}
+            \def\focframetopsep{0.4cm}
+            \def\foctitlegap{0.65cm}
+            \pgfmathsetmacro{\focconverterscale}{\focblockheight/(1.4cm*0.7)}
+            \tikzset{
+                focblock/.style = {
+                        ctrlblock,
+                        align = center,
+                        inner sep = 3pt,
+                        minimum height = \focblockheight,
+                        font = \small
+                    },
+                siglabel/.style = {font = \small, inner sep = 2pt}
+            }
+
+            \node[focblock, minimum width = 2.6cm] (op) at (2.10, 3.95) {Operating point\\selection};
+            \node[focblock, right = 1.2*\focblockgaplarge of op] (rotorctrl) {Rotor\\ flux control};
+            \node[focblock, minimum width = 2.3cm, right = \focblockgaplarge of rotorctrl] (foc) {Stator\\ current control};
+            \node[focblock, minimum width = 1.55cm, right = \focblockgaplarge of foc] (pwm) {Modulator};
+            \node[focblock, minimum width = 2.6cm, below = \focrowgap/1.9 of op] (mod) {Modulation\\degree control};
+            \node[focblock, minimum width = 1.55cm, below = \focrowgap of pwm] (pll) {Flux\\estimator};
+
+            \coordinate[right = \focblockgaplarge of pwm] (convwest);
+            \draw (convwest) node[
+                tdcacshape,
+                anchor = west,
+                circuitikz/blocks/scale = \focconverterscale
+            ] (conv) {};
+            \node[
+                threephasemotorshaftshape,
+                at = ($(conv.center |- pll.east)$),
+                anchor = center,
+                circuitikz/blocks/scale = \focconverterscale
+            ] (motor) {};
+
+            \begin{scope}[on background layer]
+                \draw[draw = black, fill = black!3, rounded corners = 0.30cm]
+                ($(mod.south west |- pll.south)+(-\focframeleftsep,-\focframebottomsep)$)
+                rectangle
+                ($(pwm.north east)+(\focframerightsep,\focframetopsep)$);
+            \end{scope}
+            \node[font = \normalsize] at ($(op.north)!0.5!(pwm.north)+(0,\foctitlegap)$) {Control software};
+
+            \coordinate[left = \focinputgap of op.west] (torqueIn);
+            \coordinate[left = \focinputgap of mod.west] (ampIn);
+            \draw[thick, ->] (torqueIn) -- (op.west);
+            \node[left] at (torqueIn) {$T^*$};
+            \draw[thick, ->] (ampIn) -- (mod.west);
+            \node[left] at (ampIn) {$m^*$};
+
+
+            \coordinate (opTout) at ($(op.south east)!0.75!(op.north east)$);
+            \coordinate (opPsiout) at ($(op.south east)!0.25!(op.north east)$);
+            \coordinate (opTin) at ($(rotorctrl.south west)!0.75!(rotorctrl.north west)$);
+            \coordinate (opPsiin) at ($(rotorctrl.south west)!0.25!(rotorctrl.north west)$);
+            \draw[thick, ->] (opTout) -- (opTin);
+            \draw[thick, ->] (opPsiout) -- (opPsiin);
+            \node[siglabel, above] at ($(opTout)!0.35!(opTin)$) {$T_{\mathrm{lim}}^*$};
+            \node[siglabel, above] at ($(opPsiout)!0.35!(opPsiin)$) {$\psi_{\mathrm{r,lim}}^*$};
+
+
+            \coordinate (opIdOut) at ($(rotorctrl.south east)!0.75!(rotorctrl.north east)$);
+            \coordinate (focIdIn) at ($(foc.south west)!0.75!(foc.north west)$);
+            \coordinate (opIqOut) at ($(rotorctrl.south east)!0.25!(rotorctrl.north east)$);
+            \coordinate (focIqIn) at ($(foc.south west)!0.25!(foc.north west)$);
+            \draw[thick, ->] (opIdOut) -- (focIdIn);
+            \draw[thick, ->] (opIqOut) -- (focIqIn);
+            \node[siglabel, above] at ($(opIdOut)!0.35!(focIdIn)$) {$i_{\mathrm{s,d}}^*$};
+            \node[siglabel, above] at ($(opIqOut)!0.35!(focIqIn)$) {$i_{\mathrm{s,q}}^*$};
+
+            \draw[thick, ->] (mod.north) -- node[right] {$\psi_{\mathrm{r,max}}$} (op.south);
+
+            \foreach \dy/\phase in {0.5/a, 0.00/b, -0.5/c} {
+                    \draw[thick, ->] ($(foc.east)+(0,\dy)$) -- ($(pwm.west)+(0,\dy)$);
+                    \node[siglabel, above] at ($($(foc.east)+(0,\dy)$)!0.5!($(pwm.west)+(0,\dy)$)$) {$u_\mathrm{\phase}^*$};
+                }
+            \coordinate (uLabelPos) at ($($(foc.east)+(0,0.0)$)!0.5!($(pwm.west)+(0,0.0)$)$);
+
+            \foreach \dy/\phase in {0.5/a, 0.00/b, -0.5/c} {
+                    \draw[thick, ->] ($(pwm.east)+(0,\dy)$) -- ($(conv.west)+(0,\dy)$);
+                    \node[siglabel, above] at ($($(pwm.east)+(0,\dy)$)!0.5!($(conv.west)+(0,\dy)$)$) {$s_\mathrm{\phase}$};
+                }
+            \coordinate (sALabelPos) at ($($(pwm.east)+(0,0.5)$)!0.5!($(conv.west)+(0,0.5)$)$);
+            \coordinate (sBLabelPos) at ($($(pwm.east)+(0,0.0)$)!0.5!($(conv.west)+(0,0.0)$)$);
+            \coordinate (sCLabelPos) at ($($(pwm.east)+(0,-0.5)$)!0.5!($(conv.west)+(0,-0.5)$)$);
+
+            \draw[thick] (conv.south) to[currtap, name=ctdc] (motor.north);
+            \coordinate (ctdcQuarterTop) at ($(conv.south)+(0.5,0)$);
+            \path[name path = motorcircle] (motor.center) circle[radius = \dimexpr\focblockheight/2\relax];
+            \path[name path = ctdcQuarterLine] (ctdcQuarterTop) -- ($(ctdcQuarterTop |- motor.south)+(0,-0.2)$);
+            \path[name intersections = {of = motorcircle and ctdcQuarterLine, by = ctdcQuarterBottom}];
+            \coordinate (ctdcQuarterTapTop) at ($(ctdcQuarterTop)!0.05!(ctdcQuarterBottom)$);
+            \coordinate (ctdcQuarterTapBottom) at ($(ctdcQuarterTop)!0.4!(ctdcQuarterBottom)$);
+            \draw[thick](ctdcQuarterTop) -- (ctdcQuarterTapTop);
+            \draw[thick] (ctdcQuarterTapTop) to[currtap, name=ctdcquarter] (ctdcQuarterTapBottom);
+            \draw[thick] (ctdcQuarterTapBottom) -- (ctdcQuarterBottom);
+
+            \coordinate (ctdcQuarterLeftTop) at ($(conv.south)+(-0.5,0)$);
+            \path[name path = ctdcQuarterLeftLine] (ctdcQuarterLeftTop) -- ($(ctdcQuarterLeftTop |- motor.south)+(0,-0.2)$);
+            \path[name intersections = {of = motorcircle and ctdcQuarterLeftLine, by = ctdcQuarterLeftBottom}];
+            \coordinate (ctdcQuarterLeftTapTop) at ($(ctdcQuarterLeftTop)!0.525!(ctdcQuarterLeftBottom)$);
+            \coordinate (ctdcQuarterLeftTapBottom) at ($(ctdcQuarterLeftTop)!0.875!(ctdcQuarterLeftBottom)$);
+            \draw[thick] (ctdcQuarterLeftTop) -- (ctdcQuarterLeftTapTop);
+            \draw[thick] (ctdcQuarterLeftTapTop) to[currtap, name=ctdcquarterleft] (ctdcQuarterLeftTapBottom);
+            \draw[thick] (ctdcQuarterLeftTapBottom) -- (ctdcQuarterLeftBottom);
+            \coordinate (focCurrSenseInA) at ($(foc.south east)!0.2!(foc.south west)$);
+            \coordinate (focCurrSenseInB) at ($(foc.south east)!0.4!(foc.south west)$);
+            \coordinate (focCurrSenseInC) at ($(foc.south east)!0.6!(foc.south west)$);
+            \coordinate (focPllSenseIn) at ($(foc.south west)!0.2!(foc.south east)$);
+            \coordinate (pllWestThird) at ($(pll.south west)!0.8!(pll.north west)$);
+            \coordinate (pllWestBelow) at ($(pll.south west)!0.2!(pll.north west)$);
+            \coordinate (pllWestmid) at ($(pll.south west)!0.5!(pll.north west)$);
+            \coordinate (pwmDropA) at (pwm.south |- ctdcquarter.tap);
+            \coordinate (pwmDropB) at (pwm.south |- ctdc.tap);
+            \coordinate (pwmDropC) at (pwm.south |- ctdcquarterleft.tap);
+            \coordinate (pwmModBusLevel) at ($(ctdcquarterleft.tap)+(0,-0.18)$);
+            \coordinate (pwmModBusStart) at (pwm.south |- pwmModBusLevel);
+            \coordinate (pwmModBusEnd) at (mod.east |- pwmModBusLevel);
+            \node[crossingshape, rotate=-90, name = jumpPwmDropA, thick] at (pwmDropA) {};
+            \node[crossingshape, rotate=-90, name = jumpPwmDropB, thick] at (pwmDropB) {};
+            \node[crossingshape, rotate=-90, name = jumpPwmDropC, thick] at (pwmDropC) {};
+            \node[crossingshape, rotate=-90, name = fluxmodjump, thick] at (rotorctrl.south |- mod.east) {};
+
+            \draw[thick, ->] (ctdcquarter.tap) -| (focCurrSenseInA);
+            \draw[thick, ->] (ctdc.tap) -| (focCurrSenseInB);
+            \draw[thick, ->] (ctdcquarterleft.tap) -| (focCurrSenseInC);
+            \draw[thick, ->] (pllWestThird) -| (focPllSenseIn);
+            \draw[thick, -] (pllWestmid) -| (fluxmodjump.east);
+            \draw[thick, ->] (fluxmodjump.west) -| (rotorctrl.south);
+            \draw[thick, ->] (pllWestBelow) -| (mod.south);
+            \draw[thick] (pwm.south) -- (jumpPwmDropA.west);
+            \draw[thick] (jumpPwmDropA.east) -- (jumpPwmDropB.west);
+            \draw[thick] (jumpPwmDropB.east) -- (jumpPwmDropC.west);
+            \draw[thick, siglabel, ->] (jumpPwmDropC.east) |- node[pos=0.96, above] {$m$} (mod.east);
+            \node[siglabel, above] at (sALabelPos |- ctdcquarter.tap) {$i_\mathrm{a}$};
+            \node[siglabel, above] at (sBLabelPos |- ctdc.tap) {$i_\mathrm{b}$};
+            \node[siglabel, above] at (sCLabelPos |- ctdcquarterleft.tap) {$i_\mathrm{c}$};
+            \node[siglabel, above] at (uLabelPos |- pllWestThird) {$\varepsilon_{\psi_\mathrm{r}}$};
+            \node[siglabel, above] at (uLabelPos |- pllWestBelow) {$\omega_{\psi_\mathrm{r}}$};
+            \node[siglabel, above] at (uLabelPos |- pllWestmid) {$\psi_\mathrm{r}$};
+            \draw[thick, ->] (motor.shaft) ++(0.4,0.24) arc[start angle = 40, end angle = -40, radius = 0.5];
+            \node[below] at ($(motor.shaft tip)+(-0.1,-0.35)$) {$n,T$};
+            \draw[thick, ->] (motor.west) to (pll.east);
+            \draw[thick] ($(ctdcQuarterTop |- conv.north)$) to [short, -o] ++(0,0.5) coordinate (DC_link_right);
+            \draw[thick] ($(ctdcQuarterLeftTop |- conv.north)$) to [short, -o] ++(0,0.5) coordinate (DC_link_left);
+            \draw[thick] (DC_link_left) to [open, v^=$u_{\mathrm{DC}}$, voltage = straight] (DC_link_right);
+        \end{circuitikz}
+        \caption{Overview of a rotor flux-oriented control system for a squirell-cage IM drive. The flux estimator requires additional voltage and current inputs, which are not shown for the sake of clarity. Likewise, the rotor flux orientation superscript is omitted in the signal labels.}
+        \label{fig:foc_IM_high_level}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Current control}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% High-level current control structure %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{High-level current control structure}
+    \begin{itemize}
+        \item The IM's stator current dynamic model \eqref{eq:IM_RFO_v7_compact_current_model} is structurally identical to the PMSM's stator current model \eqref{eq:current_diff_eq_RK1_alpha_beta}.
+        \item Specific differences are limited to the induced voltage terms (relevant for the feedforward decoupling) and the magnetic submodel.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[node distance=1.05cm]
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sum0) {};
+            \node[ctrlblock, align=center, right=1.15cm of sum0, minimum width=2.1cm, minimum height=1.1cm] (ctrl) {Feedback\\controller};
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$+$}, right=0.6cm of ctrl] (sum1) {};
+            \node[ctrlblock, align=center, right=1.8cm of sum1, minimum width=2.05cm, minimum height=1.1cm] (inv) {Inverter\\plant};
+            \node[ctrlblock, align=center, right=1.15cm of inv, minimum width=1.50cm, minimum height=1.1cm] (plant) {Machine\\plant};
+            \node[ctrlblock, align=center, below=0.2cm of ctrl, minimum width=2.1cm, minimum height=1.1cm] (dec) {MIMO\\decoupling};
+            \node[ctrlblock, align=center, below=2cm of sum1, minimum width=2.0cm, minimum height=1.1cm] (pred) {Model\\prediction};
+            \node[right=1.3cm of plant] (out0) {};
+            \coordinate (tap0) at ($(out0)!0.5!(plant.east)$);
+            \node[left=1.25cm of sum0] (r0) {};
+            \coordinate (predinA) at ($(pred.south east)!0.25!(pred.north east)$);
+            \coordinate (predinB) at ($(pred.south east)!0.75!(pred.north east)$);
+            \coordinate (predout) at (pred.west);
+            \coordinate (predfbtap) at (dec.west -| sum0.south);
+            \coordinate (uinv) at ($(inv.east)!0.5!(plant.west)$);
+            \begin{scope}[every node/.style={font=\footnotesize}]
+                \draw[->, thick] (r0) -- node[above, near start] {$\bm{i}_\mathrm{s,dq}^{*}[k\!+\!1]$} (sum0.west);
+                \draw[->, thick] (sum0.east) -- node[above] {} (ctrl.west);
+                \draw[->, thick] (ctrl.east) -- node[above] {} (sum1.west);
+                \draw[->, thick] (dec.east) -| (sum1.south);
+                \draw[->, thick] (sum1.east) -- node[above] {$\bm{u}_\mathrm{s,dq}^{*}[k\!+\!1]$} (inv.west);
+                \draw[->, thick] (inv.east) -- node[above] {$\bar{\bm{u}}_\mathrm{s,dq}[k]$} (plant.west);
+                \draw[thick] (plant.east) to[short, -*] (tap0.center);
+                \draw[->, thick] (plant.east) -- node[above] {$\bm{i}_\mathrm{s,dq}[k]$} (out0.center);
+                \draw[->, thick] (tap0.center) to[short, *-] node[pos=0.32, right] {} (tap0.center |- predinA) -- (predinA);
+                \draw[->, thick] (uinv) to [short, *-] node[pos=0.32, left] {} (uinv |-  predinB) -- (predinB);
+                \draw[->, thick] (pred.west) -|  node[pos=0.24, below] {$\hat{\bm{i}}_\mathrm{s,dq}[k\!+\!1|k]$} (sum0.south);
+                \draw[->, thick] (predfbtap) to [short, *-] (dec.west);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{MIMO stator current loop for IM drives: structurally identical to the PMSM current loop.}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Compact qLPV plant for decoupling %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Compact current model for the IM}
+    Introduce the short notation
+    \begin{equation}
+        \begin{gathered}
+            \bm{i}[k]=\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k],\qquad
+            \bm{u}[k]=\bm{u}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k],\qquad
+            \bm{T}_{\mathrm{p}}[k]=\bm{T}_\mathrm{p}(-\omega_{\psi_\mathrm{r}}[k]T_\mathrm{s}),\\
+            \bm{L}[k]=\bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}[k],
+            \qquad
+            \bm{u}_\mathrm{x}[k]=\bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]+\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k].
+        \end{gathered}
+        \label{eq:IM_current_control_short_notation}
+    \end{equation}\pause%
+    Then \eqref{eq:IM_RFO_v7_compact_current_model} becomes
+    \begin{equation}
+        \bm{i}[k+1]
+        =\left(\bm{I}_2-\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s}R_\mathrm{s}\right)\bm{i}[k]
+        +\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s}\bm{u}[k]
+        +\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s}\bm{u}_\mathrm{x}[k].
+        \label{eq:IM_current_control_qLPV_plant}
+    \end{equation}\pause%
+    As in the PMSM case, all controller-relevant variables are evaluated after the one-step prediction that compensates the digital control delay.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Target dynamics after decoupling %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Target dynamics after decoupling}
+    We seek a feedforward decoupling structure that transforms \eqref{eq:IM_current_control_qLPV_plant} into the diagonal first-order model
+    \begin{equation}
+        \bm{i}[k+1]=\left(\bm{I}_2-\bm{D}^{-1}[k]T_\mathrm{s}R_\mathrm{s}\right)\bm{i}[k]
+        +\bm{D}^{-1}[k]T_\mathrm{s}\bm{v}[k],
+        \label{eq:IM_target_diag_model}
+    \end{equation}\pause%
+    with the new input $\bm{v}$ and the desired diagonal inductance matrix
+    \begin{equation}
+        \bm{D}[k]=\operatorname{diag}\left(L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{dd}}[k],
+        L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{qq}}[k]\right).
+        \label{eq:IM_target_diag_inductance}
+    \end{equation}\pause%
+    Hence, the desired SISO current dynamics are
+    \begin{equation}
+        \begin{split}
+            i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k+1]
+             & =\left(1-\frac{T_\mathrm{s}R_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{dd}}[k]}\right)i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k]
+            +\frac{T_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{dd}}[k]}v_\mathrm{d}[k],                                                    \\
+            i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k+1]
+             & =\left(1-\frac{T_\mathrm{s}R_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{qq}}[k]}\right)i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k]
+            +\frac{T_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{qq}}[k]}v_\mathrm{q}[k].
+        \end{split}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Decoupling equation matching %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Discrete-time MIMO decoupling}
+    Write \eqref{eq:IM_current_control_qLPV_plant} as
+    \begin{equation}
+        \bm{i}[k+1]=\bm{A}[k]\bm{i}[k]+\bm{B}[k]\bm{u}[k]+\bm{e}[k]
+    \end{equation}\pause%
+    with
+    \begin{equation}
+        \begin{gathered}
+            \bm{A}[k]=\bm{I}_2-\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s}R_\mathrm{s},\qquad
+            \bm{B}[k]=\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s},\\
+            \bm{e}[k]=\bm{L}^{-1}[k]\bm{T}_{\mathrm{p}}[k]T_\mathrm{s}\bm{u}_\mathrm{x}[k].
+        \end{gathered}
+    \end{equation}\pause%
+    Define the input transformation
+    \begin{equation}
+        \bm{u}[k]=\bm{u}_\mathrm{0}[k]+\bm{F}[k]\bm{i}[k]+\bm{P}[k]\bm{v}[k].
+        \label{eq:IM_input_transformation}
+    \end{equation}\pause%
+    Matching with the target model \eqref{eq:IM_target_diag_model} gives
+    \begin{equation}
+        \bm{e}[k]+\bm{B}[k]\bm{u}_\mathrm{0}[k]=\bm{0},\qquad
+        \bm{A}[k]+\bm{B}[k]\bm{F}[k]=\bm{I}_2-\bm{D}^{-1}[k]T_\mathrm{s}R_\mathrm{s},
+    \end{equation}
+    \begin{equation}
+        \bm{B}[k]\bm{P}[k]=\bm{D}^{-1}[k]T_\mathrm{s}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Decoupling law %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Discrete-time MIMO decoupling (cont.)}
+    Since
+    \begin{equation}
+        \bm{B}^{-1}[k]=\frac{1}{T_\mathrm{s}}\bm{T}_{\mathrm{p}}^{-1}[k]\bm{L}[k],
+    \end{equation}\pause%
+    the decoupling terms are
+    \begin{equation}
+        \bm{u}_\mathrm{0}[k]=-\bm{u}_\mathrm{x}[k],
+        \qquad
+        \bm{P}[k]=\bm{T}_{\mathrm{p}}^{-1}[k]\bm{L}[k]\bm{D}^{-1}[k],
+    \end{equation}
+    \begin{equation}
+        \bm{F}[k]=\left(\bm{I}_2-\bm{T}_{\mathrm{p}}^{-1}[k]\bm{L}[k]\bm{D}^{-1}[k]\right)R_\mathrm{s}.
+    \end{equation}\pause%
+    Therefore, the modified stator-voltage command is
+    \begin{equation}
+        \begin{split}
+            \bm{u}^{*}[k]
+             & =-\bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+            -\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]                                                                                        \\
+             & \quad+\left(\bm{I}_2-\bm{T}_{\mathrm{p}}^{-1}[k]\bm{L}[k]\bm{D}^{-1}[k]\right)R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+            +\bm{T}_{\mathrm{p}}^{-1}[k]\bm{L}[k]\bm{D}^{-1}[k]\bm{v}[k].
+        \end{split}
+        \label{eq:IM_decoupling_law}
+    \end{equation}
+    Substitution of \eqref{eq:IM_decoupling_law} into \eqref{eq:IM_current_control_qLPV_plant} yields \eqref{eq:IM_target_diag_model}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resulting independent SISO current loops %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Resulting independent SISO current loops}
+    \begin{itemize}
+        \item Perfect model-based decoupling turns the stator current controller into two independent current loops.
+        \item The remaining controller task is identical to the PMSM case after replacing $L_\mathrm{dd}$ and $L_\mathrm{qq}$ by the effective IM inductances in \eqref{eq:IM_target_diag_inductance}.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}[x=0.78cm,y=0.95cm]
+            \coordinate (r) at (-1.20,0.00);
+            \coordinate (tapr) at (0.00,0.00);
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumc) at (1.55,0.00) {};
+            \node[ctrlblock, align=center, minimum width=1.55cm, minimum height=0.78cm] (gf) at (4.70,1.55) {$G_{\mathrm{f},\nu}(\mathrm{z})$};
+            \node[ctrlblock, align=center, minimum width=1.55cm, minimum height=0.78cm] (gc) at (4.70,0.00) {$G_{\mathrm{c},\nu}(\mathrm{z})$};
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/north={$+$}] (sumv) at (7.75,0.00) {};
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/north={$+$}] (sumd) at (10.10,0.00) {};
+            \node[ctrlblock, align=center, minimum width=1.38cm, minimum height=0.78cm] (gp) at (12.70,0.00) {$G_{\mathrm{p},\nu}(\mathrm{z})$};
+            \coordinate (tapy) at ($(gp.east)+(0.70,0)$);
+            \coordinate (yout) at ($(tapy)+(1.00,0)$);
+            \coordinate (dist) at ($(sumd.center)+(0,1.25)$);
+            \draw[thick] (r) -- node[above, near start] {$i^{\psi_\mathrm{r},*}_{\mathrm{s},\nu}$} (tapr);
+            \draw[thick, ->] (tapr) to[short, *-] (sumc.west);
+            \draw[->, thick] (tapr) |- (gf.west);
+            \draw[->, thick] (sumc.east) -- node[above] {$e_\nu$} (gc.west);
+            \draw[->, thick] (gc.east) -- node[above] {$v_{\mathrm{c},\nu}$} (sumv.west);
+            \draw[->, thick] (gf.east) -| node[pos=0.18, above] {$v_{\mathrm{f},\nu}$} (sumv.north);
+            \draw[->, thick] (sumv.east) -- node[above] {$v_\nu$} (sumd.west);
+            \draw[->, thick] (dist) -- node[right, near start] {$d_\nu$} (sumd.north);
+            \draw[->, thick] (sumd.east) -- (gp.west);
+            \draw[thick] (gp.east) to[short, -*] (tapy);
+            \draw[->, thick] (tapy) -- node[above] {$i^{\psi_\mathrm{r}}_{\mathrm{s},\nu}$} (yout);
+            \draw[->, thick] (tapy) |- ++(0,-1.10) -| (sumc.south);
+        \end{tikzpicture}
+        \caption{Equivalent SISO current loop for $\nu\in\{\mathrm{d},\mathrm{q}\}$ after IM MIMO decoupling.}
+        \label{fig:IM_SISO_current_loop}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resulting SISO current plants %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Resulting SISO current plants}
+    For one axis $\nu\in\{\mathrm{d},\mathrm{q}\}$ and with an additive input disturbance $d_\nu$, the decoupled IM current dynamics become
+    \begin{equation}
+        i^{\psi_\mathrm{r}}_{\mathrm{s},\nu}[k+1]=a_\nu[k]i^{\psi_\mathrm{r}}_{\mathrm{s},\nu}[k]+b_\nu[k]\left(v_\nu[k]+d_\nu[k]\right).
+        \label{eq:IM_siso_current_plant}
+    \end{equation}\pause%
+    The plant parameters are
+    \begin{equation}
+        \begin{gathered}
+            a_\mathrm{d}[k]=1-\frac{T_\mathrm{s}R_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{dd}}[k]},\qquad
+            b_\mathrm{d}[k]=\frac{T_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{dd}}[k]},\\
+            a_\mathrm{q}[k]=1-\frac{T_\mathrm{s}R_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{qq}}[k]},\qquad
+            b_\mathrm{q}[k]=\frac{T_\mathrm{s}}{L^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r},\mathrm{qq}}[k]}.
+        \end{gathered}
+    \end{equation}\pause%
+    \vspace{-0.3cm}
+    \begin{varblock}{Pole placement and ARW measure}
+        Due to the structural equivalence of the decoupled SISO stator current control loops of the IM and PMSM, the PI control pole placement and the ARW design measures from the previous PMSM chapter can be applied directly to the IM case, i.e., they will not be repeated here.
+    \end{varblock}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Linear magnetic model simplification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear magnetic model: simplified IM current plant}
+    If magnetic saturation and cross-saturation are neglected, the apparent and differential inductances coincide and become constant scalar quantities:
+    \begin{equation}
+        L^{\psi_\mathrm{r}}_{\mathrm{m},\mathrm{app}}=L_\mathrm{m},\qquad
+        L^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{app}}=L_\mathrm{s},\qquad
+        L^{\psi_\mathrm{r}}_{\mathrm{r},\mathrm{app}}=L_\mathrm{r},
+        \qquad
+        \bm{L}^{\psi_\mathrm{r}}_\mathrm{m}=L_\mathrm{m}\bm{I}_2.
+    \end{equation}\pause%
+    Hence, the reduced differential magnetic model simplifies to
+    \begin{equation}
+        \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}|\psi_\mathrm{r}}
+        =\left(L_\mathrm{s}-\frac{L_\mathrm{m}^2}{L_\mathrm{r}}\right)\bm{I}_2
+        =\sigma L_\mathrm{s}\bm{I}_2,
+        \qquad
+        \bm{L}^{\psi_\mathrm{r}}_{\mathrm{s}\psi_\mathrm{r}}
+        =\frac{L_\mathrm{m}}{L_\mathrm{r}}\bm{I}_2 .
+        \label{eq:IM_linear_Ls_psir}
+    \end{equation}\pause%
+    Consequently, the desired diagonal inductance matrix is no longer operating-point dependent:
+    \begin{equation}
+        \bm{D}=\sigma L_\mathrm{s}\bm{I}_2,
+        \qquad
+        a=1-\frac{T_\mathrm{s}R_\mathrm{s}}{\sigma L_\mathrm{s}},
+        \qquad
+        b=\frac{T_\mathrm{s}}{\sigma L_\mathrm{s}}.
+    \end{equation}
+    Thus, both current axes have the same nominal PT1 stator-current eigendynamics.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Linear magnetic model impact on decoupling %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Linear magnetic model: impact on decoupling}
+    With \eqref{eq:IM_linear_Ls_psir}, the general MIMO decoupling law in \eqref{eq:IM_decoupling_law} reduces to
+    \begin{equation}
+        \bm{u}^{*}[k]
+        =-\bm{u}^{\psi_\mathrm{r}}_{\mathrm{rot},\mathrm{dq}}[k]
+        -\bm{u}^{\psi_\mathrm{r}}_{\psi_\mathrm{r},\mathrm{dq}}[k]
+        +\left(\bm{I}_2-\bm{T}_{\mathrm{p}}^{-1}[k]\right)R_\mathrm{s}\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s},\mathrm{dq}}[k]
+        +\bm{T}_{\mathrm{p}}^{-1}[k]\bm{v}[k].
+        \label{eq:IM_linear_decoupling_law}
+    \end{equation}\pause%
+    Substitution yields two identical nominal SISO plants
+    \begin{equation}
+        i^{\psi_\mathrm{r}}_{\mathrm{s},\nu}[k+1]
+        =a\,i^{\psi_\mathrm{r}}_{\mathrm{s},\nu}[k]+b\left(v_\nu[k]+d_\nu[k]\right),
+        \qquad \nu\in\{\mathrm{d},\mathrm{q}\},
+        \label{eq:IM_linear_siso_plant}
+    \end{equation}
+    \begin{equation}
+        G_{\mathrm{p},\nu}(\mathrm{z})=\frac{b}{\mathrm{z}-a}.
+    \end{equation}\pause%
+    Practical implications:
+    \begin{itemize}
+        \item No current-dependent gain scheduling of $a_\nu$, $b_\nu$, $K_{\mathrm{p},\nu}$, $K_{\mathrm{i},\nu}$ and $K_{\mathrm{f},\nu}$ is required by the magnetic model.
+        \item The PMSM pole-placement design can be copied directly with $L_\nu=\sigma L_\mathrm{s}$.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Rotor flux control}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor flux and torque control implementation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Rotor flux and torque control implementation}
+    \centering
+    \begin{figure}
+        \begin{circuitikz}[>=Latex, scale=0.8, transform shape]
+            \tikzset{
+                detailblock/.style = {ctrlblock, align=center, minimum width=1.34cm, minimum height=0.86cm, font=\small},
+                intblock/.style = {ctrlblock, align=center, minimum width=1.10cm, minimum height=1.02cm, font=\small},
+                tfblock/.style = {draw, rectangle, thick, minimum width=2.00cm, minimum height=1.90cm, inner sep=0pt},
+                dublock/.style = {ctrlblock, align=center, minimum width=1.72cm, minimum height=1.48cm, font=\small},
+                satblock/.style = {draw, rectangle, thick, minimum width=1.64cm, minimum height=1.98cm, inner sep=0pt},
+                sig/.style = {font=\small, inner sep=1.5pt},
+                tap/.style = {circle, fill=black, inner sep=1.15pt}
+            }
+            \ctikzset{block left anchors pos=0.7, block right anchors pos=0.7}
+            \def\phaseport{0.72}
+            \def\smallgap{0.6cm}
+            \def\medgap{1.0cm}
+            \def\biggap{2.25cm}
+
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumd) {};
+            \node[signedmixer, tripoles/signedmixer/west={$*$}, tripoles/signedmixer/north={$/$}, below=2cm of sumd] (sumq) {};
+
+            \coordinate[left=\smallgap of sumd] (refd);
+            \coordinate[left=\smallgap of sumq] (refq);
+            \draw[->, thick] (refd) -- (sumd.west);
+            \draw[->, thick] (refq) -- (sumq.west);
+            \node[sig, above] at ($(refd)!0.1!(sumd.west)$) {$\psi_\mathrm{r}^{*}$};
+            \node[sig, above] at ($(refq)!0.1!(sumq.west)$) {$T^{*}$};
+            %\coordinate (out_feedback_back) at ($(out_idq)!0.5!(out_idq -| MA.east)$);
+
+            \coordinate[below=\smallgap of sumd.south] (fbd);
+            \coordinate (mid) at ($(sumd.south)!0.5!(sumq.north)$);
+            \coordinate (psistart) at (mid -| refd);
+            \coordinate[below=\smallgap of sumq.south] (fbq);
+            \draw[->, thick] (psistart) to (psistart -| sumd.south) to [short, *-] (sumd.south);
+            \draw[->, thick] (psistart) to (psistart -| sumq.north) to [short, *-] (sumq.north);
+            \node[sig, above right] at (psistart) {$\psi_\mathrm{r}$};
+
+
+            \node[detailblock, right=\medgap of sumd] (kpd) {$K_{\mathrm{p,\psi}}$};
+            \coordinate[above=\smallgap of kpd] (kid);
+            \node[detailblock, right=\medgap of sumq] (kpq) {$\frac{2}{3p}\frac{L_\mathrm{r, app}}{L_\mathrm{m,app}}$};
+            \coordinate[above=\smallgap of kpq] (kiq);
+
+            \draw[->, thick] (sumd) -- (kpd);
+            \draw[->, thick] (sumq) -- (kpq);
+
+
+
+
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/north={$-$}, right=1.0cm of kid] (sumid) {};
+
+            \draw[->, thick] ($(sumd.east)!0.4!(kpd.west)$) to[short, *-] ($(sumd.east)!0.4!(kpd.west)$) |-  (sumid.west);
+
+
+
+            \node[intblock, anchor=west, right=\medgap of sumid] (intd)  {$\dfrac{\mathrm{z}T_\mathrm{s}}{\mathrm{z}-1}$};
+
+            \draw[->, thick] (sumid) -- (intd);
+
+            \node[detailblock, right=\smallgap of intd] (kid2) {$K_{\mathrm{i,\psi}}$};
+
+            \draw[->, thick] (intd) -- (kid2);
+
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$+$}, right=\smallgap of kid2] (sumvd) {};
+            \draw[->, thick] (kid2) -- (sumvd);
+            \draw[->, thick] (kpd.east) -| (sumvd.south);
+
+            \node[saturationshape, circuitikz/blocks/scale=1.5, minimum height = 3cm, right=11cm of mid] (dqabc) {};
+            \draw[->, thick] (sumvd.east) -| ($(dqabc.left up)!0.5!(sumvd.east)$) |- (dqabc.left up);
+            \draw[->, thick] (kpq.east) -| ($(dqabc.left down)!0.5!(kpq.east)$) |- (dqabc.left down);
+            \node[sig, above left, xshift=-2ex] at (dqabc.left up) {$i_{\mathrm{s,d}}^{*}$};
+            \node[sig, above left, xshift=-2ex] at (dqabc.left down) {$i_{\mathrm{s,q}}^{*}$};
+            \node[sig, above right] at (dqabc.right up) {$i_{\mathrm{s,d,lim}}^{*}$};
+            \node[sig, above right] at (dqabc.right down) {$i_{\mathrm{s,q,lim}}^{*}$};
+
+            \coordinate[right=\biggap of dqabc.right up] (out_id);
+            \coordinate[right=\biggap of dqabc.right down] (out_iq);
+            \draw[->, thick] (dqabc.right up) -- (out_id);
+            \draw[->, thick] (dqabc.right down) -- (out_iq);
+
+
+            \node[twoportshape, anchor=south, circuitikz/blocks/scale=1.5, t=$\Delta i_\mathrm{s,d}$] (delta) at ($(dqabc.left up)!0.5!(sumvd.east)+(0,2.25cm)$) {};
+            \draw[->, thick] (sumvd.east -| delta.south) to [short, *-] (delta.south);
+            \draw[->, thick] ($(dqabc.right up)!0.7!(out_id)$) to [short, *-] ($(dqabc.right up)!0.7!(out_id)$) |-  (delta.east);
+
+
+
+            \node[detailblock] (kawd) at (kid2 |- delta.west) {$K_{\mathrm{aw,\psi}}$};
+            \draw[->, thick] (delta.west) -- (kawd);
+            \draw[->, thick] (kawd) -| (sumid.north);
+        \end{circuitikz}%
+        \caption{Rotor flux and torque controller representation with ARW feedback}
+        \label{fig:rotor_flux_controller_implementation}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor flux controller task %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux controller task in rotor-flux-oriented IM control}
+    The current controller addendum provided two decoupled stator-current loops in the rotor-flux-oriented frame. For the flux-control design, the inner $d$-axis current loop is therefore approximated by its closed-loop reference response:
+    \begin{equation}
+        G_{\mathrm{i,d}}(\mathrm{z})
+        =\frac{I_{\mathrm{s,d}}(\mathrm{z})}{I^{*}_{\mathrm{s,d}}(\mathrm{z})}
+        \approx\frac{1-\lambda_\mathrm{i}}{\mathrm{z}-\lambda_\mathrm{i}} .
+        \label{eq:IM_flux_inner_current_PT1}
+    \end{equation}\pause%
+    Here, $\lambda_\mathrm{i}$ is the remaining current-loop pole after the pole-zero cancellation used in the SISO current-loop design. The outer rotor-flux controller generates
+    \begin{equation}
+        i^{*}_{\mathrm{s,d}}[k]
+        =G_{\mathrm{c},\psi}(\mathrm{z})
+        \left(\psi^{*}_{\mathrm{r,d}}[k]-\psi_{\mathrm{r,d}}[k]\right),
+        \label{eq:IM_flux_controller_task}
+    \end{equation}
+    while the torque feedforward path generates $i^{*}_{\mathrm{s,q}}[k]$ in parallel.\pause%
+    \begin{varblock}{Time-scale separation}
+        The rotor-flux loop is much slower (one to two orders of magnitudes slower) than the inner current loop and must be tuned with explicit current-limit awareness.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Rotor flux plant with current loop %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor flux plant including the closed current loop}
+    Freezing the magnetic model at the actual operating point gives the rotor-flux difference equation
+    \begin{equation}
+        \psi_{\mathrm{r,d}}[k+1]
+        =a_\psi[k]\psi_{\mathrm{r,d}}[k]
+        +b_\psi[k]i_{\mathrm{s,d}}[k]
+        \label{eq:IM_flux_discrete_plant}
+    \end{equation}
+    with
+    \begin{equation}
+        a_\psi[k]=1-\frac{T_\mathrm{s}R_\mathrm{r}}{L_{\mathrm{r},\mathrm{app}}[k]},
+        \qquad
+        b_\psi[k]=\frac{T_\mathrm{s}R_\mathrm{r}L_{\mathrm{m},\mathrm{app}}[k]}{L_{\mathrm{r},\mathrm{app}}[k]} .
+        \label{eq:IM_flux_ab}
+    \end{equation}\pause%
+    Combining \eqref{eq:IM_flux_inner_current_PT1} and \eqref{eq:IM_flux_discrete_plant} gives the plant from $i^{*}_{\mathrm{s,d}}$ to $\psi_{\mathrm{r,d}}$:
+    \begin{equation}
+        G_{\mathrm{p},\psi}(\mathrm{z})
+        =\frac{\Psi_{\mathrm{r,d}}(\mathrm{z})}{I^{*}_{\mathrm{s,d}}(\mathrm{z})}
+        \approx
+        \frac{b_\psi[k](1-\lambda_\mathrm{i})}{(\mathrm{z}-a_\psi[k])(\mathrm{z}-\lambda_\mathrm{i})} .
+        \label{eq:IM_flux_plant_with_current_loop}
+    \end{equation}\pause%
+    For $\lambda_\mathrm{i}\ll a_\psi[k]$ in the sense of time-scale separation, the fast pole is commonly neglected for the outer-loop tuning:
+    \begin{equation}
+        G_{\mathrm{p},\psi}(\mathrm{z})\approx\frac{b_\psi[k]}{\mathrm{z}-a_\psi[k]},
+        \qquad
+        \frac{b_\psi[k]}{1-a_\psi[k]}=L_{\mathrm{m},\mathrm{app}}[k].
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PI flux controller and exact closed loop %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PI rotor flux controller: closed-loop transfer function}
+    Define the flux-control error and use the same discrete-time PI form as in the current-controller derivation:
+    \begin{equation}
+        e_\psi[k]=\psi^{*}_{\mathrm{r,d}}[k]-\psi_{\mathrm{r,d}}[k],
+        \qquad
+        G_{\mathrm{c},\psi}(\mathrm{z})
+        =K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s}\frac{\mathrm{z}}{\mathrm{z}-1}
+        =k_\psi\frac{\mathrm{z}-z_\psi}{\mathrm{z}-1} .
+        \label{eq:IM_flux_PI}
+    \end{equation}
+    with
+    \begin{equation}
+        k_\psi=K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s},
+        \qquad
+        z_\psi=\frac{K_{\mathrm{p},\psi}}{K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s}} .
+        \label{eq:IM_flux_PI_kz}
+    \end{equation}\pause%
+    Using the plant in \eqref{eq:IM_flux_plant_with_current_loop}, the closed-loop reference transfer function is
+    \begin{equation}
+        \frac{\Psi_{\mathrm{r,d}}(\mathrm{z})}{\Psi^{*}_{\mathrm{r,d}}(\mathrm{z})}
+        =\frac{k_\psi b_\psi(1-\lambda_\mathrm{i})(\mathrm{z}-z_\psi)}{\Delta_\psi(\mathrm{z})}
+        \label{eq:IM_flux_closed_loop_tf}
+    \end{equation}
+    with characteristic polynomial
+    \begin{equation}
+        \Delta_\psi(\mathrm{z})
+        =(\mathrm{z}-1)(\mathrm{z}-a_\psi)(\mathrm{z}-\lambda_\mathrm{i})
+        +k_\psi b_\psi(1-\lambda_\mathrm{i})(\mathrm{z}-z_\psi).
+        \label{eq:IM_flux_closed_loop_den_exact}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exact pole placement with residual pole %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Pole placement with the inner-current PT1 approximation}
+    Since the PI controller has two free parameters, two flux-loop poles can be selected and the remaining third pole is determined by the fixed coefficient of $\mathrm{z}^2$. Choose
+    \begin{equation}
+        \Delta_{\psi,\mathrm{des}}(\mathrm{z})=(\mathrm{z}-p_1)(\mathrm{z}-p_2)(\mathrm{z}-r),
+        \qquad
+        r=1+a_\psi+\lambda_\mathrm{i}-p_1-p_2 .
+        \label{eq:IM_flux_desired_cubic}
+    \end{equation}\pause%
+    With
+    \begin{equation}
+        Q_\mathrm{d}=p_1p_2+r(p_1+p_2),
+        \qquad
+        P_\mathrm{d}=p_1p_2r,
+        \qquad
+        Q_0=a_\psi+\lambda_\mathrm{i}+a_\psi\lambda_\mathrm{i},
+        \label{eq:IM_flux_pole_aux}
+    \end{equation}
+    coefficient comparison of \eqref{eq:IM_flux_closed_loop_den_exact} gives
+    \begin{equation}
+        \kappa_\psi=Q_\mathrm{d}-Q_0,
+        \qquad
+        z_\psi=\frac{P_\mathrm{d}-a_\psi\lambda_\mathrm{i}}{\kappa_\psi},
+        \qquad
+        k_\psi=\frac{\kappa_\psi}{b_\psi(1-\lambda_\mathrm{i})} .
+        \label{eq:IM_flux_exact_pole_placement}
+    \end{equation}\pause%
+    Finally,
+    \begin{equation}
+        K_{\mathrm{p},\psi}=k_\psi z_\psi,
+        \qquad
+        K_{\mathrm{i},\psi}=\frac{k_\psi(1-z_\psi)}{T_\mathrm{s}} .
+        \label{eq:IM_flux_exact_PI_gains}
+    \end{equation}
+    The design is admissible only if the resulting $r$, $z_\psi$, $K_{\mathrm{p},\psi}$ and $K_{\mathrm{i},\psi}$ are stable and practically meaningful.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Practical reduced pole placement %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Practical reduced pole-placement design}
+    For the usual bandwidth separation $\lambda_\mathrm{i}\ll p_1,p_2\approx a_\psi$, the inner current loop can be approximated by unity for the flux-loop tuning. Then
+    \begin{equation}
+        G_{\mathrm{p},\psi}(\mathrm{z})\approx\frac{b_\psi}{\mathrm{z}-a_\psi},
+        \qquad
+        G_{\mathrm{c},\psi}(\mathrm{z})=K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s}\frac{\mathrm{z}}{\mathrm{z}-1}.
+        \label{eq:IM_flux_reduced_plant_controller}
+    \end{equation}\pause%
+    This is identical in form to the decoupled SISO current-controller plant. Hence, for
+    \begin{equation}
+        \Delta_{\psi,\mathrm{des}}(\mathrm{z})=(\mathrm{z}-p_1)(\mathrm{z}-p_2)
+        =\mathrm{z}^2-S_\psi\mathrm{z}+P_\psi,
+        \qquad
+        S_\psi=p_1+p_2,
+        \quad P_\psi=p_1p_2,
+        \label{eq:IM_flux_reduced_poles}
+    \end{equation}
+    the PI gains follow directly from the current-controller formulas:
+    \begin{equation}
+        K_{\mathrm{p},\psi}=\frac{a_\psi-P_\psi}{b_\psi},
+        \qquad
+        K_{\mathrm{i},\psi}=\frac{1-S_\psi+P_\psi}{b_\psi T_\mathrm{s}} .
+        \label{eq:IM_flux_reduced_PI_gains}
+    \end{equation}\pause%
+    With the reduced design, the closed-loop transfer function is
+    \begin{equation}
+        \frac{\Psi_{\mathrm{r,d}}(\mathrm{z})}{\Psi^{*}_{\mathrm{r,d}}(\mathrm{z})}
+        =\frac{b_\psi\left[(K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s})\mathrm{z}-K_{\mathrm{p},\psi}\right]}{\mathrm{z}^2-S_\psi\mathrm{z}+P_\psi} .
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Best practice for flux pole selection %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Best-practice pole selection for the rotor flux loop}
+    A compact tuning rule is to use two identical real poles
+    \begin{equation}
+        p_1=p_2=\lambda_\psi,
+        \qquad
+        \lambda_\psi=\mathrm{e}^{-\rho_\psi},
+        \qquad
+        \rho_\psi=\frac{T_\mathrm{s}}{\tau_{\psi,\mathrm{cl}}} .
+        \label{eq:IM_flux_pole_selection}
+    \end{equation}\pause%
+    The closed-loop flux time constant must be selected with two separations in mind:
+    \begin{equation}
+        \tau_{\psi,\mathrm{cl}}\gg\tau_{\mathrm{i},\mathrm{cl}},
+        \qquad
+        \tau_{\psi,\mathrm{cl}}\sim T_\mathrm{r}=\frac{L_{\mathrm{r},\mathrm{app}}}{R_\mathrm{r}},
+        \label{eq:IM_flux_time_scale_separation}
+    \end{equation}
+    or, equivalently, $\rho_\psi\ll\rho_\mathrm{i}$.\pause%
+    Practical guidelines:
+    \begin{itemize}
+        \item Keep at least one order of magnitude separation, e.g., $\tau_{\psi,\mathrm{cl}}\in[10,25]\tau_{\mathrm{i},\mathrm{cl}}$ as a lower bound.
+        \item Avoid current-loop-like flux dynamics; otherwise large magnetizing-current transients are demanded.
+        \item For fast field build-up, reserve $d$-axis current margin and test interaction with $i^{*}_{\mathrm{s,q}}$.
+        \item Schedule $a_\psi[k]$ and $b_\psi[k]$ if saturation or rotor-heating-dependent $R_\mathrm{r}$ changes matter.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Torque feedforward %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Open-loop torque controller in parallel to the flux controller}
+    In rotor-flux-oriented coordinates, the torque equation is
+    \begin{equation}
+        T[k]
+        =\frac{3}{2}p\frac{L_{\mathrm{m},\mathrm{app}}[k]}{L_{\mathrm{r},\mathrm{app}}[k]}
+        \psi_{\mathrm{r,d}}[k]i_{\mathrm{s,q}}[k] .
+        \label{eq:IM_flux_torque_equation}
+    \end{equation}\pause%
+    Thus, the open-loop torque controller maps the reference torque to the torque-producing current reference
+    \begin{equation}
+        i^{*}_{\mathrm{s,q}}[k]
+        =\frac{2}{3p}\frac{L_{\mathrm{r},\mathrm{app}}[k]}{L_{\mathrm{m},\mathrm{app}}[k]}
+        \frac{T^*[k]}{\psi_{\mathrm{r,d}}[k]} .
+        \label{eq:IM_flux_torque_to_isq}
+    \end{equation}\pause%
+    For a linear magnetic model this becomes
+    \begin{equation}
+        i^{*}_{\mathrm{s,q}}[k]
+        =\frac{2}{3p}\frac{L_\mathrm{r}}{L_\mathrm{m}}
+        \frac{T^*[k]}{\psi_{\mathrm{r,d}}[k]} .
+    \end{equation}
+    In implementation, the denominator is clipped by $\psi_{\mathrm{r},\min}>0$ to avoid excessive $i^{*}_{\mathrm{s,q}}$ during start-up and field build-up.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Mutual current limiting %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Mutual current limiting of flux and torque commands}
+    The flux controller and the open-loop torque controller produce the unconstrained reference vector
+    \begin{equation}
+        \tilde{\bm{i}}^{*}_{\mathrm{s,dq}}[k]
+        =\begin{bmatrix}
+            \tilde{i}^{*}_{\mathrm{s,d}}[k] \\
+            \tilde{i}^{*}_{\mathrm{s,q}}[k]
+        \end{bmatrix} .
+    \end{equation}\pause%
+    With a simple magnitude clipping strategy, the orientation of this reference vector is kept unchanged:
+    \begin{equation}
+        \gamma[k]
+        =\min\left\{1,\frac{i_{\mathrm{s},\max}}{\left\|\tilde{\bm{i}}^{*}_{\mathrm{s,dq}}[k]\right\|_2}\right\},
+        \qquad
+        \bm{i}^{*}_{\mathrm{s,dq}}[k]
+        =\gamma[k]\tilde{\bm{i}}^{*}_{\mathrm{s,dq}}[k].
+        \label{eq:IM_flux_mutual_current_limit}
+    \end{equation}\pause%
+    Consequences:
+    \begin{itemize}
+        \item $\gamma=1$: flux and torque commands are feasible.
+        \item $\gamma<1$: both axes are reduced proportionally.
+        \item The implemented current vector is feasible, but flux and torque references cannot both be fulfilled.
+        \item Magnitude clipping is simple, but it does not prioritize torque or rotor-flux tracking.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux controller ARW %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{ARW measure for the rotor flux controller under current clipping}
+    Let the unlimited flux-controller output be
+    \begin{equation}
+        x_{\mathrm{i},\psi}^{+}[k]=x_{\mathrm{i},\psi}[k-1]+T_\mathrm{s}e_\psi[k],
+        \qquad
+        \tilde{i}^{*}_{\mathrm{s,d}}[k]
+        =K_{\mathrm{p},\psi}e_\psi[k]+K_{\mathrm{i},\psi}x_{\mathrm{i},\psi}^{+}[k].
+        \label{eq:IM_flux_unlimited_PI_output}
+    \end{equation}\pause%
+    After mutual current limiting, the actually issued $d$-axis current reference is
+    \begin{equation}
+        i^{*}_{\mathrm{s,d}}[k]=\gamma[k]\tilde{i}^{*}_{\mathrm{s,d}}[k],
+        \qquad
+        \Delta i_\psi[k]=\tilde{i}^{*}_{\mathrm{s,d}}[k]-i^{*}_{\mathrm{s,d}}[k].
+        \label{eq:IM_flux_current_clipping_mismatch}
+    \end{equation}\pause%
+    The ARW correction is then applied to the flux-controller integrator:
+    \begin{equation}
+        x_{\mathrm{i},\psi}[k]
+        =x_{\mathrm{i},\psi}^{+}[k]-\frac{K_{\mathrm{aw},\psi}}{K_{\mathrm{i},\psi}}\Delta i_\psi[k],
+        \qquad
+        i_{\mathrm{i},\psi}[k]=K_{\mathrm{i},\psi}x_{\mathrm{i},\psi}[k].
+        \label{eq:IM_flux_ARW_state_update}
+    \end{equation}\pause%
+    For isolated ARW tracking, i.e., $e_\psi[k]=0$, the integral current follows
+    \begin{equation}
+        \frac{I_{\mathrm{i},\psi}(\mathrm{z})}{I^{*}_{\mathrm{s,d}}(\mathrm{z})}
+        =\frac{K_{\mathrm{aw},\psi}\mathrm{z}}{\mathrm{z}-(1-K_{\mathrm{aw},\psi})},
+        \qquad
+        \lambda_{\mathrm{aw},\psi}=1-K_{\mathrm{aw},\psi} .
+    \end{equation}
+    Choose $\lambda_{\mathrm{aw},\psi}\leq\lambda_\psi$ so that the integrator tracks the clipped current command at least as fast as the flux loop.
 \end{frame}
 
 
