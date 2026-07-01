@@ -3,7 +3,7 @@ import jax.numpy as jnp
 
 import equinox as eqx
 
-from .pmsm import PMSM, clip_voltage, lut_interpolate
+from utils.pmsm.pmsm import PMSM, clip_voltage, lut_interpolate
 
 
 class FOCController:
