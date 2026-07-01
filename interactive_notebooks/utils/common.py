@@ -1,3 +1,5 @@
+"""Adapted from https://github.com/ExcitingSystems/exciting-environments."""
+
 import numpy as np
 import jax.numpy as jnp
 

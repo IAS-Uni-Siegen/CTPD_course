@@ -8,7 +8,7 @@ import jax
 import jax.numpy as jnp
 import equinox as eqx
 
-from .pmsm import lut_interpolate
+from utils.common import lut_interpolate
 
 
 def build_grid(dim: int, low: float | list, high: float, points_per_dim: int) -> jax.Array:
