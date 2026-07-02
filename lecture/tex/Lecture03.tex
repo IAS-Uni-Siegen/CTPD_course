@@ -3539,7 +3539,7 @@
         \end{column}
         \begin{column}{0.45\textwidth}
             \begin{tikzpicture}
-                \begin{axis}[opsaxisgen]
+                \begin{axis}[opsaxisgen, axis on top]
                     \path[fill=lightgray]
                     (axis cs:{xmtpcnorm(0)},0)
                     \foreach \yy in {0.00,0.01,...,0.81} { -- (axis cs:{xmtpcnorm(\yy)},{\yy}) }
@@ -3571,7 +3571,7 @@
     \centering
     \begin{figure}
         \begin{tikzpicture}
-            \begin{axis}[opsspeedaxis]
+            \begin{axis}[opsspeedaxis, axis on top]
                 % FW feasible region in the torque-speed plane.
                 % It is computed from the MTPC feasibility boundary, the MC
                 % current-limit boundary, and the high-speed MTPF/MTPV locus.

@@ -114,3 +114,266 @@
     }%
 }
 
+
+% Helper functions and parameters for IM OPS plots
+% -------------------------------------------------------------------------
+% Normalized rotor-flux-oriented IM example:
+%   x = i_{s,d}^{psi_r}/i_{s,max}, y = i_{s,q}^{psi_r}/i_{s,max}
+%   L_m(x) follows a mild apparent main-inductance saturation law,
+%   while L_{sigma s} and L_{sigma r} are constant.
+% All trajectories below are evaluated online by pgfmath/PGFPlots.
+% -------------------------------------------------------------------------
+
+
+\pgfmathsetmacro{\imLmZero}{1.0}
+\pgfmathsetmacro{\imSatA}{0.20}
+\pgfmathsetmacro{\imSatB}{0.70}
+\pgfmathsetmacro{\imLsigmas}{0.15}
+\pgfmathsetmacro{\imLsigmar}{0.12}
+\pgfmathsetmacro{\imRs}{1.00}
+\pgfmathsetmacro{\imRr}{0.80}
+
+\pgfmathdeclarefunction{imLm}{1}{%
+    \pgfmathparse{\imLmZero*(1-\imSatA*(#1)*(#1)/(1+\imSatB*(#1)*(#1)))}%
+}
+\pgfmathdeclarefunction{imLmPrime}{1}{%
+    \pgfmathparse{\imLmZero*(-2*\imSatA*abs(#1))/((1+\imSatB*(#1)*(#1))*(1+\imSatB*(#1)*(#1)))}%
+}
+\pgfmathdeclarefunction{imLs}{1}{%
+    \pgfmathparse{\imLsigmas+imLm(abs(#1))}%
+}
+\pgfmathdeclarefunction{imLr}{1}{%
+    \pgfmathparse{\imLsigmar+imLm(abs(#1))}%
+}
+\pgfmathdeclarefunction{imBeta}{1}{%
+    \pgfmathparse{imLm(abs(#1))/imLr(abs(#1))}%
+}
+\pgfmathdeclarefunction{imBetaPrime}{1}{%
+    \pgfmathparse{imLmPrime(abs(#1))*\imLsigmar/(imLr(abs(#1))*imLr(abs(#1)))}%
+}
+\pgfmathdeclarefunction{imEta}{1}{%
+    \pgfmathparse{imLm(abs(#1))*imLm(abs(#1))/imLr(abs(#1))}%
+}
+\pgfmathdeclarefunction{imEtaPrime}{1}{%
+    \pgfmathparse{imLmPrime(abs(#1))*imLm(abs(#1))*(2*imLr(abs(#1))-imLm(abs(#1)))/(imLr(abs(#1))*imLr(abs(#1)))}%
+}
+\pgfmathdeclarefunction{imA}{1}{%
+    \pgfmathparse{imEta(abs(#1))*abs(#1)}%
+}
+\pgfmathdeclarefunction{imAprime}{1}{%
+    \pgfmathparse{imEta(abs(#1))+abs(#1)*imEtaPrime(abs(#1))}%
+}
+\pgfmathdeclarefunction{imBcu}{1}{%
+    \pgfmathparse{\imRs+\imRr*imBeta(abs(#1))*imBeta(abs(#1))}%
+}
+\pgfmathdeclarefunction{imBcuPrime}{1}{%
+    \pgfmathparse{2*\imRr*imBeta(abs(#1))*imBetaPrime(abs(#1))}%
+}
+\pgfmathdeclarefunction{imSigmaEff}{1}{%
+    \pgfmathparse{imLs(abs(#1))-imEta(abs(#1))}%
+}
+\pgfmathdeclarefunction{imSigmaEffPrime}{1}{%
+    \pgfmathparse{imLmPrime(abs(#1))-imEtaPrime(abs(#1))}%
+}
+\pgfmathdeclarefunction{imFluxD}{1}{%
+    \pgfmathparse{imLs(abs(#1))*abs(#1)}%
+}
+\pgfmathdeclarefunction{imFluxDsq}{1}{%
+    \pgfmathparse{imFluxD(abs(#1))*imFluxD(abs(#1))}%
+}
+\pgfmathdeclarefunction{imFluxDsqPrime}{1}{%
+    \pgfmathparse{2*imLs(abs(#1))*abs(#1)*(imLs(abs(#1))+abs(#1)*imLmPrime(abs(#1)))}%
+}
+\pgfmathdeclarefunction{imFluxQweight}{1}{%
+    \pgfmathparse{imSigmaEff(abs(#1))*imSigmaEff(abs(#1))}%
+}
+\pgfmathdeclarefunction{imFluxQweightPrime}{1}{%
+    \pgfmathparse{2*imSigmaEff(abs(#1))*imSigmaEffPrime(abs(#1))}%
+}
+\pgfmathdeclarefunction{imTorqueRaw}{2}{%
+    \pgfmathparse{imA(abs(#1))*(#2)}%
+}
+\pgfmathdeclarefunction{imPsirRaw}{1}{%
+    \pgfmathparse{imLm(abs(#1))*abs(#1)}%
+}
+\pgfmathdeclarefunction{imPsisRaw}{2}{%
+    \pgfmathparse{sqrt(imFluxD(abs(#1))*imFluxD(abs(#1)) + imSigmaEff(abs(#1))*imSigmaEff(abs(#1))*(#2)*(#2))}%
+}
+\pgfmathdeclarefunction{imCurrentY}{1}{%
+    \pgfmathparse{sqrt(max(0,1-(#1)*(#1)))}%
+}
+\pgfmathdeclarefunction{imTorqueY}{2}{%
+    \pgfmathparse{(#2)/max(0.0001,imA(abs(#1)))}%
+}
+\pgfmathdeclarefunction{imMTPCY}{1}{%
+    \pgfmathparse{sqrt(max(0,(abs(#1)*imA(abs(#1)))/max(0.0001,imAprime(abs(#1)))))}%
+}
+\pgfmathdeclarefunction{imMTPLY}{1}{%
+    \pgfmathparse{sqrt(max(0,(2*\imRs*abs(#1))/max(0.0001,2*imBcu(abs(#1))*imAprime(abs(#1))/max(0.0001,imA(abs(#1)))-imBcuPrime(abs(#1)))))}%
+}
+\pgfmathdeclarefunction{imMTPFY}{1}{%
+    \pgfmathparse{sqrt(max(0,imFluxDsqPrime(abs(#1))/max(0.0001,2*imFluxQweight(abs(#1))*imAprime(abs(#1))/max(0.0001,imA(abs(#1)))-imFluxQweightPrime(abs(#1)))))}%
+}
+\pgfmathdeclarefunction{imPcuRaw}{2}{%
+    \pgfmathparse{\imRs*((#1)*(#1)+(#2)*(#2))+\imRr*imBeta(abs(#1))*imBeta(abs(#1))*(#2)*(#2)}%
+}
+
+% Current-circle intersections of the three online-calculated trajectories.
+% The displayed curves remain PGFPlots function plots; these constants only
+% define the visible end points of the feasible branches for the chosen example.
+\pgfmathsetmacro{\imxRMTPC}{0.683}
+\pgfmathsetmacro{\imyRMTPC}{imMTPCY(\imxRMTPC)}
+\pgfmathsetmacro{\imxRMTPL}{0.764}
+\pgfmathsetmacro{\imyRMTPL}{imMTPLY(\imxRMTPL)}
+\pgfmathsetmacro{\imxRMTPF}{0.219}
+\pgfmathsetmacro{\imyRMTPF}{imMTPFY(\imxRMTPF)}
+
+\pgfmathsetmacro{\imTN}{imTorqueRaw(\imxRMTPC,\imyRMTPC)}
+\pgfmathsetmacro{\imPsiRMax}{imPsirRaw(1)}
+\pgfmathsetmacro{\imPsiRN}{imPsirRaw(\imxRMTPC)}
+\pgfmathsetmacro{\imPsiSMax}{imPsisRaw(\imxRMTPC,\imyRMTPC)}
+
+\pgfmathdeclarefunction{imTorqueNorm}{2}{%
+    \pgfmathparse{imTorqueRaw(#1,#2)/\imTN}%
+}
+\pgfmathdeclarefunction{imPsiRNorm}{1}{%
+    \pgfmathparse{imPsirRaw(#1)/\imPsiRMax}%
+}
+\pgfmathdeclarefunction{imPsiRNNorm}{1}{%
+    \pgfmathparse{imPsirRaw(#1)/\imPsiRN}%
+}
+\pgfmathdeclarefunction{imPsiSNorm}{2}{%
+    \pgfmathparse{imPsisRaw(#1,#2)/\imPsiSMax}%
+}
+
+\pgfmathsetmacro{\imPcuN}{imPcuRaw(\imxRMTPC,\imyRMTPC)}
+\pgfmathdeclarefunction{imPcuNorm}{2}{%
+    \pgfmathparse{imPcuRaw(#1,#2)/\imPcuN}%
+}
+\pgfmathdeclarefunction{imPcuY}{2}{%
+    \pgfmathparse{sqrt(max(0,((#2)-\imRs*(#1)*(#1))/max(0.0001,imBcu(abs(#1)))))}%
+}
+\pgfmathdeclarefunction{imPsiSY}{2}{%
+    \pgfmathparse{sqrt(max(0,((#2)*(#2)-imFluxD(abs(#1))*imFluxD(abs(#1)))/max(0.0001,imFluxQweight(abs(#1)))))}%
+}
+\pgfmathdeclarefunction{imOmegaNorm}{2}{%
+    \pgfmathparse{\imPsiSMax/max(0.0001,imPsisRaw(#1,#2))}%
+}
+
+\pgfmathsetmacro{\imxExMTPC}{0.48}
+\pgfmathsetmacro{\imyExMTPC}{imMTPCY(\imxExMTPC)}
+\pgfmathsetmacro{\imTExMTPC}{imTorqueRaw(\imxExMTPC,\imyExMTPC)}
+\pgfmathsetmacro{\imIExMTPC}{sqrt(\imxExMTPC*\imxExMTPC+\imyExMTPC*\imyExMTPC)}
+\pgfmathsetmacro{\imPsiVMTPC}{0.75}
+\pgfmathsetmacro{\imxPsiVMTPC}{0.72}
+
+\pgfmathsetmacro{\imxExMTPL}{0.47}
+\pgfmathsetmacro{\imyExMTPL}{imMTPLY(\imxExMTPL)}
+\pgfmathsetmacro{\imTExMTPL}{imTorqueRaw(\imxExMTPL,\imyExMTPL)}
+\pgfmathsetmacro{\imPcuExMTPL}{0.45}
+\pgfmathsetmacro{\imxPcuExMTPL}{0.671}
+\pgfmathsetmacro{\imPsiVMTPL}{0.75}
+\pgfmathsetmacro{\imxPsiVMTPL}{0.696}
+
+\pgfmathsetmacro{\imxExFW}{0.34}
+\pgfmathsetmacro{\imPsiExFW}{0.44}
+\pgfmathsetmacro{\imyExFW}{imPsiSY(\imxExFW,\imPsiExFW)}
+\pgfmathsetmacro{\imTExFW}{imTorqueRaw(\imxExFW,\imyExFW)}
+\pgfmathsetmacro{\imxPsiExFW}{0.395}
+
+\pgfmathsetmacro{\imxExMC}{0.50}
+\pgfmathsetmacro{\imyExMC}{imCurrentY(\imxExMC)}
+\pgfmathsetmacro{\imTExMC}{imTorqueRaw(\imxExMC,\imyExMC)}
+\pgfmathsetmacro{\imPsiExMC}{0.78}
+\pgfmathsetmacro{\imxPsiExMC}{0.732}
+
+\pgfmathsetmacro{\imxExMTPF}{0.17}
+\pgfmathsetmacro{\imyExMTPF}{imMTPFY(\imxExMTPF)}
+\pgfmathsetmacro{\imTExMTPF}{imTorqueRaw(\imxExMTPF,\imyExMTPF)}
+\pgfmathsetmacro{\imPsiExMTPF}{imPsisRaw(\imxExMTPF,\imyExMTPF)}
+\pgfmathsetmacro{\imxPsiExMTPF}{0.25}
+
+\pgfmathsetmacro{\imxTSend}{0.1565}
+\pgfmathsetmacro{\imOmegaMaxPlot}{3.00}
+
+\pgfmathsetmacro{\imOmegaMTPLedge}{imOmegaNorm(\imxRMTPL,\imyRMTPL)}
+\pgfmathsetmacro{\imTorqueMTPLedge}{imTorqueNorm(\imxRMTPL,\imyRMTPL)}
+\pgfmathsetmacro{\imOmegaMTPFedge}{imOmegaNorm(\imxRMTPF,\imyRMTPF)}
+
+\pgfplotsset{
+    imsataxis/.style={
+            width=6.5cm,
+            height=4.8cm,
+            xmin=0, xmax=1.05,
+            ymin=0.82, ymax=1.02,
+            axis lines=left,
+            xlabel={$i_{\mathrm{s,d}}^{\psi_{\mathrm r}}/i_{\mathrm{s,max}}$},
+            ylabel={$L_{\mathrm{m}}/L_{\mathrm{m},0}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small}
+        },
+    imcurrentaxis/.style={
+            width=10.5cm,
+            height=7.5cm,
+            xmin=0.0, xmax=1.05,
+            ymin=0.0, ymax=1.10,
+            axis lines=left,
+            axis equal image,
+            xlabel={$i_{\mathrm{s,d}}/i_{\mathrm{s,max}}$},
+            ylabel={$i_{\mathrm{s,q}}/i_{\mathrm{s,max}}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small},
+            clip=true,
+            unbounded coords=discard,
+            filter discard warning=false
+        },
+    immapaxis/.style={
+            width=7.2cm,
+            height=5.6cm,
+            xmin=0.0, xmax=1.05,
+            ymin=0.0, ymax=1.08,
+            axis lines=left,
+            xlabel={$T^*/T_{\max}$},
+            ylabel={$\psi^*_{\mathrm r}/\psi_{\mathrm{r,N}}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small},
+            legend style={draw=black,fill=white,font=\scriptsize,legend cell align=left},
+            clip=false
+        },
+    imtmaxaxis/.style={
+            width=7.2cm,
+            height=5.6cm,
+            xmin=0.0, xmax=1.08,
+            ymin=0.0, ymax=1.10,
+            axis lines=left,
+            xlabel={$\psi^*_{\mathrm r}/\psi_{\mathrm{r,N}}$},
+            ylabel={$T^*_{\lim}/T_{\max}$},
+            grid=major,
+            tick label style={font=\small},
+            label style={font=\small},
+            legend style={draw=black,fill=white,font=\scriptsize,legend cell align=left},
+            clip=false
+        },
+    imspeedaxis/.style={
+            width=13.4cm,
+            height=7.15cm,
+            xmin=0, xmax=3.0,
+            ymin=0, ymax=1.10,
+            axis lines=left,
+            axis line style={-Latex},
+            xlabel={$\omega/\omega_{\mathrm{nom}}$},
+            ylabel={$T^*/T_{\mathrm{max}}$},
+            grid=major,
+            major grid style={gray!35},
+            xtick={0,0.2,...,3.0},
+            ytick={0,0.2,...,1.0},
+            tick label style={font=\small},
+            label style={font=\small},
+            clip=false,
+            legend style={draw=none,fill=none,font=\small},
+        }
+}
+

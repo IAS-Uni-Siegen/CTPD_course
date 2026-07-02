@@ -2648,4 +2648,664 @@
     Choose $\lambda_{\mathrm{aw},\psi}\leq\lambda_\psi$ so that the integrator tracks the clipped current command at least as fast as the flux loop.
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Operating point selection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPS task IM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating point selection task for rotor-flux-oriented IM drives}
+    The OPS maps a torque request to feasible and efficient references\footnote{For sake of brevity we drop the superscript $\psi_\mathrm{r}$ to indicate the rotor flux orientation in the following.}:
+    \begin{equation}
+        \left(T^*, \psi_\mathrm{r,max}\right)
+        \mapsto
+        \left(T^*_\mathrm{lim}, \psi^*_\mathrm{lim}\right).
+        \label{eq:IM_OPS_mapping_v14}
+    \end{equation}\pause%
+    \begin{itemize}
+        \item The rotor flux reference $\psi^*_\mathrm{lim}$ decides if operating in the loss-optimal constant torque region (low to medium speeds) or if flux weakening is required (medium to high speeds).
+        \item In the flux weakening region, the torque reference $T^*_\mathrm{lim}$ may be reduced below $T^*$ in order to satisfy the voltage and current limits.
+    \end{itemize}\vspace{-0.25cm}
+    \begin{varblock}{Similarities and differences to the PMSM OPS}
+        Likewise in the PMSM case, the IM's OPS is a static mapping problem considering steady-state conditions such that a given torque reference is mapped to a feasible and efficient operating point. However, we do not map directly into the stator current plane (like with the PMSM) due to the additional presence of rotor flux dynamics.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Steady-state model %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Steady-state IM model used for OPS}
+    Applying steady-state conditions to \eqref{eq:IM_RFO_v5_rotor_flux_first_order}, the rotor flux becomes
+    \begin{equation}
+        \psi_{\mathrm{r,d}} = L_\mathrm{m,app} i_{\mathrm{s,d}}.
+        \label{eq:steady-state_rotor_flux_IM_id}
+    \end{equation}
+    Hence, the torque can be expressed as
+    \begin{equation}
+        T
+        =\frac{3}{2}p\frac{L_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}
+        \psi_{\mathrm{r,d}} i_{\mathrm{s,q}}=\frac{3}{2}p\frac{L^2_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}
+        i_{\mathrm{s,d}}i_{\mathrm{s,q}}.
+    \end{equation}\pause%
+    The copper-loss model contains stator and rotor contributions:
+    \begin{equation}
+        P_{\mathrm{Cu}}=\frac{3}{2}
+        \left(
+        R_{\mathrm s}\left(i^2_{\mathrm{s,d}}+i^2_{\mathrm{s,q}}\right)
+        +R_{\mathrm r}\left(i^2_{\mathrm{r,d}}+i^2_{\mathrm{r,q}}\right)
+        \right).
+        \label{eq:IM_OPS_copper_losses}
+    \end{equation}
+    With \eqref{eq:IM_RFO_v5_rotor_current_elimination} we eliminate the rotor currents and obtain
+    \begin{equation}
+        P_{\mathrm{Cu}}=\frac{3}{2}
+        \left(
+        R_{\mathrm s}i^2_{\mathrm{s,d}}
+        +\left(R_{\mathrm s}+R_{\mathrm r}\frac{L^2_{\mathrm{m,app}}}{L^2_{\mathrm{r,app}}}\right)i^2_{\mathrm{s,q}}
+        \right).
+        \label{eq:IM_OPS_copper_losses_stator_currents}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Steady-state model (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Steady-state IM model used for OPS (cont.)}
+    From \eqref{eq:basic_IM_model_set} the IM's steady-state stator voltage demand is
+    \begin{equation}
+        \bm{u}_{\mathrm{s,dq}}= R_\mathrm{s} \bm{i}_\mathrm{s,dq}+ \omega_{\psi_\mathrm{r}}\bm{J}\bm{\psi}_\mathrm{s,dq} \approx \omega_{\psi_\mathrm{r}}\bm{J}\bm{\psi}_\mathrm{s,dq}.
+    \end{equation}
+    Here, the ohmic voltage drop is considered negligible compared to the rotatory induced voltage. With \eqref{eq:stator_flux_IM_stray_constant} and \eqref{eq:steady-state_rotor_flux_IM_id} we express the stator flux as a function of the stator currents:
+    \begin{equation}
+        \bm{\psi}_\mathrm{s,dq} = \begin{bmatrix}
+            L_\mathrm{s,app} i_\mathrm{s,d} \\ \sigma L_\mathrm{s,app} i_\mathrm{s,q}
+        \end{bmatrix}.
+    \end{equation}
+    Hence, the squared steady-state stator voltage magnitude becomes
+    \begin{equation}
+        \|\bm{u}_{\mathrm{s,dq}}\|_2^2
+        =\omega_{\psi_\mathrm{r}}^2\left(L_\mathrm{s,app}^2 i_\mathrm{s,d}^2 + \sigma^2 L_\mathrm{s,app}^2 i_\mathrm{s,q}^2\right).
+        \label{eq:IM_OPS_voltage_demand}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Generic OPS problem %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating point selection as constrained optimization: IM case}
+    For a given objective $J_{\mathrm{OPS}}$, the OPS problem reads
+    \begin{equation}
+        \begin{aligned}
+            \bm{i}_{\mathrm{s,dq}}^{*}
+             & \in
+            \arg\min_{\bm{i}_{\mathrm{s,dq}}}
+            J_{\mathrm{OPS}}\left(\bm{i}_{\mathrm{s,dq}};\omega_{\psi_\mathrm{r}}\right) \\[-0.5mm]
+            \text{s.t.}\qquad
+             & T\left(\bm{i}_{\mathrm{s,dq}}\right)=T^*,
+            \qquad
+            \left\|\bm{i}_{\mathrm{s,dq}}\right\|_2\le i_{\mathrm{s},\max},              \\[-0.5mm]
+             & \left\|\bm{u}_{\mathrm{s,dq}}
+            \left(\bm{i}_{\mathrm{s,dq}},\omega_{\psi_\mathrm{r}}\right)\right\|_2
+            \le u_{\mathrm{s},\max}(u_{\mathrm{dc}},m_{\max}).
+        \end{aligned}
+        \label{eq:IM_OPS_problem_v14}
+    \end{equation}\pause%
+    The relevant objective functions are
+    \begin{equation}
+        \begin{aligned}
+            J_{\mathrm{MTPC}} & =\left\|\bm{i}_{\mathrm{s,dq}}\right\|_2^2,
+                              & \quad                                          & \text{maximum torque per (stator) current},             \\
+            J_{\mathrm{MTPL}} & =P_{\mathrm{Cu}},
+                              &                                                & \text{maximum torque per (stator/rotor copper) losses}, \\
+            J_{\mathrm{MTPF}} & =\left\|\bm{\psi}_{\mathrm{s,dq}}\right\|_2^2,
+                              &                                                & \text{maximum torque per (stator) flux}.
+        \end{aligned}
+        \label{eq:IM_OPS_objectives_v14}
+    \end{equation}\pause%
+    The MTPF objective is the relevant high-speed proxy for a maximum torque per (stator) voltage (MTPV) strategy as can be seen from \eqref{eq:IM_OPS_voltage_demand}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contours %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Formal definition of the IM OPS contours}
+    We define the relevant contours in the rotor-flux-oriented stator current plane ($\bm{i}=\bm{i}_{\mathrm{s,dq}}$):
+    \vspace{-0.2cm}
+    \begin{columns}[c,onlytextwidth]
+        \begin{column}{0.50\textwidth}
+            \begin{align*}
+                \mathbb{T}(\bar T)
+                 & :=\left\{\bm{i}\in\mathbb{R}^2\mid T(\bm{i})=\bar T\right\},       \\
+                \mathbb{I}(\bar i)
+                 & :=\left\{\bm{i}\in\mathbb{R}^2\mid \|\bm{i}\|_2\le \bar i\right\}, \\
+                \partial\mathbb{I}(\bar i)
+                 & :=\left\{\bm{i}\in\mathbb{R}^2\mid \|\bm{i}\|_2=\bar i\right\},    \\
+                \mathbb{F}(\bar\psi)
+                 & :=\left\{\bm{i}\in\mathbb{R}^2\mid
+                \|\bm{\psi}_{\mathrm{s,dq}}(\bm{i})\|_2\le\bar\psi\right\}.
+            \end{align*}
+        \end{column}\pause%
+        \begin{column}{0.50\textwidth}
+            \begin{align*}
+                \mathbb{MTPC}
+                 & :={\bigcup}_{\bar T}\arg\min_{\bm{i}\in\mathbb{T}(\bar T)}\|\bm{i}\|_2^2,          \\
+                \mathbb{MTPL}
+                 & :={\bigcup}_{\bar T}\arg\min_{\bm{i}\in\mathbb{T}(\bar T)}P_{\mathrm{Cu}}(\bm{i}), \\
+                \mathbb{MTPF}
+                 & :={\bigcup}_{\bar T}\arg\min_{\bm{i}\in\mathbb{T}(\bar T)}
+                \|\bm{\psi}_{\mathrm{s,dq}}(\bm{i})\|_2^2 .
+            \end{align*}
+        \end{column}
+    \end{columns}\pause%
+    \begin{varblock}{Relation to the PMSM OPS representation}
+        The geometric interpretation is unchanged: the optimum is a tangency of a constant-torque contour with the selected cost contour. Only the machine map changes from the PMSM flux map to the rotor-flux-oriented IM map.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-plane loci: MTPC %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS: MTPC region}
+    \begin{columns}
+        \begin{column}{0.525\textwidth}
+            \vspace{0.4cm}\\
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=0,ymax=1.05,xtick={0,0.5,1.0},ytick={0,0.5,1.0}]
+                    \addplot[very thick,color=signaldelta,domain=0:1,samples=180] {imCurrentY(x)};
+                    \addplot[very thick,color=signalalpha,domain=0:\imxPsiVMTPC,samples=80,restrict y to domain=0:1.05,unbounded coords=discard] {imPsiSY(x,\imPsiVMTPC)};
+                    \addplot[very thick,dashed,color=signaldelta,domain=0:\imIExMTPC,samples=180] {sqrt(max(0,\imIExMTPC*\imIExMTPC-x*x))};
+                    \addplot[very thick,color=signalbeta] coordinates {(0,0)};
+                    \addplot[very thick,color=signalbeta,domain=0.0005:\imxRMTPC,samples=220,variable=\x] ({\x},{imMTPCY(\x)});
+                    \addplot[very thick,black,domain=0.04:1,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imTorqueY(x,\imTExMTPC)};
+                    \addplot[very thick, only marks,mark=star,mark size=4,color=signalepsilon] coordinates {(\imxExMTPC,\imyExMTPC)};
+                    \node[color=signaldelta,anchor=south west] at (axis cs:0.65,0.7) {$\partial\mathbb{I}(i_{\mathrm{s,max}})$};
+                    \node[color=signalalpha,anchor=south west] at (axis cs:0.65,0.8) {$\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})$};
+                    \node[color=signalbeta,anchor=south] at (axis cs:0.3,0.1) {$\mathbb{MTPC}$};
+                    \node[black,anchor=south] at (axis cs:0.45,0.65) {$\mathbb{T}(T^*)$};
+                    \node[color=signaldelta,anchor=west] at (axis cs:0.37,0.30) {$\partial\mathbb{I}(i_{\mathrm{s}}^*)$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.475\textwidth}
+            \begin{itemize}
+                \item<1-> Minimizes only the stator copper losses::
+                      $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=\|\bm{i}_{\mathrm{s,dq}}\|_2^2.$$
+                \item<2-> Visual interpretation: tangent point of the torque contour and the current circle:
+                      $$
+                          \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial\mathbb{I}(\bm{i}_{\mathrm{s,dq}}).
+                      $$
+                \item<3-> Applicable below the voltage limit, i.e., in the low-speed region.
+                \item<4-> Suboptimal efficiency since rotor copper losses are neglected.
+                \item<5-> However, produces the maximum torque of the IM at the current limit.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-plane loci: MTPL %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS: MTPL region}
+    \begin{columns}
+        \begin{column}{0.525\textwidth}
+            \vspace{0.4cm}\\
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=0,ymax=1.05,xtick={0,0.5,1.0},ytick={0,0.5,1.0}]
+                    \addplot[very thick,color=signaldelta,domain=0:1,samples=180] {imCurrentY(x)};
+                    \addplot[very thick,color=signalalpha,domain=0:\imxPsiVMTPL,samples=80,restrict y to domain=0:1.05,unbounded coords=discard] {imPsiSY(x,\imPsiVMTPL)};
+
+                    \addplot[very thick,color=signalalpha!75!black] coordinates {(0,0)};
+                    \addplot[very thick,color=signalalpha!75!black,domain=0.0005:\imxRMTPL,samples=220,variable=\x] ({\x},{imMTPLY(\x)});
+                    \addplot[very thick,black,domain=0.04:1,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imTorqueY(x,0.1535959938)};
+                    \addplot[very thick,dashed,color=signalalpha!75!black,domain=0:\imxPcuExMTPL,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imPcuY(x,\imPcuExMTPL)};
+                    \addplot[very thick, only marks,mark=star,mark size=4,color=signalepsilon] coordinates {(0.47,0.3822004872)};
+                    \node[color=signaldelta,anchor=south west] at (axis cs:0.65,0.7) {$\partial\mathbb{I}(i_{\mathrm{s,max}})$};
+                    \node[color=signalalpha,anchor=south west] at (axis cs:0.65,0.8) {$\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})$};
+                    \node[color=signalalpha!75!black,anchor=south] at (axis cs:0.5,0.5) {$\mathbb{MTPL}$};
+                    \node[black,anchor=south] at (axis cs:0.38,0.6) {$\mathbb{T}(T^*)$};
+                    \node[color=signalalpha!75!black,anchor=west] at (axis cs:0.35,0.15) {$\partial P_{\mathrm{Cu}}$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.475\textwidth}
+            \begin{itemize}
+                \item Loss-minimal operation in the low-speed region:
+                      $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=P_{\mathrm{Cu,s}}+P_{\mathrm{Cu,r}}.$$
+                \item<2-> Visual interpretation: tangent point of the torque contour and the copper-loss contour:
+                      $$
+                          \partial T(\bm{i}_{\mathrm{s,dq}}^{\psi_{\mathrm r}})=\lambda\,\partial P_{\mathrm{Cu}}(\bm{i}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}).
+                      $$
+                \item<3-> Applicable below the current and voltage limits.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-plane loci: MC %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS: maximum current (MC) region}
+    \begin{columns}
+        \begin{column}{0.525\textwidth}
+            \vspace{0.4cm}\\
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=0,ymax=1.05,xtick={0,0.5,1.0},ytick={0,0.5,1.0}]
+                    \addplot[very thick,color=signaldelta,domain=0:1,samples=180] {imCurrentY(x)};
+                    \addplot[very thick,color=signalalpha,domain=0:\imxPsiExMC,samples=80,restrict y to domain=0:1.05,unbounded coords=discard] {imPsiSY(x*1.38,\imPsiExMC)};
+                    \addplot[very thick,black,domain=0.04:1,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imTorqueY(x,\imTExMC)};
+                    \addplot[very thick, only marks,mark=star,mark size=4,color=signalepsilon] coordinates {(\imxExMC,\imyExMC)};
+                    \node[color=signaldelta,anchor=south west] at (axis cs:0.63,0.75) {$\partial\mathbb{I}(i_{\mathrm{s,max}})$};
+                    \node[color=signalalpha,anchor=south west] at (axis cs:0.06,0.65) {$\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})$};
+                    \node[black,anchor=west] at (axis cs:0.55,0.55) {$\mathbb{T}(T^*)$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.475\textwidth}
+            \begin{itemize}
+                \item Region where the current and voltage constraints become simultaneously active (i.e., produces the maximum available torque at the given speed).
+                \item<2-> The OPS can no longer follow the MTPL or MTPC loci due tohe voltage limit.
+                \item<3-> Visual interpretation: the MC operating points are located at the boundary intersection
+                      $$
+                          \partial\mathbb{I}(i_{\mathrm{s,max}})\cap\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}}).
+                      $$
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-plane loci: FW %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS: field-weakening (FW) region}
+    \begin{columns}
+        \begin{column}{0.525\textwidth}
+            \vspace{0.4cm}\\
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=0,ymax=1.05,xtick={0,0.5,1.0},ytick={0,0.5,1.0}]
+                    \addplot[very thick,color=signaldelta,domain=0:1,samples=180] {imCurrentY(x)};
+                    \addplot[very thick,color=signalalpha,domain=0:\imxPsiExFW,samples=80,restrict y to domain=0:1.05,unbounded coords=discard] {imPsiSY(x,\imPsiExFW)};
+                    \addplot[very thick,black,domain=0.04:1,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imTorqueY(x,\imTExFW)};
+                    \addplot[very thick, only marks,mark=star,mark size=4,color=signalepsilon] coordinates {(\imxExFW,\imyExFW)};
+                    \node[color=signaldelta,anchor=south west] at (axis cs:0.61,0.78) {$\partial\mathbb{I}(i_{\mathrm{s,max}})$};
+                    \node[color=signalalpha,anchor=west] at (axis cs:0.40,0.23) {$\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})$};
+                    \node[black,anchor=west] at (axis cs:0.42,0.70) {$\mathbb{T}(T^*)$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.475\textwidth}
+            \begin{itemize}
+                \item Region with active voltage constraint and remaining current margin (i.e., a torque reference below the maximum available torque at the given speed).
+                \item<3-> Visual interpretation: the admissible operating point lies on
+                      $$
+                          \mathbb{T}(T^*)\cap\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})
+                      $$
+                      while still satisfying $\|\bm{i}_{\mathrm{s,dq}}\|_2<i_{\mathrm{s,max}}$.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-plane loci: MTPF %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS: MTPF region}
+    \begin{columns}
+        \begin{column}{0.525\textwidth}
+            \vspace{0.4cm}\\
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=0,ymax=1.05,xtick={0,0.5,1.0},ytick={0,0.5,1.0}]
+                    \addplot[very thick,color=signaldelta,domain=0:1,samples=180] {imCurrentY(x)};
+                    \addplot[very thick,color=signalalpha,domain=0:\imxPsiExMTPF,samples=80,restrict y to domain=0:1.05,unbounded coords=discard] {imPsiSY(x,\imPsiExMTPF)};
+                    \addplot[very thick,color=signalgamma] coordinates {(0,0)};
+                    \addplot[very thick,color=signalgamma,domain=0.0005:\imxRMTPF,samples=220,variable=\x] ({\x},{imMTPFY(\x)});
+                    \addplot[very thick,black,domain=0.04:1,samples=180,restrict y to domain=0:1.05,unbounded coords=discard] {imTorqueY(x,\imTExMTPF)};
+                    \addplot[very thick, only marks,mark=star,mark size=4,color=signalepsilon] coordinates {(\imxExMTPF,\imyExMTPF)};
+                    \node[color=signaldelta,anchor=south west] at (axis cs:0.61,0.75) {$\partial\mathbb{I}(i_{\mathrm{s,max}})$};
+                    \node[color=signalalpha,anchor=west] at (axis cs:0.25,0.125) {$\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})$};
+                    \node[color=signalgamma,anchor=south] at (axis cs:0.13,0.02) {$\mathbb{MTPF}$};
+                    \node[black,anchor=south] at (axis cs:0.35,0.525) {$\mathbb{T}(T^*)$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.475\textwidth}
+            \begin{itemize}
+                \item High-speed region in which the voltage boundary determines the maximum achievable torque.
+                \item<2-> Current constraint is no longer relevant, the voltage limit is the dominant constraint.
+                \item<3-> Visual interpretation: tangent point of the torque contour and the flux or voltage boundary:
+                      $$
+                          \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial\Psi_{\mathrm s}(\bm{i}_{\mathrm{s,dq}})
+                          \approx \lambda\,\partial\mathbb{V}(\bm{i}_{\mathrm{s,dq}}).
+                      $$
+                \item<4-> The MTPF locus defines the upper torque capability in deep flux weakening.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Feasible operating range %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Feasible operating range of the IM-OPS}
+    \centering
+    \begin{columns}
+        \begin{column}{0.43\textwidth}
+            \begin{itemize}
+                \item The feasible operating range is visualized as the grey area enclosed by the MTPF and MTPL trajectories together with the admissible current boundary.
+                \item<2-> The exact shape of the feasible region depends on the specific machine characteristics.
+                \item<3-> Operating points outside this range are either infeasible (current / voltage limits) or suboptimal (additional copper losses for a given torque).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.57\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[imcurrentaxis,ymin=-1.10,ymax=1.10,ytick={-1.0,-0.5,0,0.5,1.0}, axis on top]
+                    % Positive-torque feasible half-plane, i_sq >= 0.
+                    \path[fill=lightgray]
+                    (axis cs:0,0)
+                    \foreach \xx in {0.03,0.04,...,0.22} { -- (axis cs:{\xx},{imMTPFY(\xx)}) }
+                    \foreach \xx in {0.23,0.24,...,0.76} { -- (axis cs:{\xx},{imCurrentY(\xx)}) }
+                    \foreach \xx in {0.75,0.74,...,0.03} { -- (axis cs:{\xx},{imMTPLY(\xx)}) }
+                    -- cycle;
+                    % Negative-torque feasible half-plane, i_sq <= 0.
+                    \path[fill=lightgray]
+                    (axis cs:0,0)
+                    \foreach \xx in {0.03,0.04,...,0.22} { -- (axis cs:{\xx},{-imMTPFY(\xx)}) }
+                    \foreach \xx in {0.23,0.24,...,0.76} { -- (axis cs:{\xx},{-imCurrentY(\xx)}) }
+                    \foreach \xx in {0.75,0.74,...,0.03} { -- (axis cs:{\xx},{-imMTPLY(\xx)}) }
+                    -- cycle;
+
+                    % Positive-torque boundaries.
+                    \addplot[very thick,color=signalgamma] coordinates {(0,0) (0.03,{imMTPFY(0.03)})};
+                    \addplot[very thick,color=signalgamma,domain=0.03:\imxRMTPF,samples=70,variable=\x] ({\x},{imMTPFY(\x)});
+                    \addplot[very thick,color=signalbeta] coordinates {(0,0) (0.03,{imMTPCY(0.03)})};
+                    \addplot[very thick,color=signalbeta,domain=0.03:\imxRMTPC,samples=70,variable=\x] ({\x},{imMTPCY(\x)});
+                    \addplot[very thick,color=signalalpha] coordinates {(0,0) (0.03,{imMTPLY(0.03)})};
+                    \addplot[very thick,color=signalalpha,domain=0.03:\imxRMTPL,samples=70,variable=\x] ({\x},{imMTPLY(\x)});
+                    \addplot[very thick,color=signaldelta,domain=\imxRMTPF:0.764,samples=140] {imCurrentY(x)};
+
+                    % Negative-torque boundaries: same trajectories mirrored by i_sq -> -i_sq.
+                    \addplot[very thick,color=signalgamma] coordinates {(0,0) (0.03,{-imMTPFY(0.03)})};
+                    \addplot[very thick,color=signalgamma,domain=0.03:\imxRMTPF,samples=70,variable=\x] ({\x},{-imMTPFY(\x)});
+                    \addplot[very thick,color=signalbeta] coordinates {(0,0) (0.03,{-imMTPCY(0.03)})};
+                    \addplot[very thick,color=signalbeta,domain=0.03:\imxRMTPC,samples=70,variable=\x] ({\x},{-imMTPCY(\x)});
+                    \addplot[very thick,color=signalalpha] coordinates {(0,0) (0.03,{-imMTPLY(0.03)})};
+                    \addplot[very thick,color=signalalpha,domain=0.03:\imxRMTPL,samples=70,variable=\x] ({\x},{-imMTPLY(\x)});
+                    \addplot[very thick,color=signaldelta,domain=\imxRMTPF:0.764,samples=140] {-imCurrentY(x)};
+
+                    \node[color=signalbeta,anchor=east,font=\small] at (axis cs:0.65,0.7) {$\mathbb{MTPC}$};
+                    \node[color=signalalpha,anchor=west,font=\small] at (axis cs:0.55,0.39) {$\mathbb{MTPL}$};
+                    \node[color=signalgamma,anchor=west,font=\small] at (axis cs:0.15,-0.75) {$\mathbb{MTPF}$};
+                    \node[color=signaldelta,anchor=west,font=\small] at (axis cs:0.65,0.90) {$\mathbb{MC}$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Torque-speed plane %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Operating range of the IM-OPS in the torque-speed plane}
+    \centering
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{axis}[imspeedaxis,clip=true,axis on top]
+                % Blueish MTPL area down to T=0.
+                \path[fill=signalalpha!22,draw=none]
+                (axis cs:0,0) -- (axis cs:0,\imTorqueMTPLedge) -- (axis cs:\imOmegaMTPLedge,\imTorqueMTPLedge)
+                foreach \k in {1,...,40} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40,imMTPLY(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40))},
+                        {imTorqueNorm(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40,imMTPLY(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40))})
+                    }
+                -- (axis cs:\imOmegaMaxPlot,0) -- cycle;
+
+                % Greenish MTPC region between MTPC and MTPL.
+                \path[fill=signalbeta!22,draw=none]
+                (axis cs:0,\imTorqueMTPLedge) -- (axis cs:0,1) -- (axis cs:1,1)
+                foreach \k in {1,...,40} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40,imMTPCY(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40))},
+                        {imTorqueNorm(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40,imMTPCY(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40))})
+                    }
+                foreach \k in {40,39,...,0} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40,imMTPLY(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40))},
+                        {imTorqueNorm(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40,imMTPLY(\imxRMTPL-\k*(\imxRMTPL-\imxTSend)/40))})
+                    }
+                -- cycle;
+
+                % Grey FW/MC feasible region.
+                \path[fill=lightgray,opacity=0.55,draw=none]
+                (axis cs:1,1)
+                foreach \k in {1,...,40} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPC-\k*(\imxRMTPC-\imxRMTPF)/40,imCurrentY(\imxRMTPC-\k*(\imxRMTPC-\imxRMTPF)/40))},
+                        {imTorqueNorm(\imxRMTPC-\k*(\imxRMTPC-\imxRMTPF)/40,imCurrentY(\imxRMTPC-\k*(\imxRMTPC-\imxRMTPF)/40))})
+                    }
+                foreach \k in {1,...,40} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPF-\k*(\imxRMTPF-\imxTSend)/40,imMTPFY(\imxRMTPF-\k*(\imxRMTPF-\imxTSend)/40))},
+                        {imTorqueNorm(\imxRMTPF-\k*(\imxRMTPF-\imxTSend)/40,imMTPFY(\imxRMTPF-\k*(\imxRMTPF-\imxTSend)/40))})
+                    }
+                foreach \k in {40,39,...,0} {
+                        -- (axis cs:{imOmegaNorm(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40,imMTPCY(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40))},
+                        {imTorqueNorm(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40,imMTPCY(\imxRMTPC-\k*(\imxRMTPC-\imxTSend)/40))})
+                    }
+                -- cycle;
+
+                % Online-generated operating-range boundaries.
+                \addplot[very thick,color=signalbeta] coordinates {(0,1) (1,1)};
+                \addplot[very thick,densely dashed,color=signalalpha,domain=0:\imOmegaMTPLedge,samples=2] {\imTorqueMTPLedge};
+                \addplot[very thick,densely dashed,color=signalalpha,domain=\imxRMTPL:\imxTSend,samples=90,variable=\i]
+                ({imOmegaNorm(\i,imMTPLY(\i))},{imTorqueNorm(\i,imMTPLY(\i))});
+                \addplot[very thick,densely dashed,color=signalbeta,domain=\imxRMTPC:\imxTSend,samples=90,variable=\i]
+                ({imOmegaNorm(\i,imMTPCY(\i))},{imTorqueNorm(\i,imMTPCY(\i))});
+                \addplot[very thick,color=signaldelta,domain=\imxRMTPC:\imxRMTPF,samples=90,variable=\i]
+                ({imOmegaNorm(\i,imCurrentY(\i))},{imTorqueNorm(\i,imCurrentY(\i))});
+                \addplot[very thick,color=signalgamma,domain=\imxRMTPF:\imxTSend,samples=90,variable=\i]
+                ({imOmegaNorm(\i,imMTPFY(\i))},{imTorqueNorm(\i,imMTPFY(\i))});
+
+                % Characteristic points.
+                \addplot[only marks,mark=square*,mark size=2.4,color=signalbeta] coordinates {(1,1)};
+                \addplot[only marks,mark=square*,mark size=2.4,color=signalgamma]
+                coordinates {({imOmegaNorm(\imxRMTPF,\imyRMTPF)},{imTorqueNorm(\imxRMTPF,\imyRMTPF)})};
+
+                % Labels.
+                \node[color=signalalpha,anchor=west,font=\large] at (axis cs:0.46,0.20) {$\mathbb{MTPL}$};
+                \node[color=signalbeta,anchor=west,font=\large] at (axis cs:1.3,0.6) {$\mathbb{MTPC}$};
+                \node[color=signaldelta,anchor=south,font=\large] at (axis cs:1.55,0.84) {$\mathbb{MC}$};
+                \node[color=gray,anchor=west,font=\large] at (axis cs:2.38,0.25) {$\mathbb{FW}$};
+                \node[color=signalgamma,anchor=west,font=\large] at (axis cs:2.48,0.45) {$\mathbb{MTPF}$};
+                \node[color=signalbeta,anchor=south west,font=\scriptsize] at (axis cs:1.02,1.02)
+                {$(\omega_{\mathrm{nom}},T_{\max})$};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Typical speed-torque plane for the IM drive with the different operating modes.}
+        \label{fig:speed_torque_IM_operating_range_v14}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Flux-torque maps %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Mapping current-plane trajectories to torque-flux LUTs}
+    \begin{figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{groupplot}[
+                    group style={group size=2 by 1, horizontal sep=1.6cm},
+                    width=0.47\textwidth,
+                    height=0.34\textheight
+                ]
+                \nextgroupplot[immapaxis,legend pos=south east,title={\small(a) Rotor-flux reference map $\psi_{\mathrm{r,d}}^*(T^*)$}]
+                \addplot[very thick,color=signalbeta,domain=0:\imxRMTPC,samples=120,variable=\x]
+                ({imTorqueNorm(\x,imMTPCY(\x))},{imPsiRNNorm(\x)});
+                \addlegendentry{$\mathbb{MTPC}$}
+                \addplot[very thick,color=signalalpha,domain=0:\imxRMTPL,samples=120,variable=\x]
+                ({imTorqueNorm(\x,imMTPLY(\x))},{imPsiRNNorm(\x)});
+                \addlegendentry{$\mathbb{MTPL}$}
+                \addplot[very thick,densely dotted,color=signaldelta]
+                coordinates {
+                        ({imTorqueNorm(\imxRMTPL,\imyRMTPL)},{imPsiRNNorm(\imxRMTPL)})
+                        ({imTorqueNorm(\imxRMTPC,\imyRMTPC)},{imPsiRNNorm(\imxRMTPC)})
+                    };
+                \addlegendentry{$\mathbb{MC}$ transition}
+
+                \nextgroupplot[imtmaxaxis,legend pos=north west,title={\small(b) Torque limit map $T_{\lim}(\psi_{\mathrm r})$}]
+                \addplot[very thick,color=signalgamma,domain=0:\imxRMTPF,samples=120,variable=\x]
+                ({imPsiRNNorm(\x)},{imTorqueNorm(\x,imCurrentY(\x))});
+                \addlegendentry{$i^*\in\mathbb{MTPF}$}
+                \addplot[very thick,color=signaldelta,domain=\imxRMTPF:\imxRMTPC,samples=120,variable=\x]
+                ({imPsiRNNorm(\x)},{imTorqueNorm(\x,imCurrentY(\x))});
+                \addlegendentry{$i^*\in\mathbb{MC}$}
+                \addplot[only marks,mark=square*,mark size=2.2,color=signalbeta]
+                coordinates {({imPsiRNNorm(\imxRMTPC)},{imTorqueNorm(\imxRMTPC,\imyRMTPC)})};
+                \addplot[only marks,mark=square*,mark size=2.4,color=signalgamma]
+                coordinates {({imPsiRNNorm(\imxRMTPF)},{imTorqueNorm(\imxRMTPF,\imyRMTPF)})};
+            \end{groupplot}
+        \end{tikzpicture}
+        \caption{Subplot view of the LUT construction: (a) loss-optimal rotor-flux reference over torque (below flux weakening) and (b) limiting torque envelope over rotor flux (for flux weakening).}
+        \label{fig:flux_torque_LUTs_IM_OPS}
+    \end{figure}\pause%
+    \vspace{1mm}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Selected reading: OPS solution methods %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{IM-OPS solution methods: selected reading}
+    \vspace{-1mm}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Analytical / algebraic},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+                \footnotesize
+                \begin{itemize}
+                    \item \href{https://doi.org/10.1109/60.678980}{Wasynczuk et al. (1998)}
+                    \item \href{https://doi.org/10.1109/28.395288}{Kim and Sul (1995)}
+                    \item \href{https://doi.org/10.1049/iet-epa.2019.0400}{Mosaddegh-Hesar et al. (2019)}
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Online optimization},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+                \footnotesize
+                \begin{itemize}
+                    \item \href{https://doi.org/10.1109/TIA.2012.2190818}{Qu et al. (2012)}
+                    \item \href{https://doi.org/10.1109/JESTPE.2024.3437739}{Becker et al. (2024)}
+                    \item \href{https://doi.org/10.1038/s41598-026-42634-5}{Morawiec and Wogi (2026)}
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={LUT},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+                \footnotesize
+                \begin{itemize}
+                    \item \href{https://doi.org/10.1109/PEDS.2015.7203404}{Wallscheid et al. (2015)}
+                    \item \href{https://doi.org/10.1109/TIA.2015.2448682}{Odhano et al. (2015)}
+                    \item \href{https://arxiv.org/abs/1812.02431}{Kullick and Hackl (2018)}
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{6mm}
+    \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Remark},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+        Some of the above references only include partial solutions (e.g., only MTPC or MTPL) or do not consider the full torque-speed range. Likewise in the PMSM case, many roads lead to Rome, i.e., \eqref{eq:IM_OPS_problem_v14} can be solved in many different ways, and the above references are only a small selection of the available literature.
+    \end{tcolorbox}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LUT implementation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Selected implementation example: LUT-based IM-OPS}
+    \begin{figure}
+        \begin{center}
+            \begin{tikzpicture}[>=Latex, thick, node distance=2.5cm, align=center]
+                \node (psimax) at (0, 3.3) {$\psi_{\mathrm{r,max}}$};
+                \node (tstar) at (0, 0) {$T^*$};
+                \coordinate (tstar_tap) at (1, 0);
+
+                \node[ctrlblock, minimum width=1.6cm, minimum height=1.2cm] (psiopt) at (2.25, 1.5) {};
+                \begin{scope}[shift={(psiopt.center)}]
+                    \draw[->, thin] (-5mm, -2mm) -- (5mm, -2mm);
+                    \draw[->, thin] (0mm, -4mm) -- (0mm, 4mm);
+                    \draw[color=black, thick, domain=-3.4:3.4, samples=12, variable=\x] plot ({\x mm}, {-2mm + 0.25*\x*\x mm});
+                \end{scope}
+                \node[below=0.1mm of psiopt] {$\psi_{\mathrm{r,MTPL}}^*(T)$};
+
+                \node[ctrlblock, minimum width=1.2cm, minimum height=1.2cm] (minb) at (4, 3) {min};
+
+                \node[ctrlblock, minimum width=1.5cm, minimum height=1.2cm] (tmax) at (6.25, 1.5) {};
+                \begin{scope}[shift={(tmax.center)}]
+                    \draw[->, thin] (-4mm, 0mm) -- (5mm, 0mm);
+                    \draw[->, thin] (-2mm, -4mm) -- (-2mm, 4mm);
+                    \draw[color=black, thick, domain=-3.5:3.5, samples=12, variable=\y] plot ({-2mm + 0.4*\y*\y mm}, {\y mm});
+                \end{scope}
+                \node[below=0.1mm of tmax] {$T_{\max}(\psi_{\mathrm{r}})$};
+
+                \node[ctrlblock, minimum width=1.2cm, minimum height=1.2cm] (lim) at (7.75, 0) {};
+                \draw[-, thick] ([yshift=-2mm,xshift=-3mm]lim.center) -- ([yshift=-2mm,xshift=-1mm]lim.center) -- ([yshift=2mm,xshift=1mm]lim.center) -- ([yshift=2mm,xshift=3mm]lim.center);
+                \node[right=4mm of lim, yshift=-4mm] {$T_{\mathrm{lim}}^*$};
+
+                \draw[->] (psimax) -- (minb.west |- psimax);
+                \draw[-] (tstar) -- (tstar_tap);
+                \draw[->] (tstar_tap) to [short, *-] (tstar_tap) |- (psiopt.west);
+                \draw[->] (tstar_tap) -- (lim.west);
+                \draw[->] (psiopt.north) |- ([yshift=-3mm]minb.west);
+
+                \coordinate (psilim_tap) at (5, 3);
+                \draw[->] (psilim_tap) to [short, *-] (psilim_tap) |- (tmax.west);
+                \draw[->] (tmax.east) -| (lim.north);
+                \coordinate (out_T_lim) at ($(lim.east) + (1.5,0)$);
+                \draw[->] (lim.east) -- (out_T_lim);
+                \draw[->] (minb.east) -- (out_T_lim |- minb.east) node[near end, above, xshift=5mm] {$\psi_{\mathrm{r,lim}}^*$};
+            \end{tikzpicture}
+        \end{center}
+        \caption{LUT-based IM-OPS implementation : first calculate the efficient rotor-flux reference, check if it is within the feasible region and eventually reduce the achievable torque if necessary. In contrast to the PMSM case, a mapping to the stator current references is not required, since those are handled via the underlying rotor flux controller.}
+        \label{fig:LUT_OPS_IM_v14}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Selected reading: OPS solution methods %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Drawback of loss-optimal rotor flux excitation}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}
+                \item From \figref{fig:flux_torque_LUTs_IM_OPS} it can be seen that the smaller the torque reference, the smaller the loss-optimal rotor flux reference.
+                \item Consequently, at significant load steps, the rotor flux must be increased to reach the new torque reference.
+                \item Since the stator current is limited, the closed-loop rotor flux dynamics become dominant in the torque response.
+                \item Compared to an ``always nominal flux'' strategy, the loss-optimal rotor-flux selection can lead to a slower torque response.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[height=0.8\textheight]{fig/lec04/Torque_transient_example.pdf}
+                \caption{Transient torque response example}
+                \label{fig:IM_transient_torque_example}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
