@@ -1,9 +1,10 @@
+---
 name: Build LaTeX PDFs
-on: 
-  push: 
+"on":
+  push:
     paths:
-        - '**.tex'
-        - 'lecture/build.py'
+      - '**.tex'
+      - 'lecture/build.py'
   workflow_dispatch:
 
 permissions:
@@ -21,23 +22,21 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      - name: Initialize and update submodules  #initialize and update submodules
+      - name: Initialize and update submodules
         run: |
           git submodule update --init --recursive
-      - name: Compile LaTeX document    
+      - name: Compile LaTeX document
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: |            #runs build.py with submodule location and loopthrough examfolders and build pdf
+          run: |  # runs build.py with submodule location and builds PDF
             cd lecture
             cp ../course_template/lectureClass.cls ./
             python3 build.py
             cd ..
-            
 
-            
       - name: Upload PDF file
-        uses: actions/upload-pages-artifact@v3 #actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3  # actions/upload-artifact@v4
         with:
           name: github-pages
           path: built/
@@ -45,7 +44,7 @@ jobs:
 
   deploy:
     needs: build_latex
- 
+
     # Deploy to the github-pages environment
     environment:
       name: github-pages
@@ -58,4 +57,4 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5 # or specific "vX.X.X" version tag for this action
+        uses: actions/deploy-pages@v5
