@@ -4689,8 +4689,8 @@
             \node (Psi0) at (T0 |- sumPsi) {};
             \draw[thick, ->] (Psi0) -- node[above, at start, anchor = south west] {$\|\bm{\psi}_{\mathrm{s}}\|^*$} (sumPsi.west);
             \node[crossingshape, rotate=-90, name = jumpPsi, thick] at (sumPsi.west -| sumT.south) {};
-            \node[hystcontrollershape, right = \dtcblockgaplarge of sumPsi] (hyst1) {};
-            \node[hystcontrollershape] at (hyst1.north |- sumT.east) (hyst2) {};
+            \node[twolevelhystcontrollershape, right = \dtcblockgaplarge of sumPsi] (hyst1) {};
+            \node[threelevelhystcontrollershape] at (hyst1.north |- sumT.east) (hyst2) {};
             \draw[thick, ->] (sumT.east) -- node[above, near start]{$\Delta T$} (hyst2.west);
             \draw[thick, ->] (sumPsi.east) -- node[above]{$\Delta\|\bm{\psi}_{\mathrm{s}}\|$} (hyst1.west);
             \node[dtcblock, minimum width = 2.0cm, minimum height = 3.3cm, right = \dtcblockgaplarge of hyst2.north east, anchor = north west, align = center] (swTab) {Switching\\table};
@@ -4761,8 +4761,8 @@
             \coordinate (AuxEstOut) at ($(Est.north  west)!0.25!(Est.south west)$);
             \coordinate (AuxSwIn) at ($(swTab.north  west)!0.85!(swTab.south west)$);
 
-            \draw[thick] (TorqueEstOut)  -| node[at start, anchor = south east] {$\hat{T}$} (jumpPsi.west);
-            \draw[thick, ->] (jumpPsi.east) -- (sumT.south);
+            \draw[thick] (TorqueEstOut)  -| node[at start, anchor = south east] {$\hat{T}$} (jumpPsi.east);
+            \draw[thick, ->] (jumpPsi.west) -- (sumT.south);
             \draw[thick, ->] (FluxEstOut)  -| node[at start, anchor = south east] {$\|\hat{\bm{\psi}}_{\mathrm{s}}\|$} (sumPsi.south);
             \draw[thick, ->] (AuxEstOut)   -- node[at start, anchor = south east] {$\omega, \hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}$} ($(AuxEstOut -| hyst1.south)$) |-   (AuxSwIn);
 

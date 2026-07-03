@@ -2519,6 +2519,7 @@
     \begin{equation}
         \frac{\Psi_{\mathrm{r,d}}(\mathrm{z})}{\Psi^{*}_{\mathrm{r,d}}(\mathrm{z})}
         =\frac{b_\psi\left[(K_{\mathrm{p},\psi}+K_{\mathrm{i},\psi}T_\mathrm{s})\mathrm{z}-K_{\mathrm{p},\psi}\right]}{\mathrm{z}^2-S_\psi\mathrm{z}+P_\psi} .
+        \label{eq:closed_loop_TF_rotor_flux_IM}
     \end{equation}
 \end{frame}
 
@@ -3306,6 +3307,871 @@
                 \caption{Transient torque response example}
                 \label{fig:IM_transient_torque_example}
             \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Modulation degree control}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Modulation degree control structure %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Modulation degree control structure}
+    \centering
+    \begin{figure}
+        \begin{circuitikz}[>=Latex, scale=0.75, transform shape]
+            \tikzset{
+                detailblock/.style = {ctrlblock, align=center, minimum width=1.34cm, minimum height=1.02cm, font=\small},
+                intblock/.style = {ctrlblock, align=center, minimum width=1.10cm, minimum height=1.02cm, font=\small},
+                tfblock/.style = {draw, rectangle, thick, minimum width=2.00cm, minimum height=1.90cm, inner sep=0pt},
+                dublock/.style = {ctrlblock, align=center, minimum width=1.72cm, minimum height=1.48cm, font=\small},
+                satblock/.style = {draw, rectangle, thick, minimum width=1.64cm, minimum height=1.98cm, inner sep=0pt},
+                sig/.style = {font=\small, inner sep=1.5pt},
+                tap/.style = {circle, fill=black, inner sep=1.15pt}
+            }
+            \ctikzset{block left anchors pos=0.7, block right anchors pos=0.7}
+            \def\phaseport{0.72}
+            \def\smallgap{0.6cm}
+            \def\medgap{1.0cm}
+            \def\biggap{2.25cm}
+
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumd) {};
+
+            \coordinate[left=\smallgap of sumd] (refd);
+            \draw[->, thick] (refd) -- (sumd.west);
+            \node[sig, above] at ($(refd)!0.1!(sumd.west)$) {$m^{*}$};
+
+            \coordinate[below=\biggap*0.8 of sumd.south] (fbd);
+            \draw[->, thick] (fbd) -- (fbd |- sumd.south);
+            \node[sig, left] at ($(fbd)!0.10!(fbd |- sumd.south)$) {$m$};
+
+
+            \node[detailblock, right=\smallgap of sumd] (kpd) {PI + ARW};
+
+            \draw[->, thick] (sumd) -- (kpd);
+
+            \node[saturationshape, right=\smallgap of kpd] (saturation) {};
+            \draw[->, thick] (kpd.east) -- (saturation.left);
+
+            \draw[thick, ->] (saturation.right) -- node[sig, pos=0.4, below, yshift=-1mm]{$\Delta \psi_\mathrm{r}$} ++(\medgap, 0) coordinate (out_delta_psi);
+
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/north={$+$}, anchor=west] (sumpsi) at (out_delta_psi){};
+            \coordinate[above=\smallgap of sumpsi.north] (fbpsi);
+            \draw[->, thick] (fbpsi) -- (fbpsi |- sumpsi.north);
+            \node[sig, right, anchor=west] at ($(fbpsi)!0.10!(fbpsi |- sumpsi.north)$) {$\psi'_{\mathrm{r,max}}$};
+
+
+
+            \node[detailblock, right=\medgap of sumpsi] (OPS) {OPS};
+            \node[detailblock, right=\medgap of OPS] (fluxctrl) {Flux\\controller};
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/north={$-$}, right=\medgap of fluxctrl] (sumcc) {};
+            \draw[->, thick] (fluxctrl.east) -- node[sig, below, yshift=-1mm]{$\bm{i}^*_{\mathrm{s,dq}}$} (sumcc.west);
+
+            \draw[->, thick] (sumpsi.east) --node[sig, below, yshift=-1mm]{$\psi_\mathrm{r,max}$} (OPS.west);
+            \draw[->, thick] (OPS.east) -- node[sig, below, yshift=-1mm]{$\bm{\psi}^*_{\mathrm{r,lim}}$} (fluxctrl.west);
+            \draw[->, thick] (OPS.east) -- node[sig, above, yshift=1mm]{$T_{\mathrm{lim}}^*$} (fluxctrl.west);
+
+            \node[detailblock, right=\medgap of sumcc] (CC) {Current\\ controller};
+            \draw[->, thick] (sumcc.east) -- (CC.west);
+            \node[detailblock, right=\smallgap of CC] (MA) {Machine};
+            \draw[->, thick] (CC.east) -- (MA.west);
+            \draw[->,thick] (MA.east) -- node[sig, pos=0.4, below]{$\bm{i}_{\mathrm{s,dq}}$} ++(\medgap, 0) coordinate (out_idq);
+            \coordinate (out_feedback_back) at ($(out_idq)!0.5!(out_idq -| MA.east)$);
+            \draw[->, thick] (MA.east) -- (out_feedback_back) to [short, *-] ($(out_feedback_back)+(0, 1.5cm)$) -| (sumcc.north);
+            \node[signedmixer, tripoles/signedmixer/east={$*$}, tripoles/signedmixer/north={$/$}] (summ) at (fbd -| sumpsi.north){};
+            \coordinate[above=\smallgap of summ.north] (fbudc);
+            \draw[->, thick] (fbudc) -- (fbudc |- summ.north);
+            \node[sig, right, anchor=west] at ($(fbudc)!0.10!(fbudc |- summ.north)$) {$\nicefrac{2u_{\mathrm{dc}}}{\sqrt{3}}$};
+            \node[detailblock, left=\medgap of summ] (abs) {$||\bm{x}||_2$};
+            \draw[->, thick] ($(CC.east)!0.25!(MA.west)$) to [short, *-] ($(CC.east)!0.25!(MA.west)$) |- node[sig, left, yshift=2mm, xshift=-1mm]{$\bm{u}^*_{\mathrm{s,dq}}$} (summ.east);
+            \draw[->, thick] (summ.west) -- (abs.east);
+            \draw[->, thick] (abs.west) -| (sumd.south);
+
+        \end{circuitikz}%
+        \caption{Modulation degree controller  (inner PI + ARW loop is structural identical to PMSM case from \figref{fig:modulation_degree_control} and is not shown here due to space reasons).}
+        \label{fig:modulation_degree_control_IM}
+    \end{figure}
+    \vspace{-0.65cm}
+    \begin{varblock}{Remark}
+        In contrast to the PMSM case, the closed-loop rotor flux dynamics are mostly dominant for the IM drive. While the above structure focuses on manipulating $\psi_\mathrm{r}$ according to a rotor-flux-oriented FOC approach. The same can be applied to a stator-flux-oriented FOC (or any other controller) concept by replacing $\psi_\mathrm{r}$ with $\psi_\mathrm{s}$.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Two command-variable views %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{IM modulation controller: command-variable choice}
+    The modulation controller regulates the voltage utilization via the modulation index:
+    \begin{equation}
+        m[k]=\frac{\sqrt{3}}{2}\frac{\left\|\bm{u}^{\psi_{\mathrm r},*}_{\mathrm{s,dq}}[k]\right\|_2}{u_{\mathrm{dc}}[k]},
+        \qquad e_m[k]=m^*[k]-m[k].
+        \label{eq:IM_mod_v06_m_definition}
+    \end{equation}\pause%
+    Since $\bm{u}^{\psi_{\mathrm r},*}_{\mathrm{s,dq}}[k]\approx \omega_{\psi_{\mathrm r}}\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}$, a classical flux-weakening interpretation would let the controller manipulate a stator-flux limit,
+    \begin{equation}
+        \psi_{\mathrm{s,max}}=\psi'_{\mathrm{s,max}}+\Delta\psi_{\mathrm{s,max}},
+        \qquad
+        \psi'_{\mathrm{s,max}}=\frac{2u_{\mathrm{dc}}}{\sqrt{3}|\omega_{\psi_{\mathrm r}}|} .
+        \label{eq:IM_mod_v06_classical_stator_limit}
+    \end{equation}\pause%
+    In an IM rotor-flux-oriented FOC, however, the OPS and flux controller do not manipulate $\psi_{\mathrm{s}}$ directly.  Their controlled variable is
+    \begin{equation}
+        \psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},
+        \qquad
+        \psi_{\mathrm{r,max}}^{\psi_{\mathrm r},*}=\psi_{\mathrm{r,max}}^{\prime}+\Delta\psi_{\mathrm{r,max}}^{\psi_{\mathrm r},*} .
+        \label{eq:IM_mod_v06_actual_rotor_limit}
+    \end{equation}
+    Therefore the IM modulation controller must be derived once in the classical stator-flux view and then transformed to the actually implemented rotor-flux command.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Classical PMSM-like view %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Classical stator-flux modulation-controller view}
+    From
+    \begin{equation*}
+        \bm{u}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}
+        =R_{\mathrm{s}}\bm{i}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}
+        +\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}
+        +\omega_{\psi_{\mathrm r}}\bm{J}\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}
+    \end{equation*}\pause%
+    the stator voltage demand during steady state is (neglecting the ohmic voltage drop)
+    \begin{equation}
+        \left\|\bm{u}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}\right\|_2
+        \approx |\omega_{\psi_{\mathrm r}}|\left\|\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}\right\|_2 .
+        \label{eq:IM_mod_v06_voltage_flux_approx}
+    \end{equation}\pause%
+    If $\Delta\psi_{\mathrm{s,max}}$ were the controller output and the stator-flux realization were summarized by $G_{\psi_{\mathrm{s}}}(\mathrm{z})$, the classical SISO plant would be
+    \begin{equation}
+        G_{\mathrm{p},m}^{\psi_{\mathrm{s}}}(\mathrm{z})
+        =\frac{\Delta M(\mathrm{z})}{\Delta\Psi_{\mathrm{s,max}}(\mathrm{z})}
+        \approx
+        K_mG_{\psi_{\mathrm{s}}}(\mathrm{z}),
+        \qquad
+        K_m=\frac{\sqrt{3}|\omega_{\psi_{\mathrm r}}|}{2u_{\mathrm{dc}}} .
+        \label{eq:IM_mod_v06_classical_siso}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Linear model mapping %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Magnetic model: stator-to-rotor flux mapping}
+    For the usual apparent inductance definitions and fixed requested torque $T^*$, we have
+    \begin{equation}
+        \begin{gathered}
+            \psi_{\mathrm{s,d}}^{\psi_{\mathrm r}}=a_\psi\psi_{\mathrm r},
+            \qquad
+            \psi_{\mathrm{s,q}}^{\psi_{\mathrm r}}=\sigma L_{\mathrm{s,app}}\frac{T^*}{c_T\psi_{\mathrm r}},
+            \qquad
+            a_\psi=\frac{L_{\mathrm{s,app}}}{L_{\mathrm{m,app}}},
+            \quad
+            c_T=\frac{3}{2}p\frac{L_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}.
+        \end{gathered}
+        \label{eq:IM_mod_v06_linear_flux_components}
+    \end{equation}\pause%
+    With the flux ratio
+    \begin{equation}
+        \kappa_\psi
+        =\frac{\psi_{\mathrm{s,q}}^{\psi_{\mathrm r}}}{\psi_{\mathrm{s,d}}^{\psi_{\mathrm r}}}
+        =\frac{\sigma L_{\mathrm{m,app}}T^*}{c_T\psi_{\mathrm r}^{2}},
+        \label{eq:IM_mod_v06_kappa_def}
+    \end{equation}
+    the modulation-relevant stator-flux magnitude is
+    \begin{equation}
+        \psi_{\mathrm{s}}(\psi_{\mathrm r},T^*)
+        =\left\|\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}\right\|_2
+        =a_\psi\psi_{\mathrm r}\sqrt{1+\kappa_\psi^2} .
+        \label{eq:IM_mod_v06_linear_psis_map}
+    \end{equation}\pause%
+    Hence, the \hl{stator-rotor-flux sensitivity} is
+    \begin{equation}
+        K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}
+        =\left.\frac{\partial\psi_{\mathrm{s}}}{\partial\psi_{\mathrm r}}\right|_{T^*}
+        =a_\psi\frac{1-\kappa_\psi^2}{\sqrt{1+\kappa_\psi^2}}
+        \stackrel{|\kappa_\psi|\ll 1}{\approx} \frac{L_{\mathrm{s,app}}}{L_{\mathrm{m,app}}} .
+        \label{eq:IM_mod_v06_linear_sensitivity}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Plant modeling for a rotor-flux-limit command %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Plant modeling for a rotor-flux-limit command}
+    The local small-signal chain based on the controller structure from \figref{fig:modulation_degree_control_IM} is
+    \begin{equation}
+        \Delta\psi_{\mathrm{r,d,max}}^{*}
+        \xrightarrow{K_{\mathrm{OPS}}}
+        \Delta\psi_{\mathrm{r}}^{\psi_{\mathrm r},*}
+        \xrightarrow{G_{\psi}(\mathrm{z})}
+        \Delta\psi_{\mathrm{r}}^{\psi_{\mathrm r}}
+        \xrightarrow{K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}}
+        \Delta\left\|\bm{\psi}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}\right\|_2
+        \xrightarrow{K_m}
+        \Delta m .
+        \label{eq:IM_mod_v06_actual_chain}
+    \end{equation}\pause%
+    Assuming that the flux-limiting branch of the OPS is active, it holds:
+    \begin{equation}
+        K_{\mathrm{OPS}}=\frac{\partial\psi_{\mathrm{r}}^{\psi_{\mathrm r},*}}{\partial\psi_{\mathrm{r,max}}^{\psi_{\mathrm r},*}}
+        \approx 1 .
+        \label{eq:IM_mod_v06_kops}
+    \end{equation}\pause%
+    From \eqref{eq:closed_loop_TF_rotor_flux_IM}, the rotor-flux controller design yields the closed-loop transfer function
+    \[
+        G_{\psi}(z)
+        =
+        \frac{\Psi_{\mathrm{r,d}}(z)}{\Psi_{\mathrm{r,d}}^*(z)}
+        =
+        \frac{
+            b_\psi\left[(K_{\mathrm p,\psi}+K_{\mathrm i,\psi}T_{\mathrm s})z-K_{\mathrm p,\psi}\right]
+        }{
+            z^2-S_\psi z+P_\psi
+        } .
+    \]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Plant modeling for a rotor-flux-limit command (cont.) %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Plant modeling for a rotor-flux-limit command (cont.)}
+    With the practical choice \(p_1=p_2=\lambda_\psi\), i.e.
+    \(S_\psi=2\lambda_\psi\), \(P_\psi=\lambda_\psi^2\), and the pole-placement gains from the rotor-flux-control design,
+    \[
+        G_{\psi}(z)
+        =
+        \frac{
+            (a_\psi+1-2\lambda_\psi)z+\lambda_\psi^2-a_\psi
+        }{
+            (z-\lambda_\psi)^2
+        } .
+    \]
+    For reduced modulation-controller design, approximate it by a unity-gain PT1 model
+    \begin{equation}
+        G'_{\psi}(z)
+        =
+        \frac{1-\lambda'_{\psi}}{z-\lambda'_{\psi}},
+        \qquad
+        G'_{\psi}(1)=1 .
+    \end{equation}
+    A low-frequency moment-matched choice is obtained from
+    \begin{equation}
+        \left.
+        \frac{\mathrm d G'_{\psi}(z)}{\mathrm d z}
+        \right|_{z=1}
+        =
+        \left.
+        \frac{\mathrm d G_{\psi}(z)}{\mathrm d z}
+        \right|_{z=1},
+    \end{equation}
+    which gives the reduced pole matching formula
+    \begin{equation}
+        \lambda'_{\psi}
+        =
+        1-
+        \frac{(1-\lambda_\psi)^2}{1-a_\psi}.
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Time-scale argument %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Dominant dynamics of the IM modulation plant}
+    The current controller still creates the voltage demand that is used for $m$, but its closed-loop dynamics are much faster than the rotor-flux dynamics:
+    \begin{equation}
+        \tau_{\mathrm{i,cl}}\ll\tau_{\psi,\mathrm{cl}},
+        \qquad
+        \tau_{\psi,\mathrm{cl}}\approx 10\ldots100\,\tau_{\mathrm{i,cl}} .
+        \label{eq:IM_mod_v06_time_scale}
+    \end{equation}\pause%
+    Hence, for modulation-controller design, the current loop is treated as quasi-stationary.  The dominant plant becomes
+    \begin{equation}
+        G_{\mathrm{p},m}(\mathrm{z})
+        =\frac{\Delta M(\mathrm{z})}{\Delta\Psi_{\mathrm{r,d,max}}^{*}(\mathrm{z})}
+        \approx
+        K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z}) .
+        \label{eq:IM_mod_v06_flux_dominant_plant}
+    \end{equation}\pause%
+    With $K_{\mathrm{OPS}}\approx1$, find
+    \begin{equation}
+        G_{\mathrm{p},m}(\mathrm{z})
+        \approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}\frac{1-\lambda'_{\psi}}{\mathrm{z}-\lambda'_{\psi}} .
+        \label{eq:IM_mod_v06_reduced_rotor_plant}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Direct plant comparison %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Plant models: stator- vs. rotor-flux manipulation}
+    Both variants share the voltage-to-flux gain and the dominant rotor-flux dynamics,
+    \begin{equation}
+        K_m=\frac{\sqrt{3}|\omega_{\psi_{\mathrm r}}|}{2u_{\mathrm{dc}}},
+        \qquad
+        G_{\psi}(\mathrm{z})\approx\frac{1-\lambda'_{\psi}}{\mathrm{z}-\lambda'_{\psi}} .
+        \label{eq:IM_mod_v06_common_parts}
+    \end{equation}\pause%
+    The difference is the command domain before the rotor-flux controller:
+    \begin{equation}
+        \begin{array}{rclcl}
+            \Delta\Psi_{\mathrm{s,max}}
+             & \xrightarrow{\;K_{\psi_{\mathrm r}\psi_{\mathrm{s}}}\;}                                         &
+            \Delta\Psi_{\mathrm{r,max}}^{*}
+             & \xrightarrow{\;K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z})K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_m\;} &
+            \Delta M,                                                                                            \\[1mm]
+            \Delta\Psi_{\mathrm{r,d,max}}^{*}
+             &                                                                                                 &
+            \Delta\Psi_{\mathrm{r,max}}^{*}
+             & \xrightarrow{\;K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z})K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_m\;} &
+            \Delta M.
+        \end{array}
+        \label{eq:IM_mod_v06_plant_chains_compact}
+    \end{equation}\pause%
+    Hence the two SISO plants are
+    \begin{equation}
+        \begin{aligned}
+            G_{\mathrm{p},m}^{\psi_{\mathrm s}}(\mathrm{z})
+             & =\frac{\Delta M}{\Delta\Psi_{\mathrm{s,max}}}
+            \approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z})K_{\psi_{\mathrm r}\psi_{\mathrm{s}}}
+            \approx K_mG'_{\psi}(\mathrm{z}),                      \\[1mm]
+            G_{\mathrm{p},m}^{\psi_{\mathrm r}}(\mathrm{z})
+             & =\frac{\Delta M}{\Delta\Psi_{\mathrm{r,d,max}}^{*}}
+            \approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z}).
+        \end{aligned}
+        \label{eq:IM_mod_v06_plant_models_compact}
+    \end{equation}
+    \begin{equation}
+        \boxed{\text{same dynamics }G'_{\psi}(\mathrm{z})}
+        \qquad
+        \boxed{\vphantom{G'}\text{different gain for IM output: }K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}}
+    \end{equation}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PI controller design %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{PI design for the rotor-flux-output plant}
+    The discrete-time PI controller now outputs a rotor-flux-limit correction:
+    \begin{equation}
+        \Delta\Psi_{\mathrm{r,max}}^{*}(\mathrm{z})
+        =G_{\mathrm{c},m}(\mathrm{z})E_m(\mathrm{z}),
+        \qquad
+        G_{\mathrm{c},m}(\mathrm{z})
+        =K_{\mathrm{p},m}+K_{\mathrm{i},m}T_{\mathrm{s}}\frac{\mathrm{z}}{\mathrm{z}-1} .
+        \label{eq:IM_mod_v06_PI_rotor_output}
+    \end{equation}\pause%
+    Using
+    \begin{equation}
+        G_{\mathrm{p},m}(\mathrm{z})
+        \approx\frac{b_m}{\mathrm{z}-a_m},
+        \qquad
+        a_m=\lambda'_{\psi},
+        \qquad
+        b_m=K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}(1-\lambda'_{\psi}) .
+        \label{eq:IM_mod_v06_PT1_for_design}
+    \end{equation}\pause%
+    The closed-loop characteristic polynomial is
+    \begin{equation}
+        (\mathrm{z}-1)(\mathrm{z}-a_m)+b_mK_{\mathrm{p},m}(\mathrm{z}-1)+b_mK_{\mathrm{i},m}T_{\mathrm{s}}\mathrm{z}=0 .
+        \label{eq:IM_mod_v06_char_poly}
+    \end{equation}
+    It is the same PT1-plant design problem as before, but with a different plant gain.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Pole placement %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Pole-placement formulas and scheduling}
+    With desired poles $p_1,p_2$,
+    \begin{equation}
+        (\mathrm{z}-p_1)(\mathrm{z}-p_2)=\mathrm{z}^2-S_m\mathrm{z}+P_m,
+        \qquad
+        S_m=p_1+p_2,
+        \quad P_m=p_1p_2 .
+        \label{eq:IM_mod_v06_desired_poly}
+    \end{equation}\pause%
+    Coefficient comparison gives the standard discrete PI gains
+    \begin{equation}
+        K_{\mathrm{p},m}=\frac{a_m-P_m}{b_m},
+        \qquad
+        K_{\mathrm{i},m}=\frac{1-S_m+P_m}{b_mT_{\mathrm{s}}} .
+        \label{eq:IM_mod_v06_PI_gains}
+    \end{equation}\pause%
+    For the IM implementation use
+    \begin{equation}
+        b_m=\frac{\sqrt{3}|\omega_{\psi_{\mathrm r}}|}{2u_{\mathrm{dc}}}
+        K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}(1-\lambda'_{\psi}) .
+        \label{eq:IM_mod_v06_scheduled_b}
+    \end{equation}
+    Thus, $K_{\mathrm{p},m}$ and $K_{\mathrm{i},m}$ should be scheduled over $(T^*,\psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},\omega_{\psi_{\mathrm r}},u_{\mathrm{dc}})$ or designed conservatively for the smallest relevant $|b_m|$. As a rule of the thumb, choose $p_1=p_2=[3,\ldots,10]\cdot\lambda'_\psi$ for a sufficiently fast (but not too fast) modulation controller.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Limits and anti-reset windup %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Rotor-flux limits and ARW}
+    Since the controller output is a rotor-flux correction, saturation is applied in the rotor-flux domain:
+    \begin{equation}
+        \Delta\psi_{\mathrm{r,max}}[k]
+        =\mathrm{lim}_{\Delta\psi_{\mathrm{r,min}}}^{\Delta\psi_{\mathrm{r,max}}}
+        \left\{\Delta\psi_{\mathrm{r,max}}^{*}[k]\right\} .
+        \label{eq:IM_mod_v06_rotor_saturation}
+    \end{equation}\pause%
+    Anti-reset windup is identical in structure to the PMSM case, but with the rotor-flux-domain saturation error:
+    \begin{equation}
+        \Delta u[k]=\Delta\psi_{\mathrm{r,max}}^{*}[k]-\Delta\psi_{\mathrm{r,max}}[k],
+        \qquad
+        x_{\mathrm{i},m}[k]=x_{\mathrm{i},m}^{+}[k]-\frac{K_{\mathrm{aw},m}}{K_{\mathrm{i},m}}\Delta u[k] .
+        \label{eq:IM_mod_v06_ARW}
+    \end{equation}
+    Hence, the choice of $K_{\mathrm{aw},m}$ can follow the same route as in the PMSM case.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Direct torque control}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Local TikZ block component for the IM-DTC torque loop %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Direct torque control: high-level overview %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Direct torque control (DTC) for IM drives: high-level overview}
+    \centering
+    \begin{figure}
+        \begin{circuitikz}[x=1cm, y=1cm, scale=0.91, transform shape, >=Latex]
+            \def\dtcblockheight{1.5cm}
+            \def\dtcblockgaplarge{1.20cm}
+            \pgfmathsetmacro{\dtcconverterscale}{\dtcblockheight/(1.4cm*0.7)}
+            \tikzset{
+                dtcblock/.style = {
+                        ctrlblock,
+                        align = center,
+                        inner sep = 3pt,
+                        minimum height = \dtcblockheight,
+                        font = \small
+                    },
+                siglabel/.style = {font = \small, inner sep = 2pt}
+            }
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumT) {};
+            \node[left=1.25cm of sumT] (T0) {};
+            \draw[thick, ->] (T0) -- node[above, at start, anchor = south west] {$T^*$} (sumT.west);
+            \node[signedmixer, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}, below right = 0.6cm and 0.75cm of sumT] (sumPsi) {};
+            \node (Psi0) at (T0 |- sumPsi) {};
+            \draw[thick, ->] (Psi0) -- node[above, at start, anchor = south west] {$\|\bm{\psi}_{\mathrm{s}}\|^*$} (sumPsi.west);
+            \node[crossingshape, rotate=-90, name = jumpPsi, thick] at (sumPsi.west -| sumT.south) {};
+            \node[twolevelhystcontrollershape, right = \dtcblockgaplarge of sumPsi] (hyst1) {};
+            \node[threelevelhystcontrollershape] at (hyst1.north |- sumT.east) (hyst2) {};
+            \draw[thick, ->] (sumT.east) -- node[above, near start]{$\Delta T$} (hyst2.west);
+            \draw[thick, ->] (sumPsi.east) -- node[above]{$\Delta\|\bm{\psi}_{\mathrm{s}}\|$} (hyst1.west);
+            \node[dtcblock, minimum width = 2.0cm, minimum height = 3.3cm, right = \dtcblockgaplarge of hyst2.north east, anchor = north west, align = center] (swTab) {Switching\\table};
+            \node[dtcblock, minimum width = 2.0cm, minimum height = 3.3cm, below = 0.5cm of swTab, align = center] (Est) {Torque \\ \& \\ flux \\ estimator};
+            \draw[thick, ->] (hyst2.east)  -- ($(hyst2.east -| swTab.west)$);
+            \draw[thick, ->] (hyst1.east)  -- ($(hyst1.east -| swTab.west)$);
+
+            \node[tdcacshape, right = 2*\dtcblockgaplarge of swTab.north east, anchor = north west,circuitikz/blocks/scale = \dtcconverterscale]  (conv) {};
+            \node[threephasemotorshaftshape, below = 3 cm of conv.south, anchor = center, circuitikz/blocks/scale = \dtcconverterscale
+            ] (motor) {};
+
+            \draw[thick] (conv.south) to[currtap, name=ctdc] (motor.north);
+            \coordinate (ctdcQuarterTop) at ($(conv.south)+(0.5,0)$);
+            \path[name path = motorcircle] (motor.center) circle[radius = \dimexpr\dtcblockheight/2\relax];
+            \path[name path = ctdcQuarterLine] (ctdcQuarterTop) -- ($(ctdcQuarterTop |- motor.south)+(0,-0.2)$);
+            \path[name intersections = {of = motorcircle and ctdcQuarterLine, by = ctdcQuarterBottom}];
+            \coordinate (ctdcQuarterTapTop) at ($(ctdcQuarterTop)!0.05!(ctdcQuarterBottom)$);
+            \coordinate (ctdcQuarterTapBottom) at ($(ctdcQuarterTop)!0.4!(ctdcQuarterBottom)$);
+            \draw[thick](ctdcQuarterTop) -- (ctdcQuarterTapTop);
+            \draw[thick] (ctdcQuarterTapTop) to[currtap, name=ctdcquarter] (ctdcQuarterTapBottom);
+            \draw[thick] (ctdcQuarterTapBottom) -- (ctdcQuarterBottom);
+            \coordinate (ctdcQuarterLeftTop) at ($(conv.south)+(-0.5,0)$);
+            \path[name path = ctdcQuarterLeftLine] (ctdcQuarterLeftTop) -- ($(ctdcQuarterLeftTop |- motor.south)+(0,-0.2)$);
+            \path[name intersections = {of = motorcircle and ctdcQuarterLeftLine, by = ctdcQuarterLeftBottom}];
+            \coordinate (ctdcQuarterLeftTapTop) at ($(ctdcQuarterLeftTop)!0.525!(ctdcQuarterLeftBottom)$);
+            \coordinate (ctdcQuarterLeftTapBottom) at ($(ctdcQuarterLeftTop)!0.875!(ctdcQuarterLeftBottom)$);
+            \draw[thick] (ctdcQuarterLeftTop) -- (ctdcQuarterLeftTapTop);
+            \draw[thick] (ctdcQuarterLeftTapTop) to[currtap, name=ctdcquarterleft] (ctdcQuarterLeftTapBottom);
+            \draw[thick] (ctdcQuarterLeftTapBottom) -- (ctdcQuarterLeftBottom);
+
+            \coordinate (dtcVoltSenseInA) at ($(Est.north  east)!0.125!(Est.south east)$);
+            \coordinate (dtcVoltSenseInB) at ($(Est.north  east)!0.25!(Est.south east)$);
+            \coordinate (dtcVoltSenseInC) at ($(Est.north  east)!0.375!(Est.south east)$);
+            \coordinate (dtcCurrSenseInA) at ($(Est.north  east)!0.5!(Est.south east)$);
+            \coordinate (dtcCurrSenseInB) at ($(Est.north  east)!0.625!(Est.south east)$);
+            \coordinate (dtcCurrSenseInC) at ($(Est.north  east)!0.75!(Est.south east)$);
+            \coordinate (dtcMotorSense) at ($(Est.north  east)!0.875!(Est.south east)$);
+
+
+            \coordinate (VoltSenseCEdge) at ($(swTab.north east)!0.429!(conv.north west)$);
+            \coordinate (VoltSenseBEdge) at ($(swTab.north east)!0.286!(conv.north west)$);
+            \coordinate (VoltSenseAEdge) at ($(swTab.north east)!0.143!(conv.north west)$);
+            \coordinate (CurrSenseAEdge) at ($(swTab.north east)!0.571!(conv.north west)$);
+            \coordinate (CurrSenseBEdge) at ($(swTab.north east)!0.714!(conv.north west)$);
+            \coordinate (CurrSenseCEdge) at ($(swTab.north east)!0.857!(conv.north west)$);
+
+            \node[crossingshape, name = jumpiB, thick] at (ctdcquarter.tap -| conv.south) {};
+            \node[crossingshape, name = jumpiC, thick] at (ctdcquarter.tap -| ctdcQuarterLeftTop) {};
+            \node[crossingshape, name = jumpiC2, thick] at (ctdc.tap -| ctdcQuarterLeftTop) {};
+
+            \draw[thick] (ctdcquarter.tap) -- (jumpiB.east);
+            \draw[thick] (jumpiB.west) -- (jumpiC.east);
+            \draw[thick, ->] (jumpiC.west) -| node[above, near end ] {$i_\mathrm{a}$} ($(CurrSenseAEdge |- ctdcquarter.tap)$) |- (dtcCurrSenseInA);
+            \draw[thick] (ctdc.tap) -- (jumpiC2.east);
+            \draw[thick, ->] (jumpiC2.west) -| node[above, near end ] {$i_\mathrm{b}$} ($(CurrSenseBEdge |- ctdc.tap)$) |- (dtcCurrSenseInB);
+            \draw[thick, ->] (ctdcquarterleft.tap) -| node[above, near end ] {$i_\mathrm{c}$} ($(CurrSenseCEdge |- ctdcquarterleft.tap)$) |- (dtcCurrSenseInC);
+
+            \draw[thick, ->] (motor.south) |- node[above left] {$\omega$} (dtcMotorSense);
+
+            \coordinate (swTabOut) at ($(swTab.east |- conv.west)$);
+
+            \foreach \dy/\phase in {0.5/a, 0.00/b, -0.5/c} {
+                    \draw[thick, ->] ($(swTabOut)+(0,\dy)$) -- ($(conv.west)+(0,\dy)$) coordinate (convS\phase);
+                    \node[siglabel, above] at ($($(swTabOut)+(0,\dy)$)!0.5!($(conv.west)+(0,\dy)$)$) {$s_\mathrm{\phase}$};
+                }
+            \coordinate (TorqueEstOut) at ($(Est.north  west)!0.75!(Est.south west)$);
+            \coordinate (FluxEstOut) at ($(Est.north  west)!0.5!(Est.south west)$);
+            \coordinate (AuxEstOut) at ($(Est.north  west)!0.25!(Est.south west)$);
+            \coordinate (AuxSwIn) at ($(swTab.north  west)!0.85!(swTab.south west)$);
+
+            \draw[thick] (TorqueEstOut)  -| node[at start, anchor = south east] {$\hat{T}$} (jumpPsi.east);
+            \draw[thick, ->] (jumpPsi.west) -- (sumT.south);
+            \draw[thick, ->] (FluxEstOut)  -| node[at start, anchor = south east] {$\|\hat{\bm{\psi}}_{\mathrm{s}}\|$} (sumPsi.south);
+            \draw[thick, ->] (AuxEstOut)   -- node[at start, anchor = south east] {$\omega, \hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}$} ($(AuxEstOut -| hyst1.south)$) |-   (AuxSwIn);
+
+            \node[crossingshape, rotate=-90, name = jumpSb, thick] at (convSb -| VoltSenseAEdge) {};
+            \node[crossingshape, rotate=-90, name = jumpSc, thick] at (convSc -| VoltSenseAEdge) {};
+            \node[crossingshape, rotate=-90, name = jumpSc2, thick] at (convSc -| VoltSenseBEdge) {};
+
+            \draw[thick] ($(VoltSenseAEdge |- convSa)$) to [short, *-] (jumpSb.west);
+            \draw[thick] (jumpSb.east) -- (jumpSc.west);
+            \draw[thick, ->] (jumpSc.east) |- (dtcVoltSenseInA);
+            \draw[thick] ($(VoltSenseBEdge |- convSb)$) to [short, *-] (jumpSc2.west);
+            \draw[thick, ->] (jumpSc2.east) |- (dtcVoltSenseInB);
+            \draw[thick, ->] ($(VoltSenseCEdge |- convSc)$) to [short, *-] ($(VoltSenseCEdge |- convSc)$) |- (dtcVoltSenseInC);
+        \end{circuitikz}
+        \caption{Overview of a direct torque control system for a IM drives (not considering superimposed OPS and modulation level control levels, the DTC for PMSM and IM are structurally identical).}
+        \label{fig:dtc_IM_high_level}
+    \end{figure}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% IM torque relation in stator-flux DTC %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DTC torque mechanism for the IM}
+    Expressing the stator current in terms of the stator and rotor flux linkages, we have
+    \begin{equation}
+        \bm{i}_{\mathrm{s},\upalpha\upbeta}
+        =\frac{1}{\sigma L_\mathrm{s,app}}\left(\bm{\psi}_{\mathrm{s},\upalpha\upbeta}
+        -\frac{L_\mathrm{m,app}}{L_\mathrm{r,app}}\bm{\psi}_{\mathrm{r},\upalpha\upbeta}\right).
+        \label{eq:IM_DTC_stator_current_flux_relation_v2}
+    \end{equation}\pause%
+    The IM's torque can be represented as the dot product of the stator and rotor flux linkages:
+    \begin{equation}
+        \begin{split}
+            T & = \frac{3}{2}p \bm{i}^{\T}_{\mathrm{s},\upalpha\upbeta}\bm{J}\bm{\psi}_{\mathrm{s},\upalpha\upbeta}
+            = \frac{3}{2}p\frac{L_\mathrm{m,app}}{\sigma L_\mathrm{s,app}L_\mathrm{r,app}}
+            \bm{\psi}_{\mathrm{s},\upalpha\upbeta}^{\T}\bm{J}\bm{\psi}_{\mathrm{r},\upalpha\upbeta}                 \\
+              & = \frac{3}{2}p\frac{L_\mathrm{m,app}}{\sigma L_\mathrm{s,app}L_\mathrm{r,app}}
+            \|\bm{\psi}_\mathrm{s}\|\,\|\bm{\psi}_\mathrm{r}\|\sin(\delta).
+        \end{split}
+        \label{eq:IM_DTC_torque_flux_angle_v2}
+    \end{equation}\pause%
+    \begin{itemize}
+        \item The rotor flux linkage is a comparatively slow state due to the rotor time constant.
+        \item DTC therefore moves the stator flux vector directly to change both $\|\bm{\psi}_\mathrm{s}\|$ and the torque-producing angle $\delta$.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Stator flux and torque estimation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Stator flux and torque estimation for DTC}
+    In stationary coordinates, the stator voltage equation directly gives
+    \begin{equation}
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\mathrm{s},\upalpha\upbeta}(t)
+        =\bm{u}_{\mathrm{s},\upalpha\upbeta}(t)-R_\mathrm{s}\bm{i}_{\mathrm{s},\upalpha\upbeta}(t).
+        \label{eq:IM_DTC_stator_flux_voltage_model_ct_v2}
+    \end{equation}\pause%
+    A simple discrete-time voltage-model estimator is
+    \begin{equation}
+        \hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k+1]
+        =\hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k]
+        +T_\mathrm{s}\left(\hat{\bm{u}}_{\mathrm{s},\upalpha\upbeta}[k]-R_\mathrm{s}\bm{i}_{\mathrm{s},\upalpha\upbeta}[k]\right),
+        \label{eq:IM_DTC_stator_flux_voltage_model_dt_v2}
+    \end{equation}\pause%
+    with the torque estimate
+    \begin{equation}
+        \hat{T}[k]
+        =\frac{3}{2}p\,\bm{i}_{\mathrm{s},\upalpha\upbeta}^{\T}[k]
+        \bm{J}\hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k].
+        \label{eq:IM_DTC_torque_estimate_v2}
+    \end{equation}\pause%
+    \begin{itemize}
+        \item $\hat{\bm{u}}_\mathrm{s}$ is typically reconstructed from $s_\mathrm{a,b,c}$, $u_\mathrm{dc}$ and an inverter model.
+        \item At low stator frequencies, $R_\mathrm{s}$ errors and measurement offsets must be compensated to avoid flux-estimator drift -- or a low-pass filtered integration must be used.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Voltage-model route to rotor flux estimation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Voltage-model route: rotor flux dynamics in $\upalpha\upbeta$}
+    Starting from the flux ODEs used for the discrete-time IM model, express both flux vectors in stator-oriented $\upalpha\upbeta$ coordinates:
+    \begin{equation}
+        \begin{aligned}
+            \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+             & =\hat{\bm{u}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+            -R_\mathrm{s}\bm{i}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta},            \\
+            \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+             & =\omega\bm{J}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+            -R_\mathrm{r}\bm{i}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}.
+        \end{aligned}
+        \label{eq:IM_DTC_flux_odes_stator_frame_v6}
+    \end{equation}\pause%
+    The second equation follows from $\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}=\bm{T}_\mathrm{p}(\varepsilon)\hat{\bm{\psi}}^{\mathrm{r}}_{\mathrm{r},\upalpha\upbeta}$ and $\frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{r}}_{\mathrm{r},\upalpha\upbeta}=-R_\mathrm{r}\bm{i}^{\mathrm{r}}_{\mathrm{r},\upalpha\upbeta}$ after differentiating the coordinate transformation.\pause\par\medskip
+    Using the apparent-inductance magnetic model in the same coordinate frame gives
+    \begin{equation}
+        \begin{aligned}
+            \bm{i}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+             & =\frac{1}{\sigma L_{\mathrm{s,app}}}
+            \left(\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+            -\frac{L_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}\right), \\
+            \bm{i}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+             & =\frac{1}{\sigma L_{\mathrm{r,app}}}
+            \left(\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+            -\frac{L_{\mathrm{m,app}}}{L_{\mathrm{s,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}\right).
+        \end{aligned}
+        \label{eq:IM_DTC_apparent_current_elimination_v6}
+    \end{equation}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Voltage-model route: coupled flux-state model}
+    Substituting \eqref{eq:IM_DTC_apparent_current_elimination_v6} into \eqref{eq:IM_DTC_flux_odes_stator_frame_v6} yields a coupled ODE system with only flux linkages as states:
+    \begin{equation}
+        \begin{aligned}
+            \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+             & =\hat{\bm{u}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+            -\frac{R_\mathrm{s}}{\sigma L_{\mathrm{s,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+            +\frac{R_\mathrm{s}L_{\mathrm{m,app}}}{\sigma L_{\mathrm{s,app}}L_{\mathrm{r,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta},                             \\[0.6ex]
+            \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+             & =\frac{R_\mathrm{r}L_{\mathrm{m,app}}}{\sigma L_{\mathrm{r,app}}L_{\mathrm{s,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
+            -\frac{R_\mathrm{r}}{\sigma L_{\mathrm{r,app}}}
+            \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}
+            +\omega\bm{J}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}.
+        \end{aligned}
+        \label{eq:IM_DTC_coupled_flux_state_model_v6}
+    \end{equation}\pause%
+    Hence, the rotor flux is not obtained from a static relation in this route. It evolves as a state coupled to the stator flux through the magnetizing branch and filtered by the rotor time constant.\pause%
+    \begin{equation}
+        \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}[k+1]
+        =\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}[k]
+        +T_\mathrm{s}\,\bm{f}_\mathrm{r}\!\left(
+        \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}[k],
+        \hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{r},\upalpha\upbeta}[k],\omega[k]\right),
+        \label{eq:IM_DTC_rotor_flux_euler_v6}
+    \end{equation}
+    where $\bm{f}_\mathrm{r}(\cdot)$ is the second row of \eqref{eq:IM_DTC_coupled_flux_state_model_v6}.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Current-model route to stator flux estimation %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Current-model route: flux estimates without voltage integration}
+    Alternatively, use the previous discrete-time rotor-flux-oriented model parts directly. With
+    $\bm{i}^{\psi_\mathrm{r}}_{\mathrm{s,dq}}[k]=\bm{T}_\mathrm{p}(-\hat{\varepsilon}_{\psi_\mathrm{r}}[k])\bm{i}_{\mathrm{s},\upalpha\upbeta}[k]$ and $\tau_\mathrm{r}=L_\mathrm{r,app}/R_\mathrm{r}$, estimate
+    \begin{equation}
+        \begin{aligned}
+            \hat{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k+1]
+             & =\left(1-\frac{T_\mathrm{s}}{\tau_\mathrm{r}}\right)
+            \hat{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]
+            +\frac{T_\mathrm{s}L_\mathrm{m,app}}{\tau_\mathrm{r}}i^{\psi_\mathrm{r}}_{\mathrm{s,d}}[k],                                                \\
+            \hat{\omega}_{\psi_\mathrm{r}}[k]
+             & =\omega[k]+\frac{L_\mathrm{m,app}}{\tau_\mathrm{r}\hat{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k]}i^{\psi_\mathrm{r}}_{\mathrm{s,q}}[k], \\
+            \hat{\varepsilon}_{\psi_\mathrm{r}}[k+1]
+             & =\hat{\varepsilon}_{\psi_\mathrm{r}}[k]+T_\mathrm{s}\hat{\omega}_{\psi_\mathrm{r}}[k].
+        \end{aligned}
+        \label{eq:IM_DTC_rotor_flux_current_model_v4}
+    \end{equation}\pause%
+    Then transform the rotor-flux estimate back into stationary coordinates and reconstruct the stator flux:
+    \begin{equation}
+        \begin{aligned}
+            \hat{\bm{\psi}}_{\mathrm{r},\upalpha\upbeta}[k]
+             & =\bm{T}_\mathrm{p}(\hat{\varepsilon}_{\psi_\mathrm{r}}[k])
+            \begin{bmatrix}\hat{\psi}^{\psi_\mathrm{r}}_{\mathrm{r,d}}[k] & 0\end{bmatrix}^{\T}, \\
+            \hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k]
+             & =\sigma L_\mathrm{s,app}\bm{i}_{\mathrm{s},\upalpha\upbeta}[k]
+            +\frac{L_\mathrm{m,app}}{L_\mathrm{r,app}}\hat{\bm{\psi}}_{\mathrm{r},\upalpha\upbeta}[k].
+        \end{aligned}
+        \label{eq:IM_DTC_stator_flux_from_current_model_v4}
+    \end{equation}\pause%
+    This route avoids integrating the voltage $\bm{u}_\mathrm{s}-R_\mathrm{s}\bm{i}_\mathrm{s}$, but it needs rotor-speed information and accurate rotor parameters. Moreover, it requires a more coordinate transformations.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Mapping elementary voltage vectors for IM-DTC %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[b]
+    \frametitle{Mapping elementary voltage vectors toward IM flux and torque changes}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.50\textwidth}
+            Neglecting the ohmic voltage drop over one short sampling interval yields
+            \begin{equation}
+                \hat{\bm{\psi}}_\mathrm{s}[k+1]
+                \approx \hat{\bm{\psi}}_\mathrm{s}[k]+T_\mathrm{s}\bm{u}_\mathrm{s}[k].
+                \label{eq:IM_DTC_flux_increment_v2}
+            \end{equation}\pause%
+            Therefore, the applied elementary voltage vector determines the next stator-flux movement. With slowly varying $\bm{\psi}_\mathrm{r}$:
+            \begin{itemize}
+                \item tangential movement mainly changes $\delta$ and therefore $T$,
+                \item radial movement mainly changes $\|\bm{\psi}_\mathrm{s}\|$,
+                \item zero vectors keep $\bm{\psi}_\mathrm{s}$ approximately constant while the torque changes with the rotor dynamics.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \centering
+            \begin{figure}
+                \begin{tikzpicture}[x=1.05cm,y=1.05cm,>=Latex]
+                    \pgfmathsetmacro{\psiAngle}{47}
+                    \pgfmathsetmacro{\psiRadius}{2.6}
+                    \pgfmathsetmacro{\rotorAngle}{15}
+                    \pgfmathsetmacro{\rotorRadius}{2.7}
+                    \pgfmathsetmacro{\outerRadius}{0.78}
+                    \coordinate (O) at (0,0);
+                    \coordinate (psis) at (\psiAngle:\psiRadius);
+                    \coordinate (psir) at (\rotorAngle:\rotorRadius);
+                    \draw[->] (-0.35,0) -- (4.0,0) node[below] {$\upalpha$};
+                    \draw[->] (0,-0.35) -- (0,3.4) node[left] {$\upbeta$};
+                    \draw[signalalpha,thick,->] (O) -- node[left,pos=0.55, xshift=-0.5em] {$\hat{\bm{\psi}}_\mathrm{s}$} (psis);
+                    \draw[signaldelta,thick,->] (O) -- (psir)  node[right] {$\hat{\bm{\psi}}_\mathrm{r}$};
+                    \foreach \name/\angle in {u1/0,u2/60,u3/120,u4/180,u5/240,u6/300} {
+                            \coordinate (\name) at ($(psis)+(\angle:\outerRadius)$);
+                            \draw[signalalpha,->,thick,dashed] (psis) -- (\name);
+                        }
+                    \node[right] at (u1) {$T_\mathrm{s}\bm{u}_{\mathrm{i}1}$};
+                    \node[above] at (u2) {$T_\mathrm{s}\bm{u}_{\mathrm{i}2}$};
+                    \node[above left] at (u3) {$T_\mathrm{s}\bm{u}_{\mathrm{i}3}$};
+                    \node[left] at (u4) {$T_\mathrm{s}\bm{u}_{\mathrm{i}4}$};
+                    \node[below] at (u6) {$T_\mathrm{s}\bm{u}_{\mathrm{i}6}$};
+                    \draw[thin,->] (15:1) arc (15:47:1) node[midway,left, yshift=-1mm] {$\delta$};
+                    \fill[signalalpha] (psis) circle (2pt);
+                \end{tikzpicture}
+                \caption{Local stator-flux increments generated by the active inverter voltage vectors.}
+                \label{fig:IM_DTC_voltage_vector_effect_v2}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DTC switching table %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DTC switching table}
+
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c c c c c c}
+            \toprule
+            Sector
+              &
+            \begin{tabular}[c]{@{}c@{}}
+                $\Delta T > 0$ \\
+                $\Delta \|\bm{\psi}_\mathrm{s}\| > 0$
+            \end{tabular}
+              &
+            \begin{tabular}[c]{@{}c@{}}
+                $\Delta T > 0$ \\
+                $\Delta \|\bm{\psi}_\mathrm{s}\| < 0$
+            \end{tabular}
+              &
+            \begin{tabular}[c]{@{}c@{}}
+                $\Delta T < 0$ \\
+                $\Delta \|\bm{\psi}_\mathrm{s}\| > 0$
+            \end{tabular}
+              &
+            \begin{tabular}[c]{@{}c@{}}
+                $\Delta T < 0$ \\
+                $\Delta \|\bm{\psi}_\mathrm{s}\| < 0$
+            \end{tabular}
+              &
+            \begin{tabular}[c]{@{}c@{}}
+                $\Delta T \approx 0$
+            \end{tabular}
+            \\
+            \midrule
+            1 & $\bm{s}_{\mathrm{i}2}$ & $\bm{s}_{\mathrm{i}3}$ & $\bm{s}_{\mathrm{i}6}$ & $\bm{s}_{\mathrm{i}5}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            2 & $\bm{s}_{\mathrm{i}3}$ & $\bm{s}_{\mathrm{i}4}$ & $\bm{s}_{\mathrm{i}1}$ & $\bm{s}_{\mathrm{i}6}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            3 & $\bm{s}_{\mathrm{i}4}$ & $\bm{s}_{\mathrm{i}5}$ & $\bm{s}_{\mathrm{i}2}$ & $\bm{s}_{\mathrm{i}1}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            4 & $\bm{s}_{\mathrm{i}5}$ & $\bm{s}_{\mathrm{i}6}$ & $\bm{s}_{\mathrm{i}3}$ & $\bm{s}_{\mathrm{i}2}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            5 & $\bm{s}_{\mathrm{i}6}$ & $\bm{s}_{\mathrm{i}1}$ & $\bm{s}_{\mathrm{i}4}$ & $\bm{s}_{\mathrm{i}3}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            6 & $\bm{s}_{\mathrm{i}1}$ & $\bm{s}_{\mathrm{i}2}$ & $\bm{s}_{\mathrm{i}5}$ & $\bm{s}_{\mathrm{i}4}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
+            \bottomrule
+        \end{tabular}
+        \caption{Since DTC is basically manipulating the stator flux position, the switching table is identical to the one used for PMSM DTC. The same applies to the DTC's sector definition as in \figref{fig:DTC_sector_definition}.}
+        \label{tab:DTC_switching_table_IM}
+    \end{table}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Practical aspects and selected resources %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{IM-DTC: practical aspects and selected reading}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Implementation remarks},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+                \begin{itemize}
+                    \item Reconstruct $\hat{\bm{u}}_\mathrm{s}$ from the inverter model when using the voltage model.
+                    \item Consider the current model at low speed, but validate rotor-parameter sensitivity.
+                    \item Adapt hysteresis widths to control the average switching frequency.
+                    \item Choose $\|\bm{\psi}_\mathrm{s}\|^*$ from the OPS mapping: $\|\bm{\psi}_\mathrm{r}\|^* \rightarrow\|\bm{\psi}_\mathrm{s}\|^*$
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Selected reading},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
+                \begin{itemize}
+                    \item \href{https://doi.org/10.1109/TIA.1986.4504799}{Takahashi and Noguchi (1986)}
+                    \item \href{https://doi.org/10.1109/ISIE.1997.651717}{Buja et al. (1997)}
+                    \item \href{https://doi.org/10.1109/63.849048}{Casadei et al. (2000)}
+                    \item \href{https://doi.org/10.1186/s41601-019-0125-5}{El Ouanjli et al. (2019)}
+                \end{itemize}
+            \end{tcolorbox}
         \end{column}
     \end{columns}
 \end{frame}
