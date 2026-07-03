@@ -277,3 +277,97 @@ def add_voltage_constraint_to_ax(ax, n, color, pmsm):
     U = jnp.sqrt(u_d**2 + u_q**2)
 
     ax.contour(i_d, i_q, U, levels=[u_dc / jnp.sqrt(3)], colors=color, linewidths=1.5)
+
+
+def visualize_im_trajectories(
+    i_sequence: jax.Array,
+    u_sequence: jax.Array,
+    psi_sequence: jax.Array,
+    torque_sequence: jax.Array,
+    T_s: float,
+    albet: bool = True,
+):
+    colors = plt.rcParams["axes.prop_cycle"]()
+
+    fig = plt.figure(figsize=(12, 9), constrained_layout=True)
+
+    gs = gridspec.GridSpec(
+        12,
+        2,  # 4 rows, 2 columns
+        figure=fig,
+        width_ratios=[1.2, 1],  # left column 3x wider than right
+    )
+
+    # plots on the left
+    ax_left = [fig.add_subplot(gs[0:3, 0])]
+    for i in range(1, 4):
+        ax_left.append(fig.add_subplot(gs[i * 3 : (i + 1) * 3, 0], sharex=ax_left[0]))
+    for ax in ax_left[:-1]:
+        plt.setp(ax.get_xticklabels(), visible=False)
+
+    # plots on the right
+    ax_right_top = fig.add_subplot(gs[0:4, 1])
+    ax_right_mid = fig.add_subplot(gs[4:8, 1])
+    ax_right_bot = fig.add_subplot(gs[8:12, 1])
+    ax_right_top.set_aspect("equal")
+    ax_right_mid.set_aspect("equal")
+    ax_right_bot.set_aspect("equal")
+
+    t = jnp.linspace(0, (i_sequence.shape[0] - 1) * T_s, i_sequence.shape[0])
+    for ax in ax_left:
+        ax.set_xlim(t[0], t[-1])
+
+    ax = ax_left[0]
+    ax.set_ylabel(r"$i_\mathrm{s}$ in $\mathrm{A}$")
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, i_sequence[..., 0], label=r"$i_\mathrm{s, \upalpha}$" if albet else r"$i_\mathrm{s, d}$")
+    ax.plot(t, i_sequence[..., 1], label=r"$i_\mathrm{s, \upbeta}$" if albet else r"$i_\mathrm{s, q}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[1]
+    ax.set_ylabel(r"$\psi_\mathrm{r}$ in $\mathrm{Vs}$")
+    ax.plot(t, psi_sequence[..., 0], label=r"$\psi_\mathrm{r, \upalpha}$" if albet else r"$\psi_\mathrm{r, d}$")
+    ax.plot(t, psi_sequence[..., 1], label=r"$\psi_\mathrm{r, \upbeta}$" if albet else r"$\psi_\mathrm{r, q}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[2]
+    ax.set_ylabel(r"$u_\mathrm{s}$ in $\mathrm{V}$")
+    ax.plot(t[:-1], u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+    ax.plot(t[:-1], u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[3]
+    ax.set_ylabel(r"$T$ in $\mathrm{Nm}$")
+    ax.set_xlabel(r"$t$ in $\mathrm{s}$")
+    ax.plot(t, torque_sequence)
+
+    ax_right_top.plot(
+        i_sequence[..., 0],
+        i_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_mid.plot(
+        psi_sequence[..., 0],
+        psi_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_bot.plot(
+        u_sequence[..., 0],
+        u_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_top.set_xlabel(r"$i_\mathrm{s, \upalpha}$" if albet else r"$i_\mathrm{s, d}$")
+    ax_right_top.set_ylabel(r"$i_\mathrm{s, \upbeta}$" if albet else r"$i_\mathrm{s, q}$")
+    ax_right_mid.set_xlabel(r"$\psi_\mathrm{r, \upalpha}$" if albet else r"$\psi_\mathrm{r, d}$")
+    ax_right_mid.set_ylabel(r"$\psi_\mathrm{r, \upbeta}$" if albet else r"$\psi_\mathrm{r, q}$")
+    ax_right_bot.set_xlabel(r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+    ax_right_bot.set_ylabel(r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+
+    all_axs = [ax for ax in ax_left] + [ax_right_top, ax_right_mid, ax_right_bot]
+
+    for ax in all_axs:
+        ax.grid(True, alpha=0.5)
+        ax.tick_params(which="major", axis="y", direction="in")
+        ax.tick_params(which="both", axis="x", direction="in")
+
+    return fig, all_axs
