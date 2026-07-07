@@ -2667,11 +2667,11 @@
         \label{eq:IM_OPS_mapping_v14}
     \end{equation}\pause%
     \begin{itemize}
-        \item The rotor flux reference $\psi^*_\mathrm{lim}$ decides if operating in the loss-optimal constant torque region (low to medium speeds) or if flux weakening is required (medium to high speeds).
-        \item In the flux weakening region, the torque reference $T^*_\mathrm{lim}$ may be reduced below $T^*$ in order to satisfy the voltage and current limits.
+        \item The rotor flux reference $\psi^*_\mathrm{lim}$ decides if operating in the loss-optimal constant torque region (low to medium speeds) or if flux weakening is required (medium to high speeds).\pause%
+        \item In the flux weakening region, the torque reference $T^*_\mathrm{lim}$ may be reduced below $T^*$ in order to satisfy the voltage and current limits.\pause%
     \end{itemize}\vspace{-0.25cm}
     \begin{varblock}{Similarities and differences to the PMSM OPS}
-        Likewise in the PMSM case, the IM's OPS is a static mapping problem considering steady-state conditions such that a given torque reference is mapped to a feasible and efficient operating point. However, we do not map directly into the stator current plane (like with the PMSM) due to the additional presence of rotor flux dynamics.
+        Likewise in the PMSM case, the IM's OPS is a static mapping problem considering \hl{steady-state conditions} such that a given torque reference is \hl{mapped to a feasible and efficient operating point}. However, we do not only map into the stator current plane (like with the PMSM) due to the additional presence of rotor flux dynamics.
     \end{varblock}
 \end{frame}
 
@@ -2684,15 +2684,15 @@
     \begin{equation}
         \psi_{\mathrm{r,d}} = L_\mathrm{m,app} i_{\mathrm{s,d}}.
         \label{eq:steady-state_rotor_flux_IM_id}
-    \end{equation}
-    Hence, the torque can be expressed as
+    \end{equation}\pause%
+    Hence, the \hl{steady-state torque} can be expressed as
     \begin{equation}
         T
         =\frac{3}{2}p\frac{L_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}
         \psi_{\mathrm{r,d}} i_{\mathrm{s,q}}=\frac{3}{2}p\frac{L^2_{\mathrm{m,app}}}{L_{\mathrm{r,app}}}
         i_{\mathrm{s,d}}i_{\mathrm{s,q}}.
     \end{equation}\pause%
-    The copper-loss model contains stator and rotor contributions:
+    The \hl{copper-loss} model contains stator and rotor contributions:
     \begin{equation}
         P_{\mathrm{Cu}}=\frac{3}{2}
         \left(
@@ -2700,7 +2700,7 @@
         +R_{\mathrm r}\left(i^2_{\mathrm{r,d}}+i^2_{\mathrm{r,q}}\right)
         \right).
         \label{eq:IM_OPS_copper_losses}
-    \end{equation}
+    \end{equation}\pause%
     With \eqref{eq:IM_RFO_v5_rotor_current_elimination} we eliminate the rotor currents and obtain
     \begin{equation}
         P_{\mathrm{Cu}}=\frac{3}{2}
@@ -2717,17 +2717,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Steady-state IM model used for OPS (cont.)}
-    From \eqref{eq:basic_IM_model_set} the IM's steady-state stator voltage demand is
+    From \eqref{eq:basic_IM_model_set} the IM's \hl{steady-state stator voltage demand} is
     \begin{equation}
         \bm{u}_{\mathrm{s,dq}}= R_\mathrm{s} \bm{i}_\mathrm{s,dq}+ \omega_{\psi_\mathrm{r}}\bm{J}\bm{\psi}_\mathrm{s,dq} \approx \omega_{\psi_\mathrm{r}}\bm{J}\bm{\psi}_\mathrm{s,dq}.
-    \end{equation}
-    Here, the ohmic voltage drop is considered negligible compared to the rotatory induced voltage. With \eqref{eq:stator_flux_IM_stray_constant} and \eqref{eq:steady-state_rotor_flux_IM_id} we express the stator flux as a function of the stator currents:
+    \end{equation}\pause%
+    Here, the ohmic voltage drop is considered negligible compared to the rotatory induced voltage. \pause With \eqref{eq:stator_flux_IM_stray_constant} and \eqref{eq:steady-state_rotor_flux_IM_id} we express the stator flux as a function of the stator currents:
     \begin{equation}
         \bm{\psi}_\mathrm{s,dq} = \begin{bmatrix}
             L_\mathrm{s,app} i_\mathrm{s,d} \\ \sigma L_\mathrm{s,app} i_\mathrm{s,q}
         \end{bmatrix}.
-    \end{equation}
-    Hence, the squared steady-state stator voltage magnitude becomes
+    \end{equation}\pause%
+    Hence, the \hl{squared steady-state stator voltage magnitude} becomes
     \begin{equation}
         \|\bm{u}_{\mathrm{s,dq}}\|_2^2
         =\omega_{\psi_\mathrm{r}}^2\left(L_\mathrm{s,app}^2 i_\mathrm{s,d}^2 + \sigma^2 L_\mathrm{s,app}^2 i_\mathrm{s,q}^2\right).
@@ -2740,7 +2740,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Operating point selection as constrained optimization: IM case}
-    For a given objective $J_{\mathrm{OPS}}$, the OPS problem reads
+    For a given objective $J_{\mathrm{OPS}}$, the \hl{OPS problem} reads
     \begin{equation}
         \begin{aligned}
             \bm{i}_{\mathrm{s,dq}}^{*}
@@ -2757,13 +2757,13 @@
         \end{aligned}
         \label{eq:IM_OPS_problem_v14}
     \end{equation}\pause%
-    The relevant objective functions are
+    The relevant \hl{objective functions} are
     \begin{equation}
         \begin{aligned}
             J_{\mathrm{MTPC}} & =\left\|\bm{i}_{\mathrm{s,dq}}\right\|_2^2,
-                              & \quad                                          & \text{maximum torque per (stator) current},             \\
+                              & \quad                                          & \text{maximum torque per (stator) current},             \\\pause%
             J_{\mathrm{MTPL}} & =P_{\mathrm{Cu}},
-                              &                                                & \text{maximum torque per (stator/rotor copper) losses}, \\
+                              &                                                & \text{maximum torque per (stator/rotor copper) losses}, \\\pause%
             J_{\mathrm{MTPF}} & =\left\|\bm{\psi}_{\mathrm{s,dq}}\right\|_2^2,
                               &                                                & \text{maximum torque per (stator) flux}.
         \end{aligned}
@@ -2777,7 +2777,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Formal definition of the IM OPS contours}
-    We define the relevant contours in the rotor-flux-oriented stator current plane ($\bm{i}=\bm{i}_{\mathrm{s,dq}}$):
+    We define the relevant \hl{contours} in the rotor-flux-oriented stator current plane ($\bm{i}=\bm{i}_{\mathrm{s,dq}}$):
     \vspace{-0.2cm}
     \begin{columns}[c,onlytextwidth]
         \begin{column}{0.50\textwidth}
@@ -2837,7 +2837,7 @@
         \end{column}
         \begin{column}{0.475\textwidth}
             \begin{itemize}
-                \item<1-> Minimizes only the stator copper losses::
+                \item<1-> Minimizes only the stator copper losses:
                       $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=\|\bm{i}_{\mathrm{s,dq}}\|_2^2.$$
                 \item<2-> Visual interpretation: tangent point of the torque contour and the current circle:
                       $$
@@ -2883,7 +2883,7 @@
                       $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=P_{\mathrm{Cu,s}}+P_{\mathrm{Cu,r}}.$$
                 \item<2-> Visual interpretation: tangent point of the torque contour and the copper-loss contour:
                       $$
-                          \partial T(\bm{i}_{\mathrm{s,dq}}^{\psi_{\mathrm r}})=\lambda\,\partial P_{\mathrm{Cu}}(\bm{i}_{\mathrm{s,dq}}^{\psi_{\mathrm r}}).
+                          \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial P_{\mathrm{Cu}}(\bm{i}_{\mathrm{s,dq}}).
                       $$
                 \item<3-> Applicable below the current and voltage limits.
             \end{itemize}
@@ -2914,7 +2914,7 @@
         \begin{column}{0.475\textwidth}
             \begin{itemize}
                 \item Region where the current and voltage constraints become simultaneously active (i.e., produces the maximum available torque at the given speed).
-                \item<2-> The OPS can no longer follow the MTPL or MTPC loci due tohe voltage limit.
+                \item<2-> The OPS can no longer follow the MTPL or MTPC loci due the voltage limit.
                 \item<3-> Visual interpretation: the MC operating points are located at the boundary intersection
                       $$
                           \partial\mathbb{I}(i_{\mathrm{s,max}})\cap\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}}).
@@ -2949,7 +2949,7 @@
         \begin{column}{0.475\textwidth}
             \begin{itemize}
                 \item Region with active voltage constraint and remaining current margin (i.e., a torque reference below the maximum available torque at the given speed).
-                \item<3-> Visual interpretation: the admissible operating point lies on
+                \item<2-> Visual interpretation: the admissible operating point lies on
                       $$
                           \mathbb{T}(T^*)\cap\partial\mathbb{V}(\omega,\hat{u}_{\mathrm{s,max}})
                       $$
@@ -3182,7 +3182,7 @@
         \end{tikzpicture}
         \caption{Subplot view of the LUT construction: (a) loss-optimal rotor-flux reference over torque (below flux weakening) and (b) limiting torque envelope over rotor flux (for flux weakening).}
         \label{fig:flux_torque_LUTs_IM_OPS}
-    \end{figure}\pause%
+    \end{figure}
     \vspace{1mm}
 \end{frame}
 
@@ -3202,7 +3202,7 @@
                     \item \href{https://doi.org/10.1049/iet-epa.2019.0400}{Mosaddegh-Hesar et al. (2019)}
                 \end{itemize}
             \end{tcolorbox}
-        \end{column}
+        \end{column}\pause%
         \begin{column}{0.32\textwidth}
             \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Online optimization},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
                 \footnotesize
@@ -3212,7 +3212,7 @@
                     \item \href{https://doi.org/10.1038/s41598-026-42634-5}{Morawiec and Wogi (2026)}
                 \end{itemize}
             \end{tcolorbox}
-        \end{column}
+        \end{column}\pause%
         \begin{column}{0.32\textwidth}
             \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={LUT},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
                 \footnotesize
@@ -3223,9 +3223,8 @@
                 \end{itemize}
             \end{tcolorbox}
         \end{column}
-    \end{columns}
-
-    \vspace{6mm}
+    \end{columns}\pause%
+    \vspace{5mm}
     \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Remark},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
         Some of the above references only include partial solutions (e.g., only MTPC or MTPL) or do not consider the full torque-speed range. Likewise in the PMSM case, many roads lead to Rome, i.e., \eqref{eq:IM_OPS_problem_v14} can be solved in many different ways, and the above references are only a small selection of the available literature.
     \end{tcolorbox}
@@ -3296,8 +3295,8 @@
             \begin{itemize}
                 \item From \figref{fig:flux_torque_LUTs_IM_OPS} it can be seen that the smaller the torque reference, the smaller the loss-optimal rotor flux reference.
                 \item Consequently, at significant load steps, the rotor flux must be increased to reach the new torque reference.
-                \item Since the stator current is limited, the closed-loop rotor flux dynamics become dominant in the torque response.
-                \item Compared to an ``always nominal flux'' strategy, the loss-optimal rotor-flux selection can lead to a slower torque response.
+                \item<2-> Since the stator current is limited, the \hl{closed-loop rotor flux dynamics become dominant in the torque response}.
+                \item<3-> Compared to an ``always nominal flux'' strategy, the loss-optimal rotor-flux selection can lead to a slower torque response.
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -3394,10 +3393,10 @@
         \end{circuitikz}%
         \caption{Modulation degree controller  (inner PI + ARW loop is structural identical to PMSM case from \figref{fig:modulation_degree_control} and is not shown here due to space reasons).}
         \label{fig:modulation_degree_control_IM}
-    \end{figure}
+    \end{figure}\pause%
     \vspace{-0.65cm}
     \begin{varblock}{Remark}
-        In contrast to the PMSM case, the closed-loop rotor flux dynamics are mostly dominant for the IM drive. While the above structure focuses on manipulating $\psi_\mathrm{r}$ according to a rotor-flux-oriented FOC approach. The same can be applied to a stator-flux-oriented FOC (or any other controller) concept by replacing $\psi_\mathrm{r}$ with $\psi_\mathrm{s}$.
+        In contrast to the PMSM case, the closed-loop rotor flux dynamics are mostly dominant for the IM drive. While the above structure focuses on manipulating $\psi_\mathrm{r}$ according to a rotor-flux-oriented FOC approach, the same can be applied to a stator-flux-oriented FOC (or any other controller) concept by replacing $\psi_\mathrm{r}$ with $\psi_\mathrm{s}$.
     \end{varblock}
 \end{frame}
 
@@ -3419,13 +3418,13 @@
         \psi'_{\mathrm{s,max}}=\frac{2u_{\mathrm{dc}}}{\sqrt{3}|\omega_{\psi_{\mathrm r}}|} .
         \label{eq:IM_mod_v06_classical_stator_limit}
     \end{equation}\pause%
-    In an IM rotor-flux-oriented FOC, however, the OPS and flux controller do not manipulate $\psi_{\mathrm{s}}$ directly.  Their controlled variable is
+    In an IM rotor-flux-oriented FOC, however, the OPS and flux controller do not manipulate $\psi_{\mathrm{s}}$ directly. \pause  Their controlled variable is
     \begin{equation}
         \psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},
         \qquad
         \psi_{\mathrm{r,max}}^{\psi_{\mathrm r},*}=\psi_{\mathrm{r,max}}^{\prime}+\Delta\psi_{\mathrm{r,max}}^{\psi_{\mathrm r},*} .
         \label{eq:IM_mod_v06_actual_rotor_limit}
-    \end{equation}
+    \end{equation}\pause%
     Therefore the IM modulation controller must be derived once in the classical stator-flux view and then transformed to the actually implemented rotor-flux command.
 \end{frame}
 
@@ -3485,7 +3484,7 @@
         =\frac{\psi_{\mathrm{s,q}}^{\psi_{\mathrm r}}}{\psi_{\mathrm{s,d}}^{\psi_{\mathrm r}}}
         =\frac{\sigma L_{\mathrm{m,app}}T^*}{c_T\psi_{\mathrm r}^{2}},
         \label{eq:IM_mod_v06_kappa_def}
-    \end{equation}
+    \end{equation}\pause%
     the modulation-relevant stator-flux magnitude is
     \begin{equation}
         \psi_{\mathrm{s}}(\psi_{\mathrm r},T^*)
@@ -3509,7 +3508,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Plant modeling for a rotor-flux-limit command}
-    The local small-signal chain based on the controller structure from \figref{fig:modulation_degree_control_IM} is
+    The local \hl{small-signal chain} based on the controller structure from \figref{fig:modulation_degree_control_IM} is
     \begin{equation}
         \Delta\psi_{\mathrm{r,d,max}}^{*}
         \xrightarrow{K_{\mathrm{OPS}}}
@@ -3557,15 +3556,15 @@
         }{
             (z-\lambda_\psi)^2
         } .
-    \]
-    For reduced modulation-controller design, approximate it by a unity-gain PT1 model
+    \]\pause%
+    For \hl{reduced (easier) modulation-controller design}, approximate it by a unity-gain PT1 model
     \begin{equation}
         G'_{\psi}(z)
         =
         \frac{1-\lambda'_{\psi}}{z-\lambda'_{\psi}},
         \qquad
         G'_{\psi}(1)=1 .
-    \end{equation}
+    \end{equation}\pause%
     A low-frequency moment-matched choice is obtained from
     \begin{equation}
         \left.
@@ -3575,7 +3574,7 @@
         \left.
         \frac{\mathrm d G_{\psi}(z)}{\mathrm d z}
         \right|_{z=1},
-    \end{equation}
+    \end{equation}\pause%
     which gives the reduced pole matching formula
     \begin{equation}
         \lambda'_{\psi}
@@ -3641,19 +3640,19 @@
         \end{array}
         \label{eq:IM_mod_v06_plant_chains_compact}
     \end{equation}\pause%
-    Hence the two SISO plants are
+    Hence, the two SISO plants are
     \begin{equation}
         \begin{aligned}
             G_{\mathrm{p},m}^{\psi_{\mathrm s}}(\mathrm{z})
              & =\frac{\Delta M}{\Delta\Psi_{\mathrm{s,max}}}
             \approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z})K_{\psi_{\mathrm r}\psi_{\mathrm{s}}}
-            \approx K_mG'_{\psi}(\mathrm{z}),                      \\[1mm]
+            \approx K_mG'_{\psi}(\mathrm{z}),                      \\[1mm]\pause%
             G_{\mathrm{p},m}^{\psi_{\mathrm r}}(\mathrm{z})
              & =\frac{\Delta M}{\Delta\Psi_{\mathrm{r,d,max}}^{*}}
             \approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z}).
         \end{aligned}
         \label{eq:IM_mod_v06_plant_models_compact}
-    \end{equation}
+    \end{equation}\pause%
     \begin{equation}
         \boxed{\text{same dynamics }G'_{\psi}(\mathrm{z})}
         \qquad
@@ -3667,7 +3666,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{PI design for the rotor-flux-output plant}
-    The discrete-time PI controller now outputs a rotor-flux-limit correction:
+    The discrete-time PI controller outputs a rotor-flux-limit correction:
     \begin{equation}
         \Delta\Psi_{\mathrm{r,max}}^{*}(\mathrm{z})
         =G_{\mathrm{c},m}(\mathrm{z})E_m(\mathrm{z}),
@@ -3691,7 +3690,7 @@
         (\mathrm{z}-1)(\mathrm{z}-a_m)+b_mK_{\mathrm{p},m}(\mathrm{z}-1)+b_mK_{\mathrm{i},m}T_{\mathrm{s}}\mathrm{z}=0 .
         \label{eq:IM_mod_v06_char_poly}
     \end{equation}
-    It is the same PT1-plant design problem as before, but with a different plant gain.
+    \hl{This is the same PT1-plant design problem as before} (PMSM case), but with a different plant gain.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3719,7 +3718,7 @@
         b_m=\frac{\sqrt{3}|\omega_{\psi_{\mathrm r}}|}{2u_{\mathrm{dc}}}
         K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}(1-\lambda'_{\psi}) .
         \label{eq:IM_mod_v06_scheduled_b}
-    \end{equation}
+    \end{equation}\pause%
     Thus, $K_{\mathrm{p},m}$ and $K_{\mathrm{i},m}$ should be scheduled over $(T^*,\psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},\omega_{\psi_{\mathrm r}},u_{\mathrm{dc}})$ or designed conservatively for the smallest relevant $|b_m|$. As a rule of the thumb, choose $p_1=p_2=[3,\ldots,10]\cdot\lambda'_\psi$ for a sufficiently fast (but not too fast) modulation controller.
 \end{frame}
 
@@ -3741,7 +3740,7 @@
         \qquad
         x_{\mathrm{i},m}[k]=x_{\mathrm{i},m}^{+}[k]-\frac{K_{\mathrm{aw},m}}{K_{\mathrm{i},m}}\Delta u[k] .
         \label{eq:IM_mod_v06_ARW}
-    \end{equation}
+    \end{equation}\pause%
     Hence, the choice of $K_{\mathrm{aw},m}$ can follow the same route as in the PMSM case.
 \end{frame}
 
@@ -3889,7 +3888,7 @@
         -\frac{L_\mathrm{m,app}}{L_\mathrm{r,app}}\bm{\psi}_{\mathrm{r},\upalpha\upbeta}\right).
         \label{eq:IM_DTC_stator_current_flux_relation_v2}
     \end{equation}\pause%
-    The IM's torque can be represented as the dot product of the stator and rotor flux linkages:
+    The \hl{IM's torque} can be represented as the \hl{dot product of the stator and rotor flux linkages}:
     \begin{equation}
         \begin{split}
             T & = \frac{3}{2}p \bm{i}^{\T}_{\mathrm{s},\upalpha\upbeta}\bm{J}\bm{\psi}_{\mathrm{s},\upalpha\upbeta}
@@ -3901,7 +3900,7 @@
         \label{eq:IM_DTC_torque_flux_angle_v2}
     \end{equation}\pause%
     \begin{itemize}
-        \item The rotor flux linkage is a comparatively slow state due to the rotor time constant.
+        \item The rotor flux linkage is a comparatively slow state due to the rotor time constant.\pause%
         \item DTC therefore moves the stator flux vector directly to change both $\|\bm{\psi}_\mathrm{s}\|$ and the torque-producing angle $\delta$.
     \end{itemize}
 \end{frame}
@@ -3917,7 +3916,7 @@
         =\bm{u}_{\mathrm{s},\upalpha\upbeta}(t)-R_\mathrm{s}\bm{i}_{\mathrm{s},\upalpha\upbeta}(t).
         \label{eq:IM_DTC_stator_flux_voltage_model_ct_v2}
     \end{equation}\pause%
-    A simple discrete-time voltage-model estimator is
+    A \hl{simple discrete-time voltage-model estimator} is
     \begin{equation}
         \hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k+1]
         =\hat{\bm{\psi}}_{\mathrm{s},\upalpha\upbeta}[k]
@@ -3932,7 +3931,7 @@
         \label{eq:IM_DTC_torque_estimate_v2}
     \end{equation}\pause%
     \begin{itemize}
-        \item $\hat{\bm{u}}_\mathrm{s}$ is typically reconstructed from $s_\mathrm{a,b,c}$, $u_\mathrm{dc}$ and an inverter model.
+        \item $\hat{\bm{u}}_\mathrm{s}$ is typically reconstructed from $s_\mathrm{a,b,c}$, $u_\mathrm{dc}$ and an inverter model.\pause%
         \item At low stator frequencies, $R_\mathrm{s}$ errors and measurement offsets must be compensated to avoid flux-estimator drift -- or a low-pass filtered integration must be used.
     \end{itemize}
 \end{frame}
@@ -3975,7 +3974,7 @@
 
 \begin{frame}
     \frametitle{Voltage-model route: coupled flux-state model}
-    Substituting \eqref{eq:IM_DTC_apparent_current_elimination_v6} into \eqref{eq:IM_DTC_flux_odes_stator_frame_v6} yields a coupled ODE system with only flux linkages as states:
+    Substituting \eqref{eq:IM_DTC_apparent_current_elimination_v6} into \eqref{eq:IM_DTC_flux_odes_stator_frame_v6} yields a \hl{coupled ODE system with only flux linkages as states}:
     \begin{equation}
         \begin{aligned}
             \frac{\mathrm{d}}{\mathrm{d}t}\hat{\bm{\psi}}^{\mathrm{s}}_{\mathrm{s},\upalpha\upbeta}
@@ -4157,13 +4156,14 @@
             \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Implementation remarks},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
                 \begin{itemize}
                     \item Reconstruct $\hat{\bm{u}}_\mathrm{s}$ from the inverter model when using the voltage model.
-                    \item Consider the current model at low speed, but validate rotor-parameter sensitivity.
-                    \item Adapt hysteresis widths to control the average switching frequency.
-                    \item Choose $\|\bm{\psi}_\mathrm{s}\|^*$ from the OPS mapping: $\|\bm{\psi}_\mathrm{r}\|^* \rightarrow\|\bm{\psi}_\mathrm{s}\|^*$
+                    \item<2-> Consider the current model at low speed, but validate rotor-parameter sensitivity.
+                    \item<3-> Adapt hysteresis widths to control the average switching frequency.
+                    \item<4-> Choose $\|\bm{\psi}_\mathrm{s}\|^*$ from the OPS mapping: $\|\bm{\psi}_\mathrm{r}\|^* \rightarrow\|\bm{\psi}_\mathrm{s}\|^*$
                 \end{itemize}
             \end{tcolorbox}
         \end{column}
         \begin{column}{0.49\textwidth}
+            \onslide<5->%
             \begin{tcolorbox}[enhanced,arc=1mm,boxrule=0pt,frame hidden,drop fuzzy shadow=black!70,colback=gray!12,colbacktitle=defaultcolor,title={Selected reading},fonttitle=\normalsize,left=1mm,right=1mm,top=1mm,bottom=1mm]
                 \begin{itemize}
                     \item \href{https://doi.org/10.1109/TIA.1986.4504799}{Takahashi and Noguchi (1986)}
