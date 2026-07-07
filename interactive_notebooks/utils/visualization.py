@@ -332,14 +332,21 @@ def visualize_im_trajectories(
 
     ax = ax_left[2]
     ax.set_ylabel(r"$u_\mathrm{s}$ in $\mathrm{V}$")
-    ax.plot(t[:-1], u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
-    ax.plot(t[:-1], u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    try:
+        ax.plot(t, u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+        ax.plot(t, u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    except ValueError:
+        ax.plot(t[:-1], u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+        ax.plot(t[:-1], u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
     ax.legend(ncols=2)
 
     ax = ax_left[3]
     ax.set_ylabel(r"$T$ in $\mathrm{Nm}$")
     ax.set_xlabel(r"$t$ in $\mathrm{s}$")
-    ax.plot(t, torque_sequence)
+    try:
+        ax.plot(t, torque_sequence)
+    except ValueError:
+        ax.plot(t[:-1], torque_sequence)
 
     ax_right_top.plot(
         i_sequence[..., 0],
@@ -361,7 +368,7 @@ def visualize_im_trajectories(
     ax_right_mid.set_xlabel(r"$\psi_\mathrm{r, \upalpha}$" if albet else r"$\psi_\mathrm{r, d}$")
     ax_right_mid.set_ylabel(r"$\psi_\mathrm{r, \upbeta}$" if albet else r"$\psi_\mathrm{r, q}$")
     ax_right_bot.set_xlabel(r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
-    ax_right_bot.set_ylabel(r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    ax_right_bot.set_ylabel(r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, q}$")
 
     all_axs = [ax for ax in ax_left] + [ax_right_top, ax_right_mid, ax_right_bot]
 
@@ -371,3 +378,61 @@ def visualize_im_trajectories(
         ax.tick_params(which="both", axis="x", direction="in")
 
     return fig, all_axs
+
+
+def visualize_observer_accuracy(observations, cmo_states, states, T_s):
+
+    eps_psi_r_true = jnp.arctan2(states.physical_state.psi_r_beta, states.physical_state.psi_r_alpha)
+
+    fig, axs = plt.subplots(5, 1, figsize=(12, 8), sharex=True, constrained_layout=True)
+
+    for ax in axs:
+        ax.grid(True, alpha=0.3)
+        ax.tick_params(which="major", axis="y", direction="in")
+        ax.tick_params(which="both", axis="x", direction="in")
+
+    ax = axs[0]
+    ax.set_ylabel(r"$\varepsilon_{\psi_\mathrm{r}}$ in $\mathrm{rad}$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, eps_psi_r_true, label=r"gt $\varepsilon_{\psi_\mathrm{r}}$")
+    ax.plot(t, cmo_states.eps_r_hat, label=r"$\hat{\varepsilon}_{\psi_\mathrm{r}}$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[1]
+    ax.set_ylabel(r"$\sin(\varepsilon_{\psi_\mathrm{r}})$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, jnp.sin(eps_psi_r_true), label=r"$\sin(\mathrm{gt}\varepsilon_{\psi_\mathrm{r}})$")
+    ax.plot(t, jnp.sin(cmo_states.eps_r_hat), label=r"$\sin(\hat{\varepsilon}_{\psi_\mathrm{r}})$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[2]
+    ax.set_ylabel(r"$\cos(\varepsilon_{\psi_\mathrm{r}})$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, jnp.cos(eps_psi_r_true), label=r"$\cos(\mathrm{gt}\varepsilon_{\psi_\mathrm{r}})$")
+    ax.plot(t, jnp.cos(cmo_states.eps_r_hat), label=r"$\cos(\hat{\varepsilon}_{\psi_\mathrm{r}})$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[3]
+    ax.set_ylabel(r"error")
+    ax.plot(
+        t, jnp.sin(eps_psi_r_true) - jnp.sin(cmo_states.eps_r_hat), label=r"sin error $\varepsilon_{\psi_\mathrm{r}}$"
+    )
+    ax.plot(
+        t, jnp.cos(eps_psi_r_true) - jnp.cos(cmo_states.eps_r_hat), label=r"cos error $\varepsilon_{\psi_\mathrm{r}}$"
+    )
+    ax.legend(ncols=2)
+    ax = axs[4]
+
+    psi_mag = jnp.sqrt(states.physical_state.psi_r_alpha**2 + states.physical_state.psi_r_beta**2)
+
+    ax.grid(True, alpha=0.3)
+    ax.set_ylabel(r"$\psi_\mathrm{m}$ in $\mathrm{Vs}$")
+    ax.plot(t, psi_mag, label=r"gt $\psi_\mathrm{m}$")
+    ax.plot(t, cmo_states.psi_r_hat, label=r"$\hat{\psi}_\mathrm{m}$")
+    ax.legend(ncols=2)
+    ax.set_xlabel(r"$t$ in $\mathrm{s}$")
+
+    return fig, axs
