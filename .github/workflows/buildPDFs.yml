@@ -1,35 +1,42 @@
+---
 name: Build LaTeX PDFs
-on: 
-  push: 
+"on":
+  push:
     paths:
-        - '**.tex'
-        - 'lecture/build.py'
+      - '**.tex'
+      - 'lecture/build.py'
   workflow_dispatch:
-  
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      - name: Initialize and update submodules  #initialize and update submodules
+      - name: Initialize and update submodules
         run: |
-          git submodule init
-          git submodule update
-      - name: Compile LaTeX document    
+          git submodule update --init --recursive
+      - name: Compile LaTeX document
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: |            #runs build.py with submodule location and loopthrough examfolders and build pdf
+          run: |  # runs build.py with submodule location and builds PDF
             cd lecture
             cp ../course_template/lectureClass.cls ./
             python3 build.py
             cd ..
-            
 
-            
       - name: Upload PDF file
-        uses: actions/upload-pages-artifact@v3 #actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3  # actions/upload-artifact@v4
         with:
           name: github-pages
           path: built/
@@ -37,11 +44,6 @@ jobs:
 
   deploy:
     needs: build_latex
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
@@ -51,6 +53,8 @@ jobs:
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
+        uses: actions/deploy-pages@v5
