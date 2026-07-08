@@ -242,7 +242,7 @@ class IM(eqx.Module):
             epsilon=jnp.array(0.0),
             i_s_alpha=jnp.array(0.0),
             i_s_beta=jnp.array(0.0),
-            psi_r_alpha=jnp.array(0.0),
+            psi_r_alpha=jnp.array(0.05),
             psi_r_beta=jnp.array(0.0),
             omega_el=jnp.array(0.0),
             torque=jnp.array(0.0),
@@ -368,8 +368,8 @@ class IM(eqx.Module):
 
         additions = jax.lax.cond(
             state.additions.active_solver_state,
-            lambda _: self.Additions(solver_state=self._solver.init(term, t0, t1, y0, args), active_solver_state=True),
             lambda _: state.additions,
+            lambda _: self.Additions(solver_state=self._solver.init(term, t0, t1, y0, args), active_solver_state=True),
             operand=None,
         )
 
