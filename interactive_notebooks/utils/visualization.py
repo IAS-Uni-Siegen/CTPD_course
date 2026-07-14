@@ -2,10 +2,13 @@ from typing import Callable
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.lines as mlines
 
 import jax
 import jax.numpy as jnp
 import equinox as eqx
+
+from utils.common import lut_interpolate
 
 
 def build_grid(dim: int, low: float | list, high: float, points_per_dim: int) -> jax.Array:
@@ -244,3 +247,192 @@ def visualize_trajectories_with_reference(
     )
 
     return fig, all_axes
+
+
+def add_voltage_constraint_to_ax(ax, n, color, pmsm):
+
+    @eqx.filter_jit
+    def interpolate_flux(i_dq, pmsm):
+        p = {q: lut_interpolate(*pmsm.LUT_grids[q], pmsm.LUT_values[q], *i_dq) for q in ["Psi_d", "Psi_q"]}
+        return tuple([p[q] for q in ["Psi_d", "Psi_q"]])
+
+    i_d, i_q = pmsm.LUT_grids["L_dd"]
+    i_d = jnp.linspace(i_d[0], i_d[-1], i_d.shape[0] * 10)
+    i_q = jnp.linspace(i_q[0], i_q[-1], i_q.shape[0] * 10)
+
+    i_d, i_q = jnp.meshgrid(i_d, i_q, indexing="ij")
+    i_dq = jnp.stack([i_d, i_q], axis=-1)
+
+    psi_d, psi_q = eqx.filter_vmap(eqx.filter_vmap(interpolate_flux, in_axes=(0, None)), in_axes=(0, None))(i_dq, pmsm)
+
+    r_s = pmsm.env_properties.static_params.r_s
+    p = pmsm.env_properties.static_params.p
+    u_dc = pmsm.env_properties.static_params.u_dc
+
+    omega = jnp.array([p * n * 2 * jnp.pi / 60])
+
+    u_d = r_s * i_d - omega * psi_q
+    u_q = r_s * i_q + omega * psi_d
+
+    U = jnp.sqrt(u_d**2 + u_q**2)
+
+    ax.contour(i_d, i_q, U, levels=[u_dc / jnp.sqrt(3)], colors=color, linewidths=1.5)
+
+
+def visualize_im_trajectories(
+    i_sequence: jax.Array,
+    u_sequence: jax.Array,
+    psi_sequence: jax.Array,
+    torque_sequence: jax.Array,
+    T_s: float,
+    albet: bool = True,
+):
+    colors = plt.rcParams["axes.prop_cycle"]()
+
+    fig = plt.figure(figsize=(12, 9), constrained_layout=True)
+
+    gs = gridspec.GridSpec(
+        12,
+        2,  # 4 rows, 2 columns
+        figure=fig,
+        width_ratios=[1.2, 1],  # left column 3x wider than right
+    )
+
+    # plots on the left
+    ax_left = [fig.add_subplot(gs[0:3, 0])]
+    for i in range(1, 4):
+        ax_left.append(fig.add_subplot(gs[i * 3 : (i + 1) * 3, 0], sharex=ax_left[0]))
+    for ax in ax_left[:-1]:
+        plt.setp(ax.get_xticklabels(), visible=False)
+
+    # plots on the right
+    ax_right_top = fig.add_subplot(gs[0:4, 1])
+    ax_right_mid = fig.add_subplot(gs[4:8, 1])
+    ax_right_bot = fig.add_subplot(gs[8:12, 1])
+    ax_right_top.set_aspect("equal")
+    ax_right_mid.set_aspect("equal")
+    ax_right_bot.set_aspect("equal")
+
+    t = jnp.linspace(0, (i_sequence.shape[0] - 1) * T_s, i_sequence.shape[0])
+    for ax in ax_left:
+        ax.set_xlim(t[0], t[-1])
+
+    ax = ax_left[0]
+    ax.set_ylabel(r"$i_\mathrm{s}$ in $\mathrm{A}$")
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, i_sequence[..., 0], label=r"$i_\mathrm{s, \upalpha}$" if albet else r"$i_\mathrm{s, d}$")
+    ax.plot(t, i_sequence[..., 1], label=r"$i_\mathrm{s, \upbeta}$" if albet else r"$i_\mathrm{s, q}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[1]
+    ax.set_ylabel(r"$\psi_\mathrm{r}$ in $\mathrm{Vs}$")
+    ax.plot(t, psi_sequence[..., 0], label=r"$\psi_\mathrm{r, \upalpha}$" if albet else r"$\psi_\mathrm{r, d}$")
+    ax.plot(t, psi_sequence[..., 1], label=r"$\psi_\mathrm{r, \upbeta}$" if albet else r"$\psi_\mathrm{r, q}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[2]
+    ax.set_ylabel(r"$u_\mathrm{s}$ in $\mathrm{V}$")
+    try:
+        ax.plot(t, u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+        ax.plot(t, u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    except ValueError:
+        ax.plot(t[:-1], u_sequence[..., 0], label=r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+        ax.plot(t[:-1], u_sequence[..., 1], label=r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, d}$")
+    ax.legend(ncols=2)
+
+    ax = ax_left[3]
+    ax.set_ylabel(r"$T$ in $\mathrm{Nm}$")
+    ax.set_xlabel(r"$t$ in $\mathrm{s}$")
+    try:
+        ax.plot(t, torque_sequence)
+    except ValueError:
+        ax.plot(t[:-1], torque_sequence)
+
+    ax_right_top.plot(
+        i_sequence[..., 0],
+        i_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_mid.plot(
+        psi_sequence[..., 0],
+        psi_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_bot.plot(
+        u_sequence[..., 0],
+        u_sequence[..., 1],
+        zorder=1,
+    )
+    ax_right_top.set_xlabel(r"$i_\mathrm{s, \upalpha}$" if albet else r"$i_\mathrm{s, d}$")
+    ax_right_top.set_ylabel(r"$i_\mathrm{s, \upbeta}$" if albet else r"$i_\mathrm{s, q}$")
+    ax_right_mid.set_xlabel(r"$\psi_\mathrm{r, \upalpha}$" if albet else r"$\psi_\mathrm{r, d}$")
+    ax_right_mid.set_ylabel(r"$\psi_\mathrm{r, \upbeta}$" if albet else r"$\psi_\mathrm{r, q}$")
+    ax_right_bot.set_xlabel(r"$u_\mathrm{s, \upalpha}$" if albet else r"$u_\mathrm{s, d}$")
+    ax_right_bot.set_ylabel(r"$u_\mathrm{s, \upbeta}$" if albet else r"$u_\mathrm{s, q}$")
+
+    all_axs = [ax for ax in ax_left] + [ax_right_top, ax_right_mid, ax_right_bot]
+
+    for ax in all_axs:
+        ax.grid(True, alpha=0.5)
+        ax.tick_params(which="major", axis="y", direction="in")
+        ax.tick_params(which="both", axis="x", direction="in")
+
+    return fig, all_axs
+
+
+def visualize_observer_accuracy(observations, cmo_states, states, T_s):
+
+    eps_psi_r_true = jnp.arctan2(states.physical_state.psi_r_beta, states.physical_state.psi_r_alpha)
+
+    fig, axs = plt.subplots(5, 1, figsize=(12, 8), sharex=True, constrained_layout=True)
+
+    for ax in axs:
+        ax.grid(True, alpha=0.3)
+        ax.tick_params(which="major", axis="y", direction="in")
+        ax.tick_params(which="both", axis="x", direction="in")
+
+    ax = axs[0]
+    ax.set_ylabel(r"$\varepsilon_{\psi_\mathrm{r}}$ in $\mathrm{rad}$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, eps_psi_r_true, label=r"gt $\varepsilon_{\psi_\mathrm{r}}$")
+    ax.plot(t, cmo_states.eps_r_hat, label=r"$\hat{\varepsilon}_{\psi_\mathrm{r}}$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[1]
+    ax.set_ylabel(r"$\sin(\varepsilon_{\psi_\mathrm{r}})$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, jnp.sin(eps_psi_r_true), label=r"$\sin(\mathrm{gt}\varepsilon_{\psi_\mathrm{r}})$")
+    ax.plot(t, jnp.sin(cmo_states.eps_r_hat), label=r"$\sin(\hat{\varepsilon}_{\psi_\mathrm{r}})$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[2]
+    ax.set_ylabel(r"$\cos(\varepsilon_{\psi_\mathrm{r}})$")
+    t = jnp.linspace(0, (observations.shape[0] - 1) * T_s, observations.shape[0])
+    ax.set_xlim((t[0], t[-1]))
+    ax.plot(t, jnp.cos(eps_psi_r_true), label=r"$\cos(\mathrm{gt}\varepsilon_{\psi_\mathrm{r}})$")
+    ax.plot(t, jnp.cos(cmo_states.eps_r_hat), label=r"$\cos(\hat{\varepsilon}_{\psi_\mathrm{r}})$", linestyle="dashed")
+    ax.legend(ncols=2)
+
+    ax = axs[3]
+    ax.set_ylabel(r"error")
+    ax.plot(
+        t, jnp.sin(eps_psi_r_true) - jnp.sin(cmo_states.eps_r_hat), label=r"sin error $\varepsilon_{\psi_\mathrm{r}}$"
+    )
+    ax.plot(
+        t, jnp.cos(eps_psi_r_true) - jnp.cos(cmo_states.eps_r_hat), label=r"cos error $\varepsilon_{\psi_\mathrm{r}}$"
+    )
+    ax.legend(ncols=2)
+    ax = axs[4]
+
+    psi_mag = jnp.sqrt(states.physical_state.psi_r_alpha**2 + states.physical_state.psi_r_beta**2)
+
+    ax.grid(True, alpha=0.3)
+    ax.set_ylabel(r"$\psi_\mathrm{m}$ in $\mathrm{Vs}$")
+    ax.plot(t, psi_mag, label=r"gt $\psi_\mathrm{m}$")
+    ax.plot(t, cmo_states.psi_r_hat, label=r"$\hat{\psi}_\mathrm{m}$")
+    ax.legend(ncols=2)
+    ax.set_xlabel(r"$t$ in $\mathrm{s}$")
+
+    return fig, axs

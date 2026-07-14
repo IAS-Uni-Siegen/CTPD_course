@@ -5,3 +5,5 @@ ipywidgets>=8.1.8
 ipympl>=0.10.0
 equinox>=0.13.8
 diffrax>=0.7.2
+jaxopt
+interpax
