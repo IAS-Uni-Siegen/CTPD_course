@@ -72,8 +72,8 @@
         \bm{\pi}\,\middle|\,
         \begin{array}{l}
             \bm{x}(0)=\bm{x}_0,\quad
-            \dot{\bm{x}}(t)=\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{w}(t)), \\
-            \bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{w}(t))\leq\bm{0},       \\
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{w}(t)), \\
+            \bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{w}(t))\leq\bm{0},                               \\
             \bm{x}(t)\in\mathcal{X},\quad
             \bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t))\in\mathcal{U},\quad t\geq0
         \end{array}
@@ -290,7 +290,7 @@
         \qquad
         \bm{Q}=\bm{C}\T\bm{Q}_{\mathrm{y}}\bm{C},
     \end{equation}
-    subject to $\dot{\bm{e}}=\bm{A}\bm{e}+\bm{B}\Delta\bm{u}$.
+    subject to $\nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{e}=\bm{A}\bm{e}+\bm{B}\Delta\bm{u}$.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -949,7 +949,7 @@
     \frametitle{Input constraint: the policy topology matters}
     Consider the \hl{constrained plant model}, i.e., $a=0$, $b=1$:
     \begin{equation*}
-        \dot{x}(t)=u(t),
+        \frac{\mathrm{d}}{\mathrm{d}t}x(t)=u(t),
         \qquad x(0)=x_0>0,
         \qquad |u(t)|\leq u_{\max} .
     \end{equation*}\pause%
@@ -1447,7 +1447,6 @@
     \frametitle{Receeding horizon principle}
     \centering
     \begin{circuitikz}
-
         \def\hd{1.5}
         \def\vd{3}
         \draw[->] (0,0) to node[above]{$y^*$} ++(\hd,0) node[adder, anchor = west] (sum) {};
@@ -1528,7 +1527,6 @@
 
         (b) FCS: modulator-free
     \end{minipage}
-
     \vspace{0.15cm}
     Let $n_u=\dim(\bm{u})$, let $n_\mathrm{s}$ denote the number of admissible converter input vectors, and let $M$ denote the modulator map.
     \begin{equation*}
@@ -1541,8 +1539,6 @@
         \begin{column}{0.49\textwidth}
             \centering
             \textbf{Continuous control set (CCS)}
-
-
             \begin{equation*}
                 \begin{aligned}
                     \bm{u}[k+j|k]          & \in\mathcal{U}_\mathrm{CCS}, \\[-0.5mm]
@@ -1590,7 +1586,6 @@
         \qquad
         j=0,\ldots,N-1.
     \end{equation}\vspace{-0.4cm}
-
     \begin{block}{Goal}
         Rewrite the finite-horizon OCP as one \hl{quadratic program} (QP) in the future input sequence.
     \end{block}
@@ -1612,8 +1607,6 @@
         \end{bmatrix}\T.
     \end{equation}
     Repeated substitution of the linear model yields the \hl{condensed prediction equation}
-
-
     \begin{equation}
         \boxed{\bm{X}_{N}[k]=\bm{S}_{\mathrm{x}}\hat{\bm{x}}[k]+\bm{S}_{\mathrm{u}}\bm{U}_{N}[k].}
     \end{equation}
@@ -1771,8 +1764,6 @@
     \end{equation}
     The objective is approximated quadratically around the current trajectory guess.
     \hl{Each SQP iteration has the structure}
-
-
     \begin{equation*}
         \text{linearize dynamics/constraints}
         \;\rightarrow\;
@@ -1808,7 +1799,6 @@
             \href{https://github.com/do-mpc/do-mpc}{do-mpc}\quad
             \href{https://github.com/coin-or/Ipopt}{IPOPT}}
     \end{center}
-
     \begin{block}{Connection to the previous slides}
         Linear MPC reduces tracking with constraints to a QP. Nonlinear MPC keeps the predictive OCP structure but requires iterative numerical approximations at each sampling instant.
     \end{block}
@@ -1829,8 +1819,6 @@
     \end{equation}
     Here, $\bm{\nu}(\bm{s})$ maps a switching action to the induced stator-voltage vector.
     For the candidate sequence
-
-
     \begin{equation}
         \bm{s}_{N}[k]
         =\{\bm{s}[k|k],\ldots,\bm{s}[k+N-1|k]\}\in\mathbb{S}^{N},
@@ -1936,8 +1924,6 @@
             \draw[-Latex] (cmp) -- (out);
         \end{tikzpicture}
     \end{center}
-
-
     \begin{itemize}
         \item All $8$ stage predictions are independent and can be evaluated concurrently.
         \item FPGAs shine with low latency and high throughput for such parallelizable tasks.
@@ -1961,7 +1947,6 @@
         \boxed{\mathcal{J}_{m}^{\mathrm{part}}+\underline{\mathcal{J}}_{m}^{\mathrm{tail}}\geq \overline{\mathcal{J}}.}
     \end{equation}
     Typical bounding ideas are
-
     \begin{itemize}
         \item simple lower bound: $\underline{\mathcal{J}}_{m}^{\mathrm{tail}}=0$,
         \item additional bounds due to constraints violations,
@@ -2317,7 +2302,6 @@
         \end{cases}
     \end{equation*}
     Additional thoughts for drive control:
-
     \begin{itemize}
         \item enforce hard constraints by action masking, safety filters, or constrained training,
         \item include $\bm{s}[k-1]$ in $\bm{z}[k]$ when switching transitions are penalized,
@@ -2336,8 +2320,6 @@
         \bm{u}[k]\in\mathcal{U}_{\mathrm{CCS}}.
     \end{equation*}
     A value-only method would require solving a continuous NLP
-
-
     \begin{equation*}
         \bm{u}^{*}(\bm{z})
         \in\argmax_{\bm{u}\in\mathcal{U}_{\mathrm{CCS}}}
@@ -2377,8 +2359,6 @@
         \quad\longrightarrow\quad \max_{\bm{\theta}}.
     \end{equation*}
     For a deterministic actor $\bm{u}=\bm{\mu}_{\bm{\theta}}(\bm{z})$, the \hl{critic} is trained from
-
-
     \begin{equation*}
         y=r_{\mathrm{RL}}[k+1]
         +\gamma q_{\bar{\bm{w}}}
@@ -2438,8 +2418,6 @@
             \bottomrule
         \end{tabular}
     \end{center}
-
-
     \begin{block}{Further study}
         A complete open course with slides, videos, tutorial templates, and solutions is available at
         \begin{center}
@@ -2453,6 +2431,233 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Differentiable predictive control (DPC)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Differentiable predictive control in the OCP/MPC/RL landscape
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Differentiable predictive control in the OCP/MPC/RL landscape}
+    The preceding methods can be interpreted as different approximations of the same ideal constrained OCP:
+    \begin{equation*}
+        \pi^{*}\in\argmin_{\pi\in\Pi_{\mathrm{adm}}}\mathcal{J}_{\infty}(\bm{x}_0;\pi).
+    \end{equation*}
+    \begin{center}
+        \begin{tabular}{lll}
+            \textbf{MPC} & $\rightarrow$ & solve a finite-horizon OCP online at each sampling step,            \\[1mm]
+            \textbf{RL}  & $\rightarrow$ & learns an explicit policy approximation from reward samples,        \\[1mm]
+            \textbf{DPC} & $\rightarrow$ & train a parametrized policy through a differentiable rollout model.
+        \end{tabular}
+    \end{center}
+    DPC uses the model-predictive cost structure, but avoids the online optimizer by learning
+    \begin{equation*}
+        \boxed{\bm{u}[k]=\pi_{\bm{\theta}}\bigl(\bm{x}[k],\bm{r}[k],\bm{\xi}[k]\bigr)}
+    \end{equation*}
+    offline over a distribution of operating scenarios $\bm{\xi}\sim\mathcal{D}$.
+    \begin{block}{Key idea}
+        If model, policy, costs, and soft constraint penalties are differentiable, the finite-horizon closed-loop loss can be minimized by gradient-based learning (i.e., supervised learning).
+    \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Differentiable closed-loop rollout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DÜC: high-level visualization}
+    \begin{figure}
+        \includegraphics[width=0.8\textwidth]{fig/lec05/DPC_conceptual_overview.pdf}
+        \caption{Conceptual methodology of differentiable predictive control (source: \href{https://www.sciencedirect.com/science/article/pii/S0959152422000981}{10.1016/j.jprocont.2022.06.001}, \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{CC BY-NC-ND 4.0}).}
+        \label{fig:DPC_conceptual_overview}
+    \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Parametric finite-horizon control problem behind DPC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Parametric finite-horizon control problem behind DPC}
+    For one (rollout) \hl{scenario} $\bm{\xi}$, consider the finite-horizon constrained OCP
+    \begin{equation}
+        \begin{aligned}
+            \min_{\bm{u}[0],\ldots,\bm{u}[N-1]}\quad
+             & \mathcal{J}_{N}(\bm{x}_0,\bm{\xi})
+            =\sum_{k=0}^{N-1}\ell\bigl(\bm{x}[k],\bm{u}[k],\bm{r}[k];\bm{\xi}\bigr)
+            +\ell_{\mathrm{f}}\bigl(\bm{x}[N],\bm{r}[N];\bm{\xi}\bigr)                  \\
+            \mathrm{s.t.}\quad
+             & \bm{x}[0]=\bm{x}_0(\bm{\xi}),                                            \\
+             & \bm{x}[k+1]=\bm{f}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}[k];\bm{\xi}\bigr), \\
+             & \bm{g}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}[k];\bm{\xi}\bigr)\leq\bm{0}.
+        \end{aligned}
+    \end{equation}
+    DPC replaces this implicit optimization problem (as considered in MPC) by an \hl{explicit policy approximation} (as resulting from RL):
+    \begin{equation}
+        \boxed{\bm{u}[0],\ldots,\bm{u}[N-1]\approx \pi_{\bm{\theta}}(\bm{x}[0],\bm{r}[0],\bm{\xi}), \ldots, \pi_{\bm{\theta}}(\bm{x}[N-1],\bm{r}[N-1],\bm{\xi}).}
+    \end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Differentiable closed-loop rollout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Differentiable closed-loop rollout}
+    For fixed $\bm{\theta}$ and $\bm{\xi}$, DPC closes the loop over the prediction horizon:
+    \begin{equation}
+        \bm{x}[0]=\bm{x}_0(\bm{\xi}),\qquad
+        \bm{u}_{\bm{\theta}}[k]=\pi_{\bm{\theta}}\bigl(\bm{x}[k],\bm{r}[k],\bm{\xi}\bigr),
+    \end{equation}
+    \begin{equation}
+        \bm{x}[k+1]=\bm{f}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k];\bm{\xi}\bigr),
+        \qquad k=0,\ldots,N-1.
+    \end{equation}
+    The \hl{differentiable DPC loss} is
+    \begin{equation}
+        \mathcal{L}_{N}(\bm{\theta};\bm{\xi})
+        =\sum_{k=0}^{N-1}\ell_{\mathrm{DPC}}[k]+\ell_{\mathrm{f}}\bigl(\bm{x}[N],\bm{r}[N];\bm{\xi}\bigr),
+    \end{equation}
+    with a \hl{soft-constrained stage loss}, e.g.,
+    \begin{equation}
+        \ell_{\mathrm{DPC}}[k]
+        =\ell\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k],\bm{r}[k];\bm{\xi}\bigr)
+        +\left\|\left[\bm{g}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k];\bm{\xi}\bigr)\right]_{+}\right\|_{\bm{Q}_{\mathrm{g}}}^{2}.
+    \end{equation}
+    Here $[\cdot]_+$ denotes the componentwise positive part, i.e., only constraint violations are penalized.
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DPC training objective: optimize a policy over scenarios
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{DPC training objective: optimize a policy over scenarios}
+    Instead of solving one OCP online, \hl{DPC trains one policy over a scenario distribution} (rollouts):
+    \begin{equation*}
+        \boxed{
+            \bm{\theta}^{*}\in\argmin_{\bm{\theta}}
+            \mathbb{E}_{\bm{\xi}\sim\mathcal{D}}
+            \left[\mathcal{L}_{N}(\bm{\theta};\bm{\xi})\right].}
+    \end{equation*}
+    In practice, the expectation is approximated by a mini-batch $\mathcal{B}$:
+    \begin{equation*}
+        \hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})
+        =\frac{1}{|\mathcal{B}|}\sum_{\bm{\xi}\in\mathcal{B}}\mathcal{L}_{N}(\bm{\theta};\bm{\xi}).
+    \end{equation*}
+    Implementing the complete \hl{closed-loop computation graph in differentiable programming framework} (e.g., JAX or PyTorch),
+    \begin{equation*}
+        \nabla_{\bm{\theta}}\hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})
+    \end{equation*}
+    can be computed by automatic differentiation.
+    \begin{block}{Interpretation}
+        The DPC loss acts like a white-box finite-horizon value estimate: it is generated by a known model and directly differentiated with respect to the policy parameters.
+    \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Backpropagation through predictive dynamics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Backpropagation through predictive dynamics}
+    The \hl{sensitivity} of the predicted trajectory follows from the chain rule. Define
+    \begin{equation*}
+        \bm{S}_{x}[k]=\frac{\partial \bm{x}_{\bm{\theta}}[k]}{\partial \bm{\theta}},
+        \qquad
+        \bm{S}_{x}[0]=\bm{0}.
+    \end{equation*}
+    With
+    \begin{equation*}
+        \bm{F}_{x}[k]=\frac{\partial \bm{f}_{\mathrm{d}}}{\partial\bm{x}}[k],\quad
+        \bm{F}_{u}[k]=\frac{\partial \bm{f}_{\mathrm{d}}}{\partial\bm{u}}[k],\quad
+        \bm{\Pi}_{x}[k]=\frac{\partial \pi_{\bm{\theta}}}{\partial\bm{x}}[k],\quad
+        \bm{\Pi}_{\theta}[k]=\frac{\partial \pi_{\bm{\theta}}}{\partial\bm{\theta}}[k],
+    \end{equation*}
+    one obtains the forward sensitivity recursion
+    \begin{equation*}
+        \boxed{
+            \bm{S}_{x}[k+1]
+            =\bm{F}_{x}[k]\bm{S}_{x}[k]
+            +\bm{F}_{u}[k]\left(\bm{\Pi}_{x}[k]\bm{S}_{x}[k]+\bm{\Pi}_{\theta}[k]\right).}
+    \end{equation*}
+    Equivalently, modern implementations compute the same gradient by reverse-mode automatic differentiation.
+    \begin{block}{Relation to optimal control}
+        The backward pass corresponds to a discrete adjoint calculation; in the continuous-time limit this links to Pontryagin-type adjoint equations.
+    \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Basic DPC training loop
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Basic DPC training loop}
+    A basic self-supervised DPC training loop is:
+    \begin{enumerate}
+        \item sample a mini-batch of scenarios $\mathcal{B}=\{\bm{\xi}_{1},\ldots,\bm{\xi}_{B}\}$,
+        \item roll out the closed-loop model with $\bm{u}_{\bm{\theta}}[k]=\pi_{\bm{\theta}}(\bm{x}[k],\bm{r}[k],\bm{\xi})$,
+        \item evaluate tracking, input-effort, terminal, and constraint-violation terms,
+        \item compute $\nabla_{\bm{\theta}}\hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})$ by automatic differentiation,
+        \item update the policy, e.g., $\bm{\theta}\leftarrow\bm{\theta}-\alpha\nabla_{\bm{\theta}}\hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})$.
+    \end{enumerate}
+    \begin{center}
+        \begin{tikzpicture}[>=Latex,node distance=7mm and 5mm,
+                box/.style={draw,rounded corners,minimum height=8mm,minimum width=22mm,align=center,font=\scriptsize}]
+            \node[box] (scen) {scenarios\\$\bm{\xi}\sim\mathcal{D}$};
+            \node[box,right=of scen] (pol) {policy\\$\pi_{\bm{\theta}}$};
+            \node[box,right=of pol] (model) {model\\$\bm{f}_{\mathrm{d}}$};
+            \node[box,right=of model] (loss) {DPC loss\\$\mathcal{L}_{N}$};
+            \draw[-Latex] (scen) -- (pol);
+            \draw[-Latex] (pol) -- (model);
+            \draw[-Latex] (model) -- (loss);
+            \draw[-Latex,dashed] (loss.north) .. controls +(0,0.8) and +(0,0.8) .. node[above,font=\scriptsize] {gradient} (pol.north);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Basic DPC training loop
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Data-driven DPC training: model system identification + policy learning}
+    \begin{figure}
+        \includegraphics[width=0.39\textwidth]{fig/lec05/DPC_SysID.pdf}\hspace{1cm}
+        \includegraphics[width=0.39\textwidth]{fig/lec05/DPC_Policy_Training.pdf}
+        \caption{Learning a model from data (left) to training a policy (right) (source: \href{https://www.sciencedirect.com/science/article/pii/S0959152422000981}{10.1016/j.jprocont.2022.06.001}, \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{CC BY-NC-ND 4.0}).}
+        \label{fig:DPC_sysid_policy_training}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Practical strengths and caveats
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Practical strengths and caveats}
+    \begin{columns}[T,totalwidth=\textwidth]
+        \begin{column}{0.46\textwidth}
+            \begin{block}{Strengths}
+                \begin{itemize}
+                    \item shifts computation offline,
+                    \item enables fast online policy evaluation,
+                    \item uses model-predictive tracking and constraint penalties,
+                    \item does not require expert MPC demonstrations.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \hspace{0.04\textwidth}
+        \begin{column}{0.46\textwidth}
+            \begin{block}{Caveats}
+                \begin{itemize}
+                    \item gradients require differentiability,
+                    \item constraint satisfaction is often soft unless additional safety layers are used,
+                    \item training quality depends on scenario coverage and model accuracy,
+                    \item no exact online optimality certificate.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{2mm}
+    \begin{block}{Software and further reading}
+        Example DPC/L2C implementations are available in \href{https://github.com/pnnl/neuromancer}{NeuroMANCER} and the \href{https://sciml-l4dc2026.github.io/SciML-L4DC2026}{SciML L2C tutorial material}.
+    \end{block}
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2471,7 +2676,6 @@
             \bottomrule
         \end{tabular}
     \end{center}
-
     \begin{varblock}{A few final remarks}
         The above summaries are intended to provide a high-level overview of the main ideas -- important aspects, like recursive feasibility and safety guarantees, are not covered. Further important but uncovered aspects are the training and deployment strategies (offline vs. online, simulation vs. real-world, etc.) and the choice of the function approximator (e.g., neural network architecture). If handled carefully, all three methods can be used to achieve high-performance drive control close to the physical limits of the system.
     \end{varblock}
