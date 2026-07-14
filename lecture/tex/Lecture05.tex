@@ -26,20 +26,20 @@
             \bm{u}\in\mathcal{U}.
         \end{gathered}
         \label{eq:ocp_ct_state_space}
-    \end{equation}
+    \end{equation}\pause%
     For $\bm{x}(0)=\bm{x}_0$, the infinite-horizon constrained \hl{optimal control problem} (OCP) is
     \begin{equation}
         \bm{\pi}^* \in \argmin_{\bm{\pi}\in\Pi_\mathrm{adm}(\bm{x}_0)}
         \mathcal{J}_\infty(\bm{x}_0;\bm{\pi})
-    \end{equation}
+    \end{equation}\pause%
     with the undiscounted, infinite-horizon \hl{cost} functional and stage cost $\ell(\bm{x},\bm{u},\bm{r})$
     \begin{equation}
         \mathcal{J}_\infty(\bm{x}_0;\bm{\pi})=
         \int_{0}^{\infty}
         \ell(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{r}(t))\,\mathrm{d}t
         \label{eq:ocp_cost_ct}
-    \end{equation}
-    and  the \hl{admissible policy set} $\Pi_\mathrm{adm}(\bm{x}_0)$ defined by the closed-loop system \hl{constraints}
+    \end{equation}\pause%
+    and the \hl{admissible policy set} $\Pi_\mathrm{adm}(\bm{x}_0)$ defined by the closed-loop system \hl{constraints}
     \begin{equation}
         \begin{gathered}
             \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=
@@ -90,7 +90,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Dynamic-programming characterization}
-    For the autonomous, nominal case $\dot{\bm{x}}=\bm{f}_\mathrm{c}(\bm{x},\bm{u})$, define the \hl{optimal value function}
+    For the nominal case $\nicefrac{\mathrm{d}\bm{x}}{\mathrm{d}t}=\bm{f}_\mathrm{c}(\bm{x},\bm{u})$, define the \hl{optimal value function}
     \begin{equation}
         v^*(\bm{x})=
         \inf_{\bm{\pi}}
@@ -111,7 +111,7 @@
     with
     \begin{equation}
         \mathcal{U}(\bm{x})=\{\bm{u}\in\mathcal{U}\,|\,\bm{g}_\mathrm{c}(\bm{x},\bm{u})\leq\bm{0}\} .
-    \end{equation}\pause
+    \end{equation}\pause%
     The corresponding feedback law is
     \begin{equation}
         \bm{\pi}^*(\bm{x})\in
@@ -134,26 +134,26 @@
     \frametitle{HJB example: from plant model to error dynamics}
     Start from a first-order plant with state $x(t)$, input $u_{\mathrm{p}}(t)$, and constant reference $r$:
     \begin{equation*}
-        \dot{x}(t)=a x(t)+b u_{\mathrm{p}}(t),
+        \frac{\mathrm{d}}{\mathrm{d}t}x(t)=a x(t)+b u_{\mathrm{p}}(t),
         \qquad y(t)=x(t),
         \qquad b\neq0 .
-    \end{equation*}
+    \end{equation*}\pause%
     Choose the steady-state input $u_{\mathrm{r}}$ for $x(t)=r$:
     \begin{equation*}
         0=a r+b u_{\mathrm{r}}
         \quad\Rightarrow\quad
         u_{\mathrm{r}}=-\frac{a}{b}r .
-    \end{equation*}
+    \end{equation*}\pause%
     With tracking error and incremental input
     \begin{equation*}
         e(t)=x(t)-r,
         \qquad
         u(t)=u_{\mathrm{p}}(t)-u_{\mathrm{r}},
-    \end{equation*}
+    \end{equation*}\pause%
     the error dynamics become
     \begin{equation*}
-        \boxed{\dot{e}(t)=a e(t)+b u(t).}
-    \end{equation*}
+        \boxed{\frac{\mathrm{d}}{\mathrm{d}t}e(t)=a e(t)+b u(t).}
+    \end{equation*}\pause%
     Consider the unconstrained, undiscounted infinite-horizon tracking OCP without discounting:
     \begin{equation*}
         \min_{u(\cdot)}\mathcal{J}_\infty(e_0;u)
@@ -171,23 +171,23 @@
     The value function is
     \begin{equation*}
         v^*(e_0)=\inf_{u(\cdot)}\mathcal{J}_\infty(e_0;u) .
-    \end{equation*}
+    \end{equation*}\pause%
     The HJB equation reads
     \begin{equation*}
         0=\min_{u\in\mathbb{R}}
         \left[q e^2+R u^2+v_e^*(e)(a e+b u)\right] .
-    \end{equation*}
+    \end{equation*}\pause%
     Use the quadratic ansatz
     \begin{equation*}
         v^*(e)=P e^2,
         \qquad v_e^*(e)=2Pe,
         \qquad P>0 .
-    \end{equation*}
+    \end{equation*}\pause%
     The HJB minimizer follows from
     \begin{equation*}
         \frac{\partial}{\partial u}
         \left(q e^2+R u^2+2Pe(ae+bu)\right)=0,
-    \end{equation*}
+    \end{equation*}\pause%
     hence
     \begin{equation*}
         2Ru+2Pbe=0
@@ -204,15 +204,15 @@
     Substitute $u^*(e)=-(bP/R)e$ into the HJB equation:
     \begin{equation*}
         0=\left(q+2aP-\frac{b^2}{R}P^2\right)e^2 .
-    \end{equation*}
+    \end{equation*}\pause%
     Since the equation must hold for all $e$, one obtains
     \begin{equation*}
         q+2aP-\frac{b^2}{R}P^2=0 .
-    \end{equation*}
+    \end{equation*}\pause%
     The stabilizing solution is
     \begin{equation*}
         P=\frac{R}{b^2}\left(a+\sqrt{a^2+\frac{b^2q}{R}}\right).
-    \end{equation*}
+    \end{equation*}\pause%
     Therefore,
     \begin{equation*}
         \boxed{u^*(t)=-K e(t),\qquad K=\frac{bP}{R}=\frac{1}{b}\left(a+\sqrt{a^2+\frac{b^2q}{R}}\right).}
@@ -230,10 +230,10 @@
     \frametitle{Unconstrained LQR tracking problem for an LTI system}
     Consider the \hl{continuous-time LTI} model
     \begin{equation}
-        \dot{\bm{x}}(t)=\bm{A}\bm{x}(t)+\bm{B}\bm{u}(t),
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=\bm{A}\bm{x}(t)+\bm{B}\bm{u}(t),
         \qquad
         \bm{y}(t)=\bm{C}\bm{x}(t),
-    \end{equation}
+    \end{equation}\pause%
     with
     \begin{equation}
         \bm{x}(t)\in\mathbb{R}^{n_x},
@@ -241,13 +241,13 @@
         \bm{u}(t)\in\mathbb{R}^{n_u},
         \qquad
         \bm{y}(t),\bm{r}\in\mathbb{R}^{n_y}.
-    \end{equation}
+    \end{equation}\pause%
     For a \hl{constant reference} $\bm{r}(t)=\bm{r}$, assume that an \hl{equilibrium pair} $(\bm{x}_{\mathrm{r}},\bm{u}_{\mathrm{r}})$ exists such that
     \begin{equation}
         \bm{A}\bm{x}_{\mathrm{r}}+\bm{B}\bm{u}_{\mathrm{r}}=\bm{0},
         \qquad
         \bm{C}\bm{x}_{\mathrm{r}}=\bm{r}.
-    \end{equation}
+    \end{equation}\pause%
     The undiscounted infinite-horizon tracking OCP is
     \begin{equation}
         \min_{\bm{u}(\cdot)}\; \mathcal{J}_\infty
@@ -268,21 +268,21 @@
         \bm{e}(t)=\bm{x}(t)-\bm{x}_{\mathrm{r}},
         \qquad
         \Delta\bm{u}(t)=\bm{u}(t)-\bm{u}_{\mathrm{r}}.
-    \end{equation}
+    \end{equation}\pause%
     Since $(\bm{x}_{\mathrm{r}},\bm{u}_{\mathrm{r}})$ satisfies the equilibrium equations, the error dynamics become
     \begin{equation*}
-        \dot{\bm{e}}(t)
-        =\dot{\bm{x}}(t)
+        \frac{\mathrm{d}}{\mathrm{d}t}\bm{e}(t)
+        =\frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)
         =\bm{A}(\bm{x}-\bm{x}_{\mathrm{r}})+\bm{B}(\bm{u}-\bm{u}_{\mathrm{r}})
         =\bm{A}\bm{e}(t)+\bm{B}\Delta\bm{u}(t).
-    \end{equation*}
+    \end{equation*}\pause%
     Moreover,
     \begin{equation}
         \bm{y}(t)-\bm{r}
         =\bm{C}\bm{x}(t)-\bm{C}\bm{x}_{\mathrm{r}}
         =\bm{C}\bm{e}(t).
-    \end{equation}
-    Hence the tracking OCP is converted into the \hl{regulation problem}
+    \end{equation}\pause%
+    Hence, the tracking OCP is converted into the \hl{regulation problem}
     \begin{equation}
         \min_{\Delta\bm{u}(\cdot)}\; \mathcal{J}_\infty
         =\int_0^{\infty}
@@ -304,19 +304,19 @@
         =\min_{\Delta\bm{u}(\cdot)}
         \int_0^{\infty}
         \left[\bm{e}(t)\T\bm{Q}\bm{e}(t)+\Delta\bm{u}(t)\T\bm{R}\Delta\bm{u}(t)\right]\,\mathrm{d}t.
-    \end{equation}
+    \end{equation}\pause%
     The stationary \hl{undiscounted HJB} equation is
     \begin{equation}
         0=\min_{\Delta\bm{u}\in\mathbb{R}^{n_u}}
         \left[\bm{e}\T\bm{Q}\bm{e}+\Delta\bm{u}\T\bm{R}\Delta\bm{u}
             +\nabla_{\bm{e}}v^*(\bm{e})\T(\bm{A}\bm{e}+\bm{B}\Delta\bm{u})\right].
-    \end{equation}
+    \end{equation}\pause%
     For an LTI system with quadratic stage cost, use the \hl{quadratic ansatz}
     \begin{equation}
         v^*(\bm{e})=\bm{e}\T\bm{P}\bm{e},
         \qquad
         \bm{P}=\bm{P}\T\succeq\bm{0}
-    \end{equation}
+    \end{equation}\pause%
     leading to
     \begin{equation}
         \nabla_{\bm{e}}v^*(\bm{e})=2\bm{P}\bm{e}.
@@ -333,17 +333,17 @@
         0=\min_{\Delta\bm{u}}
         \left[\bm{e}\T\bm{Q}\bm{e}+\Delta\bm{u}\T\bm{R}\Delta\bm{u}
             +2\bm{e}\T\bm{P}(\bm{A}\bm{e}+\bm{B}\Delta\bm{u})\right].
-    \end{equation}
+    \end{equation}\pause%
     The \hl{stationarity condition} with respect to $\Delta\bm{u}$ is
     \begin{equation}
         \frac{\partial}{\partial \Delta\bm{u}}
         \left(\Delta\bm{u}\T\bm{R}\Delta\bm{u}+2\bm{e}\T\bm{P}\bm{B}\Delta\bm{u}\right)
         =2\bm{R}\Delta\bm{u}+2\bm{B}\T\bm{P}\bm{e}=\bm{0}.
-    \end{equation}
+    \end{equation}\pause%
     Thus, the \hl{minimizing input deviation} is
     \begin{equation}
         \boxed{\Delta\bm{u}^*(\bm{e})=-\bm{R}^{-1}\bm{B}\T\bm{P}\bm{e}.}
-    \end{equation}
+    \end{equation}\pause%
     Alternatively, we can define the \hl{LQR gain matrix} $\bm{K}$ and write
     \begin{equation}
         \bm{K}=\bm{R}^{-1}\bm{B}\T\bm{P},
@@ -362,13 +362,13 @@
         0=\bm{e}\T\bm{Q}\bm{e}
         +\bm{e}\T\bm{P}\bm{A}\bm{e}+\bm{e}\T\bm{A}\T\bm{P}\bm{e}
         -\bm{e}\T\bm{P}\bm{B}\bm{R}^{-1}\bm{B}\T\bm{P}\bm{e}.
-    \end{equation}
+    \end{equation}\pause%
     Since this identity must hold for all $\bm{e}\in\mathbb{R}^{n_x}$,
     \begin{equation}
         \boxed{\bm{A}\T\bm{P}+\bm{P}\bm{A}
             -\bm{P}\bm{B}\bm{R}^{-1}\bm{B}\T\bm{P}+\bm{Q}=\bm{0}.}
         \label{eq:CARE}
-    \end{equation}
+    \end{equation}\pause%
     This is the \hl{continuous-time algebraic Riccati equation} (CARE). Under
     \begin{equation}
         (\bm{A},\bm{B})\text{ stabilizable},
@@ -386,19 +386,19 @@
     Solving the CARE \eqref{eq:CARE} numerically (typically offline), the optimal value function is
     \begin{equation}
         v^*(\bm{x})=(\bm{x}-\bm{x}_{\mathrm{r}})\T\bm{P}(\bm{x}-\bm{x}_{\mathrm{r}}),
-    \end{equation}
+    \end{equation}\pause%
     and the \hl{optimal input} is
     \begin{equation}
         \boxed{\bm{u}^*(t)=\bm{u}_{\mathrm{r}}-
             \bm{K}\bigl(\bm{x}(t)-\bm{x}_{\mathrm{r}}\bigr),
             \qquad \bm{K}=\bm{R}^{-1}\bm{B}\T\bm{P}.}
-    \end{equation}
+    \end{equation}\pause%
     Hence, the \hl{tracking problem for a constant reference} is solved by
     \begin{equation}
         \text{equilibrium feedforward }\bm{u}_{\mathrm{r}}
         \quad + \quad
         \text{LQR state feedback on the tracking error }\bm{x}-\bm{x}_{\mathrm{r}}.
-    \end{equation}\vspace{-0.4cm}
+    \end{equation}\vspace{-0.4cm}\pause%
     \begin{block}{Scope of the result}
         This closed-form solution relies on \emph{linear dynamics}, \emph{quadratic cost}, and \emph{absence of state/input constraints}. With constraints or nonlinearities, the HJB problem no longer reduces to a CARE.
     \end{block}
@@ -410,29 +410,29 @@
 \begin{frame}
     \frametitle{Transfer to a discrete-time LTI system}
     With \hl{sampling time} $T_{\mathrm{s}}$, the continuous-time LTI model can be approximated by
-    \begin{equation*}
+    \begin{equation}
         \bm{x}[k+1]=\bm{A}_{\mathrm{d}}\bm{x}[k]+
         \bm{B}_{\mathrm{d}}\bm{u}[k],
         \qquad
         \bm{y}[k]=\bm{C}\bm{x}[k].
-    \end{equation*}
+    \end{equation}\pause%
     For zero-order-hold discretization, we utilize the \hl{exact discretization}
-    \begin{equation*}
+    \begin{equation}
         \bm{A}_{\mathrm{d}}=\mathrm{e}^{\bm{A}T_{\mathrm{s}}},
         \qquad
         \bm{B}_{\mathrm{d}}=\int_0^{T_{\mathrm{s}}}\mathrm{e}^{\bm{A}\tau}\bm{B}\,\mathrm{d}\tau .
-    \end{equation*}
+    \end{equation}\pause%
     A constant reference $\bm{r}$ is represented by the equilibrium $(\bm{x}_{\mathrm{r}},\bm{u}_{\mathrm{r}})$:
-    \begin{equation*}
+    \begin{equation}
         \bm{x}_{\mathrm{r}}=\bm{A}_{\mathrm{d}}\bm{x}_{\mathrm{r}}+
         \bm{B}_{\mathrm{d}}\bm{u}_{\mathrm{r}},
         \qquad
         \bm{C}\bm{x}_{\mathrm{r}}=\bm{r}.
-    \end{equation*}
+    \end{equation}\pause%
     With $\bm{e}[k]=\bm{x}[k]-\bm{x}_{\mathrm{r}}$ and $\Delta\bm{u}[k]=\bm{u}[k]-\bm{u}_{\mathrm{r}}$, we obtain the \hl{discrete-time error dynamics}
-    \begin{equation*}
+    \begin{equation}
         \boxed{\bm{e}[k+1]=\bm{A}_{\mathrm{d}}\bm{e}[k]+\bm{B}_{\mathrm{d}}\Delta\bm{u}[k].}
-    \end{equation*}
+    \end{equation}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -445,20 +445,20 @@
         \mathcal{J}_\infty
         =\sum_{k=0}^{\infty}
         \left(\bm{e}[k]\T\bm{Q}\bm{e}[k]+\Delta\bm{u}[k]\T\bm{R}\Delta\bm{u}[k]\right).
-    \end{equation}
+    \end{equation}\pause%
     The Bellman equation is
     \begin{equation}
         v^*(\bm{e})=\min_{\Delta\bm{u}}
         \left[\bm{e}\T\bm{Q}\bm{e}+\Delta\bm{u}\T\bm{R}\Delta\bm{u}
             +v^*(\bm{A}_{\mathrm{d}}\bm{e}+\bm{B}_{\mathrm{d}}\Delta\bm{u})\right].
-    \end{equation}
+    \end{equation}\pause%
     Using $v^*(\bm{e})=\bm{e}\T\bm{P}\bm{e}$ and following the same steps as in the continuous-time case yields
     \begin{equation}
         \boxed{\Delta\bm{u}^*[\bm{e}]=-\bm{K}_{\mathrm{d}}\bm{e},
             \quad
             \bm{K}_{\mathrm{d}}=(\bm{R}+\bm{B}_{\mathrm{d}}\T\bm{P}\bm{B}_{\mathrm{d}})^{-1}
             \bm{B}_{\mathrm{d}}\T\bm{P}\bm{A}_{\mathrm{d}}.}
-    \end{equation}
+    \end{equation}\pause%
     The matrix $\bm{P}=\bm{P}\T\succeq\bm{0}$ solves the \hl{discrete-time algebraic Riccati equation} (DARE):
     \begin{equation}
         \boxed{\bm{P}=\bm{A}_{\mathrm{d}}\T\bm{P}\bm{A}_{\mathrm{d}}+\bm{Q}
@@ -479,18 +479,18 @@
         \boxed{\bm{u}^*[k]
             =\bm{u}_{\mathrm{r}}-
             \bm{K}_{\mathrm{d}}\bigl(\bm{x}[k]-\bm{x}_{\mathrm{r}}\bigr).}
-    \end{equation}
+    \end{equation}\pause%
     The closed-loop tracking-error dynamics are
     \begin{equation}
         \bm{e}[k+1]
         =\left(\bm{A}_{\mathrm{d}}-\bm{B}_{\mathrm{d}}\bm{K}_{\mathrm{d}}\right)\bm{e}[k].
-    \end{equation}
+    \end{equation}\pause%
     Hence, the discrete-time LQR result has the same interpretation as in continuous time:
     \begin{equation}
         \text{equilibrium feedforward }\bm{u}_{\mathrm{r}}
         \quad + \quad
         \text{state feedback on }\bm{x}[k]-\bm{x}_{\mathrm{r}}.
-    \end{equation}\vspace{-0.4cm}
+    \end{equation}\vspace{-0.4cm}\pause%
     \begin{block}{Important limitation}
         If $(\bm{x}_{\mathrm{r}},\bm{u}_{\mathrm{r}})$ is inaccurate due to disturbances or model mismatch, pure state feedback may exhibit steady-state tracking errors. Integral feedback addresses this by adding virtual error states.
     \end{block}
@@ -504,21 +504,21 @@
     Define the \hl{integrated output tracking error}
     \begin{equation}
         \bm{\eta}[k+1]=\bm{\eta}[k]+T_{\mathrm{s}}\left(\bm{y}[k]-\bm{r}\right).
-    \end{equation}
+    \end{equation}\pause%
     For constant $\bm{r}$ and $\bm{y}[k]-\bm{r}=\bm{C}\bm{e}[k]$, this gives
     \begin{equation}
         \bm{\eta}[k+1]=\bm{\eta}[k]+T_{\mathrm{s}}\bm{C}\bm{e}[k].
-    \end{equation}
+    \end{equation}\pause%
     Introduce the \hl{augmented state}
     \begin{equation}
         \bm{e}_{\mathrm{a}}[k]
         =\begin{bmatrix}\bm{e}[k]\\\bm{\eta}[k]\end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause%
     The extended error dynamics are
     \begin{equation}
         \boxed{\bm{e}_{\mathrm{a}}[k+1]
             =\bm{A}_{\mathrm{a}}\bm{e}_{\mathrm{a}}[k]+\bm{B}_{\mathrm{a}}\Delta\bm{u}[k]}
-    \end{equation}
+    \end{equation}\pause%
     with
     \begin{equation}
         \bm{A}_{\mathrm{a}}=\begin{bmatrix}
@@ -546,14 +546,14 @@
         +\Delta\bm{u}[k]\T\bm{R}\Delta\bm{u}[k]\right),
         \qquad
         \bm{Q}_{\mathrm{a}}=\begin{bmatrix}\bm{Q}&\bm{0}\\\bm{0}&\bm{Q}_{\eta}\end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause%
     Solving the DARE from \eqref{eq:DARE} for $(\bm{A}_{\mathrm{a}},\bm{B}_{\mathrm{a}},\bm{Q}_{\mathrm{a}},\bm{R})$ gives
     \begin{equation}
         \bm{K}_{\mathrm{a}}
         =(\bm{R}+\bm{B}_{\mathrm{a}}\T\bm{P}_{\mathrm{a}}\bm{B}_{\mathrm{a}})^{-1}
         \bm{B}_{\mathrm{a}}\T\bm{P}_{\mathrm{a}}\bm{A}_{\mathrm{a}}
         =\begin{bmatrix}\bm{K}_{\mathrm{e}} & \bm{K}_{\eta}\end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause%
     The \hl{new input law with integral action} via the augmented state becomes
     \begin{equation}
         \boxed{\bm{u}[k]=\bm{u}_{\mathrm{r}}
@@ -578,14 +578,14 @@
         \text{stationary }\upalpha\upbeta\text{ discretization}
         \quad\rightarrow\quad
         \text{rotation into the implemented dq}\text{ frame}.
-    \end{equation*}
+    \end{equation*}\pause%
     This yields the \hl{abstract two-axis stator current model}
     \begin{equation*}
         \boxed{\bm{i}_{\mathrm{s},\mathrm{dq}}[k+1]
             =\bm{A}_{\mathrm{i}}[k]\bm{i}_{\mathrm{s},\mathrm{dq}}[k]
             +\bm{B}_{\mathrm{i}}[k]
             \left(\bm{u}_{\mathrm{s},\mathrm{dq}}[k]+\bm{u}_{\mathrm{x},\mathrm{dq}}[k]\right).}
-    \end{equation*}
+    \end{equation*}\pause%
     Here
     \begin{equation*}
         \bm{i}_{\mathrm{s},\mathrm{dq}}=
@@ -594,14 +594,14 @@
         \bm{u}_{\mathrm{s},\mathrm{dq}}=
         \begin{bmatrix}u_{\mathrm{s},\mathrm{d}}&u_{\mathrm{s},\mathrm{q}}\end{bmatrix}\T,
     \end{equation*}
-    and $\bm{u}_{\mathrm{x},\mathrm{dq}}$ denotes an external induced-voltage contribution.
+    and $\bm{u}_{\mathrm{x},\mathrm{dq}}$ denotes an external induced-voltage contribution.\pause%
     With
     \begin{equation*}
         \theta[k]=\omega_{\mathrm{k}}[k]T_{\mathrm{s}},
         \qquad
         \bm{T}_{\mathrm{p}}(-\theta)=
         \begin{bmatrix}\cos(\theta)&\sin(\theta)\\-\sin(\theta)&\cos(\theta)\end{bmatrix},
-    \end{equation*}
+    \end{equation*}\pause%
     PMSM and IM current loops have the same model structure with different $\bm{A}_{\mathrm{i}}$, $\bm{B}_{\mathrm{i}}$, and $\bm{u}_{\mathrm{x},\mathrm{dq}}$.
 \end{frame}
 
@@ -619,7 +619,7 @@
         \bm{L}_{\mathrm{s}}=\begin{bmatrix}L_{\mathrm{dd}}&0\\0&L_{\mathrm{qq}}\end{bmatrix},
         \quad
         \bm{\psi}_{\mathrm{PM}}=\begin{bmatrix}\psi_{\mathrm{PM}}&0\end{bmatrix}\T .
-    \end{equation*}
+    \end{equation*}\pause%
     Let $\theta[k]=\omega[k]T_{\mathrm{s}}$, $c=\cos(\theta[k])$, $s=\sin(\theta[k])$. The $\upalpha\upbeta\rightarrow \mathrm{dq}$ current model gives
     \begin{equation*}
         \bm{A}_{\mathrm{i}}^{\mathrm{PMSM}}[k]=
@@ -644,12 +644,12 @@
             \dfrac{T_{\mathrm{s}}}{L_{\mathrm{dd}}}c  & \dfrac{T_{\mathrm{s}}}{L_{\mathrm{dd}}}s \\[4mm]
             -\dfrac{T_{\mathrm{s}}}{L_{\mathrm{qq}}}s & \dfrac{T_{\mathrm{s}}}{L_{\mathrm{qq}}}c
         \end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     The permanent-magnet induced term is written in input-equivalent form:
     \begin{equation*}
         \boxed{\bm{u}_{\mathrm{x},\mathrm{dq}}^{\mathrm{PMSM}}[k]
             =\frac{\bm{I}_2-\bm{T}_{\mathrm{p}}(-\theta[k])\T}{T_{\mathrm{s}}}\bm{\psi}_{\mathrm{PM}}.}
-    \end{equation*}
+    \end{equation*}\pause%
     Hence
     \begin{equation*}
         \bm{i}_{\mathrm{s},\mathrm{dq}}[k+1]
@@ -671,7 +671,7 @@
         =\begin{bmatrix}L_{\mathrm{s}|\psi_{\mathrm{r}},\mathrm{d}}&0\\0&L_{\mathrm{s}|\psi_{\mathrm{r}},\mathrm{q}}\end{bmatrix},
         \quad
         \theta_{\psi_{\mathrm{r}}}[k]=\omega_{\psi_{\mathrm{r}}}[k]T_{\mathrm{s}}.
-    \end{equation*}
+    \end{equation*}\pause%
     With $c=\cos(\theta_{\psi_{\mathrm{r}}})$, $s=\sin(\theta_{\psi_{\mathrm{r}}})$, the stator-current model has
     \begin{equation*}
         \bm{A}_{\mathrm{i}}^{\mathrm{IM}}[k]=
@@ -699,13 +699,13 @@
             -\dfrac{T_{\mathrm{s}}}{L_{\mathrm{s}|\psi_{\mathrm{r}},\mathrm{q}}}s &
             \dfrac{T_{\mathrm{s}}}{L_{\mathrm{s}|\psi_{\mathrm{r}},\mathrm{q}}}c
         \end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     The input-equivalent induced contribution is
     \begin{equation*}
         \boxed{\bm{u}_{\mathrm{x},\mathrm{dq}}^{\mathrm{IM}}[k]
             =\bm{u}_{\mathrm{rot},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k]
             +\bm{u}_{\psi_{\mathrm{r}},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k].}
-    \end{equation*}
+    \end{equation*}\pause%
     Therefore,
     \begin{equation*}
         \bm{i}_{\mathrm{s},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k+1]
@@ -726,14 +726,14 @@
         \bm{u}_{\mathrm{rot},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k]
         =\frac{\bm{I}_2-\bm{T}_{\mathrm{p}}(-\theta_{\psi_{\mathrm{r}}}[k])\T}{T_{\mathrm{s}}}
         \bm{\psi}_{\mathrm{s},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k].
-    \end{equation*}
+    \end{equation*}\pause%
     For a linear magnetic model, use
     \begin{equation*}
         \bm{\psi}_{\mathrm{s},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k]
         =L_{\mathrm{s}|\psi_{\mathrm{r}}}\bm{i}_{\mathrm{s},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k]
         +\frac{L_{\mathrm{m}}}{L_{\mathrm{r}}}
         \begin{bmatrix}\psi_{\mathrm{r},\mathrm{d}}^{\psi_{\mathrm{r}}}[k]\\0\end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     The rotor-flux-magnitude contribution can be written as
     \begin{equation*}
         \bm{u}_{\psi_{\mathrm{r}},\mathrm{dq}}^{\psi_{\mathrm{r}}}[k]
@@ -758,18 +758,18 @@
         \bm{e}_{\mathrm{i}}[k]=\bm{i}_{\mathrm{s},\mathrm{dq}}[k]-\bm{i}_{\mathrm{s},\mathrm{dq}}^*,
         \qquad
         \Delta\bm{u}_{\mathrm{s}}[k]=\bm{u}_{\mathrm{s},\mathrm{dq}}[k]-\bm{u}_{\mathrm{s},\mathrm{dq},\mathrm{r}}.
-    \end{equation*}
+    \end{equation*}\pause%
     The nominal LTI current error model is
     \begin{equation*}
         \bm{e}_{\mathrm{i}}[k+1]
         =\bm{A}_{\mathrm{i}}\bm{e}_{\mathrm{i}}[k]
         +\bm{B}_{\mathrm{i}}\Delta\bm{u}_{\mathrm{s}}[k].
-    \end{equation*}
+    \end{equation*}\pause%
     Add virtual integrator states for steady-state tracking accuracy:
     \begin{equation*}
         \bm{\eta}_{\mathrm{i}}[k+1]
         =\bm{\eta}_{\mathrm{i}}[k]+T_{\mathrm{s}}\bm{e}_{\mathrm{i}}[k].
-    \end{equation*}
+    \end{equation*}\pause%
     Hence
     \begin{equation*}
         \boxed{
@@ -796,21 +796,21 @@
         \begin{bmatrix}\bm{e}_{\mathrm{i}}[k]\\\bm{\eta}_{\mathrm{i}}[k]\end{bmatrix}
         +\Delta\bm{u}_{\mathrm{s}}[k]\T\bm{R}_{\mathrm{u}}\Delta\bm{u}_{\mathrm{s}}[k]
         \right).
-    \end{equation*}
+    \end{equation*}\pause%
     The DARE for $(\bm{A}_{\mathrm{i},\mathrm{a}},\bm{B}_{\mathrm{i},\mathrm{a}},\bm{Q}_{\mathrm{i},\mathrm{a}},\bm{R}_{\mathrm{u}})$ yields
     \begin{equation*}
         \bm{K}_{\mathrm{i},\mathrm{a}}
         =\left(\bm{R}_{\mathrm{u}}+\bm{B}_{\mathrm{i},\mathrm{a}}\T\bm{P}_{\mathrm{i},\mathrm{a}}\bm{B}_{\mathrm{i},\mathrm{a}}\right)^{-1}
         \bm{B}_{\mathrm{i},\mathrm{a}}\T\bm{P}_{\mathrm{i},\mathrm{a}}\bm{A}_{\mathrm{i},\mathrm{a}}
         =\begin{bmatrix}\bm{K}_{\mathrm{i}}&\bm{K}_{\eta,\mathrm{i}}\end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     The modulator-based voltage reference becomes
     \begin{equation*}
         \boxed{\bm{u}_{\mathrm{s},\mathrm{dq}}^*[k]
             =\bm{u}_{\mathrm{s},\mathrm{dq},\mathrm{r}}
             -\bm{K}_{\mathrm{i}}\left(\bm{i}_{\mathrm{s},\mathrm{dq}}[k]-\bm{i}_{\mathrm{s},\mathrm{dq}}^*\right)
             -\bm{K}_{\eta,\mathrm{i}}\bm{\eta}_{\mathrm{i}}[k].}
-    \end{equation*}
+    \end{equation*}\pause%
     The induced-voltage model is handled by $\bm{u}_{\mathrm{s},\mathrm{dq},\mathrm{r}}$ and feedforward terms; the integrator rejects constant residual errors.
 \end{frame}
 
@@ -834,7 +834,7 @@
         \omega=2\pi\frac{n}{60}p=\SI{1047.20}{\radian\per\second},
         \quad
         T_{\mathrm{s}}=\SI{100}{\micro\second}.
-    \end{equation*}
+    \end{equation*}\pause%
     With $\upalpha\upbeta\rightarrow \mathrm{dq}$ discretization,
     \begin{equation*}
         \bm{A}_{\mathrm{i}}=\begin{bmatrix}
@@ -845,7 +845,7 @@
             \SI{0.1989}{\ampere\per\volt}  & \SI{0.0209}{\ampere\per\volt} \\[3mm]
             \SI{-0.0105}{\ampere\per\volt} & \SI{0.0995}{\ampere\per\volt}
         \end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     The augmented state is
     \begin{equation*}
         \bm{z}[k]=\begin{bmatrix}
@@ -855,8 +855,6 @@
     \end{equation*}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Numerical DARE example: weights with units %%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Numerical DARE example: weights with units %%
@@ -870,13 +868,13 @@
         \SI{1}{\per\ampere\squared},\SI{1}{\per\ampere\squared},
         \SI{1{\cdot}10^{4}}{\per\ampere\squared\per\second\squared},
         \SI{1{\cdot}10^{4}}{\per\ampere\squared\per\second\squared}\right), \qquad \bm{R}_{\mathrm{u}}=\SI{1{\cdot}10^{-3}}{\per\volt\squared}\,\bm{I}_2 .
-    \end{equation*}
+    \end{equation*}\pause%
     With these SI units, each stage-cost term is dimensionless:
     \begin{equation*}
         \bm{z}[k]^{\mathrm{T}}\bm{Q}_{\mathrm{i},\mathrm{a}}\bm{z}[k]
         +\Delta\bm{u}_{\mathrm{s}}[k]^{\mathrm{T}}\bm{R}_{\mathrm{u}}\Delta\bm{u}_{\mathrm{s}}[k]
         \in\mathbb{R}.
-    \end{equation*}
+    \end{equation*}\pause%
     The DARE solution results in
     \begin{equation*}
         \begingroup\sisetup{per-mode=symbol}
@@ -900,11 +898,10 @@
             \SI{1.0165{\cdot}10^{6}}{\per\ampere\squared\per\second\squared}
         \end{bmatrix}.
         \endgroup
-    \end{equation*}
+    \end{equation*}\pause%
     The mixed units follow from the augmented state components
     $\bm{e}_{\mathrm{i}}$ in ampere and $\bm{\eta}_{\mathrm{i}}$ in ampere seconds.
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Numerical DARE example: feedback gain %%
@@ -918,7 +915,7 @@
         \qquad
         \bm{K}_{\mathrm{i},\mathrm{a}}=
         \begin{bmatrix}\bm{K}_{\mathrm{i}}&\bm{K}_{\eta,\mathrm{i}}\end{bmatrix}.
-    \end{equation*}
+    \end{equation*}\pause%
     Written as one matrix with direct SI units,
     \begin{equation*}
         \begingroup\sisetup{per-mode=symbol}
@@ -934,7 +931,7 @@
             \SI{906.30}{\volt\per\ampere\per\second}
         \end{bmatrix}.
         \endgroup
-    \end{equation*}
+    \end{equation*}\pause%
     Hence, the first two columns multiply current errors and the last two columns multiply integral-error states. The resulting closed-loop poles are
     \begin{equation*}
         \lambda=\{\num{0.0240},\;\num{0.0830},\;\num{0.9901},\;\num{0.9901}\}.
@@ -955,20 +952,20 @@
         \dot{x}(t)=u(t),
         \qquad x(0)=x_0>0,
         \qquad |u(t)|\leq u_{\max} .
-    \end{equation*}
+    \end{equation*}\pause%
     The cost remains general:
     \begin{equation*}
         \mathcal{J}_\infty(x_0;u)=
         \int_0^\infty \left(q x^2(t)+R u^2(t)\right)\,\mathrm{d}t,
         \qquad q>0,
         \quad R>0 .
-    \end{equation*}
+    \end{equation*}\pause%
     \hl{Compare two feasible policy topologies} on $x\in[0,x_0]$:
     \begin{equation*}
         u_K(x)=-Kx,
         \qquad
         0<K\leq\frac{u_{\max}}{x_0},
-    \end{equation*}
+    \end{equation*}\pause%
     and
     \begin{equation*}
         u_\alpha(x)=-\min\{\alpha x,u_{\max}\},
@@ -987,25 +984,25 @@
     For a fixed policy $u=\pi(x)$, the policy-evaluation HJB is
     \begin{equation*}
         0=q x^2+R\pi^2(x)+v_x^\pi(x)\pi(x).
-    \end{equation*}
+    \end{equation*}\pause%
     For the linear topology $u_K(x)=-Kx$:
     \begin{equation*}
         v_x^K(x)=\frac{q+RK^2}{K}x,
         \qquad
         \mathcal{J}_{\mathrm{lin}}(K)=v^K(x_0)
         =\frac{q+RK^2}{2K}x_0^2 .
-    \end{equation*}
+    \end{equation*}\pause%
     For the saturated topology, define
     \begin{equation*}
         x_{\mathrm{sw}}=\frac{u_{\max}}{\alpha} .
-    \end{equation*}
+    \end{equation*}\pause%
     Evaluating the inner linear region and the outer saturated region gives
     \begin{equation*}
         \mathcal{J}_{\mathrm{sat}}(\alpha)
         =\frac{q x_0^3}{3u_{\max}}+Ru_{\max}x_0
         +\frac{q u_{\max}^2}{6\alpha^3}
         -\frac{R u_{\max}^2}{2\alpha} .
-    \end{equation*}
+    \end{equation*}\pause%
     \hl{Thus, the HJB evaluation already shows that different policy topologies induce different value functions.}
 \end{frame}
 
@@ -1017,7 +1014,7 @@
     Assume the input constraint is active for the unconstrained gain,
     \begin{equation*}
         K_0=\sqrt{\frac{q}{R}}>\frac{u_{\max}}{x_0} .
-    \end{equation*}
+    \end{equation*}\pause%
     Then the best feasible linear feedback is
     \begin{equation*}
         K_{\mathrm{lin}}^*=\frac{u_{\max}}{x_0},
@@ -1025,14 +1022,14 @@
         \mathcal{J}_{\mathrm{lin}}^*
         =\frac{q x_0^3}{2u_{\max}}+
         \frac{R u_{\max}x_0}{2} .
-    \end{equation*}
+    \end{equation*}\pause%
     For the saturated topology,
     \begin{equation*}
         \mathcal{J}_{\mathrm{sat}}(\alpha)
         =\frac{q x_0^3}{3u_{\max}}+Ru_{\max}x_0
         +\frac{q u_{\max}^2}{6\alpha^3}
         -\frac{R u_{\max}^2}{2\alpha} .
-    \end{equation*}
+    \end{equation*}\pause%
     Its best member is obtained from
     \begin{equation*}
         \frac{\mathrm{d}\mathcal{J}_{\mathrm{sat}}}{\mathrm{d}\alpha}=0
@@ -1049,25 +1046,25 @@
     Define
     \begin{equation*}
         z=\frac{u_{\max}}{x_0K_0}\in(0,1).
-    \end{equation*}
+    \end{equation*}\pause%
     The difference between the optimized policy classes is
     \begin{equation*}
         \mathcal{J}_{\mathrm{lin}}^*-
         \mathcal{J}_{\mathrm{sat}}^*
         =\frac{q x_0^3}{u_{\max}}
         \left(\frac{1}{6}-\frac{z^2}{2}+\frac{z^3}{3}\right).
-    \end{equation*}
+    \end{equation*}\pause%
     Let
     \begin{equation*}
         \varphi(z)=\frac{1}{6}-\frac{z^2}{2}+\frac{z^3}{3} .
-    \end{equation*}
+    \end{equation*}\pause%
     Since
     \begin{equation*}
         \varphi(1)=0,
         \qquad
         \varphi'(z)=z(z-1)<0
         \quad\text{for}\quad 0<z<1,
-    \end{equation*}
+    \end{equation*}\pause%
     it follows that $\varphi(z)>0$ for all $z\in(0,1)$. Therefore,
     \begin{equation*}
         \boxed{\mathcal{J}_{\mathrm{sat}}^*<\mathcal{J}_{\mathrm{lin}}^*.}
@@ -1085,11 +1082,11 @@
         K_0=\sqrt{q/R}=\sqrt{10},
         \qquad
         |{-K_0x_0}|=\sqrt{10}>u_{\max}.
-    \end{equation*}
+    \end{equation*}\pause%
     Hence, the best feasible linear gain on $x\in[0,x_0]$ is
     \begin{equation*}
         K_{\mathrm{lin}}^*=\frac{u_{\max}}{x_0}=1 .
-    \end{equation*}
+    \end{equation*}\pause%
     \begin{columns}[T,onlytextwidth]
         \begin{column}{0.49\textwidth}
             \textbf{Best feasible linear law}
@@ -1102,7 +1099,7 @@
                 {2K_{\mathrm{lin}}^*}x_0^2
                 =0.55 .
             \end{equation*}
-        \end{column}
+        \end{column}\pause%
         \begin{column}{0.49\textwidth}
             \textbf{Best saturated law}
             \begin{equation*}
@@ -1114,13 +1111,12 @@
                 \approx0.4228 .
             \end{equation*}
         \end{column}
-    \end{columns}
+    \end{columns}\pause%
     \begin{equation*}
         \boxed{\mathcal{J}_{\mathrm{sat}}^*<\mathcal{J}_{\mathrm{lin}}^*.}
     \end{equation*}
     \hl{A richer feasible policy topology exploits the admissible input range more effectively.}
 \end{frame}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1135,17 +1131,17 @@
         +\frac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_{\mathrm{s,dq}},
         \qquad
         \bm{\psi}_{\mathrm{s,dq}}=f_{\psi_s}(\bm{i}_{\mathrm{s,dq}}).
-    \end{equation*}
+    \end{equation*}\pause%
     With
     \begin{equation*}
         \bm{L}(\bm{i}_{\mathrm{s,dq}})
         =\frac{\partial f_{\psi_s}}{\partial \bm{i}_{\mathrm{s,dq}}}(\bm{i}_{\mathrm{s,dq}}),
-    \end{equation*}
+    \end{equation*}\pause%
     the current dynamics are
     \begin{equation*}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_{\mathrm{s,dq}}=\bm{f}_i(\bm{i}_{\mathrm{s,dq}},\bm{u}_{\mathrm{s,dq}},\omega)=\bm{L}^{-1}\!\left(\bm{u}_{\mathrm{s,dq}}-R_s\bm{i}_{\mathrm{s,dq}}
         -\omega\bm{J}f_{\psi_s}(\bm{i}_{\mathrm{s,dq}})\right).
-    \end{equation*}
+    \end{equation*}\pause%
     Further consider the \hl{current and voltage constraints\footnote{The inverter output constraints are approximated by a simple circle, i.e., for linear modulation.}}
     \begin{equation*}
         \bm{i}_{\mathrm{s,dq}}\in\mathcal{I}_s=\{\bm{i}\mid\|\bm{i}\|_2\leq i_{s,\max}\},
@@ -1166,19 +1162,19 @@
         \ell_i(\bm{i}_{\mathrm{s,dq}},\bm{u}_{\mathrm{s,dq}})
         =\bm{e}_i^{\mathrm{T}}\bm{Q}_i\bm{e}_i
         +\bm{u}_{\mathrm{s,dq}}^{\mathrm{T}}\bm{R}_u\bm{u}_{\mathrm{s,dq}} .
-    \end{equation*}
+    \end{equation*}\pause%
     The undiscounted, infinite-horizon current-control OCP is
     \begin{equation*}
         \min_{\bm{u}_{\mathrm{s,dq}}(\cdot)}\mathcal{J}_\infty
         =\int_0^\infty \ell_i(\bm{i}_{\mathrm{s,dq}}(t),\bm{u}_{\mathrm{s,dq}}(t))\,\mathrm{d}t
     \end{equation*}
-    subject to the current dynamics and the constraints $\mathcal{I}_\mathrm{s},\mathcal{U}_\mathrm{s}$.
+    subject to the current dynamics and the constraints $\mathcal{I}_\mathrm{s},\mathcal{U}_\mathrm{s}$. \pause%
     The value function is
     \begin{equation*}
         v^*=v^*(i_{\mathrm{s,d}},i_{\mathrm{s,q}}),
         \qquad
         \nabla_{\bm{i}}v^*=\begin{bmatrix}v_{i_d}^* & v_{i_q}^*\end{bmatrix}^{\mathrm{T}} .
-    \end{equation*}
+    \end{equation*}\pause%
     On the finite-cost admissible domain $\mathcal{K}\subseteq\mathcal{I}_s$, \hl{the HJB conditions produces a PDE}
     \begin{equation*}
         \boxed{0=\min_{\bm{u}_{\mathrm{s,dq}}\in\mathcal{U}_\mathrm{s}}
@@ -1200,25 +1196,25 @@
         \qquad
         \bm{p}=\bm{L}^{-\mathrm{T}}(\bm{i}_{\mathrm{s,dq}})
         \nabla_{\bm{i}}v^*(\bm{i}_{\mathrm{s,dq}}).
-    \end{equation*}
+    \end{equation*}\pause%
     Without the voltage constraint one obtains the formal minimizer
     \begin{equation*}
         \bm{u}_{\mathrm{unc}}^*
         =-\frac{1}{2}\bm{R}_u^{-1}\bm{p}.
-    \end{equation*}
+    \end{equation*}\pause%
     With $\bm{u}_{\mathrm{s,dq}}\in\mathcal{U}_\mathrm{s}$, the minimizer is the weighted projection
     \begin{equation*}
         \boxed{\bm{u}_{\mathrm{s,dq}}^*
             =\operatorname{proj}_{\mathcal{U}_\mathrm{s}}^{\bm{R}_u}
             \left(-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
             \nabla_{\bm{i}}v^*\right).}
-    \end{equation*}
+    \end{equation*}\pause%
     For $\bm{R}_u=r_u\bm{I}$, the active-voltage switching surface satisfies
     \begin{equation*}
         \left\|\bm{L}^{-\mathrm{T}}(\bm{i}_{\mathrm{s,dq}})
         \nabla_{\bm{i}}v^*(\bm{i}_{\mathrm{s,dq}})\right\|_2
         =2r_u\hat{u}_{\mathrm{s},\max} .
-    \end{equation*}
+    \end{equation*}\pause%
     However, \hl{this surface is a priori unknown} because the value function $v^*$ is unknown.
 \end{frame}
 
@@ -1231,24 +1227,24 @@
     \begin{equation*}
         \bm{i}_{\mathrm{s,dq}}(t)\in\mathcal{I}_\mathrm{s}
         \quad \forall t\geq0.
-    \end{equation*}
+    \end{equation*}\pause%
     The finite-cost admissible current domain is the viability kernel
     \begin{equation*}
         \mathcal{K}=\left\{\bm{i}_0\in\mathcal{I}_\mathrm{s}\,\middle|\,
         \exists\bm{u}_{\mathrm{s,dq}}(t)\in\mathcal{U}_\mathrm{s}:
         \bm{i}_{\mathrm{s,dq}}(t)\in\mathcal{I}_\mathrm{s}\ \forall t\geq0\right\}.
-    \end{equation*}
+    \end{equation*}\pause%
     At the current boundary, $\|\bm{i}_{\mathrm{s,dq}}\|_2=i_{\mathrm{s},\max}$, invariance requires
     \begin{equation*}
         \bm{i}_{\mathrm{s,dq}}^{\mathrm{T}}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_{\mathrm{s,dq}}\leq0,
-    \end{equation*}
+    \end{equation*}\pause%
     hence
     \begin{equation*}
         \exists\bm{u}_{\mathrm{s,dq}}\in\mathcal{U}_\mathrm{s}:
         \bm{i}_{\mathrm{s,dq}}^{\mathrm{T}}\bm{L}^{-1}
         \left(\bm{u}_{\mathrm{s,dq}}-R_s\bm{i}_{\mathrm{s,dq}}
         -\omega\bm{J}f_{\psi_s}\right)\leq0 .
-    \end{equation*}
+    \end{equation*}\pause%
     Thus, $\mathcal{I}_\mathrm{s}$ as \hl{the current circle is not automatically the feasible domain}.
     It depends on $\omega$, $\hat{u}_{\mathrm{s},\max}$, $R_s$, $f_{\psi_\mathrm{s}}$, and $\bm{L}$, i.e., it must be also found as part of the solution.
 \end{frame}
@@ -1266,12 +1262,12 @@
         =\operatorname{proj}_{\mathcal{U}_\mathrm{s}}^{\bm{R}_u}
         \left(-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
         \nabla_{\bm{i}}v^*\right).
-    \end{equation*}
+    \end{equation*}\pause%
     The unknowns are coupled:
     \begin{equation*}
         \boxed{v^*,\quad \bm{u}_{\mathrm{s,dq}}^*,\quad
             \mathcal{K},\quad \text{active voltage regions}.}
-    \end{equation*}
+    \end{equation*}\pause%
     \hl{Consequence: closed-form feedback laws are practically intractable.   Practical approximations replace the HJB PDE by finite-dimensional problems}:
     \begin{equation*}
         \begin{array}{rcl}
@@ -1279,16 +1275,11 @@
             \text{DPC} & : & \text{train a differentiable policy through rollout models}, \\[1mm]
             \text{RL}  & : & \text{learn value or policy approximations from data}.
         \end{array}
-    \end{equation*}
+    \end{equation*}\pause%
     \begin{equation*}
         \boxed{\text{The numerical methods approximate the ideal constrained HJB solution.}}
     \end{equation*}
 \end{frame}
-
-
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Model predictive control (MPC)}
@@ -1550,6 +1541,8 @@
         \begin{column}{0.49\textwidth}
             \centering
             \textbf{Continuous control set (CCS)}
+
+
             \begin{equation*}
                 \begin{aligned}
                     \bm{u}[k+j|k]          & \in\mathcal{U}_\mathrm{CCS}, \\[-0.5mm]
@@ -1597,6 +1590,7 @@
         \qquad
         j=0,\ldots,N-1.
     \end{equation}\vspace{-0.4cm}
+
     \begin{block}{Goal}
         Rewrite the finite-horizon OCP as one \hl{quadratic program} (QP) in the future input sequence.
     \end{block}
@@ -1618,6 +1612,8 @@
         \end{bmatrix}\T.
     \end{equation}
     Repeated substitution of the linear model yields the \hl{condensed prediction equation}
+
+
     \begin{equation}
         \boxed{\bm{X}_{N}[k]=\bm{S}_{\mathrm{x}}\hat{\bm{x}}[k]+\bm{S}_{\mathrm{u}}\bm{U}_{N}[k].}
     \end{equation}
@@ -1775,6 +1771,8 @@
     \end{equation}
     The objective is approximated quadratically around the current trajectory guess.
     \hl{Each SQP iteration has the structure}
+
+
     \begin{equation*}
         \text{linearize dynamics/constraints}
         \;\rightarrow\;
@@ -1810,6 +1808,7 @@
             \href{https://github.com/do-mpc/do-mpc}{do-mpc}\quad
             \href{https://github.com/coin-or/Ipopt}{IPOPT}}
     \end{center}
+
     \begin{block}{Connection to the previous slides}
         Linear MPC reduces tracking with constraints to a QP. Nonlinear MPC keeps the predictive OCP structure but requires iterative numerical approximations at each sampling instant.
     \end{block}
@@ -1830,6 +1829,8 @@
     \end{equation}
     Here, $\bm{\nu}(\bm{s})$ maps a switching action to the induced stator-voltage vector.
     For the candidate sequence
+
+
     \begin{equation}
         \bm{s}_{N}[k]
         =\{\bm{s}[k|k],\ldots,\bm{s}[k+N-1|k]\}\in\mathbb{S}^{N},
@@ -1936,6 +1937,7 @@
         \end{tikzpicture}
     \end{center}
 
+
     \begin{itemize}
         \item All $8$ stage predictions are independent and can be evaluated concurrently.
         \item FPGAs shine with low latency and high throughput for such parallelizable tasks.
@@ -1959,6 +1961,7 @@
         \boxed{\mathcal{J}_{m}^{\mathrm{part}}+\underline{\mathcal{J}}_{m}^{\mathrm{tail}}\geq \overline{\mathcal{J}}.}
     \end{equation}
     Typical bounding ideas are
+
     \begin{itemize}
         \item simple lower bound: $\underline{\mathcal{J}}_{m}^{\mathrm{tail}}=0$,
         \item additional bounds due to constraints violations,
@@ -2026,6 +2029,7 @@
             \end{tikzpicture}
         \end{column}
         \begin{column}{0.44\textwidth}
+
             \begin{itemize}
                 \item \textcolor{signalgamma}{Explored nodes}: branch currently expanded.
                 \item \textcolor{signalbeta}{Bounded nodes}: subtree pruned by a valid lower bound.
@@ -2056,6 +2060,7 @@
             \text{explicit switching rules}   & : & \text{specialized approximations for }N=1 \text{ (e.g., DTC)}.
         \end{array}
     \end{equation*}\vspace{-0.3cm}
+
     \begin{block}{Takeaway}
         FCS-MPC is conceptually simple: predict all candidate switching trajectories and choose the one with minimum cost. Its main challenge is computational complexity to achieve relevant prediction horizons, which motivates parallel hardware and intelligent tree-search reduction.
     \end{block}
@@ -2134,6 +2139,8 @@
         \qquad \gamma\in[0,1),
     \end{equation}
     with (augmented) \hl{MDP state} $\bm{z}[k]\in\mathcal{Z}$ and control action $\bm{u}[k]\in\mathcal{U}$ based on the \hl{policy} $\pi_{\bm{\theta}}$ with parameters $\bm{\theta}$:
+
+
     \begin{equation}
         \bm{z}[k+1]\sim p\bigl(\cdot\mid\bm{z}[k],\bm{u}[k]\bigr),
         \qquad
@@ -2167,6 +2174,7 @@
             =-\ell\bigl(\bm{x}[k],\bm{u}[k],\bm{r}[k]\bigr)-p_{\mathrm{c}}[k],}
     \end{equation}
     where $p_{\mathrm{c}}[k]\geq 0$ collects optional \hl{penalties} for constraint violations, e.g., overcurrent or inadmissible voltage usage.
+
     \begin{block}{Interpretation}
         \begin{equation*}
             \text{small stage cost }\ell \quad\Longleftrightarrow\quad \text{large reward }r_{\mathrm{RL}}.
@@ -2309,6 +2317,7 @@
         \end{cases}
     \end{equation*}
     Additional thoughts for drive control:
+
     \begin{itemize}
         \item enforce hard constraints by action masking, safety filters, or constrained training,
         \item include $\bm{s}[k-1]$ in $\bm{z}[k]$ when switching transitions are penalized,
@@ -2327,6 +2336,8 @@
         \bm{u}[k]\in\mathcal{U}_{\mathrm{CCS}}.
     \end{equation*}
     A value-only method would require solving a continuous NLP
+
+
     \begin{equation*}
         \bm{u}^{*}(\bm{z})
         \in\argmax_{\bm{u}\in\mathcal{U}_{\mathrm{CCS}}}
@@ -2366,6 +2377,8 @@
         \quad\longrightarrow\quad \max_{\bm{\theta}}.
     \end{equation*}
     For a deterministic actor $\bm{u}=\bm{\mu}_{\bm{\theta}}(\bm{z})$, the \hl{critic} is trained from
+
+
     \begin{equation*}
         y=r_{\mathrm{RL}}[k+1]
         +\gamma q_{\bar{\bm{w}}}
@@ -2426,6 +2439,7 @@
         \end{tabular}
     \end{center}
 
+
     \begin{block}{Further study}
         A complete open course with slides, videos, tutorial templates, and solutions is available at
         \begin{center}
@@ -2457,6 +2471,7 @@
             \bottomrule
         \end{tabular}
     \end{center}
+
     \begin{varblock}{A few final remarks}
         The above summaries are intended to provide a high-level overview of the main ideas -- important aspects, like recursive feasibility and safety guarantees, are not covered. Further important but uncovered aspects are the training and deployment strategies (offline vs. online, simulation vs. real-world, etc.) and the choice of the function approximator (e.g., neural network architecture). If handled carefully, all three methods can be used to achieve high-performance drive control close to the physical limits of the system.
     \end{varblock}
