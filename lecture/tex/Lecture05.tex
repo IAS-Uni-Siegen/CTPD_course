@@ -1340,7 +1340,7 @@
         \end{aligned}
         \label{eq:mpc_ocp}
     \end{equation}
-    where $\mathcal{Z}=\{(\bm{x},\bm{u})\in\mathcal{X}\times\mathcal{U}\,|\,\bm{g}(\bm{x},\bm{u})\leq\bm{0}\}$ and $V_\mathrm{f}$ as the \hl{terminal cost} approximating the infinite-horizon value function $v^*$.  \pause  Apply only the first optimal input and shift the horizon (\hl{receding-horizon feedback}):
+    where $\mathcal{Z}=\{(\bm{x},\bm{u})\in\mathcal{X}\times\mathcal{U}\,|\,\bm{g}(\bm{x},\bm{u})\leq\bm{0}\}$ is \hl{the feasible operating area}, $\mathcal{X}_\mathrm{f}$ is the \hl{terminal state  set}, and $V_\mathrm{f}$ is the \hl{terminal cost} approximating the infinite-horizon value function $v^*$.  \pause  Apply only the first optimal input and shift the horizon (\hl{receding-horizon feedback}):
     \begin{equation}
         \bm{u}[k]=\bm{u}^*[k|k],
         \qquad
@@ -1526,14 +1526,14 @@
         \vspace{0.10cm}
 
         (b) FCS: modulator-free
-    \end{minipage}
+    \end{minipage}\pause%
     \vspace{0.15cm}
-    Let $n_u=\dim(\bm{u})$, let $n_\mathrm{s}$ denote the number of admissible converter input vectors, and let $M$ denote the modulator map.
+    Let $n_u=\dim(\bm{u})$, let $n_\mathrm{s}$ denote the number of admissible converter input vectors, and let $M$ denote the modulator map:
     \begin{equation*}
         \mathcal{U}_\mathrm{FCS}=\{\bm{u}_1,\ldots,\bm{u}_{n_\mathrm{s}}\}\subset\mathbb{R}^{n_u},
         \qquad
         \mathcal{U}_\mathrm{CCS}=\operatorname{conv}(\mathcal{U}_\mathrm{FCS}).
-    \end{equation*}
+    \end{equation*}\pause%
     \vspace{-0.25cm}
     \begin{columns}[T,totalwidth=\textwidth]
         \begin{column}{0.49\textwidth}
@@ -1571,21 +1571,21 @@
         \bm{x}[k+1]=\bm{A}_{\mathrm{d}}\bm{x}[k]+\bm{B}_{\mathrm{d}}\bm{u}[k],
         \qquad
         \bm{y}[k]=\bm{C}\bm{x}[k].
-    \end{equation}
+    \end{equation}\pause%
     At time step $k$, define the \hl{quadratic finite-horizon tracking objective}
     \begin{equation}
         \mathcal{J}_{N}[k]
         =\sum_{j=0}^{N-1}
         \left(\|\bm{y}[k+j|k]-\bm{r}[k+j|k]\|_{\bm{Q}_{\mathrm{y}}}^{2}
         +\|\bm{u}[k+j|k]-\bm{u}_{\mathrm{r}}[k+j|k]\|_{\bm{R}_{\mathrm{u}}}^{2}\right)
-    \end{equation}
+    \end{equation}\pause%
     with $\bm{Q}_{\mathrm{y}}\succeq\bm{0}$ and $\bm{R}_{\mathrm{u}}\succ\bm{0}$.
     \hl{Linear stage constraints} are written as
     \begin{equation}
         \bm{E}_{\mathrm{x}}\bm{x}[k+j|k]+\bm{E}_{\mathrm{u}}\bm{u}[k+j|k]\leq \bm{e},
         \qquad
         j=0,\ldots,N-1.
-    \end{equation}\vspace{-0.4cm}
+    \end{equation}\vspace{-0.4cm}\pause%
     \begin{block}{Goal}
         Rewrite the finite-horizon OCP as one \hl{quadratic program} (QP) in the future input sequence.
     \end{block}
@@ -1605,11 +1605,11 @@
         \bm{X}_{N}[k]=\begin{bmatrix}
             \bm{x}[k|k]\T & \cdots & \bm{x}[k+N|k]\T
         \end{bmatrix}\T.
-    \end{equation}
+    \end{equation}\pause%
     Repeated substitution of the linear model yields the \hl{condensed prediction equation}
     \begin{equation}
         \boxed{\bm{X}_{N}[k]=\bm{S}_{\mathrm{x}}\hat{\bm{x}}[k]+\bm{S}_{\mathrm{u}}\bm{U}_{N}[k].}
-    \end{equation}
+    \end{equation}\pause%
     The matrices $\bm{S}_{\mathrm{x}}$ and $\bm{S}_{\mathrm{u}}$ contain powers of $\bm{A}_{\mathrm{d}}$ and products with $\bm{B}_{\mathrm{d}}$:
     \begin{equation}
         \bm{S}_{\mathrm{x}}=\begin{bmatrix}\bm{I}\\ \bm{A}_{\mathrm{d}}\\ \vdots\\ \bm{A}_{\mathrm{d}}^{N}\end{bmatrix},
@@ -1620,7 +1620,7 @@
             \vdots                                       & \ddots & \vdots              \\
             \bm{A}_{\mathrm{d}}^{N-1}\bm{B}_{\mathrm{d}} & \cdots & \bm{B}_{\mathrm{d}}
         \end{bmatrix}.
-    \end{equation}
+    \end{equation}\pause%
     With $\bm{C}_{N}=\bm{I}_{N+1}\otimes \bm{C}$, where $\otimes$ denotes the Kronecker product, the output predictions are
     \begin{equation}
         \bm{Y}_{N}[k]=\bm{C}_{N}\bm{X}_{N}[k].
@@ -1637,18 +1637,18 @@
         \bm{R}_{N}[k]=\begin{bmatrix}\bm{r}[k|k]\T&\cdots&\bm{r}[k+N|k]\T\end{bmatrix}\T,
         \quad
         \bm{U}_{\mathrm{r},N}[k]=\begin{bmatrix}\bm{u}_{\mathrm{r}}[k|k]\T&\cdots&\bm{u}_{\mathrm{r}}[k+N-1|k]\T\end{bmatrix}\T.
-    \end{equation}
+    \end{equation}\pause%
     With \hl{block-diagonal weighting matrices} $\bm{Q}_{\mathrm{y},N}\succeq\bm{0}$ and $\bm{R}_{\mathrm{u},N}\succ\bm{0}$,
     \begin{equation}
         \mathcal{J}_{N}[k]
         =\|\bm{C}_{N}(\bm{S}_{\mathrm{x}}\hat{\bm{x}}[k]+\bm{S}_{\mathrm{u}}\bm{U}_{N}[k])-\bm{R}_{N}[k]\|_{\bm{Q}_{\mathrm{y},N}}^{2}
         +\|\bm{U}_{N}[k]-\bm{U}_{\mathrm{r},N}[k]\|_{\bm{R}_{\mathrm{u},N}}^{2}.
-    \end{equation}
+    \end{equation}\pause%
     Expanding the squares gives the \hl{condensed quadratic cost function}
     \begin{equation}
         \boxed{\mathcal{J}_{N}[k]=\frac{1}{2}\bm{U}_{N}\T\bm{H}\bm{U}_{N}
             +\bm{h}[k]\T\bm{U}_{N}+\mathrm{const.}}
-    \end{equation}
+    \end{equation}\pause%
     where
     \begin{align}
         \bm{H}    & =2\left(\bm{S}_{\mathrm{u}}\T\bm{C}_{N}\T\bm{Q}_{\mathrm{y},N}\bm{C}_{N}\bm{S}_{\mathrm{u}}+\bm{R}_{\mathrm{u},N}\right),                                            \\
@@ -1664,7 +1664,7 @@
     \hl{Stacking all stage and terminal constraints} yields
     \begin{equation}
         \bm{G}_{\mathrm{x}}\bm{X}_{N}[k]+\bm{G}_{\mathrm{u}}\bm{U}_{N}[k]\leq \bm{g}_{N}.
-    \end{equation}
+    \end{equation}\pause%
     Using the condensed prediction equation gives the \hl{input-only inequality system}
     \begin{equation}
         \boxed{\bm{A}_{\mathrm{QP}}\bm{U}_{N}[k]\leq \bm{b}_{\mathrm{QP}}+\bm{E}_{\mathrm{QP}}\hat{\bm{x}}[k]}
@@ -1676,8 +1676,8 @@
         \bm{b}_{\mathrm{QP}}=\bm{g}_{N},
         \qquad
         \bm{E}_{\mathrm{QP}}=-\bm{G}_{\mathrm{x}}\bm{S}_{\mathrm{x}}.
-    \end{equation}
-    Therefore, linear MPC with quadratic costs and linear constraints becomes the QP
+    \end{equation}\pause%
+    Therefore, linear MPC with quadratic costs and linear constraints becomes the \hl{QP}
     \begin{equation}
         \boxed{
             \begin{aligned}
@@ -1685,7 +1685,7 @@
                 +\bm{h}[k]\T\bm{U}_{N}                                                                                                      \\
                 \mathrm{s.t.}\quad        & \bm{A}_{\mathrm{QP}}\bm{U}_{N}[k]\leq \bm{b}_{\mathrm{QP}}+\bm{E}_{\mathrm{QP}}\hat{\bm{x}}[k].
             \end{aligned}}
-    \end{equation}
+    \end{equation}\pause%
     Apply $\bm{u}[k]=\bm{u}^{*}[k|k]$ and repeat at $k\leftarrow k+1$.
 \end{frame}
 
@@ -1700,7 +1700,7 @@
         \quad\text{and}\quad
         \bm{A}_{\mathrm{QP}}\bm{U}_{N}\leq \bm{b}_{\mathrm{QP}}+\bm{E}_{\mathrm{QP}}\hat{\bm{x}}[k]
         \text{ is feasible.}
-    \end{equation}
+    \end{equation}\pause%
     Typical \hl{numerical solver approaches} are
     \begin{equation*}
         \begin{array}{rcl}
@@ -1708,14 +1708,14 @@
             \text{interior-point methods}    & : & \text{robust sparse/structured QP solution},             \\[1mm]
             \text{operator splitting / ADMM} & : & \text{simple iterations, good embedded implementations}.
         \end{array}
-    \end{equation*}
+    \end{equation*}\pause%
     Open-source solver examples:
     \begin{center}
         \fbox{\href{https://github.com/coin-or/qpOASES}{qpOASES}\quad
             \href{https://github.com/osqp/osqp}{OSQP}\quad
             \href{https://github.com/giaf/hpipm}{HPIPM}\quad
             \href{https://github.com/PREDICT-EPFL/piqp}{PIQP}}
-    \end{center}
+    \end{center}\pause%
     \begin{block}{Implementation note}
         Practical MPC implementations often exploit warm starts, sparse matrices, partial condensing, and fixed problem dimensions to satisfy real-time sampling constraints.
     \end{block}
@@ -1731,7 +1731,7 @@
         \bm{x}[k+1]=\bm{f}(\bm{x}[k],\bm{u}[k]),
         \qquad
         \bm{g}(\bm{x}[k],\bm{u}[k])\leq\bm{0},
-    \end{equation}
+    \end{equation}\pause%
     the finite-horizon \hl{MPC problem becomes a nonlinear program} (NLP):
     \begin{equation}
         \boxed{
@@ -1744,7 +1744,7 @@
                  & \bm{x}[k+j+1|k]=\bm{f}(\bm{x}[k+j|k],\bm{u}[k+j|k]),            \\
                  & \bm{g}(\bm{x}[k+j|k],\bm{u}[k+j|k])\leq\bm{0}.
             \end{aligned}}
-    \end{equation}
+    \end{equation}\pause%
     Unlike the QP case, the future states cannot generally be eliminated into one global affine prediction map.
 \end{frame}
 
@@ -1761,8 +1761,8 @@
         \qquad
         \bm{g}(\bm{x},\bm{u})\approx
         \bm{g}(\bar{\bm{x}},\bar{\bm{u}})+\bm{G}_{j}\Delta\bm{z}.
-    \end{equation}
-    The objective is approximated quadratically around the current trajectory guess.
+    \end{equation}\pause%
+    The objective is approximated quadratically around the current trajectory guess. \pause%
     \hl{Each SQP iteration has the structure}
     \begin{equation*}
         \text{linearize dynamics/constraints}
@@ -1770,11 +1770,11 @@
         \text{solve QP}
         \;\rightarrow\;
         \text{update trajectory}.
-    \end{equation*}
+    \end{equation*}\pause%
     Real-time iteration (RTI) uses only one SQP step per sampling instant:
     \begin{equation*}
         \boxed{\text{previous MPC solution as warm start }\Rightarrow\text{ one fast local QP update}.}
-    \end{equation*}
+    \end{equation*}\pause%
     Alternatives include interior-point NLP methods, multiple shooting, direct collocation, and differential dynamic programming variants.
 \end{frame}
 
@@ -1791,14 +1791,14 @@
             \text{implicit discretization/collocation} & \Rightarrow & \text{larger sparse equality-constrained problems}, \\[1mm]
             \text{real-time control}                   & \Rightarrow & \text{strict latency and robustness requirements}.
         \end{array}
-    \end{equation*}
+    \end{equation*}\pause%
     Open-source tool examples for nonlinear OCP/NMPC are
     \begin{center}
         \fbox{\href{https://github.com/casadi/casadi}{CasADi}\quad
             \href{https://github.com/acados/acados}{acados}\quad
             \href{https://github.com/do-mpc/do-mpc}{do-mpc}\quad
             \href{https://github.com/coin-or/Ipopt}{IPOPT}}
-    \end{center}
+    \end{center}\pause%
     \begin{block}{Connection to the previous slides}
         Linear MPC reduces tracking with constraints to a QP. Nonlinear MPC keeps the predictive OCP structure but requires iterative numerical approximations at each sampling instant.
     \end{block}
@@ -1816,19 +1816,19 @@
         \bm{u}_{\mathrm{s},\mathrm{dq}}=\bm{\nu}(\bm{s}),
         \qquad
         \bm{x}[k+1]=\bm{f}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{\nu}(\bm{s}[k]),\bm{r}[k]\bigr).
-    \end{equation}
+    \end{equation}\pause%
     Here, $\bm{\nu}(\bm{s})$ maps a switching action to the induced stator-voltage vector.
     For the candidate sequence
     \begin{equation}
         \bm{s}_{N}[k]
         =\{\bm{s}[k|k],\ldots,\bm{s}[k+N-1|k]\}\in\mathbb{S}^{N},
-    \end{equation}
+    \end{equation}\pause%
     define
     \begin{equation}
         \mathcal{J}_{N}[k]
         =\sum_{j=0}^{N-1}\ell\bigl(\bm{x}[k+j|k],\bm{\nu}(\bm{s}[k+j|k]),\bm{r}[k+j|k]\bigr)
         +V_{\mathrm{f}}\bigl(\bm{x}[k+N|k]\bigr).
-    \end{equation}
+    \end{equation}\pause%
     The \hl{FCS-MPC search problem} is
     \begin{equation}
         \bm{s}_{N}^{*}[k]\in\argmin_{\bm{s}_{N}[k]\in\mathbb{S}^{N}}\mathcal{J}_{N}[k]
@@ -1846,9 +1846,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Search tree and exponential growth of candidate paths}
-    Every prediction step branches into $n_{\mathrm{s}}=|\mathbb{S}|$ successor actions. Hence,
+    Every prediction step branches into $n_{\mathrm{s}}=|\mathbb{S}|$ successor actions. Hence, it applies
     \begin{equation*}
-        \boxed{\#\text{ paths}=n_{\mathrm{s}}^{N}}
+        \boxed{\#\text{ paths}=n_{\mathrm{s}}^{N}}.
     \end{equation*}
 
     \begin{center}
@@ -1884,7 +1884,7 @@
             \node[draw=none,anchor=west,align=left] at (4.55,-0.85) {$8$ explicit candidate actions\\at the first prediction step};
             \node[draw=none,anchor=west,align=left] at (4.55,-2.05) {each $N=1$ node again\\branches into $8$ successors};
         \end{tikzpicture}
-    \end{center}
+    \end{center}\pause%
     \vspace{-1mm}
     A root-to-leaf path corresponds to one switching sequence; for $n_{\mathrm{s}}=8$ and $N=2$, \hl{exhaustive evaluation} already requires $8^2=64$ candidate paths and for $N=5$, it requires $8^5=32768$.
 \end{frame}
@@ -1923,7 +1923,7 @@
             \draw[-Latex,thin] (c7.south) -- (cmp.north east);
             \draw[-Latex] (cmp) -- (out);
         \end{tikzpicture}
-    \end{center}
+    \end{center}\pause%
     \begin{itemize}
         \item All $8$ stage predictions are independent and can be evaluated concurrently.
         \item FPGAs shine with low latency and high throughput for such parallelizable tasks.
@@ -1935,22 +1935,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Reducing search effort by branch and bound}
-    Exhaustive enumeration has worst-case complexity $\mathcal{O}(n_{\mathrm{s}}^{N})$.
+    Exhaustive enumeration has worst-case complexity $\mathcal{O}(n_{\mathrm{s}}^{N})$. \pause%
     \hl{Branch and bound} prunes partial switching paths that cannot improve the current best complete path.
     For a partial sequence of length $m$, define
     \begin{equation}
         \mathcal{J}_{m}^{\mathrm{part}}
         =\sum_{j=0}^{m-1}\ell\bigl(\bm{x}[k+j|k],\bm{\nu}(\bm{s}[k+j|k]),\bm{r}[k+j|k]\bigr).
-    \end{equation}
+    \end{equation}\pause%
     Let $\overline{\mathcal{J}}$ denote the best complete-path cost found so far. A \hl{subtree can be discarded} if
     \begin{equation}
         \boxed{\mathcal{J}_{m}^{\mathrm{part}}+\underline{\mathcal{J}}_{m}^{\mathrm{tail}}\geq \overline{\mathcal{J}}.}
-    \end{equation}
+    \end{equation}\pause%
     Typical bounding ideas are
     \begin{itemize}
-        \item simple lower bound: $\underline{\mathcal{J}}_{m}^{\mathrm{tail}}=0$,
-        \item additional bounds due to constraints violations,
-        \item branch ordering by promising stage costs to obtain a good incumbent early.
+        \item simple lower bound: $\underline{\mathcal{J}}_{m}^{\mathrm{tail}}=0$,\pause%
+        \item additional bounds due to constraints violations,\pause%
+        \item branch ordering by promising stage costs to obtain a good incumbent early.\pause%
     \end{itemize}
     Hence, branch and bound can reduce the average number of evaluated paths substantially.
 \end{frame}
@@ -2034,18 +2034,17 @@
         \text{exact brute-force search}
         \quad\leftrightarrow\quad
         \text{optimality, but exponential growth with }N
-    \end{equation*}
+    \end{equation*}\pause%
     Practical implementations therefore combine several ideas:
     \begin{equation*}
         \begin{array}{rcl}
-            \text{short horizons}             & : & T_\mathrm{s}\text{ is much smaller than in modulator-based CCM}, \\[1mm]
-            \text{parallel stage prediction}  & : & \text{FPGA acceleration},                                        \\[1mm]
-            \text{branch and bound}           & : & \text{subtree pruning based on lower/upper bounds},              \\[1mm]
-            \text{move blocking / heuristics} & : & \text{reduced combinatorial search depth},                       \\[1mm]
-            \text{explicit switching rules}   & : & \text{specialized approximations for }N=1 \text{ (e.g., DTC)}.
+            \text{short horizons}             & : & T_\mathrm{s}\text{ is much smaller than in modulator-based CCM},     \\[1mm]\pause%
+            \text{parallel stage prediction}  & : & \text{FPGA acceleration},                                            \\[1mm]\pause%
+            \text{branch and bound}           & : & \text{subtree pruning based on lower/upper bounds},                  \\[1mm]\pause%
+            \text{move blocking / heuristics} & : & \text{reduced combinatorial search depth},                           \\[1mm]\pause%
+            \text{explicit switching rules}   & : & \text{specialized approximations for }N=1 \text{ (e.g., DTC)}.\pause %
         \end{array}
     \end{equation*}\vspace{-0.3cm}
-
     \begin{block}{Takeaway}
         FCS-MPC is conceptually simple: predict all candidate switching trajectories and choose the one with minimum cost. Its main challenge is computational complexity to achieve relevant prediction horizons, which motivates parallel hardware and intelligent tree-search reduction.
     \end{block}
@@ -2122,23 +2121,21 @@
     \begin{equation}
         \mathcal{M}=(\mathcal{Z},\mathcal{U},p,r_{\mathrm{RL}},\gamma),
         \qquad \gamma\in[0,1),
-    \end{equation}
+    \end{equation}\pause%
     with (augmented) \hl{MDP state} $\bm{z}[k]\in\mathcal{Z}$ and control action $\bm{u}[k]\in\mathcal{U}$ based on the \hl{policy} $\pi_{\bm{\theta}}$ with parameters $\bm{\theta}$:
-
-
     \begin{equation}
         \bm{z}[k+1]\sim p\bigl(\cdot\mid\bm{z}[k],\bm{u}[k]\bigr),
         \qquad
         \bm{u}[k]\sim\pi_{\bm{\theta}}\bigl(\cdot\mid\bm{z}[k]\bigr).
-    \end{equation}
-    The \hl{discount factor} $\gamma$ weights future rewards: small $\gamma$ emphasizes immediate behavior, while $\gamma\rightarrow 1$ emphasizes long-term consequences.
+    \end{equation}\pause%
+    The \hl{discount factor} $\gamma$ weights future rewards: small $\gamma$ emphasizes immediate behavior, while $\gamma\rightarrow 1$ emphasizes long-term consequences.\pause%
     For a drive-control tracking task, $\bm{z}[k]$ should include all variables such that the entire information decribing closed-loop behavior is captured, e.g.,
     \begin{equation}
         \bm{z}[k]
         =\begin{bmatrix}
             \bm{x}[k]\T & \bm{r}[k]\T & \bm{u}[k-1]\T
         \end{bmatrix}\T.
-    \end{equation}
+    \end{equation}\pause%
     Here, $\bm{r}[k]$ remains the control \hl{reference}.
 \end{frame}
 
@@ -2151,15 +2148,14 @@
     \begin{equation}
         r_{\mathrm{RL}}[k+1]
         =r_{\mathrm{RL}}\bigl(\bm{z}[k],\bm{u}[k],\bm{z}[k+1]\bigr).
-    \end{equation}
+    \end{equation}\pause%
     The control agent maximizes accumulated future rewards. For a classical control objective with stage cost $\ell$, a natural choice is
     \begin{equation}
         \boxed{
             r_{\mathrm{RL}}[k+1]
             =-\ell\bigl(\bm{x}[k],\bm{u}[k],\bm{r}[k]\bigr)-p_{\mathrm{c}}[k],}
     \end{equation}
-    where $p_{\mathrm{c}}[k]\geq 0$ collects optional \hl{penalties} for constraint violations, e.g., overcurrent or inadmissible voltage usage.
-
+    where $p_{\mathrm{c}}[k]\geq 0$ collects optional \hl{penalties} for constraint violations, e.g., overcurrent or inadmissible voltage usage.\pause%
     \begin{block}{Interpretation}
         \begin{equation*}
             \text{small stage cost }\ell \quad\Longleftrightarrow\quad \text{large reward }r_{\mathrm{RL}}.
@@ -2178,26 +2174,26 @@
     The \hl{return} from time step $k$ is
     \begin{equation}
         G[k]=\sum_{j=0}^{\infty}\gamma^j r_{\mathrm{RL}}[k+j+1].
-    \end{equation}
+    \end{equation}\pause%
     For a policy $\pi$, the \hl{value} and \hl{action-value} functions are
     \begin{align}
         v_{\pi}(\bm{z})
          & =\mathbb{E}_{\pi}\bigl[G[k]\mid\bm{z}[k]=\bm{z}\bigr],                  \\
         q_{\pi}(\bm{z},\bm{u})
          & =\mathbb{E}_{\pi}\bigl[G[k]\mid\bm{z}[k]=\bm{z},\bm{u}[k]=\bm{u}\bigr].
-    \end{align}
+    \end{align}\pause%
     Hence,
     \begin{equation}
         v_{\pi}(\bm{z})
         =\mathbb{E}_{\bm{u}\sim\pi(\cdot|\bm{z})}
         \left[q_{\pi}(\bm{z},\bm{u})\right].
-    \end{equation}
+    \end{equation}\pause%
     The \hl{optimal (greedy) policy} is obtained from
     \begin{equation}
         \boxed{\pi^{*}(\bm{z})\in
             \argmax_{\bm{u}\in\mathcal{U}(\bm{z})}
             q^{*}(\bm{z},\bm{u}).}
-    \end{equation}
+    \end{equation}\pause%
     Thus, $q^{*}$ evaluates each state-action pair by its expected future reward.
 \end{frame}
 
@@ -2215,20 +2211,21 @@
                 +\gamma\max_{\bm{u}'\in\mathcal{U}(\bm{z}')}
                 q^{*}(\bm{z}',\bm{u}')
                 \right].}
-    \end{equation}
-    Here, $(\bm{z}',\bm{u}')$ are the next state and action (at time $k+1$), respectively. For a \hl{parameterized approximation} $q_{\bm{w}}\approx q^{*}$, the temporal-difference target is
+    \end{equation}\pause%
+    Here, $(\bm{z}',\bm{u}')$ are the next state and action (at time $k+1$), respectively.\pause% 
+    For a \hl{parameterized approximation} $q_{\bm{w}}\approx q^{*}$, the temporal-difference target is
     \begin{equation}
         y=r_{\mathrm{RL}}[k+1]
         +\gamma\max_{\bm{u}'}
         q_{\bar{\bm{w}}}(\bm{z}',\bm{u}'),
-    \end{equation}
+    \end{equation}\pause%
     and the critic loss is
     \begin{equation}
         \mathcal{L}_{q}(\bm{w})
         =\mathbb{E}_{(\bm{z},\bm{u},r_{\mathrm{RL}},\bm{z}')\sim\mathcal{D}}
         \left[\left(q_{\bm{w}}(\bm{z},\bm{u})-y\right)^2\right].
-    \end{equation}
-    Here, $\mathcal{D}$ is a \hl{replay (data) buffer} and $q_{\bar{\bm{w}}}$ is a slowly updated \hl{target network}. Hence, the loss is the mean-squared error of the estimator's output plugged into the Bellman optimality equation.
+    \end{equation}\pause%
+    Here, $\mathcal{D}$ is a \hl{replay (data) buffer} and $q_{\bar{\bm{w}}}$ is a slowly updated \hl{target network}. \pause  Hence, the loss is the mean-squared error of the estimator's output plugged into the Bellman optimality equation.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2250,7 +2247,7 @@
     \end{equation}\vspace{-0.3cm}
     \begin{columns}[c]
         \begin{column}{0.55\textwidth}
-            \onslide<4->{
+            \onslide<3->{
                     \begin{block}{FCS-RL solution}
                         Once an accurate estimate $q_{\bm{w}}$ is found, the optimal action / policy is easily determined and the task is solved: just compare the finite $n_{\mathrm{s}}$ outputs of the estimator and select the best one:
                         \begin{equation}
@@ -2294,18 +2291,18 @@
 \begin{frame}
     \frametitle{DQN training loop and control-specific challenges}
     To improve the policy over time the agent needs to apply \hl{exploration} to receive new data deviating from the current greedy policy. A simple $\varepsilon$-greedy exploration strategy is
-    \begin{equation*}
+    \begin{equation}
         \bm{s}[k]=
         \begin{cases}
             \text{random admissible switching action},                                  & \text{with probability }\varepsilon, \\
             \displaystyle\argmax_{\bm{s}_i\in\mathbb{S}}q_{\bm{w}}(\bm{z}[k],\bm{s}_i), & \text{otherwise}.
         \end{cases}
-    \end{equation*}
+    \end{equation}\pause%
     Additional thoughts for drive control:
     \begin{itemize}
-        \item enforce hard constraints by action masking, safety filters, or constrained training,
-        \item include $\bm{s}[k-1]$ in $\bm{z}[k]$ when switching transitions are penalized,
-        \item cover relevant operating points to limit extrapolation risk,
+        \item enforce hard constraints by action masking, safety filters, or constrained training,\pause%
+        \item include $\bm{s}[k-1]$ in $\bm{z}[k]$ when switching transitions are penalized,\pause%
+        \item cover relevant operating points to limit extrapolation risk,\pause%
         \item note that a learned DQN has no  optimality guarantee (need for empirical validation).
     \end{itemize}
 \end{frame}
@@ -2316,16 +2313,17 @@
 \begin{frame}
     \frametitle{Continuous actions motivate actor-critic methods}
     For CCS control, the RL action is a continuous vector (e.g., stator voltage in dq frame):
-    \begin{equation*}
+    \begin{equation}
         \bm{u}[k]\in\mathcal{U}_{\mathrm{CCS}}.
-    \end{equation*}
+    \end{equation}\pause%
     A value-only method would require solving a continuous NLP
-    \begin{equation*}
+    \begin{equation}
         \bm{u}^{*}(\bm{z})
         \in\argmax_{\bm{u}\in\mathcal{U}_{\mathrm{CCS}}}
         q_{\bm{w}}(\bm{z},\bm{u})
-    \end{equation*}
-    at every sampling instant. \hl{Actor-critic methods} avoid this inner optimization by learning a \hl{direct / explicit mapping} from state to actions:
+    \end{equation}
+    at every sampling instant.\pause%
+    \hl{Actor-critic methods} avoid this inner optimization by learning a \hl{direct / explicit mapping} from state to actions:
     \begin{equation*}
         \underbrace{\bm{u}=\bm{\pi}_{\bm{\theta}}(\bm{z})}_{\text{actor: direct control action}},
         \qquad
@@ -2354,24 +2352,24 @@
 \begin{frame}
     \frametitle{Deterministic actor-critic learning for continuous actions}
     For a \hl{differentiable deterministic policy} $\bm{\pi}_{\bm{\theta}}(\bm{z})=\bm{\mu}_{\bm{\theta}}(\bm{z})$, define the expected return as evaluation metric:
-    \begin{equation*}
+    \begin{equation}
         J(\bm{\theta})=\mathbb{E}_{\bm{\mu}_{\bm{\theta}}}\left[G[0]\right]
         \quad\longrightarrow\quad \max_{\bm{\theta}}.
-    \end{equation*}
+    \end{equation}\pause%
     For a deterministic actor $\bm{u}=\bm{\mu}_{\bm{\theta}}(\bm{z})$, the \hl{critic} is trained from
-    \begin{equation*}
+    \begin{equation}
         y=r_{\mathrm{RL}}[k+1]
         +\gamma q_{\bar{\bm{w}}}
         \bigl(\bm{z}',\bm{\mu}_{\bar{\bm{\theta}}}(\bm{z}')\bigr),
-    \end{equation*}
+    \end{equation}\pause%
     with
-    \begin{equation*}
+    \begin{equation}
         \mathcal{L}_{q}(\bm{w})
         =\mathbb{E}_{\mathcal{D}}
         \left[\left(q_{\bm{w}}(\bm{z},\bm{u})-y\right)^2\right].
-    \end{equation*}
+    \end{equation}\pause%
     The \hl{deterministic policy gradient} is
-    \begin{equation*}
+    \begin{equation}
         \boxed{
             \nabla_{\bm{\theta}}J(\bm{\theta})
             \approx
@@ -2381,13 +2379,13 @@
                 \,\nabla_{\bm{u}}q_{\bm{w}}(\bm{z},\bm{u})
                 \big|_{\bm{u}=\bm{\mu}_{\bm{\theta}}(\bm{z})}
                 \right].}
-    \end{equation*}
+    \end{equation}\pause%
     Voltage constraints can be encoded by projection or a bounded output map, e.g.,
-    \begin{equation*}
+    \begin{equation}
         \bm{u}
         =\operatorname{proj}_{\mathcal{U}_{\mathrm{CCS}}}
         \bigl(\bm{\mu}_{\bm{\theta}}(\bm{z})\bigr).
-    \end{equation*}
+    \end{equation}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2417,7 +2415,7 @@
             Representative methods & DQN, Rainbow                                     & DDPG, TD3, SAC, PPO                                            \\
             \bottomrule
         \end{tabular}
-    \end{center}
+    \end{center}\pause%
     \begin{block}{Further study}
         A complete open course with slides, videos, tutorial templates, and solutions is available at
         \begin{center}
@@ -2444,16 +2442,16 @@
     \end{equation*}
     \begin{center}
         \begin{tabular}{lll}
-            \textbf{MPC} & $\rightarrow$ & solve a finite-horizon OCP online at each sampling step,            \\[1mm]
-            \textbf{RL}  & $\rightarrow$ & learns an explicit policy approximation from reward samples,        \\[1mm]
-            \textbf{DPC} & $\rightarrow$ & train a parametrized policy through a differentiable rollout model.
+            \textbf{MPC} & $\rightarrow$ & solve a finite-horizon OCP online at each sampling step,                  \\[1mm]\pause%
+            \textbf{RL}  & $\rightarrow$ & learns an explicit policy approximation from reward samples,              \\[1mm]\pause%
+            \textbf{DPC} & $\rightarrow$ & train a parametrized policy through a differentiable rollout model.\pause %
         \end{tabular}
     \end{center}
     DPC uses the model-predictive cost structure, but avoids the online optimizer by learning
     \begin{equation*}
         \boxed{\bm{u}[k]=\pi_{\bm{\theta}}\bigl(\bm{x}[k],\bm{r}[k],\bm{\xi}[k]\bigr)}
     \end{equation*}
-    offline over a distribution of operating scenarios $\bm{\xi}\sim\mathcal{D}$.
+    offline over a distribution of operating scenarios $\bm{\xi}\sim\mathcal{D}$.\pause%
     \begin{block}{Key idea}
         If model, policy, costs, and soft constraint penalties are differentiable, the finite-horizon closed-loop loss can be minimized by gradient-based learning (i.e., supervised learning).
     \end{block}
@@ -2488,7 +2486,7 @@
              & \bm{x}[k+1]=\bm{f}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}[k];\bm{\xi}\bigr), \\
              & \bm{g}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}[k];\bm{\xi}\bigr)\leq\bm{0}.
         \end{aligned}
-    \end{equation}
+    \end{equation}\pause%
     DPC replaces this implicit optimization problem (as considered in MPC) by an \hl{explicit policy approximation} (as resulting from RL):
     \begin{equation}
         \boxed{\bm{u}[0],\ldots,\bm{u}[N-1]\approx \pi_{\bm{\theta}}(\bm{x}[0],\bm{r}[0],\bm{\xi}), \ldots, \pi_{\bm{\theta}}(\bm{x}[N-1],\bm{r}[N-1],\bm{\xi}).}
@@ -2508,18 +2506,18 @@
     \begin{equation}
         \bm{x}[k+1]=\bm{f}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k];\bm{\xi}\bigr),
         \qquad k=0,\ldots,N-1.
-    \end{equation}
+    \end{equation}\pause%
     The \hl{differentiable DPC loss} is
     \begin{equation}
         \mathcal{L}_{N}(\bm{\theta};\bm{\xi})
         =\sum_{k=0}^{N-1}\ell_{\mathrm{DPC}}[k]+\ell_{\mathrm{f}}\bigl(\bm{x}[N],\bm{r}[N];\bm{\xi}\bigr),
-    \end{equation}
+    \end{equation}\pause%
     with a \hl{soft-constrained stage loss}, e.g.,
     \begin{equation}
         \ell_{\mathrm{DPC}}[k]
         =\ell\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k],\bm{r}[k];\bm{\xi}\bigr)
         +\left\|\left[\bm{g}_{\mathrm{d}}\bigl(\bm{x}[k],\bm{u}_{\bm{\theta}}[k];\bm{\xi}\bigr)\right]_{+}\right\|_{\bm{Q}_{\mathrm{g}}}^{2}.
-    \end{equation}
+    \end{equation}\pause%
     Here $[\cdot]_+$ denotes the componentwise positive part, i.e., only constraint violations are penalized.
 \end{frame}
 
@@ -2536,17 +2534,17 @@
             \bm{\theta}^{*}\in\argmin_{\bm{\theta}}
             \mathbb{E}_{\bm{\xi}\sim\mathcal{D}}
             \left[\mathcal{L}_{N}(\bm{\theta};\bm{\xi})\right].}
-    \end{equation*}
+    \end{equation*}\pause%
     In practice, the expectation is approximated by a mini-batch $\mathcal{B}$:
     \begin{equation*}
         \hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})
         =\frac{1}{|\mathcal{B}|}\sum_{\bm{\xi}\in\mathcal{B}}\mathcal{L}_{N}(\bm{\theta};\bm{\xi}).
-    \end{equation*}
+    \end{equation*}\pause%
     Implementing the complete \hl{closed-loop computation graph in differentiable programming framework} (e.g., JAX or PyTorch),
     \begin{equation*}
         \nabla_{\bm{\theta}}\hat{\mathcal{L}}_{\mathcal{B}}(\bm{\theta})
     \end{equation*}
-    can be computed by automatic differentiation.
+    can be computed by automatic differentiation.\pause%
     \begin{block}{Interpretation}
         The DPC loss acts like a white-box finite-horizon value estimate: it is generated by a known model and directly differentiated with respect to the policy parameters.
     \end{block}
@@ -2562,14 +2560,14 @@
         \bm{S}_{x}[k]=\frac{\partial \bm{x}_{\bm{\theta}}[k]}{\partial \bm{\theta}},
         \qquad
         \bm{S}_{x}[0]=\bm{0}.
-    \end{equation*}
+    \end{equation*}\pause%
     With
     \begin{equation*}
         \bm{F}_{x}[k]=\frac{\partial \bm{f}_{\mathrm{d}}}{\partial\bm{x}}[k],\quad
         \bm{F}_{u}[k]=\frac{\partial \bm{f}_{\mathrm{d}}}{\partial\bm{u}}[k],\quad
         \bm{\Pi}_{x}[k]=\frac{\partial \pi_{\bm{\theta}}}{\partial\bm{x}}[k],\quad
         \bm{\Pi}_{\theta}[k]=\frac{\partial \pi_{\bm{\theta}}}{\partial\bm{\theta}}[k],
-    \end{equation*}
+    \end{equation*}\pause%
     one obtains the forward sensitivity recursion
     \begin{equation*}
         \boxed{
@@ -2577,7 +2575,7 @@
             =\bm{F}_{x}[k]\bm{S}_{x}[k]
             +\bm{F}_{u}[k]\left(\bm{\Pi}_{x}[k]\bm{S}_{x}[k]+\bm{\Pi}_{\theta}[k]\right).}
     \end{equation*}
-    Equivalently, modern implementations compute the same gradient by reverse-mode automatic differentiation.
+    Equivalently, modern implementations compute the same gradient by reverse-mode automatic differentiation.\pause%
     \begin{block}{Relation to optimal control}
         The backward pass corresponds to a discrete adjoint calculation; in the continuous-time limit this links to Pontryagin-type adjoint equations.
     \end{block}
@@ -2639,7 +2637,7 @@
                     \item uses model-predictive tracking and constraint penalties,
                     \item does not require expert MPC demonstrations.
                 \end{itemize}
-            \end{block}
+            \end{block}\pause%
         \end{column}
         \hspace{0.04\textwidth}
         \begin{column}{0.46\textwidth}
@@ -2650,7 +2648,7 @@
                     \item training quality depends on scenario coverage and model accuracy,
                     \item no exact online optimality certificate.
                 \end{itemize}
-            \end{block}
+            \end{block}\pause%
         \end{column}
     \end{columns}
     \vspace{2mm}
@@ -2675,7 +2673,7 @@
             DPC             & evaluate $\bm{\pi}_{\bm{\theta}^*}$ & closed-loop rollouts $\rightarrow$ trained feedback   \\
             \bottomrule
         \end{tabular}
-    \end{center}
+    \end{center}\pause%
     \begin{varblock}{A few final remarks}
         The above summaries are intended to provide a high-level overview of the main ideas -- important aspects, like recursive feasibility and safety guarantees, are not covered. Further important but uncovered aspects are the training and deployment strategies (offline vs. online, simulation vs. real-world, etc.) and the choice of the function approximator (e.g., neural network architecture). If handled carefully, all three methods can be used to achieve high-performance drive control close to the physical limits of the system.
     \end{varblock}
