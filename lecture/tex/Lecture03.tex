@@ -43,7 +43,7 @@
     \begin{equation}
         \begin{alignedat}{4}
              &  & \mbox{Stator voltage:} &  & \quad\bm{u}_\mathrm{s,dq}( & t) &  & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\bm{\psi}_\mathrm{s,dq}(t) + \nicefrac{\mathrm{d}}{\mathrm{d}t}\bm{\psi}_\mathrm{s,dq}(t), \\
-            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{PM}),}                                                      \\\onslide<3->{
+            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}( & t) &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}(t), \psi_\mathrm{pm}),}                                                      \\\onslide<3->{
                                                                                                                                                                                                                                                           &  & \mbox{Torque:}              &  & \quad T(                       & t) &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)}
         \end{alignedat}
         \label{eq:basic_PMSM_model_set}
@@ -52,7 +52,7 @@
             \begin{equation*}
                 \begin{aligned}
                     \bm{i}_\mathrm{s,dq}: \text{stator current},                                                              &
-                    \qquad \psi_\mathrm{PM}  : \text{permanent magnet flux linkage},                                            \\
+                    \qquad \psi_\mathrm{pm}  : \text{permanent magnet flux linkage},                                            \\
                     R_\mathrm{s}:                                                          \text{stator winding resistances}, &
                     \qquad \bm{f}_{\psi_\mathrm{s}} : \text{stator flux linkage function},                                      \\
                     p                                           : \text{pole pair number},                                    &
@@ -215,7 +215,7 @@
                     fill=signalalpha,
                     opacity=0.78,
                 ]
-                table[x=id,y=iq,z expr=1000*\thisrow{psi_d}] {fig/lec03/PMSM_flux_maps.dat};
+                table[x=id,y=iq,z expr=\thisrow{psi_d}] {fig/lec03/PMSM_flux_maps.dat};
 
                 \nextgroupplot[
                     zlabel={$\psi_{\mathrm{s,q}}\,/\,\mathrm{mVs}$},
@@ -229,7 +229,7 @@
                     fill=signalalpha,
                     opacity=0.78,
                 ]
-                table[x=id,y=iq,z expr=1000*\thisrow{psi_q}] {fig/lec03/PMSM_flux_maps.dat};
+                table[x=id,y=iq,z expr=\thisrow{psi_q}] {fig/lec03/PMSM_flux_maps.dat};
             \end{groupplot}
         \end{tikzpicture}
         \caption{Exemplary current-to-flux maps for a \SI{68}{\kilo\watt} PMSM (derived from \href{https://ieeexplore.ieee.org/document/10098161}{10.1109/TPEL.2023.3265705}, \href{https://creativecommons.org/licenses/by/4.0/deed.en}{CC BY 4.0})}
@@ -273,10 +273,10 @@
                     draw=black,
                     fill=signalalpha,
                     opacity=0.78,]
-                table[x=id, y=iq, z expr=1000*\thisrow{L_dd}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+                table[x=id, y=iq, z expr=\thisrow{L_dd}] {fig/lec03/PMSM_diff_inductance_maps.dat};
 
                 \nextgroupplot[
-                    zlabel={$L_\mathrm{dq} / \mathrm{mH}$}
+                    zlabel={$L_\mathrm{dq} / \upmu\mathrm{H}$}
                 ]
                 \addplot3[surf,
                     mesh/rows=13,
@@ -287,7 +287,7 @@
                     opacity=0.78,]
                 table[x=id, y=iq, z expr=1000*\thisrow{L_dq}] {fig/lec03/PMSM_diff_inductance_maps.dat};
                 \nextgroupplot[
-                    zlabel={$L_\mathrm{qd}/ \mathrm{mH}$},
+                    zlabel={$L_\mathrm{qd}/ \upmu\mathrm{H}$},
                 ]
                 \addplot3[surf,
                     mesh/rows=13,
@@ -308,7 +308,7 @@
                     draw=black,
                     fill=signalalpha,
                     opacity=0.78,]
-                table[x=id, y=iq, z expr=1000*\thisrow{L_qq}] {fig/lec03/PMSM_diff_inductance_maps.dat};
+                table[x=id, y=iq, z expr=\thisrow{L_qq}] {fig/lec03/PMSM_diff_inductance_maps.dat};
             \end{groupplot}
         \end{tikzpicture}
         \caption{Exemplary differential inductance maps derived from \figref{fig:flux_maps_BRUSA}}
@@ -361,22 +361,22 @@
     \frametitle{Nonlinear PMSM flux linkage model and inductances (cont.)}
     Representing the nonlinear flux linkage model \eqref{eq:nonlinear_flux_function_PMSM} based on the \hl{apparent inductance matrix} $\bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq})$ yields
     \begin{equation}
-        \bm{\psi}_\mathrm{s,dq}(t) = \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}(t))\bm{i}_\mathrm{s,dq}(t) + \bm{\psi}_\mathrm{PM}
+        \bm{\psi}_\mathrm{s,dq}(t) = \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}(t))\bm{i}_\mathrm{s,dq}(t) + \bm{\psi}_\mathrm{pm}
     \end{equation}\pause
     with
     \begin{equation}
         \bm{L}_{\mathrm{app}}(\bm{i}_\mathrm{s,dq}) = \begin{bmatrix}
             L_{\mathrm{dd,app}}(i_\mathrm{s,d})                 & L_{\mathrm{dq,app}}(i_\mathrm{s,d}, i_\mathrm{s,q}) \\[1.5ex]
             L_{\mathrm{qd,app}}(i_\mathrm{s,d}, i_\mathrm{s,q}) & L_{\mathrm{qq,app}}(i_\mathrm{s,q})
-        \end{bmatrix}, \quad \bm{\psi}_\mathrm{PM} = \begin{bmatrix}
-            \psi_\mathrm{PM} \\[1.5ex]
+        \end{bmatrix}, \quad \bm{\psi}_\mathrm{pm} = \begin{bmatrix}
+            \psi_\mathrm{pm} \\[1.5ex]
             0
         \end{bmatrix}.
     \end{equation}\pause
     Here, the following can be noted:
     \begin{itemize}
         \item Main diagonal elements of $\bm{L}_{\mathrm{app}}$ depend only on the respective current component by convention since otherwise a unique apparent inductance definition would not be possible.\pause
-        \item Since the apparent inductance matrix represents the absolute flux linkage change due to the stator currents, the PM flux linkage $\bm{\psi}_\mathrm{PM}$ is explicitly included in the model.\pause
+        \item Since the apparent inductance matrix represents the absolute flux linkage change due to the stator currents, the PM flux linkage $\bm{\psi}_\mathrm{pm}$ is explicitly included in the model.\pause
         \item Since the apparent inductance representation is less elegant than the original flux function $\bm{f}_{\psi_\mathrm{s}}$ and partly ambiguous, it is not commonly used for control-oriented modeling of PMSMs.
     \end{itemize}
 \end{frame}
@@ -407,8 +407,8 @@
     \frametitle{Linear PMSM model with constant inductances}
     Applying the \hl{first-order Taylor expansion} to the nonlinear flux function $\bm{f}_{\psi_\mathrm{s}}$ around some operating point (typically the origin $\bm{i}_\mathrm{s,dq}=\bm{0}$) yields the \hl{linear PMSM flux model}
     \begin{equation}
-        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})\vphantom{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}}_{\displaystyle=\bm{\psi}_\mathrm{PM}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}}\bm{i}_\mathrm{s,dq}(t)  \onslide<2->{= \begin{bmatrix}
-                    \psi_{\mathrm{PM}} \\
+        \bm{\psi}_\mathrm{s,dq}(t)  \approx \underbrace{\bm{f}_{\psi_\mathrm{s}}(\bm{0})\vphantom{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}}_{\displaystyle=\bm{\psi}_\mathrm{pm}} + \underbrace{\frac{\partial \bm{f}_{\psi_\mathrm{s}}}{\partial \bm{i}_\mathrm{s,dq}}\bigg|_{\bm{i}_\mathrm{s,dq}=\bm{0}}}_{\displaystyle=\,\bm{L}}\bm{i}_\mathrm{s,dq}(t)  \onslide<2->{= \begin{bmatrix}
+                    \psi_{\mathrm{pm}} \\
                     0
                 \end{bmatrix} + \begin{bmatrix}
                     L_{\mathrm{dd}} & L_{\mathrm{dq}} \\
@@ -418,14 +418,14 @@
     \onslide<3->{With this linear flux model, the current ODE simplifies to}
     \begin{equation}
         \begin{split}
-            \onslide<3->{\bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{PM} + \bm{L} \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\
-            \onslide<4->{\Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \bm{L} \bm{i}_\mathrm{s,dq}(t)\right)\right].}
+            \onslide<3->{\bm{u}_\mathrm{s,dq}(t)                                                & = R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)+ \omega(t)\bm{J}\left[\bm{\psi}_\mathrm{pm} + \bm{L} \bm{i}_\mathrm{s,dq}(t)\right] + \bm{L}\frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t)} \\
+            \onslide<4->{\Leftrightarrow  \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) & = \bm{L}^{-1}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{pm} + \bm{L} \bm{i}_\mathrm{s,dq}(t)\right)\right].}
         \end{split}
         \label{eq:linear_current_ODE_PMSM}
     \end{equation}
     \onslide<5->{And the torque expressions results in
             \begin{equation}
-                T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd}}-L_{\mathrm{qq}})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t) + L_{\mathrm{dq}} i_\mathrm{s,q}^2(t) - L_{\mathrm{qd}} i_\mathrm{s,d}^2(t)\right].
+                T(t) = \frac{3}{2}p\left[\psi_\mathrm{pm} i_\mathrm{s,q}(t) + (L_{\mathrm{dd}}-L_{\mathrm{qq}})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t) + L_{\mathrm{dq}} i_\mathrm{s,q}^2(t) - L_{\mathrm{qd}} i_\mathrm{s,d}^2(t)\right].
             \end{equation}}
 \end{frame}
 
@@ -443,7 +443,7 @@
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{s,dq}(t) = \begin{bmatrix}
             L_{\mathrm{dd}}^{-1} & 0                    \\
             0                    & L_{\mathrm{qq}}^{-1}
-        \end{bmatrix}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{PM} + \begin{bmatrix}
+        \end{bmatrix}\left[\bm{u}_\mathrm{s,dq}(t)- R_\mathrm{s} \bm{i}_\mathrm{s,dq}(t)- \omega(t)\bm{J}\left(\bm{\psi}_\mathrm{pm} + \begin{bmatrix}
                 L_{\mathrm{dd}} & 0               \\
                 0               & L_{\mathrm{qq}}
             \end{bmatrix} \bm{i}_\mathrm{s,dq}(t)\right)\right].
@@ -451,9 +451,9 @@
     \end{equation}\pause
     and torque expression
     \begin{equation}
-        T(t) = \frac{3}{2}p\left[\psi_\mathrm{PM} i_\mathrm{s,q}(t) + (L_{\mathrm{dd}}-L_{\mathrm{qq}})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
+        T(t) = \frac{3}{2}p\left[\psi_\mathrm{pm} i_\mathrm{s,q}(t) + (L_{\mathrm{dd}}-L_{\mathrm{qq}})i_\mathrm{s,d}(t)i_\mathrm{s,q}(t)\right].
     \end{equation}\pause
-    This is the \hl{standard linear model for IPMSMs} with constant inductances. For \hl{SPMSMs}, there is no \hl{magnetic anisotropy} in the dq-paths, i.e., $L_{\mathrm{dd}} \approx L_{\mathrm{qq}}$ and the torque expression further simplifies to $T(t) = \frac{3}{2}p\psi_\mathrm{PM} i_\mathrm{s,q}(t)$.
+    This is the \hl{standard linear model for IPMSMs} with constant inductances. For \hl{SPMSMs}, there is no \hl{magnetic anisotropy} in the dq-paths, i.e., $L_{\mathrm{dd}} \approx L_{\mathrm{qq}}$ and the torque expression further simplifies to $T(t) = \frac{3}{2}p\psi_\mathrm{pm} i_\mathrm{s,q}(t)$.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -896,12 +896,12 @@
         \centering
         \begin{tikzpicture}[scale=0.93, >=Latex, line cap=round, line join=round]
             % fixed axes
-            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[below right=-1pt] {$\alpha$};
-            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above left=-1pt] {$\beta$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[right=-1pt] {$\upalpha$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above=-1pt] {$\upbeta$};
 
             % dq axes for the beginning of the step
-            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$d$};
-            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$q$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$\mathrm{d}$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$\mathrm{q}$};
 
             % only the relevant circular arc between the alpha-axis and the larger angle
             \draw[black, dashed, line width=0.8pt] (3.55,0) arc[start angle=0,end angle=180,radius=3.55];
@@ -994,12 +994,12 @@
         \centering
         \begin{tikzpicture}[scale=0.93, >=Latex, line cap=round, line join=round]
             % fixed axes
-            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[below right=-1pt] {$\alpha$};
-            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above left=-1pt] {$\beta$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,0) -- (5.0,0) node[right=-1pt] {$\upalpha$};
+            \draw[black, line width=0.9pt, -{Latex[length=3.2mm,width=2.2mm]}] (0,-0.45) -- (0,5) node[above=-1pt] {$\upbeta$};
 
             % dq axes for the beginning of the step
-            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$d$};
-            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$q$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (15:5) node[right=-1pt] {$\mathrm{d}$};
+            \draw[black, line width=0.8pt, -{Latex[length=2.8mm,width=2.0mm]}] (0,0) -- (105:5) node[above left=-1pt] {$\mathrm{q}$};
 
             % only the relevant circular arc between the alpha-axis and the larger angle
             \draw[black, dashed, line width=0.8pt] (3.55,0) arc[start angle=0,end angle=180,radius=3.55];
@@ -1037,7 +1037,7 @@
     \begin{equation}
         \begin{alignedat}{4}
              &  & \mbox{Difference eq.:} &  & \quad\bm{\psi}_{\mathrm{s,dq}}[&k+1] &  & = \bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\left(\bm{\psi}_{\mathrm{s,dq}}[k] + T_\mathrm{s}\left(\bm{u}_{\mathrm{s,dq}}[k] - R_\mathrm{s}\,\bm{i}_{\mathrm{s,dq}}[k]\right)\right), \\
-            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}[ & k+1] &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k+1], \psi_\mathrm{PM}),}                                                                                          \\\onslide<3->{
+            \onslide<2->{&  & \mbox{Stator flux linkage:} &  & \quad \bm{\psi}_\mathrm{s,dq}[ & k+1] &  & = \bm{f}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k+1], \psi_\mathrm{pm}),}                                                                                          \\\onslide<3->{
                                                                                                                                                                                                                                                                                                   &  & \mbox{Torque:}              &  & \quad T[                       & k+1] &  & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}[k+1])\T\bm{J}\bm{\psi}_\mathrm{s,dq}[k+1].}
         \end{alignedat}
         \label{eq:basic_PMSM_model_set_RK1}
@@ -1081,9 +1081,9 @@
             L_{\mathrm{dd}} & 0               \\
             0               & L_{\mathrm{qq}}
         \end{bmatrix}\bm{i}_\mathrm{s,dq} + \begin{bmatrix}
-            \psi_\mathrm{PM} \\
+            \psi_\mathrm{pm} \\
             0
-        \end{bmatrix} = \bm{L}\bm{i}_\mathrm{s,dq} + \bm{\psi}_\mathrm{PM}.
+        \end{bmatrix} = \bm{L}\bm{i}_\mathrm{s,dq} + \bm{\psi}_\mathrm{pm}.
     $$\pause%
     This was already the case in \eqref{eq:PMSM_current_ODE_linear_mdl} from which we can derive the continuous-time system matrix $\bm{A}_\mathrm{c}$ assuming a constant speed $\omega(t) = \omega$
     \begin{equation}
@@ -1107,7 +1107,7 @@
     Applying the RK1 discretization to the linear current ODE \eqref{eq:linear_current_ODE_PMSM} in the $\mathrm{dq}$-frame yields:
     \begin{equation}
         \begin{split}
-            \bm{i}_\mathrm{s,dq}[k+1] = \left(\bm{I} - \bm{L}^{-1}R_\mathrm{s}T_\mathrm{s}-\omega T_\mathrm{s}\bm{L}^{-1}\bm{J}\bm{L}\right)\bm{i}_\mathrm{s,dq}[k] + \bm{L}^{-1}T_\mathrm{s}\bm{u}_\mathrm{s,dq}[k] - \bm{L}^{-1}\omega T_\mathrm{s}\bm{J}\bm{\psi}_\mathrm{PM}.
+            \bm{i}_\mathrm{s,dq}[k+1] = \left(\bm{I} - \bm{L}^{-1}R_\mathrm{s}T_\mathrm{s}-\omega T_\mathrm{s}\bm{L}^{-1}\bm{J}\bm{L}\right)\bm{i}_\mathrm{s,dq}[k] + \bm{L}^{-1}T_\mathrm{s}\bm{u}_\mathrm{s,dq}[k] - \bm{L}^{-1}\omega T_\mathrm{s}\bm{J}\bm{\psi}_\mathrm{pm}.
         \end{split}
     \end{equation}\pause%
     In this case, the system matrix is
@@ -1154,8 +1154,8 @@
     Applying the same assumptions (linear magnetization, constant speed) to the RK1 model derived from the $\upalpha\upbeta$-frame as from \eqref{eq:current_diff_eq_RK1_alpha_beta} yields the following current difference equation:
     \begin{equation}
         \begin{split}
-            \bm{i}_\mathrm{s,dq}[k+1] = & \left(\bm{I} - \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\left(\bm{L}\bm{i}_\mathrm{s,dq}[k] + \bm{\psi}_\mathrm{PM}\right) + \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k]\\
-            =                           & \bm{T}_\mathrm{p}(-\omega T_\mathrm{s})\left(\bm{I} - \bm{L}^{-1}R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\bm{\psi}_\mathrm{PM} + \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k].
+            \bm{i}_\mathrm{s,dq}[k+1] = & \left(\bm{I} - \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\left(\bm{L}\bm{i}_\mathrm{s,dq}[k] + \bm{\psi}_\mathrm{pm}\right) + \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k]\\
+            =                           & \bm{T}_\mathrm{p}(-\omega T_\mathrm{s})\left(\bm{I} - \bm{L}^{-1}R_\mathrm{s}T_\mathrm{s}\right)\bm{i}_\mathrm{s,dq}[k] \\ &+ \bm{L}^{-1}\left(\bm{T}_\mathrm{p}(-\omega T_\mathrm{s})-\bm{I}\right)\bm{\psi}_\mathrm{pm} + \bm{L}^{-1}\bm{T}_\mathrm{p}(-\omega T_\mathrm{s}) T_\mathrm{s}\bm{u}_{\mathrm{dq}}[k].
         \end{split}
     \end{equation}\pause%
     Hence, the discrete-time system matrix is given by
@@ -1476,7 +1476,7 @@
             \draw[thick, ->] (motor.west) to (pll.east);
             \draw[thick] ($(ctdcQuarterTop |- conv.north)$) to [short, -o] ++(0,0.5) coordinate (DC_link_right);
             \draw[thick] ($(ctdcQuarterLeftTop |- conv.north)$) to [short, -o] ++(0,0.5) coordinate (DC_link_left);
-            \draw[thick] (DC_link_left) to [open, v^=$u_{\mathrm{DC}}$, voltage = straight] (DC_link_right);
+            \draw[thick] (DC_link_left) to [open, v^=$u_{\mathrm{dc}}$, voltage = straight] (DC_link_right);
         \end{circuitikz}
         \caption{Overview of a field-oriented control system for a PMSM drive. The phase-locked loop (PLL) is used to filter the rotor position and speed based on rotary sensors (e.g., resolver).}
         \label{fig:foc_SM_high_level}
@@ -2268,8 +2268,8 @@
                     ytick={0,0.5,1.0,1.5},
                     grid=both,
                     minor tick num=1,
-                    tick label style={font=\scriptsize},
-                    label style={font=\scriptsize},
+                    tick label style={font=\footnotesize},
+                    label style={font=\footnotesize},
                     scale only axis
                 ]
 
@@ -2449,13 +2449,13 @@
 
             \end{groupplot}
 
-            \node[font=\normalsize] at ($(group c1r1.north)+(0,0.42cm)$) {$\rho=0.25$};
-            \node[font=\normalsize] at ($(group c2r1.north)+(0,0.42cm)$) {$\rho=0.5$};
-            \node[font=\normalsize] at ($(group c3r1.north)+(0,0.42cm)$) {$\rho=1$};
+            \node[font=\footnotesize] at ($(group c1r1.north)+(0,0.42cm)$) {$\rho=0.25$};
+            \node[font=\footnotesize] at ($(group c2r1.north)+(0,0.42cm)$) {$\rho=0.5$};
+            \node[font=\footnotesize] at ($(group c3r1.north)+(0,0.42cm)$) {$\rho=1$};
 
-            \node[font=\normalsize, rotate=90] at ($(group c1r1.west)+(-0.78cm,0)$) {$d=1$};
-            \node[font=\normalsize, rotate=90] at ($(group c1r2.west)+(-0.78cm,0)$) {$d=0.9$};
-            \node[font=\normalsize, rotate=90] at ($(group c1r3.west)+(-0.78cm,0)$) {$d=0.5$};
+            \node[font=\footnotesize, rotate=90] at ($(group c1r1.west)+(-0.78cm,0)$) {$d=1$};
+            \node[font=\footnotesize, rotate=90] at ($(group c1r2.west)+(-0.78cm,0)$) {$d=0.9$};
+            \node[font=\footnotesize, rotate=90] at ($(group c1r3.west)+(-0.78cm,0)$) {$d=0.5$};
         \end{tikzpicture}
         %\caption{Idealized reference step-responses for different combinations of $d$ and $\rho$. The dashed line indicates the reference value.}
     \end{figure}
@@ -2470,10 +2470,10 @@
         \centering
         \begin{tikzpicture}
             \begin{groupplot}[
-                    group style={group size=3 by 3, horizontal sep=0.58cm, vertical sep=0.55cm,
-                            x descriptions at=edge bottom},
-                    width=0.285\textwidth,
-                    height=0.188\textheight,
+                    group style={group size=3 by 3, horizontal sep=0.56cm, vertical sep=0.62cm,
+                            x descriptions at=edge bottom, y descriptions at=edge left},
+                    width=0.28\textwidth,
+                    height=0.19\textheight,
                     xmin=0, xmax=16,
                     ymin=-0.20, ymax=2.20,
                     xtick={0,5,10,15},
@@ -2481,8 +2481,8 @@
                     grid=both,
                     minor tick num=1,
                     tick label style={font=\scriptsize},
-                    label style={font=\scriptsize},
-                    title style={font=\scriptsize},
+                    label style={font=\footnotesize},
+                    title style={font=\footnotesize},
                     xlabel={sample $k$},
                     scale only axis
                 ]
@@ -2497,7 +2497,7 @@
                     }
                 \pgfmathsetmacro{\yvaluehold}{15*(\lambdavalue)^(15-1)}
                 \xdef\coordlist{\coordlist (16,\yvaluehold)}
-                \nextgroupplot[title={$\rho=0.25$}, ylabel={$d=1$}, xlabel={}]
+                \nextgroupplot[title={$\rho=0.25$}, ylabel={$d=1$}, xlabel={}, label style={font=\footnotesize}]
                 \addplot[black, very thick, const plot mark left] coordinates {\coordlist};
                 \addplot[black!50, dashed, thin] coordinates {(0,0) (16,0)};
 
@@ -2539,7 +2539,7 @@
                     }
                 \pgfmathsetmacro{\yvaluehold}{(\rvalue)^(15-1)*sin(deg(15*\thetavalue))/sin(deg(\thetavalue))}
                 \xdef\coordlist{\coordlist (16,\yvaluehold)}
-                \nextgroupplot[ylabel={$d=0.9$}, xlabel={}]
+                \nextgroupplot[ylabel={$d=0.9$}, xlabel={}, label style={font=\footnotesize}]
                 \addplot[black, very thick, const plot mark left] coordinates {\coordlist};
                 \addplot[black!50, dashed, thin] coordinates {(0,0) (16,0)};
 
@@ -2585,7 +2585,7 @@
                     }
                 \pgfmathsetmacro{\yvaluehold}{(\rvalue)^(15-1)*sin(deg(15*\thetavalue))/sin(deg(\thetavalue))}
                 \xdef\coordlist{\coordlist (16,\yvaluehold)}
-                \nextgroupplot[ylabel={$d=0.5$}]
+                \nextgroupplot[ylabel={$d=0.5$}, label style={font=\footnotesize}]
                 \addplot[black, very thick, const plot mark left] coordinates {\coordlist};
                 \addplot[black!50, dashed, thin] coordinates {(0,0) (16,0)};
 
@@ -2665,20 +2665,20 @@
             ]
 
             % Current response: d-axis
-            \nextgroupplot[title={$d$-axis current}, ylabel={$i_{\mathrm{s,d}}$ / A}, ymin=-150, ymax=15]
+            \nextgroupplot[title={$\mathrm{d}$-axis current}, ylabel={$i_{\mathrm{s,d}}$ / A}, ymin=-150, ymax=15]
             \addplot[signaldelta, very thick] table[x=time_ms,y=id_A,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[black, dashed, thin] table[x=time_ms,y=id_ref_A,col sep=comma] {fig/lec03/no_arw.csv};
             %add arrow pointing towards 3.5 ms / -125 A from right and label it with "increased overshoot"
             \draw[<-, thin] (axis cs:4,-125) -- (axis cs:5,-125) node[anchor=west, font=\footnotesize, inner sep=1pt, fill=white] {increased overshoot};
 
             % Current response: q-axis
-            \nextgroupplot[title={$q$-axis current}, ylabel={$i_{\mathrm{s,q}}$ / A}, ymin=-20, ymax=120]
+            \nextgroupplot[title={$\mathrm{q}$-axis current}, ylabel={$i_{\mathrm{s,q}}$ / A}, ymin=-20, ymax=120]
             \addplot[signaldelta, very thick] table[x=time_ms,y=iq_A,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[black, dashed, thin] table[x=time_ms,y=iq_ref_A,col sep=comma] {fig/lec03/no_arw.csv};
             \draw[<-, thin] (axis cs:3.0, 95) -- (axis cs:4.5,75) node[anchor=west, font=\footnotesize, inner sep=1pt, fill=white] {increased overshoot};
 
             % Integrator state: d-axis
-            \nextgroupplot[title={$d$-axis control action}, xlabel={time / ms}, ylabel={$u_{\mathrm{d}}$ / V}, ymin=-600, ymax=100]
+            \nextgroupplot[title={$\mathrm{d}$-axis control action}, xlabel={time / ms}, ylabel={$u_{\mathrm{d}}$ / V}, ymin=-600, ymax=100]
             \addplot[signalalpha, very thick] table[x=time_ms,y=ud_unclipped_V,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[signalalpha, dashed, very thick] table[x=time_ms,y=ud_clipped_V,col sep=comma] {fig/lec03/no_arw.csv};
             \draw[<-, thin] (axis cs:3.0, -270) -- (axis cs:4.0,-150) node[anchor=west, font=\footnotesize, inner sep=1pt, fill=white] {clipped voltage};
@@ -2687,7 +2687,7 @@
 
 
             % Integrator state: q-axis
-            \nextgroupplot[title={$q$-axis control action}, xlabel={time / ms}, ylabel={$u_{\mathrm{q}}$ / V}, ymin=-100, ymax=600]
+            \nextgroupplot[title={$\mathrm{q}$-axis control action}, xlabel={time / ms}, ylabel={$u_{\mathrm{q}}$ / V}, ymin=-100, ymax=600]
             \addplot[signalalpha, very thick] table[x=time_ms,y=uq_unclipped_V,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[signalalpha, dashed, very thick] table[x=time_ms,y=uq_clipped_V,col sep=comma] {fig/lec03/no_arw.csv};
             \draw[<-, thin] (axis cs:2.5, 500) -- (axis cs:3.5,500) node[anchor=west, font=\footnotesize, inner sep=1pt, fill=white] {unclipped voltage};
@@ -3016,7 +3016,7 @@
             ]
 
             % Current response: d-axis
-            \nextgroupplot[title={$d$-axis current}, ylabel={$i_{\mathrm{s,d}}$ / A}, ymin=-145, ymax=15]
+            \nextgroupplot[title={$\mathrm{d}$-axis current}, ylabel={$i_{\mathrm{s,d}}$ / A}, ymin=-145, ymax=15]
             \addplot[signalalpha, very thick] table[x=time_ms,y=id_A,col sep=comma] {fig/lec03/no_arw.csv};
             \addlegendentry{no ARW}
             \addplot[signalbeta, very thick] table[x=time_ms,y=id_A,col sep=comma] {fig/lec03/arw_KR1.csv};
@@ -3028,7 +3028,7 @@
             \addplot[black, dashed, thin] table[x=time_ms,y=id_ref_A,col sep=comma] {fig/lec03/no_arw.csv};
 
             % Current response: q-axis
-            \nextgroupplot[title={$q$-axis current}, ylabel={$i_{\mathrm{s,q}}$ / A}, ymin=-20, ymax=120]
+            \nextgroupplot[title={$\mathrm{q}$-axis current}, ylabel={$i_{\mathrm{s,q}}$ / A}, ymin=-20, ymax=120]
             \addplot[signalalpha, very thick] table[x=time_ms,y=iq_A,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[signalbeta, very thick] table[x=time_ms,y=iq_A,col sep=comma] {fig/lec03/arw_KR1.csv};
             \addplot[signalgamma, very thick] table[x=time_ms,y=iq_A,col sep=comma] {fig/lec03/arw_lambda_zr.csv};
@@ -3036,14 +3036,14 @@
             \addplot[black, dashed, thin] table[x=time_ms,y=iq_ref_A,col sep=comma] {fig/lec03/no_arw.csv};
 
             % Integrator state: d-axis
-            \nextgroupplot[title={$d$-axis integral action}, xlabel={time / ms}, ylabel={$v_{\mathrm{i,d}}$ / V}, ymin=-430, ymax=40]
+            \nextgroupplot[title={$\mathrm{d}$-axis integral action}, xlabel={time / ms}, ylabel={$v_{\mathrm{i,d}}$ / V}, ymin=-430, ymax=40]
             \addplot[signalalpha, very thick] table[x=time_ms,y=xI_d_V,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[signalbeta, very thick] table[x=time_ms,y=xI_d_V,col sep=comma] {fig/lec03/arw_KR1.csv};
             \addplot[signalgamma, very thick] table[x=time_ms,y=xI_d_V,col sep=comma] {fig/lec03/arw_lambda_zr.csv};
             \addplot[signaldelta, very thick] table[x=time_ms,y=xI_d_V,col sep=comma] {fig/lec03/arw_lambda_exp_minus_rho.csv};
 
             % Integrator state: q-axis
-            \nextgroupplot[title={$q$-axis integral action}, xlabel={time / ms}, ylabel={$v_{\mathrm{i,q}}$ / V}, ymin=-30, ymax=550]
+            \nextgroupplot[title={$\mathrm{q}$-axis integral action}, xlabel={time / ms}, ylabel={$v_{\mathrm{i,q}}$ / V}, ymin=-30, ymax=550]
             \addplot[signalalpha, very thick] table[x=time_ms,y=xI_q_V,col sep=comma] {fig/lec03/no_arw.csv};
             \addplot[signalbeta, very thick] table[x=time_ms,y=xI_q_V,col sep=comma] {fig/lec03/arw_KR1.csv};
             \addplot[signalgamma, very thick] table[x=time_ms,y=xI_q_V,col sep=comma] {fig/lec03/arw_lambda_zr.csv};
@@ -3676,7 +3676,7 @@
     \[
         \bm{z}=\begin{bmatrix}i_{\mathrm d}&i_{\mathrm q}&1\end{bmatrix}^{\!\top},
         \qquad
-        q_k(\bm{z};\bm{\theta})=\bm{z}^\top Q_k(\bm{\theta})\bm{z},
+        q_l(\bm{z};\bm{\theta})=\bm{z}^\top Q_l(\bm{\theta})\bm{z},
         \qquad
         \bm{\theta}=(T^*,\omega,u_{\mathrm{dc}},i_{\max},\ldots).
     \]
@@ -3686,7 +3686,7 @@
             \tikzstyle{procbox}=[draw, rounded corners=1mm, minimum width=2.82cm, minimum height=1.45cm, inner sep=0pt]
             \tikzstyle{proctext}=[align=center, text width=2.55cm]
             \node[procbox] (loci) at (0,0) {};
-            \node[proctext] at (loci.center) {form active\\loci\\$q_k(\bm{z};\bm{\theta})=0$};
+            \node[proctext] at (loci.center) {form active\\loci\\$q_l(\bm{z};\bm{\theta})=0$};
             \node[procbox] (poly) at (3.15,0) {};
             \node[proctext] at (poly.center) {eliminate\\variables\\$p(\bm{\eta};\bm{\theta})=0$};
             \node[procbox] (roots) at (6.30,0) {};
@@ -3699,7 +3699,7 @@
         \end{tikzpicture}
     \end{center}
     \vspace{-2mm}\pause%
-    Typical quadrics are:
+    Typical quadrics for the $l$-th target quantity are:
     \[
         \underbrace{q_T=0}_{\text{torque hyperbola}},\qquad
         \underbrace{q_I\le 0}_{\text{current circle}},\qquad
@@ -3719,7 +3719,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Analytical OPS: linear IPMSM MTPC example}
-    With constant inductances and $\Delta L=L_{\mathrm dd}-L_{\mathrm qq}$:
+    With constant inductances and $\Delta L=L_{\mathrm{dd}}-L_{\mathrm{qq}}$:
     \[
         \tau=\frac{T^*}{\frac{3}{2}p}
         =\left(\psi_{\mathrm{pm}}+\Delta L i_{\mathrm{s,d}}\right)i_{\mathrm{s,q}},
@@ -3826,19 +3826,20 @@
         \quad
         h(\bm{\xi};\bm{\theta}_j)\le 0,
     \]\pause%
+    delivering data points
     \[
         \mathcal D_N=\{(\bm{\theta}_j,\bm{\xi}_j^*)\}_{j=1}^{N}.
     \]\pause%
-    Online, replace the implicit optimizer by an explicit approximation:
+    Online, replace the implicit optimizer by interpolation or an explicit approximation:
     \[
         \bm{\xi}^*(\bm{\theta})\approx \widehat{\bm{\xi}}^*(\bm{\theta})
         =\mathcal I_{\mathrm{LUT}}(\bm{\theta};\mathcal D_N)
         \quad\text{or}\quad
-        \widehat{\bm{\xi}}^*(\bm{\theta})=g_\eta(\bm{\theta}).
+        \widehat{\bm{\xi}}^*(\bm{\theta})=\bm{\pi}_{\bm{w}}(\bm{\theta}).
     \]
     \begin{itemize}
         \item $\mathcal I_{\mathrm{LUT}}$: nearest-neighbor, multilinear or spline interpolation.\pause%
-        \item $g_\eta$: polynomial, piecewise-affine, Gaussian-process or ANN surrogate.\pause%
+        \item $\bm{\pi}_{\bm{w}}$: polynomial, piecewise-affine, Gaussian-process or ANN surrogate with weights $\bm{w}$.\pause%
         \item Optional online feasibility repair: projection, clipping or fallback to a safe OPS region.
     \end{itemize}
 \end{frame}
@@ -4286,7 +4287,7 @@
     \frametitle{Local OPS linearization in flux weakening}
     We consider the simplified PMSM model with constant inductance matrix
     \begin{equation}
-        \bm{\psi}_{\mathrm{s,dq}} = \bm{L}\bm{i}_{\mathrm{s,dq}} + \bm{\psi}_{\mathrm{PM}},
+        \bm{\psi}_{\mathrm{s,dq}} = \bm{L}\bm{i}_{\mathrm{s,dq}} + \bm{\psi}_{\mathrm{pm}},
         \qquad
         \bm{L} =
         \begin{bmatrix}
@@ -4791,11 +4792,11 @@
     \begin{columns}[T,onlytextwidth]
         \begin{column}{0.52\textwidth}
             Historically the DTC scheme was applied to SPMSM drives without magnetic saturation. Hence, the simplified flux model $$
-                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{PM}$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=L_\mathrm{qd}=0$ was used. \onslide<2->{In this case, the torque simplifies to}
+                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{pm}$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=L_\mathrm{qd}=0$ was used. \onslide<2->{In this case, the torque simplifies to}
             \begin{align*}
                 \onslide<2->{\bm{T} & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)              \\}
-                \onslide<3->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} (\bm{\psi}_\mathrm{PM})\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)                \\}
-                \onslide<4->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} \|\bm{\psi}_\mathrm{PM}\| \|\bm{\psi}_\mathrm{s,dq}(t)\| \sin(\delta(t))}
+                \onslide<3->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} (\bm{\psi}_\mathrm{pm})\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)                \\}
+                \onslide<4->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} \|\bm{\psi}_\mathrm{pm}\| \|\bm{\psi}_\mathrm{s,dq}(t)\| \sin(\delta(t))}
             \end{align*}
             \onslide<4->{where $\delta(t)$ is the angle between the stator flux and the PM flux.}
         \end{column}
@@ -4855,7 +4856,7 @@
 
                             \fill[signalalpha] (psi0) circle (2pt);
                             \draw[thick, signalalpha, ->] (0,0) -- node[left, pos=0.5]{$\bm{\psi}_\mathrm{s}$} (psi0);
-                            \draw[thick, signaldelta, ->] (0,0) -- (psiPM) node[below, pos=0.75]{$\bm{\psi}_\mathrm{PM}$};
+                            \draw[thick, signaldelta, ->] (0,0) -- (psiPM) node[below, pos=0.75]{$\bm{\psi}_\mathrm{pm}$};
                             \draw[dashed] (psiPM) -- ($(psiPM) + (psi0)$);
                             \draw[dashed] (psi0) -- ($(psiPM) + (psi0)$);
                             \draw[thin] ($(psi0)!0.5!(psiPM) + (0.5,0)$) -- ++(0.8,-0.3) node[right] {$\sim T$};
@@ -4941,8 +4942,8 @@
                     \fill[signalalpha] (psi0) circle (2pt);
                     \draw[thick, signalalpha, ->] (0,0) -- node[right, pos=0.3]{$\bm{\psi}_\mathrm{s}[k]$} (psi0);
                     \draw[thick, signalalpha, ->] (0,0) -- node[left, pos=0.9]{$\bm{\psi}_\mathrm{s}[k+1]$} (u3);
-                    \draw[thick, signaldelta, ->] (0,0) -- (psiPM0) node[right]{$\bm{\psi}_\mathrm{PM}[k]$};
-                    \draw[thick, signaldelta, ->] (0,0) --  (psiPM1) node[right]{$\bm{\psi}_\mathrm{PM}[k+1]$};
+                    \draw[thick, signaldelta, ->] (0,0) -- (psiPM0) node[right]{$\bm{\psi}_\mathrm{pm}[k]$};
+                    \draw[thick, signaldelta, ->] (0,0) --  (psiPM1) node[right]{$\bm{\psi}_\mathrm{pm}[k+1]$};
                     \draw[->] (0,0) ++(\psiPMNullgrad:\psiPMr*0.8) arc (\psiPMNullgrad:\psiPMEinsgrad:\psiPMr*0.8);
                     \draw[thin] (\psiPMNullgrad/2+\psiPMEinsgrad/2:\psiPMr*0.75) -- ++(-0.2,-.35) node[below] {$\omega[k] T_\mathrm{s}$};
                 \end{tikzpicture}
@@ -5002,7 +5003,7 @@
             6 & $\bm{s}_{\mathrm{i}1}$ & $\bm{s}_{\mathrm{i}2}$ & $\bm{s}_{\mathrm{i}5}$ & $\bm{s}_{\mathrm{i}4}$ & $\bm{s}_{\mathrm{i}0}, \bm{s}_{\mathrm{i}7}$ \\
             \bottomrule
         \end{tabular}
-        \caption{Exemplary DTC switching table\footnote{It should be noted that the switching strategy is not a unique choice. Depending on different control goals other switching tables might be more suited incl. a finer sector division and state-dependent strategies.} for different control situations}
+        \caption{Exemplary DTC switching table\footnote{It should be noted that the switching strategy is not a unique choice. Depending on different control goals other switching tables might be more suited incl. a finer sector division and state-dependent strategies.} with elementary switching vectors $\bm{s}_{\mathrm{i}j}$ for different control situations}
         \label{tab:DTC_switching_table}
     \end{table}
 \end{frame}
@@ -5355,8 +5356,8 @@
     \frametitle{DTC switching frequency}
     \begin{itemize}
         \item<1-> The switching frequency of the DTC scheme is not fixed but depends on the operating point and the chosen hysteresis band widths.
-        \item<2-> This is a major difference compared to modulation-based control schemes where the switching frequency can be pre-defined.
-        \item<3-> To achieve an average reference switching frequency of $f^*_\mathrm{s}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = s_i[k] - s_i[k-1]$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
+        \item<2-> This is a major difference compared to modulation-based control schemes where the pulsing frequency can be pre-defined.
+        \item<3-> To achieve an average reference pulsing frequency of $f^*_\mathrm{p}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = s_i[k] - s_i[k-1]$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
     \end{itemize}
     \onslide<4->{
             \begin{figure}
@@ -5372,7 +5373,7 @@
                     \node[signedmixer, right =1.5*\stdgap of sumS, tripoles/signedmixer/west={$+$}, tripoles/signedmixer/south={$-$}] (sumF) {};
                     \coordinate[left=\stdgap of sumF] (sumFInAux);
                     \coordinate[below=\stdgap of sumFInAux] (sumFIn);
-                    \draw[thick, ->] (sumFIn)  node[above right]{$3 f^*_\mathrm{s}$} -|  (sumF.south);
+                    \draw[thick, ->] (sumFIn)  node[above right]{$3 f^*_\mathrm{p}$} -|  (sumF.south);
                     \draw[thick, ->] (sumS.east) -- (sumF.west);
                     \node[twoportshape, right=1.5*\stdgap of sumF, t=$\sum$] (int) {};
                     \draw[thick, ->] (sumF.east) -- (int.west);
@@ -5424,11 +5425,11 @@
     \frametitle{Current model-based flux estimation}
     Similarly to the FOC case, we assume a known stator currents to stator flux linkage mapping
     $$
-        \hat{\bm{\psi}}_\mathrm{s,dq}[k]  = \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{PM}),
+        \hat{\bm{\psi}}_\mathrm{s,dq}[k]  = \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{pm}),
     $$
     e.g., due to a prior machine characterization. \pause Using inverse Park transformation, the stator flux in $\upalpha\upbeta$-coordinates can be estimated as
     $$
-        \hat{\bm{\psi}}_\mathrm{s,\upalpha\upbeta}[k]  = \bm{T}_\mathrm{p}(\varepsilon[k]) \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{PM}).
+        \hat{\bm{\psi}}_\mathrm{s,\upalpha\upbeta}[k]  = \bm{T}_\mathrm{p}(\varepsilon[k]) \hat{\bm{f}}_{\psi_\mathrm{s}}(\bm{i}_\mathrm{s,dq}[k], \psi_\mathrm{pm}).
     $$\pause%
     Hence, this method relies on:
     \begin{itemize}
