@@ -10,14 +10,14 @@
     Consider a general nonlinear ODE
     \begin{equation}\label{eq:system_det_dyn}
         \begin{split}
-            \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t) & = \bm{f}(\bm{x}(t), \bm{u}(t),t)\, , \quad \bm{x}(t_0)=\bm{x}_0\, , \\
-            \bm{y}(t)                               & =\bm{g}\left(\bm{x}(t),\bm{u}(t),t\right)
+            \frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t) & = \bm{f}(\bm{x}(t), \bm{u}(t))\, , \quad \bm{x}(t_0)=\bm{x}_0\, , \\
+            \bm{y}(t)                               & =\bm{g}\left(\bm{x}(t),\bm{u}(t)\right)
         \end{split}
     \end{equation}
-    with state $\bm{x}(t)\in \mathbb{R}^n$, input $\bm{u}(t)\in \mathbb{R}^m$, output $\bm{y}(t)\in \mathbb{R}^p$, time $t\in \mathbb{R}$, and nonlinear functions $\bm{f}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^n$ and $\bm{g}(\cdot): \mathbb{R}^n \times \mathbb{R}^m \times \mathbb{R} \to \mathbb{R}^p$. \pause For each discrete time step $k\in \mathbb{N}_0$ with step size $T_\mathrm{s}$, the state and output at time $t=(k+1)T_\mathrm{s}$ are approximated by the \hl{ Runge-Kutta (RK) method} as
+    with state $\bm{x}(t)\in \mathbb{R}^n$, input $\bm{u}(t)\in \mathbb{R}^m$, output $\bm{y}(t)\in \mathbb{R}^p$, time $t\in \mathbb{R}$, and nonlinear functions $\bm{f}(\cdot): \mathbb{R}^n \times \mathbb{R}^m  \to \mathbb{R}^n$ and $\bm{g}(\cdot): \mathbb{R}^n \times \mathbb{R}^m  \to \mathbb{R}^p$. \pause For each discrete time step $k\in \mathbb{N}_0$ with step size $T_\mathrm{s}$, the state and output at time $t=(k+1)T_\mathrm{s}$ are approximated by the \hl{ Runge-Kutta (RK) method} as
     \begin{equation}
         \begin{split}
-            \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}\sum_{j=1}^{s}b_j\bm{h}_j\, , \quad \bm{h}_j  = \bm{f}\left(\bm{x}(t)+T_\mathrm{s} \sum_{l=1}^{s}\alpha_{j,l}\cdot\bm{h}_l, \,\,\bm{u}(t+c_j T_\mathrm{s})\right), \\
+            \bm{x}[k+1] & = \bm{x}[k] + T_\mathrm{s}\sum_{j=1}^{s}b_j\bm{h}_j\, , \quad \bm{h}_j  = \bm{f}\left(\bm{x}[k]+T_\mathrm{s} \sum_{l=1}^{s}\alpha_{j,l}\cdot\bm{h}_l, \,\,\bm{u}(t_k+c_j T_\mathrm{s})\right), \\
             \bm{y}[k]   & = \bm{g}\left(\bm{x}[k],\bm{u}[k]\right)\,.
         \end{split}
         \label{eq:system_det_dyn_RK_explizit}
@@ -54,7 +54,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Explicit Runge-Kutta method(cont.)}
+    \frametitle{Explicit Runge-Kutta method (cont.)}
     From \eqref{eq:RK4_coeff} one can calculate the next discrete time state using \hl{RK4} as
     \begin{equation}
         \begin{split}
@@ -76,7 +76,7 @@
 %% Runge-Kutta method(cont.) %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-    \frametitle{Explicit Runge-Kutta method(cont.)}
+    \frametitle{Explicit Runge-Kutta method (cont.)}
     \begin{figure}[htbp]
         \centering
 
@@ -301,13 +301,13 @@
     This can be found by either a first-order Taylor series expansion of the matrix exponential \eqref{eq:exact_discretization_matrices} or by applying the RK1 method \eqref{eq:RK1} directly to the LTI system. \pause Likewise, the \hl{implicit Euler method (IRK1)} for the LTI system is given by
     \begin{equation}
         \begin{split}
-            \bm{x}[k+1]  = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k+1] + \bm{B}\bm{u}[k+1])\quad             \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k]
+            \bm{x}[k+1]  = \bm{x}[k] + T_\mathrm{s}(\bm{A}\bm{x}[k+1] + \bm{B}\bm{u}[k])\quad             \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k]
         \end{split}
     \end{equation}\pause
     leading to
     \begin{equation}
         \begin{split}
-            \bm{x}[k+1]  = (\bm{I} - T_\mathrm{s}\bm{A})^{-1}\bm{x}[k] + (\bm{I} - T_\mathrm{s}\bm{A})^{-1}T_\mathrm{s}\bm{B}\bm{u}[k+1], \quad
+            \bm{x}[k+1]  = (\bm{I} - T_\mathrm{s}\bm{A})^{-1}\bm{x}[k] + (\bm{I} - T_\mathrm{s}\bm{A})^{-1}T_\mathrm{s}\bm{B}\bm{u}[k], \quad
             \bm{y}[k]    = \bm{C}\bm{x}[k] + \bm{D}\bm{u}[k].
         \end{split}
     \end{equation}

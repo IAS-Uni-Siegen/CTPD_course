@@ -46,7 +46,7 @@
         \begin{itemize}
             \item Email: see \href{https://www.uni-siegen.de/ias/}{chair's homepage}
             \item Offices: H-A building, 4th floor
-            \item Individual appointments on request (remote or personally)
+            \item Individual appointments on request (remote or in person)
         \end{itemize}
     \end{varblock}
 \end{frame}
@@ -123,7 +123,7 @@
         \item Understand the general structure and components of controlled drive systems.
         \item<2-> Differentiate key drive control concepts (incl. modulation schemes).
         \item<3-> Understand the trade-offs of different drive control concepts and their suitability for different applications (incl. different machines and converter types).
-        \item<4-> Being able to simulate and implement drive control algorithms on virtual and real test benches.
+        \item<4-> Be able to simulate and implement drive control algorithms on virtual and real test benches.
         \item<5-> Configure and optimize controller and modulation parameters.
         \item<6-> Evaluate the achievable performance of drive control systems based on their physical constraints.
         \item<7-> Have fun learning about drive control systems and their applications!
@@ -145,12 +145,12 @@
     \end{itemize}
     \vspace{0.5cm}
     \onslide<5->{
-        What we will \underline{not} cover in this course:
-        \begin{itemize}
-            \item Mechanical load behavior,
-            \item Power supply behavior,
-        \end{itemize}
-        i.e., we will focus only on the drive system and not the drive train.}
+            What we will \underline{not} cover in this course:
+            \begin{itemize}
+                \item Mechanical load behavior,
+                \item Power supply behavior,
+            \end{itemize}
+            i.e., we will focus only on the drive system and not the drive train.}
 \end{frame}
 
 
@@ -166,7 +166,7 @@
             \node[threephasemotorshaftshape] (motor) at (4,0) {};
             \draw[->] (motor.shaft) ++(0.25,{0.7*sin(30)})
             arc[start angle=30, end angle=-30, radius=0.7]
-            node[midway, right, name=shaftlabels] {$T,\omega, \varepsilon$};
+                node[midway, right, name=shaftlabels] {$T,\omega, \varepsilon$};
             \draw (conv.ac mid out) to [currtap, name=ct1]  (motor.west mid);
             \node[tmultiwireshape] at ($(conv.ac mid out)!.25!(motor.west mid)$) {};
             \node[tmultiwireshape] at ($(conv.ac mid out)!.75!(motor.west mid)$) {};
@@ -376,7 +376,7 @@
     \end{table}
     \vspace{-0.5cm}\pause
     \begin{varblock}{}
-        The indirect approach is slower since minimizing the current/flux control error is not garantuntying to minimize the torque control error at each time instant  (the torque to current / flux mapping comes with degrees of freedom for three-phase drives). However, in practice the transient control performance difference is typically minor.
+        The indirect approach is slower since minimizing the current/flux control error is not guaranteeing to minimize the torque control error at each time instant (the torque to current / flux mapping comes with degrees of freedom for three-phase drives). However, in practice the transient control performance difference is typically minor.
     \end{varblock}
 \end{frame}
 
@@ -456,7 +456,7 @@
     \begin{equation}
         x(t) = \hat{x}(t)\cos(\varphi_x(t))
     \end{equation}
-    with time-varying \hl{amplitude} $\hat{x}(t)\in\mathbb{R}_{\geq 0}$ and \hl{phase} $\varphi_x(t)\in\mathbb{R}$.\pause The \hl{instantaneous angular frequency} of this signal is defined as
+    with time-varying \hl{amplitude} $\hat{x}(t)\in\mathbb{R}_{\geq 0}$ and \hl{phase} $\varphi_x(t)\in\mathbb{R}$. \pause The \hl{instantaneous angular frequency} of this signal is defined as
     \begin{equation}
         \omega_x(t) = \frac{\mathrm{d}}{\mathrm{d}t}\varphi_x(t).
     \end{equation}\pause
@@ -485,7 +485,7 @@
             \hat{x}_\mathrm{c}(t)\cos(\varphi_{x_\mathrm{c}}(t))
         \end{bmatrix}.
     \end{equation}
-    Here, again $\hat{x}_\mathrm{a}(t), \hat{x}_\mathrm{b}(t), \hat{x}_\mathrm{c}(t)\in\mathbb{R}_{\geq 0}$ are the time-varying amplitudes and $\varphi_{x_\mathrm{a}}(t), \varphi_{x_\mathrm{b}}(t), \varphi_{x_\mathrm{c}}(t)\in\mathbb{R}$ are the time-varying phase angles.\pause Instead of phase signals, we can also define \hl{line-to-line signals} as
+    Here, again $\hat{x}_\mathrm{a}(t), \hat{x}_\mathrm{b}(t), \hat{x}_\mathrm{c}(t)\in\mathbb{R}_{\geq 0}$ are the time-varying amplitudes and $\varphi_{x_\mathrm{a}}(t), \varphi_{x_\mathrm{b}}(t), \varphi_{x_\mathrm{c}}(t)\in\mathbb{R}$ are the time-varying phase angles. \pause Instead of phase signals, we can also define \hl{line-to-line signals} as
     \begin{equation}
         \bm{x}_\mathrm{a\text{-}b\text{-}c} = \begin{bmatrix}
             x_\mathrm{a\text{-}b}(t) \\
@@ -534,15 +534,15 @@
                 \draw[->]
                 ({(\phaselen)*cos(\angleoff)},{(\phaselen)*sin(\angleoff)})
                 arc[start angle=\angleoff, end angle=120-\angleoff, radius=\phaselen]
-                node[midway, below left] {$u_\mathrm{a\text{-}b}$};
+                    node[midway, below left] {$u_\mathrm{a\text{-}b}$};
                 \draw[->]
                 ({(\phaselen)*cos(120+\angleoff)},{(\phaselen)*sin(120+\angleoff)})
                 arc[start angle=120+\angleoff, end angle=240-\angleoff, radius=\phaselen]
-                node[midway, right] {$u_\mathrm{b\text{-}c}$};
+                    node[midway, right] {$u_\mathrm{b\text{-}c}$};
                 \draw[->]
                 ({(\phaselen)*cos(240+\angleoff)},{(\phaselen)*sin(240+\angleoff)})
                 arc[start angle=240+\angleoff, end angle=360-\angleoff, radius=\phaselen]
-                node[midway, above left] {$u_\mathrm{c\text{-}a}$};
+                    node[midway, above left] {$u_\mathrm{c\text{-}a}$};
 
                 % Draw and label the neutral point and the phase points
                 \node[right] at (A) {$a$};
@@ -820,7 +820,7 @@
         \end{bmatrix} \begin{bmatrix} x_\mathrm{a}(t) \\ x_\mathrm{b}(t) \\ x_\mathrm{c}(t)\end{bmatrix} = \bm{T}_\mathrm{c} \bm{x}_\mathrm{abc}.
         \label{eq:Clarke_transformation}
     \end{equation}
-    Above, $\bm{T}_\mathrm{c}\in\mathbb{R}^{3\times 3}$ is the \hl{Clarke transformation matrix} and $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}\in\mathbb{R}^3$ the transformed vector.\pause The values inside $\bm{T}_\mathrm{c}$ are originating from the angle displacement between the two coordinate system axes (cf. \figref{fig:abc_alphabeta_vectors}):
+    Above, $\bm{T}_\mathrm{c}\in\mathbb{R}^{3\times 3}$ is the \hl{Clarke transformation matrix} and $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}\in\mathbb{R}^3$ the transformed vector. \pause The values inside $\bm{T}_\mathrm{c}$ are originating from the angle displacement between the two coordinate system axes (cf. \figref{fig:abc_alphabeta_vectors}):
     \begin{equation}
         \renewcommand{\arraystretch}{1.2}
         \bm{T}_\mathrm{c} = \frac{2}{3}\begin{bmatrix}
@@ -832,7 +832,7 @@
             \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3} & \nicefrac{\sqrt{2}}{3}
         \end{bmatrix}.
     \end{equation}\pause
-    The factor $\nicefrac{2}{3}$ is a normalization factor to preserve the amplitude of the transformed vector, i.e., the amplitude of $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}(t)$ is identical to the amplitude of $\bm{x}_\mathrm{abc}(t)$.
+    The factor $\nicefrac{2}{3}$ preserves the amplitude of the transformed vector, i.e., the amplitude of $\bm{x}_\mathrm{\upalpha \upbeta \upgamma}(t)$ is identical to the amplitude of $\bm{x}_\mathrm{abc}(t)$ (assuming balanced,  zero-sequence-free signals).
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1093,7 +1093,7 @@
         \end{bmatrix} \begin{bmatrix} x_\mathrm{d} \\ x_\mathrm{q} \end{bmatrix} = \bm{T}_\mathrm{p}(\varepsilon) \bm{x}_{\mathrm{dq}}.
     \end{equation}
     \pause
-    Above, $\bm{T}_\mathrm{p}\in\mathbb{R}^{2\times 2}$ is the \hl{Park transformation matrix}. It might be noted that is a (historical) convention to define that $\bm{T}_\mathrm{p}$ rotates into the mathematically positive direction. Depending on the application background and choice of $\varepsilon$ (e.g., alignment with stator / air gap / rotor flux of a certain three-phase machine type), the interpretation of $\bm{x}_\mathrm{dq}$ can vary.
+    Above, $\bm{T}_\mathrm{p}\in\mathbb{R}^{2\times 2}$ is the \hl{Park transformation matrix}. It might be noted that it is a (historical) convention to define that $\bm{T}_\mathrm{p}$ rotates into the mathematically positive direction. Depending on the application background and choice of $\varepsilon$ (e.g., alignment with stator / air gap / rotor flux of a certain three-phase machine type), the interpretation of $\bm{x}_\mathrm{dq}$ can vary.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1123,13 +1123,13 @@
     \begin{align}
         \renewcommand{\arraystretch}{1.1}
         \uncover<+->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{T}_\mathrm{p}(\varepsilon(t))      & = \begin{bmatrix}
-                                                                                                      -\sin(\varepsilon(t)) & -\cos(\varepsilon(t)) \\
-                                                                                                      \cos(\varepsilon(t))  & -\sin(\varepsilon(t))
-                                                                                                  \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)}  \uncover<+->{= \bm{T}_\mathrm{p}(\varepsilon(t)) \bm{J}\omega(t),} \\
+                               -\sin(\varepsilon(t)) & -\cos(\varepsilon(t)) \\
+                               \cos(\varepsilon(t))  & -\sin(\varepsilon(t))
+                           \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)}  \uncover<+->{= \bm{T}_\mathrm{p}(\varepsilon(t)) \bm{J}\omega(t),} \\
         \uncover<+->{\frac{\mathrm{d}}{\mathrm{d}t}\bm{T}_\mathrm{p}^{-1}(\varepsilon(t)) & = \begin{bmatrix}
-                                                                                                      -\sin(\varepsilon(t)) & \cos(\varepsilon(t))  \\
-                                                                                                      -\cos(\varepsilon(t)) & -\sin(\varepsilon(t))
-                                                                                                  \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)  = -\bm{T}_\mathrm{p}^{-1}(\varepsilon(t)) \bm{J}\omega(t).}
+                               -\sin(\varepsilon(t)) & \cos(\varepsilon(t))  \\
+                               -\cos(\varepsilon(t)) & -\sin(\varepsilon(t))
+                           \end{bmatrix} \frac{\mathrm{d}}{\mathrm{d}t}\varepsilon(t)  = -\bm{T}_\mathrm{p}^{-1}(\varepsilon(t)) \bm{J}\omega(t).}
         \label{eq:Park_transformation_derivative}
     \end{align}
 \end{frame}
@@ -1173,11 +1173,11 @@
         \qquad
         \bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix} i_{\mathrm{a}}(t) & i_{\mathrm{b}}(t) & i_{\mathrm{c}}(t) \end{bmatrix}^\top,
     \end{equation}
-    without assuming balanced sinusoidal operation or vanishing zero-sequence components.\pause We define the \hl{instantaneous active power $p(t)$} as the \hl{inner product} of the voltage and current vectors:
+    without assuming balanced sinusoidal operation or vanishing zero-sequence components. \pause We define the \hl{instantaneous active power $p(t)$} as the \hl{inner product} of the voltage and current vectors:
     \begin{equation}
         p(t)=\bm{u}_{\mathrm{abc}}^{\top}(t)\bm{i}_{\mathrm{abc}}(t) = u_{\mathrm{a}}(t)i_{\mathrm{a}}(t) + u_{\mathrm{b}}(t)i_{\mathrm{b}}(t) + u_{\mathrm{c}}(t)i_{\mathrm{c}}(t).
     \end{equation}\pause
-    Moreoever, we define the \hl{instantaneous reactive power vector $\bm{q}(t)$} as the \hl{cross product} of the voltage and current vectors
+    Moreover, we define the \hl{instantaneous reactive power vector $\bm{q}(t)$} as the \hl{cross product} of the voltage and current vectors
     \begin{equation}
         \bm{q}_{\mathrm{abc}}(t)=\bm{u}_{\mathrm{abc}}(t)\times\bm{i}_{\mathrm{abc}}(t)=\begin{bmatrix}
             u_{\mathrm{b}}(t)i_{\mathrm{c}}(t)-u_{\mathrm{c}}(t)i_{\mathrm{b}}(t) \\
@@ -1255,7 +1255,7 @@
                     node[pos=1.0, right, anchor=north west] {$\bm{q}_{\mathrm{abc}}$};
 
                 \end{tikzpicture}
-                \caption{Visualization of the instantaenous reactive power component as the cross product of the voltage and current vectors in the $a$-$b$-$c$ coordinate system}
+                \caption{Visualization of the instantaneous reactive power component as the cross product of the voltage and current vectors in the $a$-$b$-$c$ coordinate system}
                 \label{fig:abc_reactive_instantaneous_power}
             \end{figure}
         \end{column}
@@ -1325,7 +1325,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{From instantaneous quantities to average active and reactive powers}
-    Let $T=\nicefrac{2\pi}{\omega}$ denote the \hl{fundamental period} of the system.\pause Then, the classical \hl{average active power} follows directly from the instantaneous active power:
+    Let $T=\nicefrac{2\pi}{\omega}$ denote the \hl{fundamental period} of the system. \pause Then, the classical \hl{average active power} follows directly from the instantaneous active power:
     \begin{equation}
         P(t)=\overline{p}(t)=\frac{1}{T}\int_{t-T}^{t} p(\tau)\,\mathrm{d}\tau.
     \end{equation}\pause
@@ -1352,10 +1352,10 @@
     the instantaneous active and reactive powers simplify to
     \begin{equation}
         \begin{split}
-            p(t) & =\frac{3}{2}\Big(v_{\upalpha}(t)i_{\upalpha}(t)+v_{\upbeta}(t)i_{\upbeta}(t)\Big)
-            =\frac{3}{2}\Big(v_{\mathrm{d}}(t)i_{\mathrm{d}}(t)+v_{\mathrm{q}}(t)i_{\mathrm{q}}(t)\Big), \\
-            q(t) & =\frac{3}{2}\left|v_{\upalpha}(t)i_{\upbeta}(t)-v_{\upbeta}(t)i_{\upalpha}(t)\right|
-            =\frac{3}{2}\left|v_{\mathrm{d}}(t)i_{\mathrm{q}}(t)-v_{\mathrm{q}}(t)i_{\mathrm{d}}(t)\right|.
+            p(t) & =\frac{3}{2}\Big(u_{\upalpha}(t)i_{\upalpha}(t)+u_{\upbeta}(t)i_{\upbeta}(t)\Big)
+            =\frac{3}{2}\Big(u_{\mathrm{d}}(t)i_{\mathrm{d}}(t)+u_{\mathrm{q}}(t)i_{\mathrm{q}}(t)\Big), \\
+            q(t) & =\frac{3}{2}\left|u_{\upalpha}(t)i_{\upbeta}(t)-u_{\upbeta}(t)i_{\upalpha}(t)\right|
+            =\frac{3}{2}\left|u_{\mathrm{d}}(t)i_{\mathrm{q}}(t)-u_{\mathrm{q}}(t)i_{\mathrm{d}}(t)\right|.
         \end{split}
     \end{equation}\pause
     Further assuming a steady-state balanced system, the instantaneous active and reactive powers become constant and equal to their average values, i.e.,

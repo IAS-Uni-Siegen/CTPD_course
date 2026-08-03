@@ -798,7 +798,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Linear EESM model with constant inductances}
-    Around some operating point, a compact linear magnetic model is obtained as
+    Assuming a linear magnetic behavior, the EESM flux linkage model simplifies to (e.g., via linearization at the origin)
     \begin{equation}
         \bm{\psi}_\mathrm{E}(t) \approx \bm{L}_{\mathrm{E}}\bm{i}_\mathrm{E}(t),
         \qquad
@@ -808,7 +808,7 @@
             L_{\mathrm{fd}} & 0               & L_{\mathrm{ff}}
         \end{bmatrix},
     \end{equation}
-    where the weak cross-couplings $L_{\mathrm{dq}}$, $L_{\mathrm{qd}}$, $L_{\mathrm{qf}}$ and $L_{\mathrm{fq}}$ are neglected. \pause
+    where the weak cross-couplings $L_{\mathrm{dq}}$, $L_{\mathrm{qd}}$, $L_{\mathrm{qf}}$ and $L_{\mathrm{fq}}$ are neglected (assuming their insignificance). \pause
     The corresponding \hl{linear EESM current} ODE becomes
     \begin{equation}
         \frac{\mathrm{d}}{\mathrm{d}t}\bm{i}_\mathrm{E}(t) = \bm{L}_{\mathrm{E}}^{-1}\left[\bm{u}_\mathrm{E}(t) - \bm{R}_\mathrm{E}\bm{i}_\mathrm{E}(t) - \bm{J}_\mathrm{E}(\omega)\bm{L}_{\mathrm{E}}\bm{i}_\mathrm{E}(t)\right].
@@ -977,12 +977,12 @@
     \end{equation}\pause
     Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that \hl{the induced voltage terms are identical for both discretization methods} when starting from the $\upalpha\upbeta$-frame:
     \begin{equation*}
-        \bm{u}_\mathrm{ind.}=T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k] = T_\mathrm{s}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
+        \bm{u}_\mathrm{ind.}=\frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k] = \frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
     \end{equation*}\pause
     Not considering the input and ohmic voltage impacts, this term can be interpreted as the \hl{flux change in between two sampling steps}:
-    \begin{equation}
+    \begin{equation*}
         \frac{\bm{\psi}_{\mathrm{s,dq}}[k+1] - \bm{\psi}_{\mathrm{s,dq}}[k]}{T_\mathrm{s}}=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k]=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
-    \end{equation}
+    \end{equation*}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1121,7 +1121,7 @@
     \begin{equation}
         \lambda_{1,2} = 1 - \frac{T_\mathrm{s}R_\mathrm{s}}{2}\left(\frac{1}{L_{\mathrm{dd}}}+\frac{1}{L_{\mathrm{qq}}}\right) \pm \frac{T_\mathrm{s}}{2}\sqrt{\left(\frac{R_\mathrm{s}}{L_{\mathrm{dd}}}-\frac{R_\mathrm{s}}{L_{\mathrm{qq}}}\right)^2 - 4\omega^2}.
     \end{equation}\pause%
-    The eigenvalues are in the unit circle (i.e., the discrete-time system is stable) if
+    The eigenvalues are in the \hl{unit circle} (i.e., the \hl{discrete-time system is stable}) if
     \begin{equation}
         \|\lambda_{1,2}\| < 1 \quad \Leftrightarrow \quad T_\mathrm{s} < \frac{R_\mathrm{s}\left(L_{\mathrm{dd}} + L_{\mathrm{qq}}\right)}{R_\mathrm{s}^2 + \omega^2 L_{\mathrm{dd}}L_{\mathrm{qq}}}.
         \label{eq:eigenvalues_RK1_PMSM_model_linear_magn}
@@ -1967,7 +1967,7 @@
     \end{equation}\pause%
     Some interpretation remarks:
     \begin{itemize}
-        \item \textbf{Damping}: $d\in[0,1]$: defines the transient response shape (underdamped / oscillatory up to critically damped for $d\rightarrow 1$). We do not consider $d>1$ (overdamped) since it results in a slow response.\pause%
+        \item \textbf{Damping}: $d\in]0,1]$: defines the transient response shape (underdamped / oscillatory up to critically damped for $d\rightarrow 1$). We do not consider $d>1$ (overdamped) since it results in a slow response.\pause%
         \item \textbf{Transient factor}: $\rho>0$: defines the transient response speed (settling time). The larger $\rho$, the faster the response. However, very large $\rho$ can lead to high controller gains and thus noise sensitivity and potential inverter saturation.
     \end{itemize}
 \end{frame}
@@ -2624,6 +2624,199 @@
     \end{figure}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Steady-state accuracy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Steady-state current error due to prediction bias %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{A prediction bias becomes a measured current offset}
+    For one axis $\nu\in\{\mathrm{d},\mathrm{q}\}$, define the \hl{one-step prediction error} and the error seen by the controller as
+    \begin{align}
+        \widetilde{i}_\nu[k+1|k]
+         & =\hat{i}_\nu[k+1|k]-i_\nu[k+1],
+        \label{eq:prediction_error_current_control_addendum} \\
+        \hat{e}_\nu[k+1]
+         & =i_\nu^{*}[k+1]-\hat{i}_\nu[k+1|k].
+    \end{align}\pause%
+    For a stable, unsaturated closed loop under constant operating conditions, the PI integral state reaches an equilibrium only if $\hat{e}_{\nu,\infty}=0$.\pause\
+    Thus, the steady-state error of the \hl{measured} current follows as
+    \begin{equation}
+        \boxed{e_{\nu,\infty}=i_{\nu,\infty}^{*}-i_{\nu,\infty}
+            =\widetilde{i}_{\nu,\infty}.}
+        \label{eq:steady_state_prediction_error_addendum}
+    \end{equation}\pause%
+    \vspace{-0.3cm}
+    \begin{varblock}{Key consequence}
+        Integral feedback guarantees zero error for the signal inside its loop. If this signal is the predicted current, a constant prediction bias remains at the measured-current output.
+    \end{varblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Numerical example for prediction-induced current offset %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Example: exact discrete-time response with a prediction bias}
+    \begin{columns}[c,onlytextwidth]
+        \begin{column}{0.44\textwidth}
+            \small
+            For ideal decoupling, choose $d=1$, $\rho=0.35$, and
+            $z_{\mathrm{r}}=\lambda=\exp(-\rho)=0.705$. The step response
+            $T_{\mathrm{r}}(z)=(1-\lambda)/(z-\lambda)$ gives
+            \begin{align*}
+                \hat{i}_{\mathrm{s,q}}[k+1]
+                 & =\lambda\hat{i}_{\mathrm{s,q}}[k]
+                +(1-\lambda)i_{\mathrm{s,q}}^{*}.
+            \end{align*}\pause%
+            Let $i_{\mathrm{s,q}}^{*}=\SI{100}{\ampere}$,
+            $\widetilde{i}_{\mathrm{q}}=\hat{i}_{\mathrm{s,q}}-i_{\mathrm{s,q}}
+                =\SI{10}{\ampere}$, and $i_{\mathrm{s,q}}[0]=0$. Substitution yields
+            \begin{align*}
+                i_{\mathrm{s,q}}[k+1]
+                 & =\lambda i_{\mathrm{s,q}}[k]
+                +(1-\lambda)\cdot\SI{90}{\ampere},        \\
+                i_{\mathrm{s,q}}[k]
+                 & =\SI{90}{\ampere}\cdot(1-\lambda^k),   \\
+                \hat{i}_{\mathrm{s,q}}[k]
+                 & =\SI{10}{\ampere}+i_{\mathrm{s,q}}[k].
+            \end{align*}\pause%
+            Thus, a steady-state error of $e_{\mathrm{q},\infty}=\SI{10}{\ampere}$ occurs.
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            \centering
+            \begin{tikzpicture}
+                % Calculate the sampled closed-loop response recursively. This
+                % deliberately uses the difference equation above rather than
+                % sampling a continuous-time curve.
+                \pgfmathsetmacro{\rhovalue}{0.35}
+                \pgfmathsetmacro{\lambdavalue}{exp(-\rhovalue)}
+                \pgfmathsetmacro{\irefvalue}{100}
+                \pgfmathsetmacro{\biasvalue}{10}
+                \pgfmathsetmacro{\imeasvalue}{0}
+                \xdef\coordmeas{(0,\imeasvalue)}
+                \xdef\coordpred{(0,\biasvalue)}
+                \foreach \k in {1,...,20}{
+                        \pgfmathsetmacro{\imeasnext}{\lambdavalue*\imeasvalue
+                            +(1-\lambdavalue)*(\irefvalue-\biasvalue)}
+                        \xdef\imeasvalue{\imeasnext}
+                        \pgfmathsetmacro{\ipredvalue}{\imeasvalue+\biasvalue}
+                        \xdef\coordmeas{\coordmeas (\k,\imeasvalue)}
+                        \xdef\coordpred{\coordpred (\k,\ipredvalue)}
+                    }
+                \begin{axis}[
+                        width=\linewidth,
+                        height=0.75\textheight,
+                        xmin=0, xmax=20,
+                        ymin=0, ymax=110,
+                        xtick={0,4,...,20},
+                        ytick={0,20,...,100},
+                        xlabel={sample $k$},
+                        ylabel={q-axis current in \si{\ampere}},
+                        grid=both,
+                        minor tick num=1,
+                        legend style={at={(0.5,1.03)},anchor=south,legend columns=3,font=\scriptsize},
+                        label style={font=\footnotesize},
+                        tick label style={font=\footnotesize}]
+                    \addplot[black, dashed, thick, domain=0:20, samples=2] {100};
+                    \addlegendentry{$i_{\mathrm{s,q}}^{*}$}
+                    \addplot[signalalpha, very thick, const plot mark left,
+                        mark=*, mark size=1.0pt] coordinates {\coordpred};
+                    \addlegendentry{$\hat{i}_{\mathrm{s,q}}$}
+                    \addplot[signaldelta, very thick, const plot mark left,
+                        mark=*, mark size=1.0pt] coordinates {\coordmeas};
+                    \addlegendentry{$i_{\mathrm{s,q}}$}
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Additive disturbance model and observer %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Estimate the missing current increment from the prediction residual}
+    With the short notation $\hat{\bm{f}}[k]=\hat{\bm{f}}\!\left(\bm{i}[k],\bm{u}^{\mathrm{appl}}[k]\right)$, lump the one-step model mismatch into an \hl{additive current disturbance}
+    \begin{equation}
+        \bm{i}[k+1]=\hat{\bm{f}}[k]+\bm{d}[k],
+        \qquad \bm{d}[k+1]\approx\bm{d}[k],
+        \label{eq:lumped_prediction_disturbance_addendum}
+    \end{equation}
+    where $\bm{d}$ captures, e.g., parameter mismatch, imperfect decoupling, and inverter nonlinearities. The matrix $\bm{L}_{\mathrm{d}}\in\mathbb{R}^{2\times 2}$ denotes the \hl{observer error-feedback gain}, mapping the innovation $\bm{\epsilon}$ to the disturbance correction.\pause%
+    \begin{columns}[c,onlytextwidth]
+        \begin{column}{0.48\textwidth}
+            \begin{varblock}[\linewidth]{Prediction residual}
+                \vspace{-1\baselineskip}\begin{align}
+                    \hat{\bm{i}}[k|k-1]
+                     & =\hat{\bm{f}}[k-1]+\hat{\bm{d}}[k-1], \\
+                    \bm{\epsilon}[k]
+                     & =\bm{i}[k]-\hat{\bm{i}}[k|k-1].
+                \end{align}
+            \end{varblock}
+        \end{column}\pause%
+        \begin{column}{0.48\textwidth}
+            \begin{varblock}[\linewidth]{Observer correction}
+                \vspace{-1\baselineskip}\begin{align}
+                    \hat{\bm{d}}[k]
+                     & =\hat{\bm{d}}[k-1]+\bm{L}_{\mathrm{d}}\bm{\epsilon}[k], \\
+                    \hat{\bm{i}}[k+1|k]
+                     & =\hat{\bm{f}}[k]+\hat{\bm{d}}[k].
+                \end{align}
+            \end{varblock}
+        \end{column}
+    \end{columns}
+    \vspace{0.15cm}
+    The observer uses the measured current only after it becomes available and therefore preserves the one-step delay compensation.\footnote{For lumped disturbance observers in predictive drive-current control, see \href{https://doi.org/10.1109/TPEL.2020.2992784}{Wallscheid and Ngoumtsa (2020)}.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Disturbance observer convergence and design trade-off %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{The observer restores steady-state accuracy for constant mismatch}
+    For the disturbance-estimation error $\widetilde{\bm{d}}[k]=\bm{d}-\hat{\bm{d}}[k]$, the ideal constant-disturbance model yields
+    \begin{equation}
+        \widetilde{\bm{d}}[k]
+        =\left(\bm{I}-\bm{L}_{\mathrm{d}}\right)\widetilde{\bm{d}}[k-1],
+        \qquad \rho\!\left(\bm{I}-\bm{L}_{\mathrm{d}}\right)<1.
+    \end{equation}\pause%
+    If this condition holds,
+    then $\hat{\bm{d}}\rightarrow\bm{d}$, $\hat{\bm{i}}[k+1|k]-\bm{i}[k+1]\rightarrow\bm{0}$, and the predicted-current PI loop becomes \hl{steady-state accurate for the measured currents}.\pause%
+    \par\vspace{0.08cm}
+    Suitable design approaches for $\bm{L}_{\mathrm{d}}$ include:
+    \begin{itemize}
+        \item \textbf{Luenberger observer / pole placement:} assign the eigenvalues of $\bm{I}-\bm{L}_{\mathrm{d}}$ inside the unit disk; a full matrix can account for d--q coupling.\pause%
+        \item \textbf{Kalman filter:} augment $\bm{d}[k+1]=\bm{d}[k]+\bm{w}_{\mathrm{d}}[k]$ and obtain $\bm{L}_{\mathrm{d}}$ from the assumed disturbance covariance $\bm{Q}_{\mathrm{d}}$ and current-measurement covariance $\bm{R}_{\mathrm{i}}$.\pause%
+    \end{itemize}
+    Besides a lumped disturbance observation, model mismatch can also be addressed by adaptive parameter estimation.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Outlook: measured-current integral feedback %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+    \frametitle{Outlook: close only the integral path with the measured current}
+    A complementary hybrid structure can retain prediction in the proportional and decoupling paths, while integrating the \hl{measured-current error}:
+    \begin{align}
+        \hat{e}_{\nu,\mathrm{P}}[k+1]
+         & =i_\nu^{*}[k+1]-\hat{i}_\nu[k+1|k],                                      \\
+        x_{\mathrm{I},\nu}[k]
+         & =x_{\mathrm{I},\nu}[k-1]+T_\mathrm{s}\left(i_\nu^{*}[k]-i_\nu[k]\right), \\
+        v_\nu[k+1]
+         & =K_{\mathrm{p},\nu}\hat{e}_{\nu,\mathrm{P}}[k+1]
+        +K_{\mathrm{i},\nu}x_{\mathrm{I},\nu}[k]
+        +K_{\mathrm{f},\nu}i_\nu^{*}[k+1].
+    \end{align}\pause%
+    \begin{itemize}
+        \item At an unsaturated equilibrium, the integral state enforces $i_{\nu,\infty}^{*}=i_{\nu,\infty}$ independently of a constant predictor bias.\pause%
+        \item The proportional action and MIMO decoupling can still exploit the one-step prediction to address the digital delay.\pause%
+        \item \hl{However:} This leads to a structural control design change requiring careful retuning of the PI gains (not shown in the following).
+    \end{itemize}
+\end{frame}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Anti-reset wind-up}
@@ -2639,7 +2832,7 @@
         \item Typically results in large overshoots and oscillations; or in the worst case, in an unstable closed-loop system.
     \end{itemize}\pause%
     \begin{varblock}{Remark on implicit controller design assumptions}
-        The previous design of the PI controller implicitly assumed that the control input can take any value (i.e., is unbounded). In practice, this is not the case due to the limited DC-link voltage and the modulation technique used. In linear control design, this issue is often addressed  via a post-hoc heuristic, the so-called \hl{anti-reset windup (ARW)} scheme, to prevent an uncontrolled runaway of the integral state.
+        The previous design of the PI controller implicitly assumed that the control input can take any value (i.e., is unbounded). In practice, this is not the case due to the limited DC-link voltage and the modulation technique used. In linear control design, this issue is often addressed  via a post-hoc heuristic, the so-called \hl{anti-reset wind-up (ARW)} scheme, to prevent an uncontrolled runaway of the integral state.
     \end{varblock}
 \end{frame}
 
@@ -3320,7 +3513,7 @@
         \end{aligned}
         \label{eq:ops_soft_eesm}
     \end{equation}\pause%
-    The \hl{weighting factor} $\gamma_T>0$ prioritizes torque tracking. If $T^*$ is infeasible,
+    The \hl{weighting factor} $\gamma_T>>0$ prioritizes torque tracking (trade-off vs. $J_{\mathrm{OPS}}$). If $T^*$ is infeasible,
     the optimizer returns the admissible operating point with minimal torque error.
 \end{frame}
 
@@ -3363,7 +3556,7 @@
             \end{align*}
         \end{column}
     \end{columns}
-    \begin{varblock}{Standard operationg strategies}
+    \begin{varblock}{Standard operating strategies}
         The \hl{maximum torque per current (MTPC)} and the \hl{maximum torque per voltage (MTPV)} strategy are setting the boundaries of the feasible operating range of the drive in the current plane. The MTPC strategy minimizes stator copper losses in the low-speed region, while the MTPV strategy maximizes torque at the voltage limit in the high-speed region. In between, a transition between both strategies is required.
     \end{varblock}
 \end{frame}
@@ -3400,7 +3593,7 @@
                 \item<2-> Advantage: no complex loss model required, only torque and current model.
                 \item<3-> Visual interpretation: tangent point of the torque contour and the current circle:
                       $$
-                          \partial T(\bm{i}_{\mathrm{s,dq}}) = \lambda \partial \mathbb{I}(\bm{i}_{\mathrm{s,dq}}).
+                          \nabla T(\bm{i}_{\mathrm{s,dq}}) = \lambda \nabla (\partial\mathbb{I}(\bm{i}_{\mathrm{s,dq}})).
                       $$
                 \item<4-> Applicable below the current and voltage limits, i.e., in the low-speed region.
             \end{itemize}
@@ -3515,7 +3708,7 @@
                 \item<2-> Current constraint is no longer relevant, voltage limit is the dominant constraint.
                 \item<3-> Visual interpretation: tangent point of the torque contour and the voltage boundary:
                       $$
-                          \partial T(\bm{i}_{\mathrm{s,dq}}) = \lambda \partial \mathbb{V}(\bm{i}_{\mathrm{s,dq}}).
+                          \nabla T(\bm{i}_{\mathrm{s,dq}}) = \lambda \nabla( \partial \mathbb{V}(\bm{i}_{\mathrm{s,dq}})).
                       $$
                 \item<4-> The MTPV locus defines the upper torque capability in deep flux weakening.
             \end{itemize}
@@ -3609,7 +3802,7 @@
                 \node[color=signalbeta,anchor=west,font=\large] at (axis cs:0.20,0.18) {$\mathbb{MTPC}$};
                 \node[color=signaldelta,anchor=south,font=\large] at (axis cs:1.5,0.84) {$\mathbb{MC}$};
                 \node[color=gray,anchor=west,font=\large] at (axis cs:2.30,0.30) {$\mathbb{FW}$};
-                \node[color=signalgamma,anchor=west,font=\large] at (axis cs:2.40,0.51) {$\mathbb{MTPF}$};
+                \node[color=signalgamma,anchor=west,font=\large] at (axis cs:2.40,0.51) {$\mathbb{MTPV}$};
 
                 % Nomenclature annotations following the lecture slides.
                 \node[color=signalbeta,anchor=south west,font=\scriptsize] at (axis cs:1.02,1.02)
@@ -3854,15 +4047,14 @@
         \centering
         \begin{tabular}{>{\raggedright\arraybackslash}p{0.14\textwidth}>{\raggedright\arraybackslash}p{0.14\textwidth}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{0.30\textwidth}}
             \toprule
-            \hlh{Method}                       & \hlh{Real-time load} & \hlh{Pro}                                              & \hlh{Con}                                                    \\
+            \hlh{Method}           & \hlh{Real-time load} & \hlh{Pro}                                         & \hlh{Con}                                                    \\
             \midrule\addlinespace[5pt]
-            Analytical roots                   & Low to medium        & Easy adaption to changing parameters                   & Additional iterative approximation step for nonlinear models \\
+            Analytical roots       & Low to medium        & Easy adaption to changing parameters              & Additional iterative approximation step for nonlinear models \\
             \addlinespace[5pt]
-            \onslide<2->Numerical optimization & Medium to high       & General purpose; adapts to new machine parameters      & Requires external solvers; Highest load                      \\
+            Numerical optimization & Medium to high       & General purpose; adapts to new machine parameters & Requires external solvers; Highest load                      \\\addlinespace[5pt]
+            LUT interpolation      & Very low             & Smallest online load                              & Fixed solution; no online adaption                           \\
             \addlinespace[5pt]
-            \onslide<3->LUT interpolation      & Very low             & Smallest online load                                   & Fixed solution; no online adaption                           \\
-            \addlinespace[5pt]
-            \onslide<4->Approximate function   & Low to medium        & Requires additional training step; approximation error & Eventually parallelizable (e.g., for FPGA)                   \\
+            Approximate function   & Low to medium        & Potentially parallelizable (e.g., for FPGA)       & Requires additional training step; approximation error       \\
             \bottomrule
         \end{tabular}
         \caption{Qualitative comparison of OPS solution methods}
@@ -3912,7 +4104,7 @@
     \end{columns}\pause%
     \vspace{1mm}
     \begin{varblock}{Remark}
-        If correctly implemented, all methods yield the same optimal set points. The choice of method is a trade-off between real-time load, implementation effort and flexibility.
+        If correctly implemented, all methods yield the (approx.) same optimal set points. The method choice is a trade-off between real-time load, implementation effort and flexibility.
     \end{varblock}
 \end{frame}
 
@@ -3982,7 +4174,7 @@
                 \fill (tstar_tap) circle(1.5pt);
             \end{tikzpicture}
         \end{center}
-        \caption{LUT-based OPS implementation: first calculated required flux magntitude $\psi_{\mathrm{MTPC}}^*(T^*)$ in MTPC mode, then check if available voltage (and thus flux $\psi_\mathrm{max}$) is sufficient to achieve the torque. Limit flux and torque in flux weakening mode if necessary (following MC and MTPV mode). Finally, $\psi_\mathrm{lim}^*$ and $T_{\mathrm{lim}}^*$ represents a feasible operating point which is then transformed to the current plane.}
+        \caption{LUT-based OPS implementation: first calculate required flux magnitude $\psi_{\mathrm{MTPC}}^*(T^*)$ in MTPC mode, then check if available voltage (and thus flux $\psi_\mathrm{max}$) is sufficient to achieve the torque. Limit flux and torque in flux weakening mode if necessary (following MC and MTPV mode). Finally, $\psi_\mathrm{lim}^*$ and $T_{\mathrm{lim}}^*$ represent a feasible operating point which is then transformed to the current plane.}
         \label{fig:LUT_OPS}
     \end{figure}
 \end{frame}
@@ -4242,7 +4434,7 @@
             \node[signedmixer, tripoles/signedmixer/east={$*$}, tripoles/signedmixer/north={$/$}] (summ) at (fbd -| sumpsi.north){};
             \coordinate[above=\smallgap of summ.north] (fbudc);
             \draw[->, thick] (fbudc) -- (fbudc |- summ.north);
-            \node[sig, right, anchor=west] at ($(fbudc)!0.10!(fbudc |- summ.north)$) {$\nicefrac{2u_{\mathrm{dc}}}{\sqrt{3}}$};
+            \node[sig, right, anchor=west] at ($(fbudc)!0.10!(fbudc |- summ.north)$) {$\nicefrac{u_{\mathrm{dc}}}{\sqrt{3}}$};
             \node[detailblock] (abs) at (kawd |- summ) {$||\bm{x}||_2$};
             \draw[->, thick] ($(CC.east)!0.25!(MA.west)$) to [short, *-] ($(CC.east)!0.25!(MA.west)$) |- node[sig, left, yshift=2mm, xshift=-1mm]{$\bm{u}^*_{\mathrm{s,dq}}$} (summ.east);
             \draw[->, thick] (summ.west) -- (abs.east);
@@ -4265,13 +4457,13 @@
     \frametitle{Control approach and plant definition}
     The modulation index is estimated based on the current controller's reference voltage vector $\bm{u}^*_{\mathrm{s,dq}}$ and the DC-link voltage $u_{\mathrm{dc}}$:
     \begin{equation}
-        m = \frac{\sqrt{3}}{2} \frac{\|\bm{u}^*_{\mathrm{s,dq}}\|_2}{u_{\mathrm{dc}}} .
+        m = \sqrt{3} \frac{\|\bm{u}^*_{\mathrm{s,dq}}\|_2}{u_{\mathrm{dc}}} .
     \end{equation}
     The modulation controller generates an \hl{additive correction of the admissible flux limit}:
     \begin{equation}
         \psi_{\max} = \psi'_{\max} + \Delta\psi,
         \qquad
-        \psi'_{\max} = \frac{2u_{\mathrm{dc}}}{\sqrt{3}|\omega|} .
+        \psi'_{\max} = \frac{u_{\mathrm{dc}}}{\sqrt{3}|\omega|} .
     \end{equation}
     Here, $\psi'_{\max}$ is the nominal flux limit (neglecting the inverter nonlinearity and the ohmic voltage drop) and $\Delta\psi$ is the correction term generated by the modulation degree controller.    For a fixed operating point $(T^*,\omega,u_{\mathrm{dc}})$ and an unchanged OPS active set, the local plant is
     \begin{equation}
@@ -4373,13 +4565,13 @@
     \end{equation}
     Hence,
     \begin{equation}
-        \Delta m = \frac{\Delta U}{2u_{\mathrm{dc}}/\sqrt{3}}
-        = \frac{|\omega|\sqrt{3}}{2u_{\mathrm{dc}}}\,\Delta \psi .
+        \Delta m = \frac{\Delta U}{u_{\mathrm{dc}}/\sqrt{3}}
+        = \frac{|\omega|\sqrt{3}}{u_{\mathrm{dc}}}\,\Delta \psi .
     \end{equation}
     The \hl{static plant gain} is therefore
     \begin{equation}
         K_{m} = \frac{\Delta m}{\Delta \psi}
-        = \frac{|\omega|\sqrt{3}}{2u_{\mathrm{dc}}} .
+        = \frac{|\omega|\sqrt{3}}{u_{\mathrm{dc}}} .
     \end{equation}
 \end{frame}
 
@@ -4406,7 +4598,7 @@
     \begin{equation}
         G_{\mathrm{p},m}(\mathrm{z})
         =
-        \frac{1}{2u_{\mathrm{dc}}/\sqrt{3}}\,
+        \frac{1}{u_{\mathrm{dc}}/\sqrt{3}}\,
         \bar{\bm{n}}_u\T\bm{G}_{u i^*}(\mathrm{z})\bar{\bm{h}}.
     \end{equation}
     Due to the inner current loop having zero stationary tracking error, the static gain remains
@@ -4415,7 +4607,7 @@
         =
         K_{m}
         =
-        \frac{|\omega|\sqrt{3}}{2u_{\mathrm{dc}}} .
+        \frac{|\omega|\sqrt{3}}{u_{\mathrm{dc}}} .
     \end{equation}
 \end{frame}
 
@@ -4791,11 +4983,11 @@
     \vspace{0.3em}
     \begin{columns}[T,onlytextwidth]
         \begin{column}{0.52\textwidth}
-            Historically the DTC scheme was applied to SPMSM drives without magnetic saturation. Hence, the simplified flux model $$
-                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{pm}$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=L_\mathrm{qd}=0$ was used. \onslide<2->{In this case, the torque simplifies to}
+            Historically the DTC scheme was applied to SPMSM drives without magnetic saturation. Hence, the simplified $\upalpha\upbeta$ flux model $$
+                \bm{\psi}_\mathrm{s}(t) = L_\mathrm{s}\bm{i}_\mathrm{s}(t) + \bm{\psi}_\mathrm{pm}(t)$$ with $L_\mathrm{dd}=L_\mathrm{qq}=L_\mathrm{s}$ and $L_\mathrm{dq}=L_\mathrm{qd}=0$ was used. \onslide<2->{In this case, the torque simplifies to}
             \begin{align*}
                 \onslide<2->{\bm{T} & = \nicefrac{3}{2} p (\bm{i}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)              \\}
-                \onslide<3->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} (\bm{\psi}_\mathrm{pm})\T\bm{J}\bm{\psi}_\mathrm{s,dq}(t)                \\}
+                \onslide<3->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} (\bm{\psi}_\mathrm{s,dq}(t))\T\bm{J}\bm{\psi}_\mathrm{pm}(t)                \\}
                 \onslide<4->{& = \nicefrac{3}{2} \nicefrac{p}{L_\mathrm{s}} \|\bm{\psi}_\mathrm{pm}\| \|\bm{\psi}_\mathrm{s,dq}(t)\| \sin(\delta(t))}
             \end{align*}
             \onslide<4->{where $\delta(t)$ is the angle between the stator flux and the PM flux.}
@@ -5357,7 +5549,7 @@
     \begin{itemize}
         \item<1-> The switching frequency of the DTC scheme is not fixed but depends on the operating point and the chosen hysteresis band widths.
         \item<2-> This is a major difference compared to modulation-based control schemes where the pulsing frequency can be pre-defined.
-        \item<3-> To achieve an average reference pulsing frequency of $f^*_\mathrm{p}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = s_i[k] - s_i[k-1]$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
+        \item<3-> To achieve an average reference pulsing frequency of $f^*_\mathrm{p}$, the hysteresis band widths can be adapted online based on the observed switching actions $\Delta s_i = \left| s_i[k] - s_i[k-1]\right|$ for $i \in \{\mathrm{a},\mathrm{b},\mathrm{c}\}$.
     \end{itemize}
     \onslide<4->{
             \begin{figure}
@@ -5405,7 +5597,7 @@
     $$\pause%
     For this task we will review three \hl{open-loop flux estimation} methods:
     \begin{itemize}
-        \item Current moodel \pause%
+        \item Current model \pause%
         \item Voltage model \pause%
         \item Gopinath estimator (combined current and voltage model)\pause%
     \end{itemize}
@@ -5467,11 +5659,11 @@
     \frametitle{Voltage model-based flux estimation (cont.)}
     Consider any \hl{constant voltage offset} $\Delta \bm{u}_{\upalpha\upbeta}\neq 0$, e.g., due to an inverter non-linearity or a measurement error. \pause This will lead to a linearly increasing flux estimation error over time
     \begin{equation}
-        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau + \hat{\bm{\psi}}_{\upalpha\upbeta}(t_0) = \bm{\psi}_{\upalpha\upbeta}(t) + t\,\Delta \bm{u}_{\upalpha\upbeta}.
+        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau + \hat{\bm{\psi}}_{\upalpha\upbeta}(t_0) = \bm{\psi}_{\upalpha\upbeta}(t) + (t-t_0)\,\Delta \bm{u}_{\upalpha\upbeta}.
     \end{equation}\pause%
     Hence, over time the flux estimation will diverge and the closed-loop control will fail. A common solution to this problem is to apply a \hl{low-pass filtered integrator}
     \begin{equation}
-        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) - \frac{1}{\tau}\hat{\bm{\psi}}_{\upalpha\upbeta}(t) \, \mathrm{d}\tau
+        \hat{\bm{\psi}}_{\upalpha\upbeta}(t) = \int_{t_0}^t \bm{u}_{\upalpha\upbeta}(\tau) + \Delta \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}(\tau) - \frac{1}{\tau}\hat{\bm{\psi}}_{\upalpha\upbeta}(\tau) \, \mathrm{d}\tau
     \end{equation}
     with the time constant $\tau$. \pause Interpreting $\hat{\bm{\psi}}_{\upalpha\upbeta}$ as output, $\bm{u}'_{\upalpha\upbeta}= \bm{u}_{\upalpha\upbeta} - R_\mathrm{s}\,\bm{i}_{\upalpha\upbeta}$ as input and $\Delta \bm{u}_{\upalpha\upbeta}$ as a disturbance, the estimated flux can be expressed in the Laplace domain\footnote{A digital implementation of the estimator would of course require a discrete-time representation. However, a simplified Laplace analysis is used for the following high-level discussion for sake of brevity.} as
     \begin{equation}
