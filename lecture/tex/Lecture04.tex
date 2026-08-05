@@ -2840,7 +2840,7 @@
 				      $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=\|\bm{i}_{\mathrm{s,dq}}\|_2^2.$$
 				\item<2-> Visual interpretation: tangent point of the torque contour and the current circle:
 				      $$
-					      \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial\mathbb{I}(\bm{i}_{\mathrm{s,dq}}).
+					      \nabla T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\nabla(\partial\mathbb{I}(\bm{i}_{\mathrm{s,dq}})).
 				      $$
 				\item<3-> Applicable below the voltage limit, i.e., in the low-speed region.
 				\item<4-> Suboptimal efficiency since rotor copper losses are neglected.
@@ -2882,7 +2882,7 @@
 				      $$J_{\mathrm{OPS}}(\bm{i}_{\mathrm{s,dq}})=P_{\mathrm{Cu,s}}+P_{\mathrm{Cu,r}}.$$
 				\item<2-> Visual interpretation: tangent point of the torque contour and the copper-loss contour:
 				      $$
-					      \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial P_{\mathrm{Cu}}(\bm{i}_{\mathrm{s,dq}}).
+					      \nabla T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\nabla P_{\mathrm{Cu}}(\bm{i}_{\mathrm{s,dq}}).
 				      $$
 				\item<3-> Applicable below the current and voltage limits.
 			\end{itemize}
@@ -2987,8 +2987,8 @@
 				\item<2-> Current constraint is no longer relevant, the voltage limit is the dominant constraint.
 				\item<3-> Visual interpretation: tangent point of the torque contour and the flux or voltage boundary:
 				      $$
-					      \partial T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\partial\Psi_{\mathrm s}(\bm{i}_{\mathrm{s,dq}})
-					      \approx \lambda\,\partial\mathbb{V}(\bm{i}_{\mathrm{s,dq}}).
+					      \nabla T(\bm{i}_{\mathrm{s,dq}})=\lambda\,\nabla\Psi_{\mathrm s}(\bm{i}_{\mathrm{s,dq}})
+					      \approx \lambda\,\nabla(\partial\mathbb{V}(\bm{i}_{\mathrm{s,dq}})).
 				      $$
 				\item<4-> The MTPF locus defines the upper torque capability in deep flux weakening.
 			\end{itemize}
@@ -3651,7 +3651,7 @@
 			\approx K_mK_{\psi_{\mathrm{s}}\psi_{\mathrm r}}K_{\mathrm{OPS}}G'_{\psi}(\mathrm{z}).
 		\end{aligned}
 		\label{eq:IM_mod_v06_plant_models_compact}
-	\end{equation}\pause%
+	\end{equation}\vspace{-0.1cm}\pause%
 	\begin{equation}
 		\boxed{\text{same dynamics }G'_{\psi}(\mathrm{z})}
 		\qquad
@@ -3718,7 +3718,7 @@
 		K_{\psi_{\mathrm{s}}\psi_{\mathrm r}}(1-\lambda'_{\psi}) .
 		\label{eq:IM_mod_v06_scheduled_b}
 	\end{equation}\pause%
-	Thus, $K_{\mathrm{p},m}$ and $K_{\mathrm{i},m}$ should be scheduled over $(T^*,\psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},\omega_{\psi_{\mathrm r}},u_{\mathrm{dc}})$ or designed conservatively for the smallest relevant $|b_m|$. As a rule of the thumb, choose $p_1=p_2=[3,\ldots,10]\cdot\lambda'_\psi$ for a sufficiently fast (but not too fast) modulation controller.
+	Thus, $K_{\mathrm{p},m}$ and $K_{\mathrm{i},m}$ should be scheduled over $(T^*,\psi_{\mathrm{r,d}}^{\psi_{\mathrm r},*},\omega_{\psi_{\mathrm r}},u_{\mathrm{dc}})$ or designed conservatively for the smallest relevant $|b_m|$. As a rule of the thumb, choose $p_1=p_2$ such that the modulation controller is about one order of magnitude slower than the rotor-flux controller.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
