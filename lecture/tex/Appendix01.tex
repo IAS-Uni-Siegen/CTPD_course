@@ -40,13 +40,9 @@
     \textbf{RK4 / classical Runge-Kutta method}: A widely used explicit RK method is the fourth-order method (RK4) with $s=4$ stages and coefficients
     \begin{equation}
         \begin{split}
-            b_1          & = b_4 = \frac{1}{6}, \quad b_2 = b_3 = \frac{1}{3}, \\
-            c_1          & = 0, \quad c_2 = c_3 = \frac{1}{2}, \quad c_4 = 1,  \\
-            \alpha_{j,l} & =
-            \begin{cases}
-                0,   & l\geq j, \\
-                c_j, & l<j,
-            \end{cases}
+            b_1           = b_4 = \frac{1}{6}, \quad b_2 = b_3 = \frac{1}{3},                                                                           \qquad
+            c_1           = 0, \quad c_2 = c_3 = \frac{1}{2}, \quad c_4 = 1,                                                                             \\
+            \alpha_{2,1}  = \alpha_{3,2} = \frac{1}{2}, \quad \alpha_{4,3} = 1, \quad \alpha_{j,l} = 0 \text{ for } \{i,j\}\notin \{(2,1),(3,2),(4,1)\}. \\
         \end{split}
         \label{eq:RK4_coeff}
     \end{equation}
@@ -239,23 +235,86 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
     \frametitle{Implicit Runge-Kutta method}
-    A RK method is called \hl{implicit} if $\alpha_{j,l}\neq 0$ for some $l\geq j$, which requires to solve implicit equations for the stage derivatives $\bm{h}_j$. Implicit methods are typically more computationally expensive per step but can offer better stability properties.\\\pause
+    A RK method is called \hl{implicit} if $\alpha_{j,l}\neq 0$ for some $l\geq j$, which requires solving a nonlinear equation systems in each step. Hence, implicit methods are typically more computationally expensive per step but can offer better stability properties.\\\pause
     \textbf{Implicit Euler method (IRK1)}: The implicit Euler method is a first-order implicit RK method with $s=1$, $b_1=1$, $\alpha_{1,1}=1$, and $c_1=1$ leading to
     \begin{equation}
         \bm{x}[k+1] = \bm{x}[k] + T_\mathrm{s}\cdot \bm{f}\left(\bm{x}[k+1],\bm{u}[k+1]\right)\,.
         \label{eq:IRK1}
     \end{equation}
     \\\pause
-    \textbf{Implicit classical Runge-Kutta (IRK4)}: The implicit version of the classical RK4 method can be defined by using the same coefficients as in \eqref{eq:RK4_coeff} but with $\alpha_{j,l}=c_j$ for all $l<j$ and $\alpha_{j,j}=c_j$ for all $j$ leading to
-    \begin{equation}
-        \begin{gathered}
-            \bm{x}[k+1]  = \bm{x}[k] + \frac{T_\mathrm{s}}{6}\left(\bm{h}_1 + 2\bm{h}_2 + 2\bm{h}_3 + \bm{h}_4\right),                   \\
-            \bm{h}_1     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_1, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \quad
-            \bm{h}_2     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_2, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \\
-            \bm{h}_3     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_3, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right), \quad
-            \bm{h}_4     = \bm{f}\left(\bm{x}(kT_\mathrm{s}) + T_\mathrm{s}\cdot\bm{h}_4, \,\,\bm{u}(kT_\mathrm{s}+T_\mathrm{s})\right).
-        \end{gathered}
-    \end{equation}
+    \textbf{Implicit classical Runge-Kutta (IRK4)}: There are multiple implicit RK methods of order four, e.g., the \href{https://en.wikipedia.org/wiki/Gauss-Legendre_method}{Gauss-Legendre method} with  coefficients
+    \[
+        \begin{array}{c@{\qquad\qquad}c}
+            %
+            \text{\textit{Butcher tableau (general 4-stage)}}
+             &
+            \text{\textit{Gauss-Legendre coefficients}}
+            \\[1.2ex]
+            %
+            \begin{array}{c|cccc}
+                c_1
+                    & \alpha_{1,1}
+                    & \alpha_{1,2}
+                    & \alpha_{1,3}
+                    & \alpha_{1,4}
+                \\
+                c_2
+                    & \alpha_{2,1}
+                    & \alpha_{2,2}
+                    & \alpha_{2,3}
+                    & \alpha_{2,4}
+                \\
+                c_3
+                    & \alpha_{3,1}
+                    & \alpha_{3,2}
+                    & \alpha_{3,3}
+                    & \alpha_{3,4}
+                \\
+                c_4
+                    & \alpha_{4,1}
+                    & \alpha_{4,2}
+                    & \alpha_{4,3}
+                    & \alpha_{4,4}
+                \\ \hline
+                    &
+                b_1 & b_2          & b_3 & b_4
+            \end{array}
+             &
+            %
+            \begin{array}{c|rrrr}
+                0.07
+                 & 0.09
+                 & -0.03
+                 & 0.01
+                 & 0.00
+                \\
+                0.33
+                 & 0.19
+                 & 0.16
+                 & -0.03
+                 & 0.01
+                \\
+                0.67
+                 & 0.17
+                 & 0.35
+                 & 0.16
+                 & -0.01
+                \\
+                0.93
+                 & 0.18
+                 & 0.31
+                 & 0.35
+                 & 0.09
+                \\ \hline
+                 &
+                0.17
+                 & 0.33
+                 & 0.33
+                 & 0.17
+            \end{array}
+            %
+        \end{array}
+    \]
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -285,7 +344,7 @@
         \end{split}
         \label{eq:exact_discretization_matrices}
     \end{equation}\pause
-    The \hl{matrix exponential} $e^{\bm{A}T_\mathrm{s}}$ can be numerically expensive to compute and, therefore, is typically precomputed offline.
+    The last identity only holds if $\bm{A}$ is invertible. The \hl{matrix exponential} $e^{\bm{A}T_\mathrm{s}}$ can be numerically expensive to compute and, therefore, is typically precomputed offline.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

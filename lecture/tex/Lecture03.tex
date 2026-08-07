@@ -977,11 +977,11 @@
     \end{equation}\pause
     Following again the assumption $\omega[k]=\omega[k+1]$, we can identify that \hl{the induced voltage terms are identical for both discretization methods} when starting from the $\upalpha\upbeta$-frame:
     \begin{equation*}
-        \bm{u}_\mathrm{ind.}=\frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k] = \frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
+        \bm{u}_\mathrm{ind.}=-\frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k] = -\frac{1}{T_\mathrm{s}}\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
     \end{equation*}\pause
     Not considering the input and ohmic voltage impacts, this term can be interpreted as the \hl{flux change in between two sampling steps}:
     \begin{equation*}
-        \frac{\bm{\psi}_{\mathrm{s,dq}}[k+1] - \bm{\psi}_{\mathrm{s,dq}}[k]}{T_\mathrm{s}}=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k]=\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
+        \bm{\psi}_{\mathrm{s,dq}}[k+1] - \bm{\psi}_{\mathrm{s,dq}}[k]=-\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k]=-\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k+1]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k].
     \end{equation*}
 \end{frame}
 
@@ -1020,7 +1020,7 @@
             \node[above, signalalpha] at (Psik) {$\bm{\psi}_{\mathrm{s,dq}}[k]$};
             \node[right, signalalpha] at (Psikp) {$\bm{\psi}_{\mathrm{s,dq}}[k{+}1]$};
 
-            \node[above right, signaldelta] at (55:3.6) {$\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k]$};
+            \node[above right, signaldelta] at (55:3.6) {$-\left(\bm{I} -\bm{T}_\mathrm{p}(-\omega[k]T_\mathrm{s})\right)\bm{\psi}_{\mathrm{s,dq}}[k]$};
 
         \end{tikzpicture}
         \caption{Interpretation of the induced voltage vector as the flux change in between two sampling steps when: \hl{discretize in $\upalpha\upbeta$-frame first, then utilize the Park transformation}. }

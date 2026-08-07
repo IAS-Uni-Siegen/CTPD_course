@@ -4745,11 +4745,11 @@
         \qquad
         s(\theta+\pi)=-s(\theta).
     \end{equation}\pause
-    With \(\alpha_0=0\), the first half wave is
+    With $\alpha_0=0$ and $\alpha_{N+1}=\pi$, the first half wave is
     \begin{equation}
         s_\mathrm{h}(\theta;\bm{\alpha}) = (-1)^i,
         \qquad
-        \theta\in[\alpha_i,\alpha_{i}),
+        \theta\in[\alpha_i,\alpha_{i+1}),
         \quad i\in\{0,\ldots,N\}.
     \end{equation}\pause
     To evaluate the harmonic spectrum of \(s(\theta)\), we use the Fourier series expansion
@@ -4760,7 +4760,7 @@
     \begin{equation}
         a_k(\bm{\alpha})=\frac{4}{k\pi}\sum_{i=1}^{N}(-1)^{i+1}\sin(k\alpha_i),
         \qquad
-        b_k(\bm{\alpha})=\frac{4}{k\pi}\sum_{i=1}^{N}(-1)^{i+1}\cos(k\alpha_i).
+        b_k(\bm{\alpha})=\frac{2}{k\pi}\left(1+(-1)^{N}+2\sum_{i=1}^{N}(-1)^{i}\cos(k\alpha_i)\right).
     \end{equation}
 \end{frame}
 
@@ -5531,7 +5531,7 @@
     \end{equation}\pause
     Also considering the forward voltage drop, the \hl{actual average inverter output voltage} during a pulse period is
     \begin{equation}
-        \overline{u}_\mathrm{i} = u_\mathrm{dc}\left(d'(d,i) - \frac{1}{2}\right) - \Delta u_\mathrm{fwd}(d',i).
+        \overline{u}_\mathrm{i} = u_\mathrm{dc}\left(d'(d,i) - \frac{1}{2}\right) - \operatorname{sgn}(i)\Delta u_\mathrm{fwd}(d',i).
     \end{equation}\pause\vspace{-0.25cm}
     \begin{varblock}{Remark on model accuracy and compensation}
         The presented model is a simplified approximation of the inverter nonlinearity. Among others, specific driver and device characteristics, temperature dependencies, and the load impact can further influence the actual voltage error. Nevertheless, it provides a useful estimation of the expected voltage error and can be used for compensation in the control design (by inverting the above model).

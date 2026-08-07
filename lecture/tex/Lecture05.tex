@@ -19,7 +19,7 @@
 			\frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=\bm{f}_\mathrm{c}(\bm{x}(t),\bm{u}(t)),
 			\quad
 			\bm{y}(t)=\bm{h}_\mathrm{c}(\bm{x}(t),\bm{u}(t)), \\
-			\bm{u}(t)=\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),
+			\bm{u}(t)=\bm{\pi}(\bm{x}(t),\bm{r}(t)),
 			\quad
 			\bm{x}\in\mathcal{X},
 			\quad
@@ -36,17 +36,17 @@
 	\begin{equation}
 		\mathcal{J}_\infty(\bm{x}_0;\bm{\pi})=
 		\int_{0}^{\infty}
-		\ell(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)),\bm{r}(t))\,\mathrm{d}t
+		\ell(\bm{x}(t),\bm{\pi}(\bm{x}(t),\bm{r}(t)),\bm{r}(t))\,\mathrm{d}t
 		\label{eq:ocp_cost_ct}
 	\end{equation}\pause%
 	and the \hl{admissible policy set} $\Pi_\mathrm{adm}(\bm{x}_0)$ defined by the closed-loop system \hl{constraints}
 	\begin{equation}
 		\begin{gathered}
 			\frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=
-			\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t))),\\
-			\bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)))\leq\bm{0},\quad
+			\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\bm{x}(t),\bm{r}(t))),\\
+			\bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\bm{x}(t),\bm{r}(t)))\leq\bm{0},\quad
 			\bm{x}(t)\in\mathcal{X},\quad
-			\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t))\in\mathcal{U}.
+			\bm{\pi}(\bm{x}(t),\bm{r}(t))\in\mathcal{U}.
 		\end{gathered}
 	\end{equation}
 \end{frame}
@@ -72,10 +72,10 @@
 		\bm{\pi}\,\middle|\,
 		\begin{array}{l}
 			\bm{x}(0)=\bm{x}_0,\quad
-			\frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t))), \\
-			\bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t)))\leq\bm{0},                               \\
+			\frac{\mathrm{d}}{\mathrm{d}t}\bm{x}(t)=\bm{f}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\bm{x}(t),\bm{r}(t))), \\
+			\bm{g}_\mathrm{c}(\bm{x}(t),\bm{\pi}(\bm{x}(t),\bm{r}(t)))\leq\bm{0},                               \\
 			\bm{x}(t)\in\mathcal{X},\quad
-			\bm{\pi}(\hat{\bm{x}}(t),\bm{r}(t))\in\mathcal{U},\quad t\geq0
+			\bm{\pi}(\bm{x}(t),\bm{r}(t))\in\mathcal{U},\quad t\geq0
 		\end{array}
 		\right\} .
 		\label{eq:admissible_policy_set}
@@ -1154,9 +1154,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 	\frametitle{Undiscounted current-control HJB equation}
-	For a current reference $\bm{i}_{\mathrm{s,dq}}^{\ast}$ and voltage deviation $\Delta u = \bm{u}_{\mathrm{s,dq}} - \bm{u}_{\mathrm{s,dq}}^*$ with $\bm{u}_{\mathrm{s,dq}}^*$ being the equilibrium voltage in the requested current set point, define
+	For a current reference $\bm{i}_{\mathrm{s,dq}}^*$ and voltage deviation $\Delta u = \bm{u}_{\mathrm{s,dq}} - \bm{u}_{\mathrm{s,dq}}^*$ with $\bm{u}_{\mathrm{s,dq}}^*$ being the equilibrium voltage in the requested current set point, define
 	\begin{equation*}
-		\bm{e}_i=\bm{i}_{\mathrm{s,dq}}-\bm{i}_{\mathrm{s,dq}}^{\ast},
+		\bm{e}_i=\bm{i}_{\mathrm{s,dq}}-\bm{i}_{\mathrm{s,dq}}^*,
 		\qquad
 		\ell_i(\bm{i}_{\mathrm{s,dq}},\bm{u}_{\mathrm{s,dq}})
 		=\bm{e}_i^{\mathrm{T}}\bm{Q}_i\bm{e}_i
@@ -1199,13 +1199,13 @@
 	Without the voltage constraint one obtains the formal minimizer
 	\begin{equation*}
 		\bm{u}_{\mathrm{unc}}^*
-		=-\frac{1}{2}\bm{R}_u^{-1}\bm{p}.
+		=\bm{u}_{\mathrm{s,dq}}^*-\frac{1}{2}\bm{R}_u^{-1}\bm{p}.
 	\end{equation*}\pause%
 	With $\bm{u}_{\mathrm{s,dq}}\in\mathcal{U}_\mathrm{s}$, the minimizer is the weighted projection
 	\begin{equation*}
 		\boxed{\bm{u}_{\mathrm{s,dq}}^*
 			=\operatorname{proj}_{\mathcal{U}_\mathrm{s}}^{\bm{R}_u}
-			\left(-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
+			\left(\bm{u}_{\mathrm{s,dq}}^*-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
 			\nabla_{\bm{i}}v^*\right).}
 	\end{equation*}\pause%
 	For $\bm{R}_u=r_u\bm{I}$, the active-voltage switching surface satisfies
@@ -1227,7 +1227,7 @@
 		\bm{i}_{\mathrm{s,dq}}(t)\in\mathcal{I}_\mathrm{s}
 		\quad \forall t\geq0.
 	\end{equation*}\pause%
-	The finite-cost admissible current domain is the viability kernel
+	The finite-cost admissible current domain is the constraint-admissible viability kernel
 	\begin{equation*}
 		\mathcal{K}=\left\{\bm{i}_0\in\mathcal{I}_\mathrm{s}\,\middle|\,
 		\exists\bm{u}_{\mathrm{s,dq}}(t)\in\mathcal{U}_\mathrm{s}:
@@ -1257,14 +1257,14 @@
 	\begin{equation*}
 		v^*(i_{\mathrm{s,d}},i_{\mathrm{s,q}})\quad\text{satisfying the HJB PDE on}\quad\mathcal{K},
 		\qquad
-		\bm{u}_{\mathrm{s,dq}}^*(\bm{i}_{\mathrm{s,dq}})
+		\bm{u}_{\mathrm{s,dq}}
 		=\operatorname{proj}_{\mathcal{U}_\mathrm{s}}^{\bm{R}_u}
-		\left(-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
+		\left(\bm{u}_{\mathrm{s,dq}}^*-\frac{1}{2}\bm{R}_u^{-1}\bm{L}^{-\mathrm{T}}
 		\nabla_{\bm{i}}v^*\right).
 	\end{equation*}\pause%
 	The unknowns are coupled:
 	\begin{equation*}
-		\boxed{v^*,\quad \bm{u}_{\mathrm{s,dq}}^*,\quad
+		\boxed{v^*,\quad \bm{u}_{\mathrm{s,dq}},\quad
 			\mathcal{K},\quad \text{active voltage regions}.}
 	\end{equation*}\pause%
 	\hl{Consequence: closed-form feedback laws are practically intractable.   Practical approximations replace the HJB PDE by finite-dimensional problems}:
@@ -1619,7 +1619,7 @@
 			\bm{A}_{\mathrm{d}}^{N-1}\bm{B}_{\mathrm{d}} & \cdots & \bm{B}_{\mathrm{d}}
 		\end{bmatrix}.
 	\end{equation}\pause%
-	With $\bm{C}_{N}=\bm{I}_{N+1}\otimes \bm{C}$, where $\otimes$ denotes the Kronecker product, the output predictions are
+	With $\bm{C}_{N}=\bm{I}_{N}\otimes \bm{C}$, where $\otimes$ denotes the Kronecker product, the output predictions are
 	\begin{equation}
 		\bm{Y}_{N}[k]=\bm{C}_{N}\bm{X}_{N}[k].
 	\end{equation}
@@ -1632,7 +1632,7 @@
 	\frametitle{Condensed quadratic tracking cost}
 	Define the \hl{stacked reference and input-feedforward sequences}
 	\begin{equation}
-		\bm{R}_{N}[k]=\begin{bmatrix}\bm{r}[k|k]\T&\cdots&\bm{r}[k+N|k]\T\end{bmatrix}\T,
+		\bm{R}_{N}[k]=\begin{bmatrix}\bm{r}[k|k]\T&\cdots&\bm{r}[k+N-1|k]\T\end{bmatrix}\T,
 		\quad
 		\bm{U}_{\mathrm{r},N}[k]=\begin{bmatrix}\bm{u}_{\mathrm{r}}[k|k]\T&\cdots&\bm{u}_{\mathrm{r}}[k+N-1|k]\T\end{bmatrix}\T.
 	\end{equation}\pause%
